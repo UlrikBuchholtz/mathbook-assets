@@ -1,0 +1,6 @@
+#!/bin/bash
+
+basedir=`git rev-parse --show-toplevel`
+
+$basedir/scripts/install-git-hooks.sh
+$basedir/scripts/set-rebase-on-pull.sh
