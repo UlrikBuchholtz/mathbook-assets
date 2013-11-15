@@ -1,0 +1,47 @@
+// Exercise Group
+$division-width: .7*$knowl-border-width;
+
+@mixin exercisegroup(
+    $border-color: $knowl-border-color, 
+    $indent-color: $knowl-border-color-bold) 
+{
+    .exercisegroup {
+        & {
+            border: none; //reset beezer.css
+            border-bottom: $division-width solid $border-color;
+        }
+
+        &.last-child {
+            border-bottom:none;
+        }
+
+        .grouped-exercises {
+            border-left:2em solid $indent-color ;
+            //padding-left:1.5em;
+            margin:1em;
+            
+            @include exercise($indent-color, 2px);
+
+            div.exercise {
+                padding-left:1.5em;
+            }
+        }
+    }
+}
+
+@mixin exercise($border-color: $knowl-border-color, $border-width: $division-width) {
+    // TODO shouldn't have to specify div here
+    // div because h5's within exercises are also classed .exercise
+    div.exercise {
+        border-bottom: $border-width solid $border-color;
+        padding:1em 0;
+
+        h5 {
+            margin-top:0;
+        }
+
+        &:last-child {
+            border-bottom:none;
+        }
+    }
+}

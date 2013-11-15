@@ -1,0 +1,10 @@
+// Content
+@import "typography";
+
+& {
+}
+
+@include link(
+    $element:"a[title]", 
+    $color: $link-tooltip-color,
+    $color-hover: $link-tooltip-color-hover);

@@ -1,0 +1,47 @@
+// Knowl
+@import "typography";
+& {
+    border: $knowl-border-width solid $knowl-border-color;
+    @include border-radius($border-radius-large);
+    margin-bottom:$line-height-computed;
+}
+
+.knowl-footer {
+    background: $knowl-border-color;
+    bottom: -$knowl-border-width;
+    padding:1px 0px 1px $knowl-border-width;
+}
+
+.knowl-output {
+    & {
+        border-color: $knowl-border-color-bold;
+        background: $knowl-within-knowl-bg-color;
+    }
+
+    .knowl-footer {
+        color: desaturate(darken($knowl-border-color-bold, 60%), 80%) ;
+        background: $knowl-border-color-bold;
+    }
+}
+
+.knowl-content {
+    padding: $knowl-padding;
+    padding-bottom:0;
+
+    .exercise {
+        margin-left: -$knowl-padding;
+        margin-right: -$knowl-padding;
+        padding-right: $knowl-padding;
+        padding-left: $knowl-padding;
+    }
+
+    .exercisegroup {
+        margin-left:-$knowl-padding;
+        margin-right:-$knowl-padding;
+        padding-right: $knowl-padding;
+        padding-left: $knowl-padding;
+    }
+}
+
+@include inline-code(white, $knowl-border-color);
+@include code($bg-color: white, $border-color: $knowl-border-color-bold);

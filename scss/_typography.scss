@@ -1,0 +1,126 @@
+// Typography
+@import "compass";
+
+@mixin typography() {
+    // TODO remove when we can change beezer-addon.css
+    // Hacky overide of beezer-addon.css's *{} font defn
+    * {
+        font-family:$font-family-base;
+    }
+
+    @include headings();
+    @include paragraph();
+    @include link();
+    @include code();
+    @include inline-code();
+}
+
+@mixin headings() {
+}
+
+@mixin paragraph() {
+}
+
+@mixin link(
+    $element: "a", 
+    $color: $link-color, 
+    $color-hover:$link-hover-color) 
+{
+    #{$element} {
+        &, &:link, &:visited {
+            color: $color;
+            text-decoration: none;
+            font-family:inherit; // Overide beezer.css
+        }
+
+        &:hover,
+        &:focus {
+          color: $color-hover;
+          text-decoration: underline;
+        }
+
+        &:focus {
+          @include tab-focus();
+        }
+    }
+}
+
+// Code blocks
+@mixin code(
+    $font-family: $font-family-monospace, 
+    $bg-color: $pre-bg, 
+    $border-color: $pre-border-color, 
+    $color: $pre-color
+) {
+    pre,
+    code,
+    kbd,
+    samp,
+    .code,
+    pre *, // Hackz to get around beezer-addon.css *{} font defn 
+    code *,
+    kbd *,
+    samp *, 
+    .code * {
+        font-family: $font-family;
+    }
+
+    // TODO remove this when we can modify beezer-addon.css
+    // Hack to get around beezer-addon.css's *{} font defn.
+    .CodeMirror * {
+        font-family:$font-family;
+    }
+
+
+
+    pre, .CodeMirror, .sagecell .CodeMirror {
+        padding: (($line-height-computed - 1) / 2);
+        line-height: 1;
+        background: $bg-color;
+        color: $color;
+        border:1px solid $border-color;
+        word-break: break-all;
+        word-wrap: break-word;
+        @include border-radius($border-radius-base);
+
+        // Account for some code outputs that place code tags in pre tags
+        code {
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+            white-space: pre-wrap;
+            background-color: transparent;
+            border-radius: 0;
+        }
+    }
+
+    .CodeMirror, .sagecell .CodeMirror {
+        padding:0;
+    }
+}
+
+// Inline code
+@mixin inline-code($bg-color: $gray-lighter, $border-color: $gray-light) {
+
+    p code, .code {
+        margin:0 1px; // override beezer.css
+        padding: 1px 5px;
+        font-size: 90%;
+        white-space: nowrap;
+        background: $bg-color;
+        @include border-radius($border-radius-small);
+        border:1px solid $border-color;
+    }
+}
+
+
+// WebKit-style focus
+// Taken from sass-blueprint
+// https://github.com/thomas-mcdonald/bootstrap-sass/blob/34d538dc33b302a02e86ccec3e0a93fbf41f0bfa/vendor/assets/stylesheets/bootstrap/_mixins.scss
+@mixin tab-focus() {
+  // Default
+  outline: thin dotted #333;
+  // WebKit
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
