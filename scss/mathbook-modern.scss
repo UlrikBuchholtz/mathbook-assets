@@ -1,0 +1,165 @@
+/**!
+* The default styles for Mathbook-based textbooks.
+*
+* @author Michael DuBois (michael@michael-dubois.com)
+*
+* Naming Conventions
+* ------------------
+* Unfortunately, SASS has adopted the dash-separated scheme for variables.
+* That is, variables should take the following form: $my-awesome-var
+* The portions of a variable name should be ordered from general to specific.
+* i.e. $color-button-primary not $primary-button-color
+* Whenever possible, avoid variable names that describe their current value.
+* i.e. use $color-button-primary instead of $color-button-red
+* This is preferrable because variables are...variable. The value may change.
+*
+*/
+
+// Global Variables
+@import "variables";
+@import "typography";
+@import "numbering";
+@import "theorem-env";
+@import "compass/reset/utilities";
+@include reset-html5();
+
+html, body, html body {
+    margin:0;
+    padding:0;
+}
+
+body, html body {
+    /* Override this in <style> tag if necessary */
+    counter-reset:chapter;
+}
+
+.theorem {
+    @include theorem-env();
+}
+
+header address {
+    padding:0;
+    margin:0;
+    line-height: inherit;
+    font-style: inherit;
+}
+
+@mixin section-title {
+    & > .heading > .title {
+        // Override mathbook.css
+        margin-left:0;
+        margin-right:0;
+        
+        @content;
+    }
+}
+
+@mixin section-heading {
+    & > .heading {
+        // Override mathbook.css
+        margin-left:0;
+        margin-right:0;
+        
+        @content;
+    }
+}
+
+body, html body {
+    background:#eee;
+}
+
+.MathJax_Display {
+    /* Allow mobile users to scroll equations 
+     * horizontally when they don't fit on the screen 
+     */
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding-bottom:1px;
+}
+
+.main {
+    display:block;
+    height:100%;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 900px;   
+    background:white;
+    border:1px solid #ccc;
+    /* transparent instead of none to fix heading margin-top box-model issue */
+    border-top-color:transparent;
+    border-bottom-color:transparent;
+}
+
+.main > .article, .main > .section {
+
+    & {
+        margin:3em;
+    }
+
+    @include section-title {
+      font-size: $font-size-h2;  
+    }
+
+    @include section-heading {}
+    
+    .section, .subsection {
+
+        @include section-title {
+            font-size: $font-size-h4;
+        }
+
+        @include section-heading {}
+
+        .subsection {
+            @include section-title {
+                font-size:$font-size-h5;
+            }
+
+            @include section-heading {}
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+// NUMBERING
+//------------------------------------------------------------------------------
+.section {
+    counter-reset: subsection;
+}
+
+.numbered-subsections {
+    counter-reset:subsection;
+
+    .subection {
+        /* Number subsections with only subsection-counter */
+        @include numbering-heading(subsection); 
+        
+        &.nocount {
+            @include numbering-nocount();
+        }
+    }
+
+}
+
+.numbered-sections {
+    counter-reset: section;
+
+    .section {
+
+        @include numbering-heading(section);
+        
+        &.numbered-subsections .subsection {
+            /* Number subsections with both section and subsection counter */
+            @include numbering-heading(subsection, section); 
+
+            &.nocount {
+                @include numbering-nocount();
+            }
+        }
+
+        &.nocount {
+            @include numbering-nocount();
+        }
+    }
+
+}

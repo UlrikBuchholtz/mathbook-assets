@@ -1,0 +1,37 @@
+/*
+ * Specify counters in reverse order (most-specific to least-specific). 
+ * The first counter will be incremented.
+ */
+@mixin numbering-heading($counters...) {
+    $heading-prefix: "\0000a0\0000a0"; // no-wrap spaces
+    @each $counter in $counters {
+        $heading-prefix: counter($counter) "." $heading-prefix;
+    }
+    /* Select only h1's that directly belong to this section */
+    & > h1, & > header > h1, & > hgroup > h1 {
+
+        &:before {
+            /* place a counter before this heading */
+            content: attr(data-numbering-prefix) $heading-prefix;
+            counter-increment: nth($counters, 1); /* increment the counter */
+            display:inline;
+        }
+
+        /* If item has a numbering prefix, use it */
+        &[data-numbering-prefix]:before {
+            content: attr(data-numbering-prefix) $heading-prefix "\0000a0\0000a0";
+            counter-increment: nth($counters, 1); /* increment the counter */
+            display:inline;
+        }
+    }
+}
+
+@mixin numbering-nocount() {
+
+    & > h1, & > header > h1, & > hgroup > h1 {
+        &:before {
+            content: none;
+            counter-increment: none;
+        }
+    }
+}

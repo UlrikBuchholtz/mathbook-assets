@@ -1,0 +1,16 @@
+@mixin theorem-env() {
+    & {
+    }
+    
+    & > section {
+        margin-left:1em;
+    }
+
+    .statement {
+        
+    }
+
+    .proof {
+        
+    }
+}
