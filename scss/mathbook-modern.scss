@@ -2,18 +2,21 @@
 * The default styles for Mathbook-based textbooks.
 *
 * @author Michael DuBois (michael@michael-dubois.com)
-*
-* Naming Conventions
-* ------------------
-* Unfortunately, SASS has adopted the dash-separated scheme for variables.
-* That is, variables should take the following form: $my-awesome-var
-* The portions of a variable name should be ordered from general to specific.
-* i.e. $color-button-primary not $primary-button-color
-* Whenever possible, avoid variable names that describe their current value.
-* i.e. use $color-button-primary instead of $color-button-red
-* This is preferrable because variables are...variable. The value may change.
-*
 */
+
+// Note: single line comments like this are not included in css output
+//
+// Naming Conventions
+// ------------------
+// Unfortunately, SASS has adopted the dash-separated scheme for variables.
+// That is, variables should take the following form: $my-awesome-var
+//
+// The portions of a variable name should be ordered from general to specific.
+// i.e. $color-button-primary not $primary-button-color
+//
+// Whenever possible, avoid variable names that describe their current value.
+// i.e. use $color-button-primary instead of $color-button-red
+// This is preferrable because variables are...variable. The value may change.
 
 // Global Variables
 @import "variables";
@@ -118,48 +121,4 @@ body, html body {
             @include section-heading {}
         }
     }
-}
-
-//------------------------------------------------------------------------------
-// NUMBERING
-//------------------------------------------------------------------------------
-.section {
-    counter-reset: subsection;
-}
-
-.numbered-subsections {
-    counter-reset:subsection;
-
-    .subection {
-        /* Number subsections with only subsection-counter */
-        @include numbering-heading(subsection); 
-        
-        &.nocount {
-            @include numbering-nocount();
-        }
-    }
-
-}
-
-.numbered-sections {
-    counter-reset: section;
-
-    .section {
-
-        @include numbering-heading(section);
-        
-        &.numbered-subsections .subsection {
-            /* Number subsections with both section and subsection counter */
-            @include numbering-heading(subsection, section); 
-
-            &.nocount {
-                @include numbering-nocount();
-            }
-        }
-
-        &.nocount {
-            @include numbering-nocount();
-        }
-    }
-
 }
