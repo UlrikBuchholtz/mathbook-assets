@@ -44,7 +44,7 @@ var Mathbook = function(options) {
             header: NAVBAR_SELECTOR,
             nav: TOC_SELECTOR,
             topLink: TOP_LINK_SELECTOR,
-            viewOffset: 20,
+            viewOffset: 50,
             anchorAttr: 'id',
             speed: 300,
             onLoad: that.onScrollingNavLoaded

@@ -63,7 +63,6 @@ var ScrollingNav = function (options) {
 
     var $w = $(window);
     var $placeholder = $('<div>');
-    var scrollingToHash = false;
     var currentScrollAnchor = null;
     var $currentSections = null;
 
@@ -122,17 +121,23 @@ var ScrollingNav = function (options) {
                                 + "\"]";
         var $matchedSection = $(selector);
         if($matchedSection.length > 0) {
+            // Don't check sections while we're auto-scrolling
             that.stopCheckSection();
+
+            // Determine position to scroll to
             $matchedSection = $matchedSection.first();
-            that.$currentSection = $matchedSection;
+            var scrollPoint = 
+                Math.max($matchedSection.offset().top - viewOffset + 1, 0);
+
+            // Define some things we need to do after scrolling
             var wrappedCallback = function() {
                 that.startCheckSection();
                 if(callback && typeof callback === "function") {
                     callback();
                 }
             }
-            var scrollPoint = 
-                Math.max($matchedSection.offset().top - viewOffset, 0);
+
+            // Perform the scroll
             $('body,html').animate({
                 scrollTop: scrollPoint
             }, settings.speed, settings.easing, wrappedCallback);
@@ -160,7 +165,9 @@ var ScrollingNav = function (options) {
     this.checkSection = function() {
         if($sections.length > 0) {
             var wScroll = $w.scrollTop();
-            var $currentSection, $currentParents;
+            var $currentSection = null;
+            var $currentParents = null;
+
             // King of the hill search for current section
             // TODO sort sections by offset so we can exit early?
             $sections.each(function(i) {
@@ -180,15 +187,18 @@ var ScrollingNav = function (options) {
                 }
             });
 
-            // IF there is no section and this is news
-            if(!$currentSection && that.$currentSection !== null) {
+            // Check to see if the current section has changed since we last 
+            // checked
+            // IF there is no section and this is new
+            if($currentSection == null && that.$currentSection !== null) {
                 // Update state accordingly
                 that.$currentSection = null;
                 $currentSections = null;
-                // Enter no section to update state
+                
+                // Enter no section to update hash 
                 that.enterSection();
 
-                // Else if current section is new
+                // Else if there is a section, and it's different
             } else if($currentSection 
                     && !$currentSection.is(that.$currentSection)) {
 
@@ -215,23 +225,16 @@ var ScrollingNav = function (options) {
     // we want use the most specific section with a link to
     // update the hash.
     this.enterSection = function() {
-        // Exit early if we're autoscrolling, don't want to enter section
-        // 'til we reach our destination
-        if(scrollingToHash) {
-            console.log("nvm, autoScrolling");
-            return false;
-        }
 
         // remove active class from all nav links 
         $navLinks.removeClass(settings.activeClass);
 
-        var currentAnchor = null;
+        var currentAnchor = "";
 
         if($currentSections) {
             // Update links and king of hill search for anchor to use as hash
             // For each of the sections we're currently in
             // (NOTE: they are ordered in document order)
-            var currentHash = location.hash.substr(1);
             $currentSections.each(function() {
                 var $section = $(this);
                 // Get the anchor
@@ -258,17 +261,19 @@ var ScrollingNav = function (options) {
             });
         }
 
-        if(currentAnchor == null) {
-            that.setHash("");
-        } else if(currentAnchor !== currentHash) {
+        var currentHash = location.hash.substr(1);
+        if(currentAnchor !== currentHash) {
             // Update hash
             that.setHash(currentAnchor);
-            // and log the event
-            var currentLocation = location.pathname + location.hash;
-            if(typeof _gaq !== "undefined") {
-                _gaq.push(['_trackEvent', 'Section Entered', currentLocation]);
-            } else {
-                console.log("section entered: " + currentLocation);
+            if(currentAnchor !== "") {
+                // and log the event
+                var currentLocation = location.pathname + location.hash;
+                if(typeof _gaq !== "undefined") {
+                    _gaq.push(['_trackEvent', 
+                            'Section Entered', currentLocation]);
+                } else {
+                    console.log("section entered: " + currentLocation);
+                }
             }
         }
     };
@@ -367,8 +372,7 @@ var ScrollingNav = function (options) {
             $header.before($placeholder)
         }
 
-        // Start checkSection interval
-        that.startCheckSection(); 
+        $('body').addClass(initClass);
 
         // updateScroll onScroll
         $w.scroll(that.updateScroll);
@@ -379,6 +383,8 @@ var ScrollingNav = function (options) {
 
         // Register resize handler
         $w.resize(that.resize);
+        that.resize();
+
 
         if (location.hash){
             // If there is already a hash set onLoad, then we need to disable our
@@ -386,29 +392,28 @@ var ScrollingNav = function (options) {
             // top to the the set hash position.
 
             // We hide the body while we set up
-            $('html, body').hide();
+           // $('html, body').hide();
 
-            // Timeout zero allows the browser to do it's thing before
-            // we come back and fix the scroll 
-            var timeout = setTimeout(function(){
-                clearTimeout(timeout);
-                // Reset to top and show body again
-                $('html, body').scrollTop(0).show();
-                // Disable hash listeners
-                scrollingToHash = true;
-                // Scroll to the requested section
-                that.scrollToSection(location.hash.substring(1), that.onLoad());
-            }, 0);
+           // // Timeout zero allows the browser to do it's thing before
+           // // we come back and fix the scroll 
+           // var timeout = setTimeout(function(){
+           //     clearTimeout(timeout);
+           //     // Reset to top and show body again
+           //     $('html, body').scrollTop(0).show();
+           //     // Scroll to the requested section
+           //     that.scrollToSection(location.hash.substring(1), that.onLoad());
+           // }, 0);
+           that.onLoad();
         } else{
             that.onLoad();
         }
     }
 
     this.onLoad = function() {
-        scrollingToHash = false;
-        that.resize();
 
-        $('body').addClass(initClass);
+        // Start checkSection interval
+        that.startCheckSection(); 
+
 
         // Call the onLoad callback if we got one
         if(typeof settings.onLoad === "function") {
