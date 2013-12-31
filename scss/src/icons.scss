@@ -1,0 +1,30 @@
+@import "../lib/ionicons/ionicons-variables";
+
+// potentially custom to mathbook
+$ionicons-font-path: "../fonts/ionicons/fonts";
+$ionicons-font-family: "Ionicons";
+$ionicons-version: "1.4.0";
+// we definitely don't want to marry ourselves to ionicons
+// so let's use a more general prefix
+$ionicons-prefix: icon-; 
+
+/*!
+  Ionicons, v#{$ionicons-version}
+    Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
+      https://twitter.com/helloimben  https://twitter.com/ionicframework
+        MIT License: https://github.com/driftyco/ionicons
+        */
+
+@import "../lib/ionicons/ionicons-font";
+@import "../lib/ionicons/ionicons-animation";
+
+// Import our modified version that only font-faces :before
+@import "ionicons-icons";
+
+/*!
+* Add a margin to any element with a class starting with the #{$ionicons-prefix}
+* prefix.
+*/
+[class^="#{$ionicons-prefix}"]:before, [class*=" #{$ionicons-prefix}"]:before {
+    margin-right:.5em;
+}

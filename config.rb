@@ -2,8 +2,8 @@
 
 # Set this to the root of your project when deployed:
 http_path = "/"
-css_dir = "gen/fcla/stylesheets"
-sass_dir = "scss"
+css_dir = "gen/stylesheets"
+sass_dir = "scss/src"
 images_dir = "images"
 javascripts_dir = "javascripts"
 

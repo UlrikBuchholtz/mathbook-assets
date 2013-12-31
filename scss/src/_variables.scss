@@ -2,6 +2,8 @@
 // Initially based on bootstrap-sass variables:
 // https://github.com/thomas-mcdonald/bootstrap-sass/blob/a8518604b982b581b1a6ca76f8e67e10ca68acca/vendor/assets/stylesheets/bootstrap/_variables.scss
 
+// You'll find layout at the bottom since it depends on everything
+
 // Grays
 // -------------------------
 
@@ -31,20 +33,18 @@ $link-tooltip-color-hover: darken($brand-info, 15%);
 // Knowls
 // -------------------------
 
-$knowl-link-color: #00a;
-$knowl-link-color-hover: #006;
-$knowl-border-width:10px;
-$knowl-padding:10px;
-$knowl-border-color: #ddddff;
-$knowl-border-color: #d5d5ff;
-$knowl-border-color-bold:#aaaaff;
-$knowl-within-knowl-bg-color: white;
-$knowl-bg-color: #eeeeff;
+$knowl-link-color: #00a !default;
+$knowl-link-color-hover: #006 !default;
+$knowl-border-width:10px !default;
+$knowl-padding:10px !default;
+$knowl-border-color: #d5d5ff !default;
+$knowl-border-color-bold:#aaaaff !default;
+$knowl-within-knowl-bg-color: white !default;
+$knowl-bg-color: #eeeeff !default;
 
 // Typography
 // -------------------------
 
-//$font-family-sans-serif:  "Open Sans" , "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 $font-family-sans-serif:  "Istok Web" , "Open Sans", "Helvetica Neue", 
                                 Helvetica, Arial, sans-serif !default;
 $font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
@@ -58,13 +58,12 @@ $font-size-base:          16px !default;
 $font-size-large:         ceil($font-size-base * 1.25) !default; // ~18px
 $font-size-small:         ceil($font-size-base * 0.85) !default; // ~12px
 
-$font-size-h1:            floor($font-size-base * 2.6) !default; // ~36px
-$font-size-h2:            floor($font-size-base * 2.15) !default; // ~30px
-$font-size-h3:            ceil($font-size-base * 1.7) !default; // ~24px
-$font-size-h4:            ceil($font-size-base * 1.25) !default; // ~18px
-$font-size-h5:            $font-size-base !default;
-$font-size-h6:            ceil($font-size-base * 0.85) !default; // ~12px
-
+$font-size-h1:            floor($font-size-base * 2) !default;// ~30px 
+$font-size-h2:            floor($font-size-base * 1.7) !default; // ~24px 
+$font-size-h3:            ceil($font-size-base * 1.25) !default; // ~18px
+$font-size-h4:            $font-size-base !default;
+$font-size-h5:            ceil($font-size-base * 0.85) !default;// ~12px
+$font-size-h6:            ceil($font-size-base * 0.7) !default; 
 $line-height-base:        1.428571429 !default; // 20/14
 $line-height-computed:    floor($font-size-base * $line-height-base) !default; // ~20px
 
@@ -72,6 +71,10 @@ $headings-font-family:    $font-family-base !default;
 $headings-font-weight:    500 !default;
 $headings-line-height:    1.1 !default;
 $headings-color:          inherit !default;
+
+$header-title-color: #444 !default;
+$header-subtitle-color: #777 !default;
+$header-bg: white !default;
 
 // Code
 // ------------------------
@@ -113,31 +116,23 @@ $caret-width-large:              5px !default;
 // --------------------------------------------------
 
 // Extra small screen / phone
-// Note: Deprecated $screen-xs and $screen-phone as of v3.0.1
-$screen-xs:                  480px !default;
-$screen-xs-min:              $screen-xs !default;
-$screen-phone:               $screen-xs-min !default;
+$screen-xs-min:              480px !default;
 
 // Small screen / tablet
-// Note: Deprecated $screen-sm and $screen-tablet as of v3.0.1
-$screen-sm:                  768px !default;
-$screen-sm-min:              $screen-sm !default;
-$screen-tablet:              $screen-sm-min !default;
+$screen-sm-min:              768px !default;
 
 // Medium screen / desktop
-// Note: Deprecated $screen-md and $screen-desktop as of v3.0.1
-$screen-md:                  992px !default;
-$screen-md-min:              $screen-md !default;
-$screen-desktop:             $screen-md-min !default;
+$screen-md-min:              992px !default;
 
 // Large screen / wide desktop
-// Note: Deprecated $screen-lg and $screen-lg-desktop as of v3.0.1
-$screen-lg:                  1200px !default;
-$screen-lg-min:              $screen-lg !default;
-$screen-lg-desktop:          $screen-lg-min !default;
+$screen-lg-min:              1200px !default;
 
 // So media queries don't overlap when required, provide a maximum
 $screen-xs-max:              ($screen-sm-min - 1) !default;
 $screen-sm-max:              ($screen-md-min - 1) !default;
 $screen-md-max:              ($screen-lg-min - 1) !default;
 
+// Layout
+// ------------------------
+$h-pad: $font-size-base;
+$toc-width:256px;
