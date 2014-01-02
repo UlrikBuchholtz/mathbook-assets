@@ -150,9 +150,11 @@ var ScrollingNav = function (options) {
         var wScroll = $w.scrollTop();
         if ((settings.startsPersistent && wScroll >= offsetTop) || 
                 wScroll > offsetTop) {
-            $header.addClass(persistentClass);
-            $placeholder.remove();
-            $header.before($placeholder);
+            if(!$header.hasClass(persistentClass)) {
+                $header.addClass(persistentClass);
+                $placeholder.remove();
+                $header.before($placeholder);
+            }
         } else {
             $header.removeClass(persistentClass);
             if(!settings.initWithPlaceholder) {
@@ -263,7 +265,6 @@ var ScrollingNav = function (options) {
 
         var currentHash = location.hash.substr(1);
         if(currentAnchor !== currentHash) {
-            // Update hash
             that.setHash(currentAnchor);
             if(currentAnchor !== "") {
                 // and log the event
