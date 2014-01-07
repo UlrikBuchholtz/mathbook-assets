@@ -2,10 +2,13 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 output=$(readlink -m $1)
+repodir="$(cd $DIR; git rev-parse --show-toplevel)"
 
-cd "$(git rev-parse --show-toplevel)"
-mkdir -p $output/stylesheets
+cd $repodir 
+echo Generating from $repodir
+ls $repodir
+mkdir -v -p $output/stylesheets
 compass compile --time --css-dir=$output/stylesheets --force
-cp -r js $output/js
-cp -r fonts $output/fonts
-cp -r images $output/images
+cp -v -r $repodir/js $output
+cp -v -r $repodir/fonts $output
+cp -v -r $repodir/images $output

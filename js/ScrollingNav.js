@@ -1,14 +1,20 @@
 var $ = jQuery;
 var ScrollingNav = function (options) {
 
+    // default class prefix
     var DEFAULT_PREFIX = "scrolling-nav-";
+
     var settings = $.extend({
+
           prefix: DEFAULT_PREFIX,
 
-          navEnabledClass: null, // enabled by default
+          navEnabledClass: null, // nav is enabled by default
+          // whether or not to initialize the page with header placeholder
           initWithPlaceholder: false,
+          // Whether or not the header is persistent upon page load
           startsPersistent: false,
 
+          // Selectors for various elements
           header: 'header:first',
           nav: 'nav:first',
           topLink: '#top-link',
@@ -19,19 +25,22 @@ var ScrollingNav = function (options) {
           scrollToAttr: 'data-scroll',
           anchorAttr: 'data-anchor',
           
+          // Offset from top of the viewport at which section entry occurs
+          viewOffset: 50,
+
           // If true, history states will be pushed rather than replaced
           // so each section entry will create a new history entry
           // accessible with back/forward btns
           pushHistory: false,
+          // Whether or not to change hashes on old browsers when
+          // pushHistory/replaceHistory is not supported.
           provideHistoryFallback: true, 
           
-          viewOffset: 50,
-          
+          checkSectionInterval: 250,
+
           animated: true,
           speed: 500,
           easing: 'swing',
-          
-          checkSectionInterval: 250,
 
           // TODO callbacks
           onLoad: null,
@@ -114,6 +123,7 @@ var ScrollingNav = function (options) {
 
     // Animated scroll to a section
     this.scrollToSection = function(scrollAnchor, callback) {
+        console.log("scrollToSection(" + scrollAnchor + ",...)");
         var selector = settings.sectionSelector 
                                 + "[" + settings.anchorAttr 
                                 +"=\"" 
@@ -131,12 +141,14 @@ var ScrollingNav = function (options) {
 
             // Define some things we need to do after scrolling
             var wrappedCallback = function() {
+                console.log("ScrollTo animate wrappedcallback");
                 that.startCheckSection();
                 if(callback && typeof callback === "function") {
                     callback();
                 }
-            }
+            };
 
+            console.log("Beginning animate");
             // Perform the scroll
             $('body,html').animate({
                 scrollTop: scrollPoint
@@ -375,46 +387,43 @@ var ScrollingNav = function (options) {
 
         $('body').addClass(initClass);
 
-        // updateScroll onScroll
-        $w.scroll(that.updateScroll);
-
         // Register onClick listeners for links
         $navLinks.on('click', that.onNavLinkClick);
         $topLink.on('click', that.onNavLinkClick);
+
+        // updateScroll onScroll
+        $w.scroll(that.updateScroll);
 
         // Register resize handler
         $w.resize(that.resize);
         that.resize();
 
-
-        if (location.hash){
+        if (typeof location.hash !== "undefined" && location.hash !== null &&
+                location.hash.substr(1) !== ""){
+            console.log("There is a hash.");
             // If there is already a hash set onLoad, then we need to disable our
             // hash/scroll listeners, reset to top, and animate the scroll from
             // top to the the set hash position.
 
-            // We hide the body while we set up
-           // $('html, body').hide();
-
-           // // Timeout zero allows the browser to do it's thing before
-           // // we come back and fix the scroll 
-           // var timeout = setTimeout(function(){
-           //     clearTimeout(timeout);
-           //     // Reset to top and show body again
-           //     $('html, body').scrollTop(0).show();
-           //     // Scroll to the requested section
-           //     that.scrollToSection(location.hash.substring(1), that.onLoad());
-           // }, 0);
-           that.onLoad();
+            // Timeout zero allows the browser to do it's thing before
+            // we come back and fix the scroll 
+            var timeout = setTimeout(function(){
+                clearTimeout(timeout);
+                // Reset to top
+                $('html, body').scrollTop(0);
+                // Scroll to the requested section
+                that.scrollToSection(location.hash.substr(1), that.onLoad);
+            }, 0);
         } else{
+            console.log("There is no hash!");
             that.onLoad();
         }
     }
 
     this.onLoad = function() {
-
+        console.log("ScrollNav onLoad");
         // Start checkSection interval
         that.startCheckSection(); 
-
 
         // Call the onLoad callback if we got one
         if(typeof settings.onLoad === "function") {
@@ -426,7 +435,7 @@ var ScrollingNav = function (options) {
     this.init();
 };
 
-// example 
+// EXAMPLE INIT 
 //$(document).ready( function() {
 //    var scrollingNav = new ScrollingNav({
 //        navEnabledClass: 'home', // nav only enabled on home page
