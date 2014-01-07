@@ -10,7 +10,7 @@
     @include clearfix();
 }
 
-#logo-container, #title {
+#logo-link, #title {
     margin-top: $font-size-base;
 }
 
@@ -78,9 +78,15 @@
     margin-left:0;
     margin-bottom:.15em;
     min-height:inherit;
+
+    .subtitle {
+        &:before {
+            content: ": ";
+        }
+    }
 }
 
-#subtitle {
+#byline {
     color: $header-subtitle-color;
     font-size: .6*$font-size-h1;
     font-weight:normal;
@@ -89,17 +95,6 @@
     min-height:inherit;
 }
 
-#title-content {
-    position:relative;
-    bottom:auto;
-    line-height:inherit;
-}
-
-#subtitle-content {
-    position:relative;
-    bottom:auto;
-    line-height:inherit;
-}
 .banner {
     border-bottom:1px solid darken($header-bg, 15%);
     /* to ensure children's margin-top works */
