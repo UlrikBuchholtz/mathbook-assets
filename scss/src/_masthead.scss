@@ -6,7 +6,7 @@
     @include box-shadow(none);
 }
 
-#title-container {
+#title-container, .title-container {
     @include clearfix();
 }
 
@@ -79,6 +79,9 @@
     margin-bottom:.15em;
     min-height:inherit;
 
+    // Override addon
+    font-family:$headings-font-family;
+
     .subtitle {
         &:before {
             content: ": ";
@@ -93,6 +96,9 @@
     margin:0;
     margin-bottom:1em;
     min-height:inherit;
+
+    // Override addon
+    font-family:$headings-font-family;
 }
 
 .banner {
