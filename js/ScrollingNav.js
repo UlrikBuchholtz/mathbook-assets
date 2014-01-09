@@ -114,16 +114,20 @@ var ScrollingNav = function (options) {
                 &&(navEnabledClass===null 
                     || $('body').hasClass(navEnabledClass))) {
 
-            that.scrollToSection(scrollAnchor);
-            e.preventDefault();
-            return false;
+            var sectionExists = that.scrollToSection(scrollAnchor);
+            if(sectionExists) {
+                e.preventDefault();
+                return false;
+            }
         }
         return true;
     };
 
     // Animated scroll to a section
+    // Returns false if no section to scroll to on this page
     this.scrollToSection = function(scrollAnchor, callback) {
         console.log("scrollToSection(" + scrollAnchor + ",...)");
+        var sectionExists = false;
         var selector = settings.sectionSelector 
                                 + "[" + settings.anchorAttr 
                                 +"=\"" 
@@ -153,8 +157,12 @@ var ScrollingNav = function (options) {
             $('body,html').animate({
                 scrollTop: scrollPoint
             }, settings.speed, settings.easing, wrappedCallback);
+
+            sectionExists = true;
         }
 
+        // Return false if no section to scroll to on this page
+        return sectionExists;
     };
 
     // Update GUI onScroll

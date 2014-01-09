@@ -21,6 +21,11 @@ h2:first-child {
 }
 // end overrides
 
+a { 
+    &:link, &:visited, &:hover, &:active {
+        text-decoration:none;
+    }
+}
 
 .list li {
   padding: 5px;

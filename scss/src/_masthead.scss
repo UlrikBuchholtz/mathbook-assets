@@ -1,8 +1,73 @@
+@import "compass";
 & {
     background: $header-bg;
     min-height:inherit;
     border:none;
     @include box-shadow(none);
+}
+
+#title-container, .title-container {
+    @include clearfix();
+}
+
+#logo-link, #title {
+    margin-top: $font-size-base;
+}
+
+#logo-link {
+    $line-height-h1: ($font-size-h1 * $line-height-base);
+    $line-height-h1-top:($line-height-h1 - $font-size-h1)/2;
+
+    $size: $font-size-h1*$line-height-base - $line-height-h1-top;
+
+    position:relative;
+    float:left;
+    font-size: $size;
+    margin-right:$font-size-base;
+    margin-left: $line-height-h1-top;
+
+    img {
+        width:auto;
+        height:auto;
+        max-height: 2*$font-size-h1;
+    }
+
+    /* Display placeholder icon for css3 browsers (progressive enhancement) */
+    &:empty {
+
+        width:1em;
+        height:$font-size-h1 * $line-height-base;
+        margin-top:$font-size-base + $line-height-h1-top;
+        //margin-top:$font-size-base;
+        height:$size;
+
+        &:before { 
+            content: "\f2d0"; /* ionicons book */
+            font-family: "Ionicons";
+            color: #ccc;
+
+            position:absolute;
+            /* centered vert and horiz*/
+            top:50%;
+            left:50%;
+            margin-top: -.5em;
+            margin-left: -.5em;
+        }
+
+        &:hover:before {
+            color: $brand-primary;
+        }
+
+        &:active:before {
+            color: $brand-secondary;
+        }
+    }
+
+    /* Override addons */
+    &:link, &:hover, &:active {
+        background:transparent;
+        border:none;
+    }
 }
 
 // Shouldn't be ids!
@@ -13,28 +78,29 @@
     margin-left:0;
     margin-bottom:.15em;
     min-height:inherit;
+
+    // Override addon
+    font-family:$headings-font-family;
+
+    .subtitle {
+        &:before {
+            content: ": ";
+        }
+    }
 }
 
-#subtitle {
+#byline {
     color: $header-subtitle-color;
     font-size: .6*$font-size-h1;
     font-weight:normal;
     margin:0;
     margin-bottom:1em;
     min-height:inherit;
+
+    // Override addon
+    font-family:$headings-font-family;
 }
 
-#title-content {
-    position:relative;
-    bottom:auto;
-    line-height:inherit;
-}
-
-#subtitle-content {
-    position:relative;
-    bottom:auto;
-    line-height:inherit;
-}
 .banner {
     border-bottom:1px solid darken($header-bg, 15%);
     /* to ensure children's margin-top works */

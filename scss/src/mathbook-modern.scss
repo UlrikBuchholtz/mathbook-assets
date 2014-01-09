@@ -19,6 +19,7 @@
 // This is preferrable because variables are...variable. The value may change.
 
 // Global Variables
+@import url(http://fonts.googleapis.com/css?family=PT+Serif:400,700);
 @import "colorscheme-mathbook";
 @import "variables";
 @import "typography";
@@ -36,6 +37,8 @@ body, html body {
     /* Override this in <style> tag if necessary */
     counter-reset:chapter;
 }
+
+@include typography();
 
 .theorem {
     @include theorem-env();
@@ -59,11 +62,19 @@ header address {
 }
 
 @mixin section-heading {
-    & > .heading {
+    & > .heading,
+    & > h1,
+    & > h2,
+    & > h3,
+    & > h4,
+    & > h5,
+    & > h6 {
         // Override mathbook.css
         margin-left:0;
         margin-right:0;
         
+        // @include content
+        // use @include section-heading { content }
         @content;
     }
 }
@@ -86,6 +97,7 @@ body, html body {
      */
     overflow-x:auto;
     overflow-y:hidden;
+    padding-top:1px;
     padding-bottom:1px;
 }
 
@@ -220,6 +232,211 @@ body.local_fields #sidebar a.local_fields { background: #BFB; }
         }
     }
 
+}
+
+.abstract {
+    h1, h5 {
+        &:after {
+            content: ". ";
+        }
+    }
+}
+
+section {
+
+    @include section-heading {
+        .type {
+            &:after {
+                content: " ";
+            }
+        }
+
+        .codenumber {
+            &:after {
+                content: ": ";
+            }
+        }
+
+        .title {
+        }
+    }
+
+    &.chapter {
+        @include section-heading {
+            font-size: $font-size-h2;
+
+            /* Chapter title goes on it's own line (as in LaTeX) */
+            .title {
+                display:block;
+                margin-top:1em;
+                margin-bottom:1.25em;
+            }
+
+            .codenumber, .type {
+                font-size: .8em;
+            }
+
+            .codenumber:after {
+                    content: "";
+            }
+        }
+
+        /* Sections inside of chapters */
+        .section {
+            @include section-heading {
+                font-size: $font-size-h3;
+            }
+
+            .subsection {
+                @include section-heading {
+                    font-size: $font-size-h4;
+                }
+
+                .subsubsection, .subsection {
+                    @include section-heading {
+                        font-size: $font-size-h5;
+                    }
+                }
+            }
+        }
+    }
+
+    /* Sections outside of chapters */
+    &.section {
+        @include section-heading {
+            font-size: $font-size-h2;
+        }
+
+        .subsection {
+            @include section-heading {
+                font-size: $font-size-h3;
+            }
+
+            .subsubsection, .subsection {
+                @include section-heading {
+                    font-size: $font-size-h4;
+                }
+            }
+        }
+    }
+
+    /* Hide type on section headings */
+    &.section, &.subsection, &.subsubsection {
+
+        @include section-heading {
+            .type {
+                display:none;
+            }
+
+            .codenumber:after {
+                content: " ";
+            }
+        }
+
+    }
+
+    &.chapter .section, &.subsection, &.subsubsection {
+        margin: #{2*$line-height-base}em 0;
+    }
+}
+
+.definition-like {
+    & > h1, & > .heading, 
+    & > h2, & > h3, & > h4, & > h5, & > h6 {
+        display:inline;
+        //font-family:inherit;
+        font-weight:bold;
+        font-size: $font-size-h5;
+        font-size: 1.05em;
+
+        .type:after {
+            content: " ";
+        }
+
+        /* TODO Do we still need this? */
+        .acro:after {
+            content: ": ";
+        }
+
+        &:after { 
+            content: ". ";
+        }
+
+        // So that the header is inline with paragraph text 
+        & + p {
+            display:inline;
+        }
+    }
+
+
+    margin:$line-height-em 0;
+}
+
+.theorem-like {
+    @extend .definition-like;
+
+    @include section-heading {
+        .codenumber:after {
+            content: ". ";
+        }
+    }
+
+    /* TODO remove ol and ul when possible */
+    p, ol, ul {
+        font-style: italic;
+    }
+
+    .statement {
+        p:first-child {
+            display:inline;
+        }
+
+        &:last-child, &:last-of-type {
+            margin-bottom:0;
+        }
+    }
+}
+
+.proof {
+    @extend .definition-like;
+
+    h1, h5 {
+        font-weight:normal;
+        font-style:italic;
+
+        .type:after {
+            content: ". ";
+        }
+    }
+
+    &:after {
+        content:"\220E";
+        display:block;
+        text-align:right;
+    }
+}
+
+.subsection {
+    /* (mxdubois: Not sure we need this) to make more space above 
+     * the next subsection, when a subsection
+     * ends with a theorem
+     */
+    .theorem-like:last-child { margin-bottom: 30px }
+}
+
+.annotatedacronyms { margin: 15px 0 0 0; }
+
+.diagram {text-align:center; margin-bottom:2em}
+
+.context {text-align:right}
+
+.attribution {
+    text-align:right;
+}
+
+.terminology {
+    font-style:italic;
+    font-weight:bold;
 }
 
 .main > .article, .main > .section, .main > #content {
