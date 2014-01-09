@@ -1,4 +1,7 @@
 var $ = jQuery;
+var NAVBAR_SELECTOR = "#navbar";
+var TOP_LINK_SELECTOR = "#navbar .top-link";
+var TOC_SELECTOR = "#toc";
 var Mathbook = function(options) {
 
     var settings = $.extend({
@@ -7,10 +10,6 @@ var Mathbook = function(options) {
 
     // Private vars
     // -------------------------------------------------------------------------
-    var NAVBAR_SELECTOR = "#navbar";
-    var TOP_LINK_SELECTOR = "#navbar .top-link";
-    var TOC_SELECTOR = "#toc";
-
     var that = this;
     var hashOnLoad;
     var scrollingNavLoaded = false;
@@ -70,8 +69,9 @@ var Mathbook = function(options) {
     this.init();
 };
 
-// init when the document is ready
-$(document).ready( function() {
+// init when the window is loaded
+$(window).load( function() {
+    console.log("Window loaded");
     var mathbook = new Mathbook({
     });
 });
