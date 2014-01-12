@@ -7,8 +7,7 @@ repodir="$(cd $DIR; git rev-parse --show-toplevel)"
 cd $repodir 
 echo Generating from $repodir
 ls $repodir
-mkdir -v -p $output/stylesheets
-compass compile --time --css-dir=$output/stylesheets --force
 cp -v -r $repodir/js $output
-cp -v -r $repodir/fonts $output
+cp -v -r $repodir/stylesheets $output
 cp -v -r $repodir/images $output
+compass compile --time --css-dir=$output/stylesheets --force
