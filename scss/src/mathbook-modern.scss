@@ -1,489 +1,77 @@
-/**!
-* The default styles for Mathbook-based textbooks.
-*
-* @author Michael DuBois (michael@michael-dubois.com)
-*/
-
-// Note: single line comments like this are not included in css output
-//
-// Naming Conventions
-// ------------------
-// Unfortunately, SASS has adopted the dash-separated scheme for variables.
-// That is, variables should take the following form: $my-awesome-var
-//
-// The portions of a variable name should be ordered from general to specific.
-// i.e. $color-button-primary not $primary-button-color
-//
-// Whenever possible, avoid variable names that describe their current value.
-// i.e. use $color-button-primary instead of $color-button-red
-// This is preferrable because variables are...variable. The value may change.
-
-// Global Variables
-@import url(http://fonts.googleapis.com/css?family=PT+Serif:400,700);
-@import "colorscheme-mathbook";
-@import "variables";
-@import "typography";
-@import "numbering";
-@import "theorem-env";
-@import "compass/reset/utilities";
-@include reset-html5();
-
-html, body, html body {
-    margin:0;
-    padding:0;
-}
-
-body, html body {
-    /* Override this in <style> tag if necessary */
-    counter-reset:chapter;
-}
-
-@include typography();
-
-.theorem {
-    @include theorem-env();
-}
-
-header address {
-    padding:0;
-    margin:0;
-    line-height: inherit;
-    font-style: inherit;
-}
-
-@mixin section-title {
-    & > .heading > .title {
-        // Override mathbook.css
-        margin-left:0;
-        margin-right:0;
-        
-        @content;
-    }
-}
-
-@mixin section-heading {
-    & > .heading,
-    & > h1,
-    & > h2,
-    & > h3,
-    & > h4,
-    & > h5,
-    & > h6 {
-        // Override mathbook.css
-        margin-left:0;
-        margin-right:0;
-        
-        // @include content
-        // use @include section-heading { content }
-        @content;
-    }
-}
-
-body, html body {
-    background:#ccc;
-}
-
-
-@import "knowl";
-@include knowl-link();
-
-/* first and third depth */
-.knowl-output, .knowl-output  .knowl-output  .knowl-output {
-
-    @include knowl();
-    @import "exercises";
-    @include exercise($knowl-border-color);
-    @include exercisegroup($knowl-border-color, darken($knowl-border-color, 0%));
-}
-
-.MathJax_Display {
-    /* Allow mobile users to scroll equations 
-     * horizontally when they don't fit on the screen 
-     */
-    overflow-x:auto;
-    overflow-y:hidden;
-    padding-top:1px;
-    padding-bottom:1px;
-}
-
-/* 
- * Reposition MathJax loading message so it overlays content instead of navbar
- * to override, we must add body specificity
- */
-body #MathJax_Message {
-    left: .5*$base-font-size;
-    bottom: .5*$base-font-size;
-    background:rgba(white,.9);
-    color: $brand-primary;
-    border-color: desaturate(lighten($brand-primary, 30%), 20%);
-    @include border-radius(.3em);
-}
-
-.container {
-    //max-width:960px;
-    //margin:0 auto;
-}
-
-.page {
-    max-width:960px;
-    //margin:0 auto;
-}
-
-#masthead {
-    @import "masthead.scss";
-}
-
-#navbar {
-    $navbar-border-width: 1px;
-
-    & { 
-        background:$navbar-bg;
-        border-bottom:$navbar-border-width solid darken($toc-bg, 15%);
-        z-index:100;
-    }
-
-    &.scrolling-nav-loaded {
-    }
-
-    &.scrolling-nav-persistent {
-        position:fixed;
-        top:0;
-        left:0;
-        right:0;
-        @include box-shadow(rgba(0,0,0,.5) 0 2px 5px);
-    }
-
-    .navbar-item {
-        $border-color: darken($navbar-bg, 15%);
-
-        position:relative;
-        color:$navbar-color;
-        @include inline-block();
-
-        border-right:1px solid $border-color;
-
-        &:last-child {
-            border-right:none;
-        }
-
-        &:first-child {
-            border-right:1px solid $border-color;
-        }
-
-        .navbar-item-text {
-            color:inherit;
-            font-size:1em;
-            margin:0;
-            line-height:2.5;
-            /*Padding here so that item width can be set explicitly*/
-            padding:0 $h-pad;
-        }
-
-        &.active {
-            @include box-shadow(inset 0 3px 8px rgba(black,.3));
-        }
-    }
-
-    #toc-navbar-item {
-        width:$toc-width;
-
-        .navbar-item-text:before {
-            opacity:.8;
-        }
-
-        @media only screen and (max-width: $screen-sm-min) {
-            width:auto;
-            // TODO define tablet/phone appearance
-        }
-    }
-
-    #toc {
-        @import "nav.scss";
-
-        & {
-            position: absolute;
-            margin-top:$navbar-border-width;
-            top:100%;
-            left:0;
-    //        @include box-shadow(inset -5px 0px 5px -5px rgba(black,.5));
-        }
-
-        @media only screen and (max-width: $screen-sm-min) {
-            display:none;
-        }
-    }
-}
-
-
-/**
- * highlighting menu entries (if their respective blueprint overwirtes 
- * the body_class variable!)
- */
-body.mwf #sidebar a.mwf { background: #BFB; }
-body.cmf #sidebar a.cmf { background: #BFB; }
-body.local_fields #sidebar a.local_fields { background: #BFB; }
-
-.main {
-    // Not sure about this one...we'll see
-    min-height:100%;
-
-    display:block;
-    width: auto;
-    margin: 0 auto;
-    padding:0;
-
-    background:white;
-
-    border:1px solid #ccc;
-    /* transparent instead of none to fix heading margin-top box-model issue */
-    border-top-color:transparent;
-    border-bottom-color:transparent;
-    @include box-shadow(0 5px 5px rgba(0,0,0,.5));
-
-    .has-toc & {
-        margin:0 auto;
-        margin-left:$toc-width;
-
-        @media only screen and (max-width: $screen-sm-min) {
-            // default to toc collapsed
-            margin-left:0;
-        }
-    }
-
-}
-
-.abstract {
-    h1, h5 {
-        &:after {
-            content: ". ";
-        }
-    }
-}
-
-section {
-
-    @include section-heading {
-        .type {
-            &:after {
-                content: " ";
-            }
-        }
-
-        .codenumber {
-            &:after {
-                content: ": ";
-            }
-        }
-
-        .title {
-        }
-    }
-
-    &.chapter {
-        @include section-heading {
-            font-size: $font-size-h2;
-
-            /* Chapter title goes on it's own line (as in LaTeX) */
-            .title {
-                display:block;
-                margin-top:1em;
-                margin-bottom:1.25em;
-            }
-
-            .codenumber, .type {
-                font-size: .8em;
-            }
-
-            .codenumber:after {
-                    content: "";
-            }
-        }
-
-        /* Sections inside of chapters */
-        .section {
-            @include section-heading {
-                font-size: $font-size-h3;
-            }
-
-            .subsection {
-                @include section-heading {
-                    font-size: $font-size-h4;
-                }
-
-                .subsubsection, .subsection {
-                    @include section-heading {
-                        font-size: $font-size-h5;
-                    }
-                }
-            }
-        }
-    }
-
-    /* Sections outside of chapters */
-    &.section {
-        @include section-heading {
-            font-size: $font-size-h2;
-        }
-
-        .subsection {
-            @include section-heading {
-                font-size: $font-size-h3;
-            }
-
-            .subsubsection, .subsection {
-                @include section-heading {
-                    font-size: $font-size-h4;
-                }
-            }
-        }
-    }
-
-    /* Hide type on section headings */
-    &.section, &.subsection, &.subsubsection {
-
-        @include section-heading {
-            .type {
-                display:none;
-            }
-
-            .codenumber:after {
-                content: " ";
-            }
-        }
-
-    }
-
-    &.chapter .section, &.subsection, &.subsubsection {
-        margin: #{2*$line-height-base}em 0;
-    }
-}
-
-.definition-like {
-    & > h1, & > .heading, 
-    & > h2, & > h3, & > h4, & > h5, & > h6 {
-        display:inline;
-        //font-family:inherit;
-        font-weight:bold;
-        font-size: $font-size-h5;
-        font-size: 1.05em;
-
-        .type:after {
-            content: " ";
-        }
-
-        /* TODO Do we still need this? */
-        .acro:after {
-            content: ": ";
-        }
-
-        &:after { 
-            content: ". ";
-        }
-
-        // So that the header is inline with paragraph text 
-        & + p {
-            display:inline;
-        }
-    }
-
-
-    margin:$line-height-em 0;
-}
-
-.theorem-like {
-    @extend .definition-like;
-
-    @include section-heading {
-        .codenumber:after {
-            content: ". ";
-        }
-    }
-
-    /* TODO remove ol and ul when possible */
-    p, ol, ul {
-        font-style: italic;
-    }
-
-    .statement {
-        p:first-child {
-            display:inline;
-        }
-
-        &:last-child, &:last-of-type {
-            margin-bottom:0;
-        }
-    }
-}
-
-.proof {
-    @extend .definition-like;
-
-    h1, h5 {
-        font-weight:normal;
-        font-style:italic;
-
-        .type:after {
-            content: ". ";
-        }
-    }
-
-    &:after {
-        content:"\220E";
-        display:block;
-        text-align:right;
-    }
-}
-
-.subsection {
-    /* (mxdubois: Not sure we need this) to make more space above 
-     * the next subsection, when a subsection
-     * ends with a theorem
-     */
-    .theorem-like:last-child { margin-bottom: 30px }
-}
-
-.annotatedacronyms { margin: 15px 0 0 0; }
-
-.diagram {text-align:center; margin-bottom:2em}
-
-.context {text-align:right}
-
-.attribution {
-    text-align:right;
-}
-
-.terminology {
-    font-style:italic;
-    font-weight:bold;
-}
-
-.main > .article, .main > .section, .main > #content {
-
-    & {
-        margin:3em;
-        max-width:100%; /* override, we'll handle this elsewhere */
-    }
-
-    @include section-title {
-      font-size: $font-size-h2;  
-    }
-
-    @include section-heading {}
-    
-    .section, .subsection {
-
-        @include section-title {
-            font-size: $font-size-h4;
-        }
-
-        @include section-heading {}
-
-        .subsection {
-            @include section-title {
-                font-size:$font-size-h5;
-            }
-
-            @include section-heading {}
-        }
-    }
-}
+// Grays
+// -------------------------
+
+$gray-darker:            lighten(#000, 13.5%) !default; // #222
+$gray-dark:              lighten(#000, 20%) !default;   // #333
+$gray:                   lighten(#000, 33.5%) !default; // #555
+$gray-light:             lighten(#000, 60%) !default;   // #999
+$gray-lighter:           lighten(#000, 93.5%) !default; // #eee
+
+// Brand colors
+// -------------------------
+
+$brand-primary:         #2655a4 !default;
+$brand-primary-light:   lighten($brand-primary,20%);
+$brand-primary-dark:    darken($brand-primary,20%);
+
+$brand-secondary:        #45A861 !default;
+$brand-secondary-light:       lighten($brand-secondary,20%);
+$brand-secondary-dark:       darken($brand-secondary, 20%);
+
+$brand-success:         #719900 !default;
+$brand-warning:         #b58900 !default;
+$brand-danger:          #d9534f !default;
+$brand-info:            #2aa198 !default;
+
+
+// Links
+// -------------------------
+$link-color:               $brand-primary !default;
+$link-hover-color:         darken($link-color, 15%) !default;
+$link-tooltip-color:       $brand-info;
+$link-tooltip-color-hover: darken($brand-info, 15%);
+
+// Knowls
+// -------------------------
+$knowl-link-color: saturate($brand-primary, 10%);
+$knowl-link-color-hover: saturate(darken($brand-primary, 10%), 10%); 
+
+$knowl-border-width:10px;
+$knowl-padding:10px;
+
+$knowl-border-color: desaturate(lighten($brand-primary, 32%), 10%);
+$knowl-border-color-bold: darken($knowl-border-color, 10%);
+
+$knowl-within-knowl-bg-color: white;
+$knowl-bg-color: desaturate(lighten($knowl-border-color, 17%), 15%);
+
+// Header
+// -------------------------
+$header-title-color: $brand-primary;
+$header-subtitle-color: #777;
+$header-bg: white ;
+
+// Navbar
+// -----------------------
+$navbar-color: $gray-dark;
+$navbar-bg: #eee;
+
+// Table of Contents
+// ------------------------
+$toc-bg: $navbar-bg;
+
+$toc-link-bg:transparent;
+$toc-link-bg-hover:$link-color;
+$toc-link-bg-active:$link-color;
+
+$toc-link-color:$brand-primary;
+$toc-link-color-hover:white;
+$toc-link-color-active:white;
+
+$toc-heading-bg: $brand-secondary; 
+$toc-heading-bg-hover: $toc-link-bg-hover; 
+
+$toc-heading-color: white;
+$toc-heading-color-hover: $toc-link-color-hover ;
+
+@import "mathbook";
