@@ -29,15 +29,17 @@ $link-tooltip-color-hover: darken($brand-info, 15%);
 
 // Knowls
 // -------------------------
+$knowl-link-color: $brand-primary !default;
+$knowl-link-color-hover: darken($brand-primary, 10%) !default; 
 
-$knowl-link-color: #00a !default;
-$knowl-link-color-hover: #006 !default;
 $knowl-border-width:10px !default;
 $knowl-padding:10px !default;
-$knowl-border-color: #d5d5ff !default;
-$knowl-border-color-bold:#aaaaff !default;
+
+$knowl-border-color: lighten($brand-primary, 32%) !default;
+$knowl-border-color-bold: darken($knowl-border-color, 10%) !default;
+
 $knowl-within-knowl-bg-color: white !default;
-$knowl-bg-color: #eeeeff !default;
+$knowl-bg-color: desaturate(lighten($knowl-border-color, 17%), 10%) !default;
 
 // Typography
 // -------------------------

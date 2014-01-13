@@ -1,7 +1,4 @@
 var $ = jQuery;
-var NAVBAR_SELECTOR = "#navbar";
-var TOP_LINK_SELECTOR = "#navbar .top-link";
-var TOC_SELECTOR = "#toc";
 var Mathbook = function(options) {
 
     var settings = $.extend({
@@ -10,6 +7,11 @@ var Mathbook = function(options) {
 
     // Private vars
     // -------------------------------------------------------------------------
+    var NAVBAR_SELECTOR = "#navbar";
+    var TOP_LINK_SELECTOR = "#navbar .top-link";
+    var TOC_SELECTOR = "#toc";
+    var CONTENT_SELECTOR = "#content";
+
     var that = this;
     var hashOnLoad;
     var scrollingNavLoaded = false;
@@ -29,12 +31,33 @@ var Mathbook = function(options) {
         // Cache element references
         $navbar = $(NAVBAR_SELECTOR);
         $toc = $(TOC_SELECTOR);
+        $content = $(CONTENT_SELECTOR);
 
         $w.resize(that.resize);
 
         that.initScrollingNav();
+        scrollingNav.enableSectionTracking();
 
-        // TODO expand/MathJax process knowl from hashOnLoad if necessary
+        // By default, MathJax scrolls the window to the hash location
+        // after "End Typeset" event. We need to override this functionality
+
+        // Override MathJax positionToHash configuration
+        MathJax.Hub.Register.StartupHook("Begin Config", function() {
+            MathJax.Hub.Config({
+                positionToHash: false
+            });
+        });
+        
+        // when Mathjax is finished rendering
+        MathJax.Hub.Register.StartupHook("End Typeset", function () {
+            console.log("MathJax End Typeset");
+
+            // we handle the hash positioning so that it lines up
+            // nicely with our fixed header 
+            scrollingNav.scrollToSection(hashOnLoad.substr(1));
+            // TODO expand/MathJax process knowl from hashOnLoad if necessary
+        });
+
     };
 
     this.initScrollingNav = function() {
@@ -43,9 +66,11 @@ var Mathbook = function(options) {
             header: NAVBAR_SELECTOR,
             nav: TOC_SELECTOR,
             topLink: TOP_LINK_SELECTOR,
-            viewOffset: 50,
+            viewOffset: 100,
             anchorAttr: 'id',
             speed: 300,
+            trackSections: false, // we'll enable this when ready
+            positionToHash: false, // we'll handle this
             onLoad: that.onScrollingNavLoaded
         });
     };
@@ -61,9 +86,18 @@ var Mathbook = function(options) {
             // set toc height to fill window
             var navbarHeight = $navbar.outerHeight();
             var windowHeight = $w.height();
-            $toc.height(windowHeight - navbarHeight);
+            var viewportHeight = windowHeight - navbarHeight;
+
+            $toc.height(viewportHeight);
+            $content.css({'minHeight': viewportHeight });
+
+            // Set view offset to ratio of viewport height
+            // if(scrollingNav) {
+            //     scrollingNav.setViewOffset(viewportHeight / 4);
+            // }
         }
     };
+
 
     // Run init when we are constructed
     this.init();
@@ -75,3 +109,5 @@ $(window).load( function() {
     var mathbook = new Mathbook({
     });
 });
+
+

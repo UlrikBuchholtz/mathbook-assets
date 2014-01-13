@@ -84,8 +84,13 @@ body, html body {
 }
 
 
-.knowl-output {
-    @import "knowl";
+@import "knowl";
+@include knowl-link();
+
+/* first and third depth */
+.knowl-output, .knowl-output  .knowl-output  .knowl-output {
+
+    @include knowl();
     @import "exercises";
     @include exercise($knowl-border-color);
     @include exercisegroup($knowl-border-color, darken($knowl-border-color, 0%));
@@ -99,6 +104,19 @@ body, html body {
     overflow-y:hidden;
     padding-top:1px;
     padding-bottom:1px;
+}
+
+/* 
+ * Reposition MathJax loading message so it overlays content instead of navbar
+ * to override, we must add body specificity
+ */
+body #MathJax_Message {
+    left: .5*$base-font-size;
+    bottom: .5*$base-font-size;
+    background:rgba(white,.9);
+    color: $brand-primary;
+    border-color: desaturate(lighten($brand-primary, 30%), 20%);
+    @include border-radius(.3em);
 }
 
 .container {
@@ -121,7 +139,7 @@ body, html body {
     & { 
         background:$navbar-bg;
         border-bottom:$navbar-border-width solid darken($toc-bg, 15%);
-        z-index:99999;
+        z-index:100;
     }
 
     &.scrolling-nav-loaded {

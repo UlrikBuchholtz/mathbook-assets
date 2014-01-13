@@ -24,9 +24,16 @@ var ScrollingNav = function (options) {
           sectionSelector: 'section',
           scrollToAttr: 'data-scroll',
           anchorAttr: 'data-anchor',
+
+          trackSections: true,
           
           // Offset from top of the viewport at which section entry occurs
           viewOffset: 50,
+
+          // Whether or not to override the browser's jump to hash
+          // implementation and scroll to the hash onLoad with animation
+          // (if animated == true)
+          positionToHash: true,
 
           // If true, history states will be pushed rather than replaced
           // so each section entry will create a new history entry
@@ -74,6 +81,8 @@ var ScrollingNav = function (options) {
     var $placeholder = $('<div>');
     var currentScrollAnchor = null;
     var $currentSections = null;
+    var isSectionTrackingInit = false;
+    var isSectionTrackingEnabled = settings.trackSections;
 
 
     // Public vars
@@ -93,7 +102,8 @@ var ScrollingNav = function (options) {
 
         // Now add the fixed offset (due to other fixed/absolute elements)
         headerOffsetTop += $header.get(0).getBoundingClientRect().top;
-        offsetTop = headerOffsetTop - parseInt($header.css('top'), 10);
+        // offsetTop = headerOffsetTop - parseInt($header.css('top'), 10);
+        offsetTop = headerOffsetTop;
        
         // Add the header height to the view offset since the 
         // viewable frame is partially occluded by the header
@@ -126,7 +136,6 @@ var ScrollingNav = function (options) {
     // Animated scroll to a section
     // Returns false if no section to scroll to on this page
     this.scrollToSection = function(scrollAnchor, callback) {
-        console.log("scrollToSection(" + scrollAnchor + ",...)");
         var sectionExists = false;
         var selector = settings.sectionSelector 
                                 + "[" + settings.anchorAttr 
@@ -145,14 +154,12 @@ var ScrollingNav = function (options) {
 
             // Define some things we need to do after scrolling
             var wrappedCallback = function() {
-                console.log("ScrollTo animate wrappedcallback");
                 that.startCheckSection();
                 if(callback && typeof callback === "function") {
                     callback();
                 }
             };
 
-            console.log("Beginning animate");
             // Perform the scroll
             $('body,html').animate({
                 scrollTop: scrollPoint
@@ -371,14 +378,16 @@ var ScrollingNav = function (options) {
         // Stop an interval that might be running already
         that.stopCheckSection();
 
-        // Ensure that we check it immediately
-        if(settings.checkSectionInterval > 0 ) {
-            that.checkSection();
-        }
+        if(isSectionTrackingEnabled) {
+            // Ensure that we check it immediately
+            if(settings.checkSectionInterval > 0 ) {
+                that.checkSection();
+            }
 
-        // and start an interval 
-        that.checkSectionIntervalID = 
-            setInterval( that.checkSection, settings.checkSectionInterval );
+            // and start an interval 
+            that.checkSectionIntervalID = 
+                setInterval( that.checkSection, settings.checkSectionInterval );
+        }
     };
 
     // Stop the checkSection interval
@@ -386,6 +395,27 @@ var ScrollingNav = function (options) {
         clearInterval(that.checkSectionIntervalID); // to be safe
     };
 
+
+    this.enableSectionTracking = function() {
+        console.log("Section tracking enabled");
+        isSectionTrackingEnabled = true;
+        this.startCheckSection();
+    };
+
+    this.disableSectionTracking = function() {
+        console.log("Section tracking disabled");
+        isSectionTrackingEnabled = false;
+        this.stopCheckSection();
+    };
+
+    this.getCurrentScrollAnchor = function() {
+        return currentScrollAnchor;
+    };
+
+    this.setViewOffset = function(newOffset) {
+        settings.viewOffset = newOffset;
+        that.computeOffsets();        
+    };
 
     // init
     this.init = function() {
@@ -406,12 +436,14 @@ var ScrollingNav = function (options) {
         $w.resize(that.resize);
         that.resize();
 
-        if (typeof location.hash !== "undefined" && location.hash !== null &&
-                location.hash.substr(1) !== ""){
-            console.log("There is a hash.");
-            // If there is already a hash set onLoad, then we need to disable our
-            // hash/scroll listeners, reset to top, and animate the scroll from
-            // top to the the set hash position.
+        // If positionToHash is enabled,
+        // and there is already a hash set onLoad, then we need to disable our
+        // hash/scroll listeners, reset to top, and animate the scroll from
+        // top to the the set hash position.
+        if (settings.positionToHash 
+                && typeof location.hash !== "undefined" 
+                && location.hash !== null 
+                && location.hash.substr(1) !== ""){
 
             // Timeout zero allows the browser to do it's thing before
             // we come back and fix the scroll 
@@ -423,7 +455,6 @@ var ScrollingNav = function (options) {
                 that.scrollToSection(location.hash.substr(1), that.onLoad);
             }, 0);
         } else{
-            console.log("There is no hash!");
             that.onLoad();
         }
     }

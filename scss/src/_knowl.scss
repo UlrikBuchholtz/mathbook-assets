@@ -1,47 +1,93 @@
 // Knowl
 @import "typography";
-& {
-    border: $knowl-border-width solid $knowl-border-color;
-    @include border-radius($border-radius-large);
-    margin-bottom:$line-height-computed;
+
+$border-color: $knowl-border-color;
+
+@mixin knowl-link() {
+    *[knowl] {
+        &, &:hover, &.active {
+            color: $knowl-link-color;
+            background: transparent;
+            border-bottom: 2px dotted $knowl-link-color;
+            font-weight:500;
+            padding:0px 2px;
+            margin:0;
+            line-height:1.3;
+            white-space: nowrap;
+            @include inline-block(baseline);
+            @include border-top-left-radius($border-radius-small);
+            @include border-top-right-radius($border-radius-small)
+        }
+
+        &.active {
+            $bg-color: lighten($knowl-border-color, 20%);
+            color: darken($bg-color, 60%);
+            background: $bg-color;
+            border-bottom: 2px solid $knowl-border-color-bold;
+        }
+
+        &:hover {
+            color: $knowl-link-color-hover;
+            background: $knowl-bg-color;
+            text-decoration:none;
+            border-bottom:2px solid $knowl-border-color-bold;
+        }
+    }
 }
 
-.knowl-footer {
-    background: $knowl-border-color;
-    bottom: -$knowl-border-width;
-    padding:1px 0px 1px $knowl-border-width;
-}
-
-.knowl-output {
+@mixin knowl() {
     & {
-        border-color: $knowl-border-color-bold;
-        background: $knowl-within-knowl-bg-color;
+        border: $knowl-border-width solid $knowl-border-color;
+        @include border-radius($border-radius-large);
+        margin-bottom:$line-height-computed;
     }
 
     .knowl-footer {
-        color: desaturate(darken($knowl-border-color-bold, 60%), 80%) ;
-        background: $knowl-border-color-bold;
+        color: darken($knowl-border-color, 60%);
+        background: $knowl-border-color;
+        bottom: -$knowl-border-width;
+        padding:1px 0px 1px $knowl-border-width;
     }
+
+    // TODO recursive solution?
+    & .knowl-output {
+        & {
+            border-color: $knowl-border-color-bold;
+            background: $knowl-within-knowl-bg-color;
+        }
+
+        /* All knowls within knowls should have this  */
+        &, & > .knowl-output {
+            border-width: $knowl-border-width / 2;
+            border-bottom-width: $knowl-border-width;
+        }
+
+        .knowl-footer {
+            color: darken($knowl-border-color, 60%);
+            // color: desaturate(darken($knowl-border-color-bold, 60%), 80%) ;
+            background: $knowl-border-color-bold;
+        }
+    }
+
+    .knowl-content {
+        padding: $knowl-padding;
+        padding-bottom:0;
+
+        .exercise {
+            margin-left: -$knowl-padding;
+            margin-right: -$knowl-padding;
+            padding-right: $knowl-padding;
+            padding-left: $knowl-padding;
+        }
+
+        .exercisegroup {
+            margin-left:-$knowl-padding;
+            margin-right:-$knowl-padding;
+            padding-right: $knowl-padding;
+            padding-left: $knowl-padding;
+        }
+    }
+
+    @include inline-code(white, $knowl-border-color);
+    @include code($bg-color: white, $border-color: $knowl-border-color-bold);
 }
-
-.knowl-content {
-    padding: $knowl-padding;
-    padding-bottom:0;
-
-    .exercise {
-        margin-left: -$knowl-padding;
-        margin-right: -$knowl-padding;
-        padding-right: $knowl-padding;
-        padding-left: $knowl-padding;
-    }
-
-    .exercisegroup {
-        margin-left:-$knowl-padding;
-        margin-right:-$knowl-padding;
-        padding-right: $knowl-padding;
-        padding-left: $knowl-padding;
-    }
-}
-
-@include inline-code(white, $knowl-border-color);
-@include code($bg-color: white, $border-color: $knowl-border-color-bold);
