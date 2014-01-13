@@ -38,6 +38,7 @@ $border-color: $knowl-border-color;
 @mixin knowl() {
     & {
         border: $knowl-border-width solid $knowl-border-color;
+        background: $knowl-bg-color;
         @include border-radius($border-radius-large);
         margin-bottom:$line-height-computed;
     }
