@@ -44,6 +44,7 @@ $border-color: $knowl-border-color;
     }
 
     .knowl-footer {
+        font-size:x-small;
         color: darken($knowl-border-color, 60%);
         background: $knowl-border-color;
         bottom: -$knowl-border-width;
@@ -72,7 +73,6 @@ $border-color: $knowl-border-color;
 
     .knowl-content {
         padding: $knowl-padding;
-        padding-bottom:0;
 
         .exercise {
             margin-left: -$knowl-padding;

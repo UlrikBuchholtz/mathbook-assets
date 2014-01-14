@@ -36,14 +36,15 @@ $link-tooltip-color-hover: darken($brand-info, 15%);
 $knowl-link-color: saturate($brand-primary, 10%);
 $knowl-link-color-hover: saturate(darken($brand-primary, 10%), 10%); 
 
-$knowl-border-width:10px;
+$knowl-border-width:5px;
+$knowl-footer-width:10px;
 $knowl-padding:10px;
 
-$knowl-border-color: desaturate(lighten($brand-primary, 32%), 10%);
-$knowl-border-color-bold: darken($knowl-border-color, 10%);
+$knowl-border-color: desaturate(lighten($brand-primary, 50%), 10%);
+$knowl-border-color-bold: $knowl-border-color;
 
 $knowl-within-knowl-bg-color: white;
-$knowl-bg-color: desaturate(lighten($knowl-border-color, 22%), 15%);
+$knowl-bg-color: desaturate(lighten($knowl-border-color, 13%), 6%);
 
 // Header
 // -------------------------
