@@ -44,7 +44,7 @@ $knowl-border-color: desaturate(lighten($brand-primary, 50%), 10%);
 $knowl-border-color-bold: $knowl-border-color;
 
 $knowl-within-knowl-bg-color: white;
-$knowl-bg-color: desaturate(lighten($knowl-border-color, 12%), 6%);
+$knowl-bg-color: desaturate(lighten($knowl-border-color, 10%), 6%);
 
 // Header
 // -------------------------
