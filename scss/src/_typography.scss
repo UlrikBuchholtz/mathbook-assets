@@ -163,8 +163,8 @@
 
     p code, .code {
         margin:0 1px; // override beezer.css
-        padding: 1px 5px;
-        font-size: 90%;
+        padding: 0px 5px;
+        font-size: 80%;
         white-space: nowrap;
         background: $bg-color;
         @include border-radius($border-radius-small);

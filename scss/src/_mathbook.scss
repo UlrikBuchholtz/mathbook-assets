@@ -50,6 +50,8 @@ header address {
     font-style: inherit;
 }
 
+// A mixin for section titles 
+// use @include section-title { properties }
 @mixin section-title {
     & > .heading > .title {
         // Override mathbook.css
@@ -60,6 +62,8 @@ header address {
     }
 }
 
+// A mixin that supports all section heading possibilities.
+// use @include section-heading { properties }
 @mixin section-heading {
     & > .heading,
     & > h1,
@@ -73,13 +77,12 @@ header address {
         margin-right:0;
         
         // @include content
-        // use @include section-heading { content }
         @content;
     }
 }
 
 body, html body {
-    background:#ccc;
+    background:#ddd;
 }
 
 
@@ -88,7 +91,6 @@ body, html body {
 
 /* first and third depth */
 .knowl-output, .knowl-output  .knowl-output  .knowl-output {
-
     @include knowl();
     @import "exercises";
     @include exercise($knowl-border-color);
@@ -107,7 +109,7 @@ body, html body {
 
 /* 
  * Reposition MathJax loading message so it overlays content instead of navbar
- * to override, we must add body specificity
+ * To override, we must add body specificity
  */
 body #MathJax_Message {
     left: .5*$base-font-size;
@@ -237,14 +239,15 @@ body.local_fields #sidebar a.local_fields { background: #BFB; }
     /* transparent instead of none to fix heading margin-top box-model issue */
     border-top-color:transparent;
     border-bottom-color:transparent;
-    @include box-shadow(0 5px 5px rgba(0,0,0,.5));
+    //@include box-shadow(0 5px 5px rgba(0,0,0,.5));
 
+    /* If has table of contents, adjust layout to accomodate*/
     .has-toc & {
         margin:0 auto;
         margin-left:$toc-width;
 
         @media only screen and (max-width: $screen-sm-min) {
-            // default to toc collapsed
+            // default to toc collapsed on smaller screens
             margin-left:0;
         }
     }
@@ -290,6 +293,7 @@ section {
             }
 
             .codenumber, .type {
+                /* Chapter titles are smaller (as in LaTeX) */
                 font-size: .8em;
             }
 
@@ -471,9 +475,11 @@ section {
     
     .section, .subsection {
 
-        @include section-title {
-            font-size: $font-size-h4;
-        }
+        // TODO Was this important?
+        // Causes mismatched section title and codenumber font-size.
+        //@include section-title {
+            //font-size: $font-size-h4;
+        //}
 
         @include section-heading {}
 
