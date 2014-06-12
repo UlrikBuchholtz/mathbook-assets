@@ -48,10 +48,19 @@ h2 {
 
     /*Props shared by headings and heading-links*/
     &, a:link, a:visited {
+        $bottom-border-width: 2px;
+        $padding: 5px;
+
         color: $toc-heading-color;
         background: $toc-heading-bg;
-        padding: 5px 5px 5px $h-pad;
-        border-bottom:2px solid darken($toc-heading-bg, 10%);
+        border-bottom:$bottom-border-width solid darken($toc-heading-bg, 10%);
+
+        padding: $padding;
+        padding-left: $h-pad; /* left-indent */
+
+        /* Bias text baseline towards lower half to account for border-bottom */
+        padding-top: $padding + $bottom-border-width;
+        padding-bottom: $padding - $bottom-border-width;
     }
 
     /*Prop resets for headings containing links*/

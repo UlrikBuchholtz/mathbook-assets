@@ -25,16 +25,18 @@
 @import "numbering";
 @import "theorem-env";
 @import "compass/reset/utilities";
+@import "heading";
 @include reset-html5();
 
-html, body, html body {
+html, body {
     margin:0;
     padding:0;
 }
 
-body, html body {
+body {
     /* Override this in <style> tag if necessary */
     counter-reset:chapter;
+    background:#ddd;
 }
 
 @include typography();
@@ -43,52 +45,17 @@ body, html body {
     @include theorem-env();
 }
 
-header address {
+address {
     padding:0;
     margin:0;
     line-height: inherit;
     font-style: inherit;
 }
 
-// A mixin for section titles 
-// use @include section-title { properties }
-@mixin section-title {
-    & > .heading > .title {
-        // Override mathbook.css
-        margin-left:0;
-        margin-right:0;
-        
-        @content;
-    }
-}
-
-// A mixin that supports all section heading possibilities.
-// use @include section-heading { properties }
-@mixin section-heading {
-    & > .heading,
-    & > h1,
-    & > h2,
-    & > h3,
-    & > h4,
-    & > h5,
-    & > h6 {
-        // Override mathbook.css
-        margin-left:0;
-        margin-right:0;
-        
-        // @include content
-        @content;
-    }
-}
-
-body, html body {
-    background:#ddd;
-}
-
-
 @import "knowl";
 @include knowl-link();
 
+// TODO what's going on here?
 /* first and third depth */
 .knowl-output, .knowl-output  .knowl-output  .knowl-output {
     @include knowl();
@@ -120,13 +87,22 @@ body #MathJax_Message {
     @include border-radius(.3em);
 }
 
+/* 
+ * Containers restrict max-width of content within elements 
+ * that may stretch to the width of the viewport. 
+ *
+ * We are not currently using them since the layout is left-aligned.
+ */
 .container {
+    // For centered layout:
     //max-width:960px;
     //margin:0 auto;
 }
 
 .page {
     max-width:960px;
+
+    // For centered layout:
     //margin:0 auto;
 }
 
@@ -134,6 +110,7 @@ body #MathJax_Message {
     @import "masthead.scss";
 }
 
+/* The horizontal navbar */
 #navbar {
     $navbar-border-width: 1px;
 
@@ -143,9 +120,11 @@ body #MathJax_Message {
         z-index:100;
     }
 
+    /* Styles applied when the scrolling script has loaded */
     &.scrolling-nav-loaded {
     }
 
+    /* Styles applied to make the navbar persistently visible */
     &.scrolling-nav-persistent {
         position:fixed;
         top:0;
@@ -154,6 +133,7 @@ body #MathJax_Message {
         @include box-shadow(rgba(0,0,0,.5) 0 2px 5px);
     }
 
+    /* An item/button in the horizontal navbar */
     .navbar-item {
         $border-color: darken($navbar-bg, 15%);
 
@@ -185,6 +165,7 @@ body #MathJax_Message {
         }
     }
 
+    /* The table-of-contents button */
     #toc-navbar-item {
         width:$toc-width;
 
@@ -198,6 +179,7 @@ body #MathJax_Message {
         }
     }
 
+    /* The table-of-contents itself */
     #toc {
         @import "nav.scss";
 
@@ -206,7 +188,6 @@ body #MathJax_Message {
             margin-top:$navbar-border-width;
             top:100%;
             left:0;
-    //        @include box-shadow(inset -5px 0px 5px -5px rgba(black,.5));
         }
 
         @media only screen and (max-width: $screen-sm-min) {
@@ -236,7 +217,7 @@ body.local_fields #sidebar a.local_fields { background: #BFB; }
     background:white;
 
     border:1px solid #ccc;
-    /* transparent instead of none to fix heading margin-top box-model issue */
+    /* transparent instead of none to fix@include heading margin-top box-model issue */
     border-top-color:transparent;
     border-bottom-color:transparent;
     //@include box-shadow(0 5px 5px rgba(0,0,0,.5));
@@ -254,17 +235,37 @@ body.local_fields #sidebar a.local_fields { background: #BFB; }
 
 }
 
+/* The homepage or "cover" of the mathbook */
+.front-matter {
+    @include heading {
+        text-align:center;
+    }
+
+    .contributors {
+        text-align:center;
+        font-style:normal;
+        color:$gray-dark;
+    }
+}
+
 .abstract {
-    h1, h5 {
+    @include heading {
         &:after {
             content: ". ";
         }
     }
 }
 
+@import "chapter-index";
+
+/**
+ * Section elements. These come in many different flavors.
+ * Some styles are applied to all of them, and some to specific flavors.
+ */
+// NOTE: Be sure you understand the & selector in SASS.
 section {
 
-    @include section-heading {
+    @include heading {
         .type {
             &:after {
                 content: " ";
@@ -277,44 +278,93 @@ section {
             }
         }
 
-        .title {
-        }
+        .title {}
     }
 
+    /* A section representing a Chapter in the mathbook */
     &.chapter {
-        @include section-heading {
-            font-size: $font-size-h2;
+        @import "utilities";
 
-            /* Chapter title goes on it's own line (as in LaTeX) */
-            .title {
-                display:block;
-                margin-top:1em;
-                margin-bottom:1.25em;
+        /* Styles applied to both <header> format and non-<header> format */
+        &, & > header {
+            @include heading {
+
+                $title-font-size: $font-size-h2;
+                // calculate 1 standard line's height in terms of title's font-size
+                $gap:em($line-height-computed, $title-font-size);
+                $prefix-font-size: $font-size-h3;
+
+                & {
+                    /* 
+                     * We use font-size-base to calculate proper line-heights 
+                     * for vertical rythym
+                     */
+                    font-size: $font-size-base;
+                    margin-bottom: em(2*$line-height-computed);
+                }
+
+                .title {
+                    /* Chapter title goes on it's own line (as in LaTeX) */
+                    display:block;
+                    font-size: $title-font-size;
+                    margin-top: $gap;
+                }
+
+                .codenumber, .type {
+                    /* Chapter titles are smaller (as in LaTeX) */
+                    font-size: $prefix-font-size;
+                }
+
+                .codenumber:after {
+                        content: "";
+                }
+            }
+        }
+
+        /** 
+         * Chapter heading in the <header> format
+         * This format supports a byline for anthology textbooks 
+         * and journals with different chapter authors.
+         */
+        header {
+
+            & {
+                margin-bottom: em(2*$line-height-computed);
             }
 
-            .codenumber, .type {
-                /* Chapter titles are smaller (as in LaTeX) */
-                font-size: .8em;
+            @include heading {
+
+                & {
+                    margin-bottom: em($line-height-computed);
+                }
+
+                .title {
+                    /* The margin goes on the header element instead */
+                    margin-bottom:0;
+                }
+
             }
 
-            .codenumber:after {
-                    content: "";
+            .byline {
+                margin:0;
+                color: $gray-light;
+                &:before { content: "By "; }
             }
         }
 
         /* Sections inside of chapters */
         .section {
-            @include section-heading {
+            @include heading {
                 font-size: $font-size-h3;
             }
 
             .subsection {
-                @include section-heading {
+                @include heading {
                     font-size: $font-size-h4;
                 }
 
                 .subsubsection, .subsection {
-                    @include section-heading {
+                    @include heading {
                         font-size: $font-size-h5;
                     }
                 }
@@ -322,29 +372,28 @@ section {
         }
     }
 
-    /* Sections outside of chapters */
+    /* Sections outside of chapters (often on their own section page) */
     &.section {
-        @include section-heading {
+        @include heading {
             font-size: $font-size-h2;
         }
 
         .subsection {
-            @include section-heading {
+            @include heading {
                 font-size: $font-size-h3;
             }
 
             .subsubsection, .subsection {
-                @include section-heading {
+                @include heading {
                     font-size: $font-size-h4;
                 }
             }
         }
     }
 
-    /* Hide type on section headings */
+    /* Hide environment type on section headings */
     &.section, &.subsection, &.subsubsection {
-
-        @include section-heading {
+        @include heading {
             .type {
                 display:none;
             }
@@ -353,17 +402,24 @@ section {
                 content: " ";
             }
         }
-
     }
 
+    /* Margins for standard types */
     &.chapter .section, &.subsection, &.subsubsection {
         margin: #{2*$line-height-base}em 0;
     }
 }
 
+.subsection {
+    /* (mxdubois: Not sure we need this) to make more space above 
+     * the next subsection, when a subsection
+     * ends with a theorem
+     */
+    .theorem-like:last-child { margin-bottom: 30px }
+}
+
 .definition-like {
-    & > h1, & > .heading, 
-    & > h2, & > h3, & > h4, & > h5, & > h6 {
+    @include heading {
         display:inline;
         //font-family:inherit;
         font-weight:bold;
@@ -396,7 +452,7 @@ section {
 .theorem-like {
     @extend .definition-like;
 
-    @include section-heading {
+    @include heading {
         .codenumber:after {
             content: ". ";
         }
@@ -437,13 +493,6 @@ section {
     }
 }
 
-.subsection {
-    /* (mxdubois: Not sure we need this) to make more space above 
-     * the next subsection, when a subsection
-     * ends with a theorem
-     */
-    .theorem-like:last-child { margin-bottom: 30px }
-}
 
 .annotatedacronyms { margin: 15px 0 0 0; }
 
@@ -463,32 +512,30 @@ section {
 .main > .article, .main > .section, .main > #content {
 
     & {
-        margin:3em;
-        max-width:100%; /* override, we'll handle this elsewhere */
+        margin:3em; /* these are the page margins */
+        //max-width:100%; /* override, we'll handle this elsewhere */
     }
 
-    @include section-title {
-      font-size: $font-size-h2;  
+    @include heading {
+        .title {
+            font-size: $font-size-h2;  
+        }
     }
-
-    @include section-heading {}
     
     .section, .subsection {
 
         // TODO Was this important?
         // Causes mismatched section title and codenumber font-size.
-        //@include section-title {
+        //@include heading > .title {
             //font-size: $font-size-h4;
         //}
 
-        @include section-heading {}
-
         .subsection {
-            @include section-title {
-                font-size:$font-size-h5;
+            @include heading { 
+                & > .title {
+                    font-size:$font-size-h5;
+                }
             }
-
-            @include section-heading {}
         }
     }
 }

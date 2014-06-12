@@ -1,0 +1,10 @@
+// A mixin that targets all heading formats.
+// usage: @include heading { properties }
+@mixin heading {
+    & > .heading, & > header > .heading {
+        // Styles for all headings can go here
+
+        // allow property inclusion. See usage comment. 
+        @content;
+    }
+}

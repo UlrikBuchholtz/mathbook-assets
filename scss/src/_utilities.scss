@@ -1,0 +1,11 @@
+
+@function strip-units($number) {
+    @return $number / ($number * 0 + 1);
+}
+
+/* Converts px to em in a given font-size context */
+@function em($target-px, 
+             $context-font-size-px: $font-size-base
+) {
+    @return ($target-px / $context-font-size-px) * 1em;
+}

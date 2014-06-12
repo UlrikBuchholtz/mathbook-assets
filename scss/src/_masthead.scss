@@ -70,9 +70,8 @@
     }
 }
 
-// Shouldn't be ids!
-// bunch of silly overrides
-#title {
+/* IMPORTANT: #title is deprecated!*/
+#title, .title {
     color: $header-title-color;
     font-size:$font-size-h1;
     margin-left:0;
@@ -89,7 +88,8 @@
     }
 }
 
-#byline {
+/* IMPORTANT: #byline is deprecated! */
+#byline, .byline {
     color: $header-subtitle-color;
     font-size: .6*$font-size-h1;
     font-weight:normal;
