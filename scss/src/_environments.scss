@@ -14,11 +14,6 @@
             content: " ";
         }
 
-        /* TODO Do we still need this? */
-        .acro:after {
-            content: ": ";
-        }
-
         &:after { 
             content: ". ";
         }
@@ -58,14 +53,27 @@
 }
 
 .proof {
-    @extend .definition-like;
 
-    h1, h5 {
+    @include heading {
+        display:inline;
+        //font-family:inherit;
+        font-size: $font-size-h5;
+        font-size: 1.05em;
+
         font-weight:normal;
         font-style:italic;
 
         .type:after {
             content: ". ";
+        }
+
+        &:after { 
+            content: ". ";
+        }
+
+        // So that the header is inline with paragraph text 
+        & + p {
+            display:inline;
         }
     }
 
@@ -74,4 +82,6 @@
         display:block;
         text-align:right;
     }
+
+    margin:$line-height-em 0;
 }
