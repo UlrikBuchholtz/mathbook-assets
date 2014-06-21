@@ -236,7 +236,7 @@ body.local_fields #sidebar a.local_fields { background: #BFB; }
 }
 
 /* The homepage or "cover" of the mathbook */
-.front-matter {
+.frontmatter {
     @include heading {
         text-align:center;
     }
@@ -353,7 +353,7 @@ section {
         }
 
         /* Sections inside of chapters */
-        .section {
+        .section, .preface, .introduction, .conclusion {
             @include heading {
                 font-size: $font-size-h3;
             }
@@ -373,7 +373,7 @@ section {
     }
 
     /* Sections outside of chapters (often on their own section page) */
-    &.section {
+    &.section, &.preface, &.introduction, &.conclusion {
         @include heading {
             font-size: $font-size-h2;
         }
@@ -404,8 +404,14 @@ section {
         }
     }
 
-    /* Margins for standard types */
-    &.chapter .section, &.subsection, &.subsubsection {
+    // TODO better way to integrate this?
+    /* Margins for standard child section types */
+    &.chapter .section,
+    &.chapter .preface, 
+    &.chapter .introduction, 
+    &.chapter .conclusion, 
+    &.subsection, 
+    &.subsubsection  {
         margin: #{2*$line-height-base}em 0;
     }
 }
