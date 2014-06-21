@@ -1,0 +1,225 @@
+// TODO make more portable with default module variables pattern
+@import "compass/css3/user-interface";
+
+@mixin ui() {
+    .ui-link {
+        @include ui-link();
+    }
+    .ui-link-directional-right {
+        @include ui-link-directional($direction:right);
+    }
+    .ui-link-directional-left {
+        @include ui-link-directional($direction:left);
+    }
+    .ui-button-directional-right {
+        @include ui-button-directional($direction:right);
+    }
+    .ui-button-directional-left {
+        @include ui-button-directional($direction:left);
+    }
+}
+
+// WebKit-style focus
+// Taken from sass-blueprint
+// https://github.com/thomas-mcdonald/bootstrap-sass/blob/34d538dc33b302a02e86ccec3e0a93fbf41f0bfa/vendor/assets/stylesheets/bootstrap/_mixins.scss
+@mixin ui-tab-focus() {
+  // Default
+  outline: thin dotted #333;
+  // WebKit
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+// Standard link
+@mixin ui-link(
+    $color: $link-color, 
+    $color-hover:$link-hover-color) 
+{
+    &, &:link, &:visited {
+        color: $color;
+        text-decoration: none;
+        font-family:inherit; // Overide beezer.css
+    }
+
+    &:hover,
+    &:focus {
+        color: $color-hover;
+        text-decoration: underline;
+        cursor:pointer;
+    }
+
+    &:focus {
+      @include ui-tab-focus();
+    }
+}
+
+// Large, button-like links with arrows for linking to other pages
+@mixin ui-link-directional (
+    $direction: right,
+
+    $color: $toc-link-color,
+    $bg: $gray-lighter,
+    $arrow-color: $gray-light, 
+
+    $color-hover: $toc-link-color-hover,
+    $bg-hover: $toc-link-bg-hover,
+    $arrow-color-hover: $toc-link-color-hover, 
+
+    $color-active: $toc-link-color-active,
+    $bg-active: $toc-link-bg-active,
+    $arrow-color-active: $toc-link-color-active 
+) {
+
+    // Due to the rotation, these are opposite (width is height)
+    $triangle-height: .4em;
+    $triangle-width: .8em;
+
+    &, &:visited {
+        position:relative;
+        display:block;
+        text-decoration:none;
+        padding:.7em;
+        margin-bottom:.175em;
+        background: $gray-lighter;
+        text-decoration:none;
+        @include border-radius(3px);
+        
+        // Place arrow on correct side
+        @if $direction == right {
+            padding-right:1.7em;
+            &:after { right:1em; }
+        } @else {
+            padding-left: 1.7em;
+            &:after { left: 1em; }
+        }
+
+        &:after {
+            content: "";
+            position:absolute;
+
+            /* center vertically */
+            top:50%;
+            margin-top:-.5*$triangle-width;
+
+            @include triangle($direction: $direction, 
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$gray-light);
+        }
+    }
+    
+    &:hover {
+        color: $color-hover;
+        background: $bg-hover;
+        text-decoration:none;
+        cursor:pointer;
+
+        &:after {
+            @include triangle($direction:$direction, 
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$color-hover);
+        }
+    }
+
+    &:active {
+        position:relative;
+        color:$color-active;
+        background: $bg-active;
+        text-decoration:none;
+        @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
+
+        &:after {
+            @include triangle($direction:$direction, 
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$color-active);
+        }
+    }
+
+    &:focus {
+        @include ui-tab-focus();
+    }
+}
+
+// Button with an arrow on one side
+@mixin ui-button-directional(
+    $direction: right,
+
+    $color: $toc-link-color,
+    $bg: $gray-lighter,
+
+    $color-hover: $toc-link-color-hover,
+    $bg-hover: $toc-link-bg-hover,
+
+    $color-active: $toc-link-color-active,
+    $bg-active: $toc-link-bg-active
+) {
+
+    // Due to the rotation, these are opposite (width is height)
+    $triangle-width: $line-height-base*1em;
+    $triangle-height: $triangle-width / 2;
+
+    // TODO linear gradient?
+    position:relative;
+    color: $color;
+    background: $bg;
+    text-decoration:none;
+    padding: 0 .5em;
+    @include user-select(none);
+
+    // Place arrow on correct side
+    @if $direction == right {
+        /* round corners opposite arrow */
+        @include border-left-radius($border-radius-base);
+        &:after {right: 0; margin-right:-$triangle-height;}
+    } @else {
+        /* round corners opposite arrow */
+        @include border-right-radius($border-radius-base);
+        &:after {left: 0; margin-left:-$triangle-height;}
+    }
+
+    &:after {
+        content: "";
+        position: absolute;
+        top:0;
+
+        @include triangle($direction: $direction, 
+                          $width:$triangle-width,
+                          $height:$triangle-height,
+                          $color:$bg);
+    }
+
+    &:hover {
+        color: $color-hover;
+        background: $bg-hover;
+        text-decoration:none;
+        cursor:pointer;
+        &:after {
+            @include triangle($direction: $direction, 
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$bg-hover);
+        }
+    }
+
+    &:active {
+        color: $color-active;
+        background: $bg-active;
+        text-decoration:none;
+        @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
+
+        &:after {
+            @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
+            @include triangle($direction: $direction, 
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$bg-active);
+        }
+    }
+
+    &:focus {
+        // TODO improve focus interaction with arrow
+        @include ui-tab-focus();
+    }
+}

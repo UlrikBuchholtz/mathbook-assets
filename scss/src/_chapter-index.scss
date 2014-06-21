@@ -1,72 +1,18 @@
+@import "ui";
 @import "triangle";
 
 /* 
  * Table-of-contents for chapter index pages 
+ * NOTE: chapter-toc is deprecated
  */
-.chapter-toc {
+.chapter-toc, .page-toc {
 
     & {
         font-size:$font-size-h3;
     }
 
     & > a {
-
-        // Due to the rotation, these are opposite (width is height)
-        $triangle-height: .4em;
-        $triangle-width: .8em;
-
-        &, &:visited {
-            position:relative;
-            display:block;
-            text-decoration:none;
-            padding:.7em;
-            margin-bottom:.175em;
-            background: $gray-lighter;
-            @include border-radius(3px);
-
-            &:after {
-                content: "";
-                position:absolute;
-                right:1em;
-                /* center vertically */
-                top:50%;
-                margin-top:-.5*$triangle-width;
-
-                @include triangle($direction:right, 
-                                  $width:$triangle-width,
-                                  $height:$triangle-height,
-                                  $color:$gray-light);
-            }
-        }
-        
-        &:hover {
-            color: $toc-link-color-hover;
-            background: $toc-link-bg-hover;
-
-            &:after {
-                @include triangle($direction:right, 
-                                  $width:$triangle-width,
-                                  $height:$triangle-height,
-                                  $color:$toc-link-color-hover);
-            }
-        }
-
-        &:active {
-            position:relative;
-            color:$toc-link-color-active;
-            background: $toc-link-bg-active;
-            @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
-
-            &:after {
-                @include triangle($direction:right, 
-                                  $width:$triangle-width,
-                                  $height:$triangle-height,
-                                  $color:$toc-link-color-active);
-            }
-        }
-
-    
+        @include ui-link-directional();
     }
 
 }
-

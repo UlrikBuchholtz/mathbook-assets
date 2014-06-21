@@ -1,32 +1,47 @@
 /**!
 * The default styles for Mathbook-based textbooks.
 *
-* @author Michael DuBois (michael@michael-dubois.com)
+* @author Michael DuBois (michael@michaeldubois.me)
 */
 
 // Note: single line comments like this are not included in css output
 //
 // Naming Conventions
 // ------------------
-// Unfortunately, SASS has adopted the dash-separated scheme for variables.
-// That is, variables should take the following form: $my-awesome-var
+// Unfortunately, SASS uses the dash-separated scheme for variables.
+// So variables should take the following form: $my-awesome-var
 //
 // The portions of a variable name should be ordered from general to specific.
 // i.e. $color-button-primary not $primary-button-color
 //
 // Whenever possible, avoid variable names that describe their current value.
 // i.e. use $color-button-primary instead of $color-button-red
-// This is preferrable because variables are...variable. The value may change.
 
-// Global Variables
+// Real CSS imports first
 @import url(http://fonts.googleapis.com/css?family=PT+Serif:400,700);
+
+// SASS imports w/o output
 @import "variables";
 @import "typography";
 @import "numbering";
-@import "theorem-env";
 @import "compass/reset/utilities";
 @import "heading";
+@import "knowl";
+@import "utilities";
+
+// Perform standard reset
 @include reset-html5();
+
+// Global SASS imports w/ output
+@import "mathjax";
+
+/* Override default styling of address */
+address {
+    padding:0;
+    margin:0;
+    line-height: inherit;
+    font-style: inherit;
+}
 
 html, body {
     margin:0;
@@ -37,54 +52,6 @@ body {
     /* Override this in <style> tag if necessary */
     counter-reset:chapter;
     background:#ddd;
-}
-
-@include typography();
-
-.theorem {
-    @include theorem-env();
-}
-
-address {
-    padding:0;
-    margin:0;
-    line-height: inherit;
-    font-style: inherit;
-}
-
-@import "knowl";
-@include knowl-link();
-
-// TODO what's going on here?
-/* first and third depth */
-.knowl-output, .knowl-output  .knowl-output  .knowl-output {
-    @include knowl();
-    @import "exercises";
-    @include exercise($knowl-border-color);
-    @include exercisegroup($knowl-border-color, darken($knowl-border-color, 0%));
-}
-
-.MathJax_Display {
-    /* Allow mobile users to scroll equations 
-     * horizontally when they don't fit on the screen 
-     */
-    overflow-x:auto;
-    overflow-y:hidden;
-    padding-top:1px;
-    padding-bottom:1px;
-}
-
-/* 
- * Reposition MathJax loading message so it overlays content instead of navbar
- * To override, we must add body specificity
- */
-body #MathJax_Message {
-    left: .5*$base-font-size;
-    bottom: .5*$base-font-size;
-    background:rgba(white,.9);
-    color: $brand-primary;
-    border-color: desaturate(lighten($brand-primary, 30%), 20%);
-    @include border-radius(.3em);
 }
 
 /* 
@@ -107,93 +74,12 @@ body #MathJax_Message {
 }
 
 #masthead {
-    @import "masthead.scss";
+    @import "masthead";
 }
 
 /* The horizontal navbar */
 #navbar {
-    $navbar-border-width: 1px;
-
-    & { 
-        background:$navbar-bg;
-        border-bottom:$navbar-border-width solid darken($toc-bg, 15%);
-        z-index:100;
-    }
-
-    /* Styles applied when the scrolling script has loaded */
-    &.scrolling-nav-loaded {
-    }
-
-    /* Styles applied to make the navbar persistently visible */
-    &.scrolling-nav-persistent {
-        position:fixed;
-        top:0;
-        left:0;
-        right:0;
-        @include box-shadow(rgba(0,0,0,.5) 0 2px 5px);
-    }
-
-    /* An item/button in the horizontal navbar */
-    .navbar-item {
-        $border-color: darken($navbar-bg, 15%);
-
-        position:relative;
-        color:$navbar-color;
-        @include inline-block();
-
-        border-right:1px solid $border-color;
-
-        &:last-child {
-            border-right:none;
-        }
-
-        &:first-child {
-            border-right:1px solid $border-color;
-        }
-
-        .navbar-item-text {
-            color:inherit;
-            font-size:1em;
-            margin:0;
-            line-height:2.5;
-            /*Padding here so that item width can be set explicitly*/
-            padding:0 $h-pad;
-        }
-
-        &.active {
-            @include box-shadow(inset 0 3px 8px rgba(black,.3));
-        }
-    }
-
-    /* The table-of-contents button */
-    #toc-navbar-item {
-        width:$toc-width;
-
-        .navbar-item-text:before {
-            opacity:.8;
-        }
-
-        @media only screen and (max-width: $screen-sm-min) {
-            width:auto;
-            // TODO define tablet/phone appearance
-        }
-    }
-
-    /* The table-of-contents itself */
-    #toc {
-        @import "nav.scss";
-
-        & {
-            position: absolute;
-            margin-top:$navbar-border-width;
-            top:100%;
-            left:0;
-        }
-
-        @media only screen and (max-width: $screen-sm-min) {
-            display:none;
-        }
-    }
+    @import "navbar"
 }
 
 
@@ -217,7 +103,7 @@ body.local_fields #sidebar a.local_fields { background: #BFB; }
     background:white;
 
     border:1px solid #ccc;
-    /* transparent instead of none to fix@include heading margin-top box-model issue */
+    /* transparent instead of none to fix margin-top box-model issue */
     border-top-color:transparent;
     border-bottom-color:transparent;
     //@include box-shadow(0 5px 5px rgba(0,0,0,.5));
@@ -233,6 +119,12 @@ body.local_fields #sidebar a.local_fields { background: #BFB; }
         }
     }
 
+    /* Root content wrapper (the page) */
+    //& > .article,
+    //& > .section,
+    & > #content {
+        margin:3em; /* these are the page margins */
+    }
 }
 
 /* The homepage or "cover" of the mathbook */
@@ -248,6 +140,7 @@ body.local_fields #sidebar a.local_fields { background: #BFB; }
     }
 }
 
+/* Abstract for papers? */
 .abstract {
     @include heading {
         &:after {
@@ -258,6 +151,9 @@ body.local_fields #sidebar a.local_fields { background: #BFB; }
 
 @import "chapter-index";
 
+/***************************************************************************
+ * Sectioning
+ **************************************************************************/
 /**
  * Section elements. These come in many different flavors.
  * Some styles are applied to all of them, and some to specific flavors.
@@ -265,6 +161,7 @@ body.local_fields #sidebar a.local_fields { background: #BFB; }
 // NOTE: Be sure you understand the & selector in SASS.
 section {
 
+    /* Default heading style */
     @include heading {
         .type {
             &:after {
@@ -281,9 +178,18 @@ section {
         .title {}
     }
 
+    /* Defaults for child "section"s  */
+    &.chapter .section,
+    &.chapter .preface, 
+    &.chapter .introduction, 
+    &.chapter .conclusion, 
+    &.subsection, 
+    &.subsubsection  {
+        margin: #{2*$line-height-base}em 0;
+    }
+
     /* A section representing a Chapter in the mathbook */
     &.chapter {
-        @import "utilities";
 
         /* Styles applied to both <header> format and non-<header> format */
         &, & > header {
@@ -354,6 +260,7 @@ section {
 
         /* Sections inside of chapters */
         .section, .preface, .introduction, .conclusion {
+
             @include heading {
                 font-size: $font-size-h3;
             }
@@ -372,7 +279,7 @@ section {
         }
     }
 
-    /* Sections outside of chapters (often on their own section page) */
+    /* Root-level "section"s */
     &.section, &.preface, &.introduction, &.conclusion {
         @include heading {
             font-size: $font-size-h2;
@@ -392,6 +299,7 @@ section {
     }
 
     /* Hide environment type on section headings */
+    // TODO introduction/preface/conclusion too?
     &.section, &.subsection, &.subsubsection {
         @include heading {
             .type {
@@ -403,145 +311,55 @@ section {
             }
         }
     }
-
-    // TODO better way to integrate this?
-    /* Margins for standard child section types */
-    &.chapter .section,
-    &.chapter .preface, 
-    &.chapter .introduction, 
-    &.chapter .conclusion, 
-    &.subsection, 
-    &.subsubsection  {
-        margin: #{2*$line-height-base}em 0;
-    }
 }
 
-.subsection {
-    /* (mxdubois: Not sure we need this) to make more space above 
+// TODO this seems unnecessary/bad, test without
+/*.subsection {*/
+    /* to make more space above 
      * the next subsection, when a subsection
      * ends with a theorem
      */
-    .theorem-like:last-child { margin-bottom: 30px }
+    /*.theorem-like:last-child { margin-bottom: 30px }*/
+/*}*/
+
+/***************************************************************************
+ * Typography!
+ **************************************************************************/
+@include typography();
+
+/***************************************************************************
+ * Knowls
+ **************************************************************************/
+@include knowl();
+
+/* restyle knowls at first and third depth */
+.knowl-output, .knowl-output  .knowl-output  .knowl-output {
+    @include knowl-output();
+    @import "exercises"; // TODO what's going on here ?
+    @include exercise($knowl-border-color);
+    @include exercisegroup($knowl-border-color, darken($knowl-border-color, 0%));
 }
 
-.definition-like {
-    @include heading {
-        display:inline;
-        //font-family:inherit;
-        font-weight:bold;
-        font-size: $font-size-h5;
-        font-size: 1.05em;
-
-        .type:after {
-            content: " ";
-        }
-
-        /* TODO Do we still need this? */
-        .acro:after {
-            content: ": ";
-        }
-
-        &:after { 
-            content: ". ";
-        }
-
-        // So that the header is inline with paragraph text 
-        & + p {
-            display:inline;
-        }
-    }
-
-
-    margin:$line-height-em 0;
-}
-
-.theorem-like {
-    @extend .definition-like;
-
-    @include heading {
-        .codenumber:after {
-            content: ". ";
-        }
-    }
-
-    /* TODO remove ol and ul when possible */
-    p, ol, ul {
-        font-style: italic;
-    }
-
-    .statement {
-        p:first-child {
-            display:inline;
-        }
-
-        &:last-child, &:last-of-type {
-            margin-bottom:0;
-        }
-    }
-}
-
-.proof {
-    @extend .definition-like;
-
-    h1, h5 {
-        font-weight:normal;
-        font-style:italic;
-
-        .type:after {
-            content: ". ";
-        }
-    }
-
-    &:after {
-        content:"\220E";
-        display:block;
-        text-align:right;
-    }
-}
-
-
+// TODO is this old?
 .annotatedacronyms { margin: 15px 0 0 0; }
 
 .diagram {text-align:center; margin-bottom:2em}
 
+// TODO what's this?
 .context {text-align:right}
 
+// TODO what's this?
 .attribution {
     text-align:right;
 }
 
+// TODO move to typography?
 .terminology {
     font-style:italic;
     font-weight:bold;
 }
 
-.main > .article, .main > .section, .main > #content {
-
-    & {
-        margin:3em; /* these are the page margins */
-        //max-width:100%; /* override, we'll handle this elsewhere */
-    }
-
-    @include heading {
-        .title {
-            font-size: $font-size-h2;  
-        }
-    }
-    
-    .section, .subsection {
-
-        // TODO Was this important?
-        // Causes mismatched section title and codenumber font-size.
-        //@include heading > .title {
-            //font-size: $font-size-h4;
-        //}
-
-        .subsection {
-            @include heading { 
-                & > .title {
-                    font-size:$font-size-h5;
-                }
-            }
-        }
-    }
+.next-button {
+    @include ui-button-directional($direction:right);
 }
+
