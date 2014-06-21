@@ -12,15 +12,6 @@
     overflow-x:hidden;
 }
 
-// overrides. can be removed when old stylesheets are gone.
-& { @include border-radius(0); }
-ul:first-child a:first-child, 
-h2:first-child a:first-child, 
-h2:first-child {
-    @include border-radius(0);
-}
-// end overrides
-
 a { 
     &:link, &:visited, &:hover, &:active {
         text-decoration:none;
