@@ -1,10 +1,8 @@
-// Content
+/*******************************************************************************
+ * Content
+ ******************************************************************************/
 @import "typography";
+@include typography();
 
-& {
-}
-
-@include link(
-    $element:"a[title]", 
-    $color: $link-tooltip-color,
-    $color-hover: $link-tooltip-color-hover);
+@import "figure";
+@import "table";

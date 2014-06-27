@@ -682,6 +682,17 @@ body {
             /* Ensure margin between edges of screen and content */
             margin: 3em .7em;
         }
+
+        @import "content";
+        @include knowl();
+
+        /* restyle knowls at first and third depth */
+        .knowl-output, .knowl-output  .knowl-output  .knowl-output {
+            @include knowl-output();
+            @import "exercises"; // TODO what's going on here ?
+            @include exercise($knowl-border-color);
+            @include exercisegroup($knowl-border-color, darken($knowl-border-color, 0%));
+        }
     }
 }
 
@@ -717,6 +728,7 @@ body {
  * Some styles are applied to all of them, and some to specific flavors.
  */
 // NOTE: Be sure you understand the & selector in SASS.
+// TODO move into #content and/or _content.scss
 section {
 
     /* Default heading style */
@@ -736,14 +748,57 @@ section {
         .title {}
     }
 
-    /* Defaults for child "section"s  */
-    &.chapter .section,
-    &.chapter .preface, 
-    &.chapter .introduction, 
-    &.chapter .conclusion, 
-    &.subsection, 
-    &.subsubsection  {
+    /* Defaults for child divisions (nested 1+ deep)  */
+    .section,
+    .preface, 
+    .introduction, 
+    .conclusion, 
+    .subsection, 
+    .subsubsection  {
         margin: #{2*$line-height-base}em 0;
+    }
+
+    /* Root-level "section"s */
+    &.section, &.preface, &.introduction, &.conclusion {
+        @include heading {
+            font-size: $font-size-h2;
+        }
+
+        .subsection {
+            @include heading {
+                font-size: $font-size-h3;
+            }
+
+            .subsubsection, .subsection {
+                @include heading {
+                    font-size: $font-size-h4;
+                }
+            }
+        }
+    }
+
+    &.introduction,
+    &.preface, 
+    &.acknowledgements, 
+    &.conclusion, 
+    &.author-biographies {
+        @include heading {
+            /* Hide codenumber for special unnumbered sections */
+            .codenumber { display:none; }
+        }
+    }
+
+    /* Hide environment type on section headings */
+    &.section, &.subsection, &.subsubsection, &.exercises, &.references {
+        @include heading {
+            .type {
+                display:none;
+            }
+
+            .codenumber:after {
+                content: " ";
+            }
+        }
     }
 
     /* A section representing a Chapter in the mathbook */
@@ -836,39 +891,6 @@ section {
             }
         }
     }
-
-    /* Root-level "section"s */
-    &.section, &.preface, &.introduction, &.conclusion {
-        @include heading {
-            font-size: $font-size-h2;
-        }
-
-        .subsection {
-            @include heading {
-                font-size: $font-size-h3;
-            }
-
-            .subsubsection, .subsection {
-                @include heading {
-                    font-size: $font-size-h4;
-                }
-            }
-        }
-    }
-
-    /* Hide environment type on section headings */
-    // TODO introduction/preface/conclusion too?
-    &.section, &.subsection, &.subsubsection, &.references, &.exercises {
-        @include heading {
-            .type {
-                display:none;
-            }
-
-            .codenumber:after {
-                content: " ";
-            }
-        }
-    }
 }
 
 // TODO this seems unnecessary/bad, test without
@@ -885,18 +907,6 @@ section {
  **************************************************************************/
 @include typography();
 
-/***************************************************************************
- * Knowls
- **************************************************************************/
-@include knowl();
-
-/* restyle knowls at first and third depth */
-.knowl-output, .knowl-output  .knowl-output  .knowl-output {
-    @include knowl-output();
-    @import "exercises"; // TODO what's going on here ?
-    @include exercise($knowl-border-color);
-    @include exercisegroup($knowl-border-color, darken($knowl-border-color, 0%));
-}
 
 // TODO is this old?
 .annotatedacronyms { margin: 15px 0 0 0; }

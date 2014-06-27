@@ -1,0 +1,61 @@
+figure {
+
+    margin-top: 10px;
+
+    &.wrap {
+        float: right;
+        margin-right: 0;
+        margin-left: 30px;
+
+        img { width: 250px; }
+    }
+
+    img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+
+        &.wrap {
+            float:right;
+            margin:0;
+        }
+    }
+    
+    table {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    figcaption {
+        & { 
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 100%;
+            text-align: center;
+        }
+
+        @include heading {
+            font-weight: bold;
+
+            .type { 
+                &:after { content: " "; }
+            }
+
+            .title {
+                &:after { content: " ";}
+            }
+
+            .codenumber {
+                font-weight: bold;
+                &:after { content: " ";}
+            }
+        }
+
+        &.wrap {
+            margin: 10px;
+            font-size: 100%;
+            text-align: center;
+        }
+    }
+}
