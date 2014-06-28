@@ -66,12 +66,6 @@ body {
     //margin:0 auto;
 }
 
-.page {
-    max-width:960px;
-
-    // For centered layout:
-    //margin:0 auto;
-}
 
 #masthead {
     @import "masthead";
@@ -91,8 +85,25 @@ body.mwf #sidebar a.mwf { background: #BFB; }
 body.cmf #sidebar a.cmf { background: #BFB; }
 body.local_fields #sidebar a.local_fields { background: #BFB; }
 
+.page {
+    $toc-open-max-width:$page-max-width;
+    $toc-closed-max-width:$page-max-width - $toc-width;
+
+    // For centered layout:
+    //margin:0 auto;
+
+    .has-toc & {
+        max-width:$toc-open-max-width;
+        @include single-transition(max-width, 200ms);
+    }
+
+    .has-toc.toc-closed & {
+        max-width:$toc-closed-max-width;
+    }
+}
+
 .main {
-    // Not sure about this one...we'll see
+    position:relative; // For toc content overlay at smaller screen sizes
     min-height:100%;
 
     display:block;
@@ -108,14 +119,70 @@ body.local_fields #sidebar a.local_fields { background: #BFB; }
     border-bottom-color:transparent;
     //@include box-shadow(0 5px 5px rgba(0,0,0,.5));
 
-    /* If has table of contents, adjust layout to accomodate*/
+    /* If table-of-contents (toc) is visible */
     .has-toc & {
-        margin:0 auto;
         margin-left:$toc-width;
+        @include single-transition(margin-left, $toc-transition-duration);
+
+        /*
+         * We do not display the content overlay in the larger layout
+         * where the toc does not overlap the content when it is open. 
+         *
+         * But we do need an initial state to transition from when displaying
+         * the overlay (so the background fades in)
+         */
+        &:before {
+            display:none;
+            background-color: rgba(black,0);
+            @include single-transition(background-color, 
+                                       $toc-transition-duration);
+
+            /* Positional attributes that should be true even if display:none */ 
+            position: absolute;
+            top:0;
+            right:0;
+            bottom:0;
+            left:0;
+            z-index: 50;
+        }
 
         @media only screen and (max-width: $screen-sm-min) {
-            // default to toc collapsed on smaller screens
+            /* 
+             * At small widths, allow toc to overlay the content  when open
+             * This way, when nav items jump to other points in the page,
+             * the calculations will be spot on because the content width wasn't
+             * compressed by the toc.
+             * 
+             * This is simpler than the alternative possibility where we
+             * fix the width of the content in the javascript and push
+             * it off the side of the screen.
+             */
             margin-left:0;
+
+            /* Fade out content while toc is overlapping it */
+            &:before {
+                content:"";
+                display:block;
+                background-color:rgba(black, .5);
+                @include single-transition(background-color, 
+                                           $toc-transition-duration);
+            }
+        }
+    }
+
+    /** 
+     * When toc is closed, we remove the margin. 
+     * CSS transitions make it slide.
+     */
+    .has-toc.toc-closed & {
+        margin-left:0;
+
+        /* Hide content overlay when toc isn't showing! */
+        &:before {
+            display:none;
+            background-color: rgba(black,0);
+            @include single-transition(background-color, 
+                                       $toc-transition-duration );
         }
     }
 

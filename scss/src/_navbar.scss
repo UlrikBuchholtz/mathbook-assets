@@ -59,8 +59,14 @@ $navbar-border-width: 1px;
 #toc-navbar-item {
     width:$toc-width;
 
-    .navbar-item-text:before {
-        opacity:.8;
+    // TODO more button-y styles.
+    .navbar-item-text {
+        cursor:pointer;
+        /* Disable text-selection on te button */
+        @include user-select(none);
+        &:before {
+            opacity:.8;
+        }
     }
 
     @media only screen and (max-width: $screen-sm-min) {
@@ -73,14 +79,24 @@ $navbar-border-width: 1px;
 #toc {
     @import "toc";
 
+    @include toc-nav();
+
     & {
         position: absolute;
         margin-top:$navbar-border-width;
         top:100%;
-        left:0;
+        z-index: 100;
     }
 
-    @media only screen and (max-width: $screen-sm-min) {
-        display:none;
+    .has-toc & {
+        left:0;
+        @include single-transition(left, $toc-transition-duration);
     }
+
+    .has-toc.toc-closed & {
+        left:-$toc-width;
+    }
+
+
+
 }

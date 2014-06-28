@@ -1,40 +1,40 @@
 @import "compass/css3";
 @import "triangle";
-& {
-    float: left;
-    width:$toc-width;
-    margin:0;
-    font-size: 85%;
-    color: #390;
-    background: $gray-lighter;
-    // Not sure about this one...we'll see
-    overflow-y:auto;
-    overflow-x:hidden;
-}
 
-a { 
-    &:link, &:visited, &:hover, &:active {
+@mixin toc-link() {
+    &, &:link, &:visited, &:hover, &:active {
+        display:block; 
+        color: $toc-link-color;
+        background: $toc-link-bg;
         text-decoration:none;
+    }
+    &:hover {
+        color: $toc-link-color-hover;
+        background: $toc-link-bg-hover;
+    }
+
+    &.active, &:active {
+        position:relative;
+        color:$toc-link-color-active;
+        background: $toc-link-bg-active;
     }
 }
 
-.list li {
-  padding: 5px;
-}
-.list a {
-  display: inline;
-  padding: 1px;
-}
+@mixin toc-heading() {
+    & {
+        display:block;
+        font-family: sans-serif;
+        font-size: 100%;
 
-h2 {
-    display:block;
-    font-family: sans-serif;
-    font-size: 100%;
-
-    margin: 0;
+        margin: 0;
+    }
 
     &:first-child {
         margin-top:0;
+    }
+
+    a {
+        @include toc-link();
     }
 
     /*Props shared by headings and heading-links*/
@@ -60,56 +60,58 @@ h2 {
       border-bottom:none;
     }
 
-    a {
-        &:hover {
-            color: $toc-heading-color-hover;
-            background: $toc-heading-bg-hover;
-            border-color:darken($toc-link-bg-hover,10%);
-        }
+    a:hover {
+        color: $toc-heading-color-hover;
+        background: $toc-heading-bg-hover;
+        border-color:darken($toc-link-bg-hover,10%);
     }
 }
 
-ul {
-    margin: 0px;
-    padding: 0px;
-    list-style-type: none;
+@mixin toc-nav() {
+    & {
+        float: left;
+        width:$toc-width;
+        margin:0;
+        font-size: 85%;
+        color: #390;
+        background: $gray-lighter;
+        // Not sure about this one...we'll see
+        overflow-y:auto;
+        overflow-x:hidden;
+    }
 
-    li {
-        display: block;
+    a {
+        @include toc-link();
+    }
+
+    h2 {
+        @include toc-heading();
+    }
+
+    ul {
         margin: 0px;
         padding: 0px;
+        list-style-type: none;
 
-        a {
-            background: transparent ;
-            padding:.4em;
-            padding-left:($h-pad*2);
-            border-bottom:1px solid darken($toc-bg, 12%);
+        li {
+            display: block;
+            margin: 0px;
+            padding: 0px;
 
-            &:hover {
-                border-color:darken($toc-link-bg-hover, 12%);
+            a {
+                background: transparent ;
+                padding:.4em;
+                padding-left:($h-pad*2);
+                border-bottom:1px solid darken($toc-bg, 12%);
+
+                &:hover {
+                    border-color:darken($toc-link-bg-hover, 12%);
+                }
+            }
+
+            &:last-child a {
+                border-bottom: none;
             }
         }
-
-        &:last-child a {
-            border-bottom: none;
-        }
-    }
-}
-
-a {
-    & {
-        display:block; 
-        color: $toc-link-color;
-        background: $toc-link-bg;
-    }
-    &:hover {
-        color: $toc-link-color-hover;
-        background: $toc-link-bg-hover;
-    }
-
-    &.active, &:active {
-        position:relative;
-        color:$toc-link-color-active;
-        background: $toc-link-bg-active;
     }
 }
