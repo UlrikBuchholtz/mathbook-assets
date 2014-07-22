@@ -17,9 +17,12 @@
  * when there is a toc. 
  * To override, we must add body specificity.
  */
-body.has-toc #MathJax_Message {
+body.has-sidebar-left #MathJax_Message {
     left: .5*$base-font-size;
-    bottom: .5*$base-font-size;
+}
+
+body.has-sidebar-left.layout-centered #MathJax_Message {
+    left:0;
 }
 
 /* Restyle MathJax loading message.
@@ -30,4 +33,11 @@ body #MathJax_Message {
     color: $brand-primary;
     border-color: desaturate(lighten($brand-primary, 30%), 20%);
     @include border-radius(.3em);
+    z-index:1000;
+    bottom: .5*$base-font-size;
+
+    @media screen and (max-width: $screen-sm-min) {
+        /* Display above bottom navbar */
+        bottom: 1.5*$navbar-icon-box-size;
+    }
 }

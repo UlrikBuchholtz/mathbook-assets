@@ -1,5 +1,6 @@
 // TODO make more portable with default module variables pattern
 @import "compass/css3/user-interface";
+@import "triangle";
 
 @mixin ui() {
     .ui-link {

@@ -52,6 +52,7 @@ $font-family-monospace:   "Source Code Pro", Consolas, Menlo, Monaco,
                                 Lucida Console, Liberation Mono, 
                                 DejaVu Sans Mono, Bitstream Vera Sans Mono, 
                                 Courier New, monospace !default;
+$font-family-icon: "Ionicons";
 $font-family-base:        $font-family-sans-serif !default;
 
 $font-size-base:          16px !default;
@@ -136,6 +137,8 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
 // Layout
 // ------------------------
 $h-pad: $font-size-base;
-$toc-width:240px;
-$toc-transition-duration: 350ms;
+$sidebar-width:240px;
+$sidebar-transition-duration: 350ms;
 $page-max-width:960px;
+$navbar-icon-size: 1em;
+$navbar-icon-box-size:2.8em;

@@ -6,21 +6,45 @@ $navbar-border-width: 1px;
 
 & { 
     background:$navbar-bg;
-    border-bottom:$navbar-border-width solid darken($toc-bg, 15%);
-    z-index:100;
-}
+    border-bottom:$navbar-border-width solid darken($navbar-bg, 15%);
+    z-index:200;
+    height: 2.8em;
+    font-family: $font-family-serif;
 
-/* Styles applied when the scrolling script has loaded */
-&.scrolling-nav-loaded {
+    /* Smoothly transition box-shadow when navbar sticks/unsticks */
+    @include single-transition(box-shadow, 400ms);
 }
 
 /* Styles applied to make the navbar persistently visible */
-&.scrolling-nav-persistent {
+.stuck & {
     position:fixed;
     top:0;
-    left:0;
     right:0;
-    @include box-shadow(rgba(0,0,0,.5) 0 2px 5px);
+    left:0;
+    @include box-shadow(
+        $navbar-shadow-color 0 $navbar-shadow-offset $navbar-shadow-spread);
+}
+
+/* At small screen sizes, turn the navbar into a full bar along bottom */
+@media screen and (max-width: $screen-sm-min) {
+    &, .stuck & {
+        position:fixed;
+        top: auto;
+        bottom:0;
+        left:0;
+        right:0;
+        background:$navbar-bg;
+        @include box-shadow(
+            $navbar-shadow-color 0 -$navbar-shadow-offset $navbar-shadow-spread);
+    }
+}
+
+.next-button, .previous-button {
+    @media screen and (min-width: $screen-sm-min + 1) {
+        /*On big screens, 
+         * we use the prev/next inside the main container */
+        display:none;
+    }
 }
 
 /* An item/button in the horizontal navbar */
@@ -57,7 +81,7 @@ $navbar-border-width: 1px;
 
 /* The table-of-contents button */
 #toc-navbar-item {
-    width:$toc-width;
+    width:$sidebar-width;
 
     // TODO more button-y styles.
     .navbar-item-text {
@@ -87,16 +111,4 @@ $navbar-border-width: 1px;
         top:100%;
         z-index: 100;
     }
-
-    .has-toc & {
-        left:0;
-        @include single-transition(left, $toc-transition-duration);
-    }
-
-    .has-toc.toc-closed & {
-        left:-$toc-width;
-    }
-
-
-
 }

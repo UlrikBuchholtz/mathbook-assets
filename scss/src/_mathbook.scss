@@ -58,12 +58,34 @@ body {
  * Containers restrict max-width of content within elements 
  * that may stretch to the width of the viewport. 
  *
- * We are not currently using them since the layout is left-aligned.
+ * You can remove body if you want the backgrounds to fill the viewport, the
+ * containers will keep the content at the correct width.
  */
 .container {
-    // For centered layout:
-    //max-width:960px;
-    //margin:0 auto;
+
+    // For left-layout:
+    margin:0;
+
+    .layout-centered & {
+        // For centered layout:
+        margin:0 auto;
+    }
+
+    // TODO content-width
+//    max-width: 720px;
+//
+//    .has-sidebar-right & {
+//        // TODO content-width + sidebar-right-width
+//        max-width:960px;
+//    }
+//    .has-sidebar-left & {
+//        // TODO content-width + sidebar-left-width
+//        max-width: 960px;
+//    }
+//    .has-sidebar-right.has-sidebar-left &  {
+//        // TODO content-width + sidebar-left-width + sidebar-right-width
+//        max-width:1200px;
+//    }
 }
 
 
@@ -71,126 +93,596 @@ body {
     @import "masthead";
 }
 
-/* The horizontal navbar */
-#navbar {
-    @import "navbar"
-}
-
-
-/**
- * highlighting menu entries (if their respective blueprint overwirtes 
- * the body_class variable!)
- */
-body.mwf #sidebar a.mwf { background: #BFB; }
-body.cmf #sidebar a.cmf { background: #BFB; }
-body.local_fields #sidebar a.local_fields { background: #BFB; }
-
 .page {
-    $toc-open-max-width:$page-max-width;
-    $toc-closed-max-width:$page-max-width - $toc-width;
+    position:relative;
+    /* Clip hidden sidebars */
+    overflow:hidden;
+}
 
-    // For centered layout:
-    //margin:0 auto;
-
-    .has-toc & {
-        max-width:$toc-open-max-width;
-        @include single-transition(max-width, 200ms);
+// TODO move somewhere more suitable
+// You can customize the icon element like so:
+//     @include with-icon() {
+//         background: red;
+//     }
+@mixin with-icon(
+    $icon-content: "", 
+    $icon-size:1em, 
+    $icon-box-size: 1.4em,
+    $icon-side:left
+){
+    @if $icon-side == left {
+        padding-left:$icon-box-size;
+    } @else if $icon-side == right {
+        padding-right:$icon-box-size;
     }
 
-    .has-toc.toc-closed & {
-        max-width:$toc-closed-max-width;
+    // We use the pseudo variable to decide which pseudo selector to use
+    // This way, left icons use before, right use after
+    &:before {
+        content: $icon-content; // TODO change to menu icon
+        font-size:$icon-size;
+        font-family: $font-family-icon;
+        line-height:$icon-box-size;
+        width:$icon-box-size;
+        text-align:center;
+        text-indent:0; /* So text isn't removed from this too */
+
+        position:absolute;
+        #{$icon-side}: 0;
+        top:0;
+
+        // Allow caller to easily customize the icon
+        @content;
     }
 }
 
-.main {
-    position:relative; // For toc content overlay at smaller screen sizes
-    min-height:100%;
-
-    display:block;
-    width: auto;
-    margin: 0 auto;
+// TODO move somewhere more suitable
+@mixin without-text($width:1em, $icon-box-size: 1.4em) {
     padding:0;
+    @include hide-text();
 
-    background:white;
+    &:before {
+        /* Force icon to center */
+        left:50%;
+        right:auto;
+        margin-left:-$icon-box-size/2;
+    }
+}
 
-    border:1px solid #ccc;
-    /* transparent instead of none to fix margin-top box-model issue */
-    border-top-color:transparent;
-    border-bottom-color:transparent;
-    //@include box-shadow(0 5px 5px rgba(0,0,0,.5));
 
-    /* If table-of-contents (toc) is visible */
-    .has-toc & {
-        margin-left:$toc-width;
-        @include single-transition(margin-left, $toc-transition-duration);
+// TODO move somwhere suitable
+@mixin button-sidebar-toggle(
+    $side: left, 
+    $icon-content:"", 
+    $icon-size: 1em, 
+    $icon-box-size: 1.4em
+){
+    // Body classes that manipulate/enable this sidebar button
+    $sidebar-closed-selector: unquote(".sidebar-" + $side + "-closed" );
+    $has-sidebar-selector: unquote(".has-sidebar-" + $side);
 
-        /*
-         * We do not display the content overlay in the larger layout
-         * where the toc does not overlap the content when it is open. 
-         *
-         * But we do need an initial state to transition from when displaying
-         * the overlay (so the background fades in)
-         */
-        &:before {
-            display:none;
-            background-color: rgba(black,0);
-            @include single-transition(background-color, 
-                                       $toc-transition-duration);
+    /* Do not display if this layout doesn't support the sidebar */
+    display:none;
 
-            /* Positional attributes that should be true even if display:none */ 
-            position: absolute;
-            top:0;
-            right:0;
-            bottom:0;
-            left:0;
-            z-index: 50;
+    /* Sidebar is supported by this layout */
+    #{$has-sidebar-selector} {
+        display:block;
+
+        position:relative;
+        margin:0;
+        line-height: $navbar-icon-box-size;
+        font-size:1em;
+        border:none;// TODO o rlly?
+
+        /* Allow CSS to transition button sizes between states */
+        @include transition-property(text-indent, width, padding);
+        @include transition-duration($sidebar-transition-duration);
+
+        /* Place an icon on the #{side} side
+         * it is positioned absolutely so that we can hide the text
+         * when the button shrinks. */
+        @include with-icon($icon-content, $side, $icon-size, $icon-box-size);
+    }
+
+    /* Sidebar is closed */
+    #{$sidebar-closed-selector} {
+        @include without-text($navbar-icon-box-size);
+    }
+
+    &.active {
+        background: $brand-primary;
+        @include box-shadow(rgba(black,.5) 0 2px 5px inset);
+    }
+}
+
+@mixin navbar-button($icon, $icon-side:left) {
+    text-align:$icon-side;
+    @include with-icon(
+        $icon, 
+        $navbar-icon-size, 
+        $navbar-icon-box-size, 
+        $icon-side);
+    @media screen and (max-width: $screen-sm-min) {
+        text-align:center;
+        /* On small screens, use icon only */
+        @include without-text($navbar-icon-size, $navbar-icon-box-size);
+    } 
+}
+
+/* Horizontal navbars */
+.navbar {
+    background:$navbar-bg;
+    
+    .button {
+    
+        /* Override link properties */
+        &, &:hover, &:visited, &:link, &:active {
+            display:block;
+            color: $navbar-color;
+            text-decoration:none;
+            background-color:transparent;
         }
 
-        @media only screen and (max-width: $screen-sm-min) {
-            /* 
-             * At small widths, allow toc to overlay the content  when open
-             * This way, when nav items jump to other points in the page,
-             * the calculations will be spot on because the content width wasn't
-             * compressed by the toc.
-             * 
-             * This is simpler than the alternative possibility where we
-             * fix the width of the content in the javascript and push
-             * it off the side of the screen.
-             */
-            margin-left:0;
+        position:relative;
+        float:left;
+        box-sizing:border-box; /* subtract border and padding from width */
 
-            /* Fade out content while toc is overlapping it */
-            &:before {
-                content:"";
-                display:block;
-                background-color:rgba(black, .5);
-                @include single-transition(background-color, 
-                                           $toc-transition-duration);
+        cursor:pointer;
+
+        font-size:1em;
+        padding:0 1.4em;
+        margin:0;
+        line-height:2.8;
+        @include user-select(none);
+
+        border:1px solid; 
+        border-color:darken($navbar-bg, 30%);
+        border-top:none;
+        border-bottom:none;
+        outline:none; /* Don't display outline on click */
+
+        @include transition-property(text-indent,background-color);
+        @include transition-duration(200ms);
+
+        &:hover {
+            background-color:lighten($navbar-bg, 5%);
+        }
+
+        &.active, &:active {
+            background-color:darken($navbar-bg, 5%);
+            @include box-shadow(rgba(black,.5) 0 2px 5px inset);
+        }
+
+        /* Icon only at small screen sizes */
+        @media screen and (max-width:$screen-sm-min) {
+            @include without-text($navbar-icon-box-size, $navbar-icon-box-size);
+            float:left;
+            text-align:center;
+            margin:0;
+            width:25%;
+            border-right:none;
+
+            &:first-child {
+                border-left:none;
+            }
+
+            &.active, &:active {
+                /* Vertically flip shadow for lower navbar */
+                @include box-shadow(rgba(black,.5) 0 -2px 5px inset);
             }
         }
     }
 
-    /** 
-     * When toc is closed, we remove the margin. 
-     * CSS transitions make it slide.
-     */
-    .has-toc.toc-closed & {
-        margin-left:0;
+    .previous-button {
+        /* ion-chevron-left */
+        @include navbar-button("\f124");
+    }
 
-        /* Hide content overlay when toc isn't showing! */
-        &:before {
-            display:none;
-            background-color: rgba(black,0);
-            @include single-transition(background-color, 
-                                       $toc-transition-duration );
+    .next-button {
+        /* ion-chevron-right */
+        @include navbar-button("\f125", right);
+    }
+}
+
+/* The main, header navbar */
+#primary-navbar {
+    @import "navbar";
+
+    #sidebar-left-toggle-button, #sidebar-right-toggle-button {
+        position:relative;
+        height:2.8em;
+        /*On big screens, */
+        @media screen and (min-width: $screen-sm-min + 1) {
+            &.active {
+                /* Show text if hidden and match sidebar width */
+                text-indent:0;
+                width:$sidebar-width;
+            }
         }
     }
 
+    #sidebar-left-toggle-button {
+        display:none;
+
+        .has-sidebar-left & {
+            display:block;
+        }
+
+
+        /* ion-navicon-round */
+        @include navbar-button("\f20d");
+    }
+
+    #sidebar-right-toggle-button {
+        display:none;
+
+        .has-sidebar-right & {
+            display:block;
+        }
+
+        /* ion-chatbox */
+        @include navbar-button("\f2e1");
+
+        /* Large, float left*/
+        @media screen and (min-width: $screen-sm-min + 1) {
+            float:right;
+        }
+    }
+}
+
+#primary-navbar-sticky-wrapper {
+    @media screen and (max-width: $screen-sm-min) {
+        height:0;
+    }
+}
+
+/* Navbar at the foot of content. We fix it to bottm of viewport */
+#secondary-navbar {
+    /* IMPORTANT: due to position fixed, the width of this element must be set 
+     * by Mathbook.js onResize and upon toggling sidebars 
+     * if it is to match the width of .main */
+    /*position:fixed;*/
+    /*bottom:0;*/
+    /*// TODO use variable*/
+    /*// We want it to overlay main's border*/
+    /*margin-left:-1px;*/
+    /*z-index:200;*/
+
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:0;
+
+    /* Use before element to apply shadow only to top edge */
+    /*&:before {*/
+        /*content:"";*/
+        /*position:absolute;*/
+        /*left:0;*/
+        /*right:0;*/
+        /*top:-$navbar-shadow-spread;*/
+        /*height:$navbar-shadow-spread;*/
+        /*@include background(linear-gradient(rgba(black,0), $navbar-shadow-color));*/
+    /*}*/
+
+    /*.button {*/
+        /*float:left;*/
+        /*height:$navbar-icon-box-size;*/
+        /*width: 50%;*/
+    /*}*/
+
+    @media screen and (max-width: $screen-sm-min) {
+        /* Main nav takes over at small size */
+        display:none;
+    }
+
+    .next-button, .previous-button {
+        width:$navbar-icon-box-size;
+        @include without-text($navbar-icon-size, $navbar-icon-box-size);
+
+        border:none;
+        background:transparent;
+        opacity:.5;
+        @include transition-property(opacity,background-color);
+        @include transition-duration(200ms);
+
+        &:hover {
+            background:rgba($gray-lighter, .5);
+            opacity:1;
+        }
+
+        &:before {
+            top:50%;
+            margin-top: - $navbar-icon-box-size/2;
+        }
+    }
+
+    .next-button-sticky-wrapper, .next-button {
+        float:right;
+
+        .next-button {
+            float:none;
+        }
+    }
+    .previous-button-sticky-wrapper, .previous-button {
+        float:left;
+
+        .previous-button {
+            float:none;
+        }
+    }
+}
+
+/* Styles for both sidebars */
+.sidebar {
+    /* Must be absolute so sidebars do not reflow main text when hidden */
+    position:absolute;
+
+    // TODO switch persistent class to .stuck in reference to position:sticky
+    .stuck & {
+        position:fixed;
+        top:0;
+    }
+
+    /* so we can slide the main content OVER the sidebar */
+    /*z-index: 0; */
+    width: $sidebar-width;
+    background:transparent; /* TODO remove from toc file */
+    /*opacity:1;*/
+
+    .sidebar-content {
+        z-index:0;
+    }
+}
+
+#sidebar-left {
+
+    & {
+        /* Default styles on load, before javascript loads */
+        margin-left:0;
+        @media screen and (max-width: $screen-sm-min) {
+            /* Small */
+            margin-left:-$sidebar-width;
+        }
+    }
+
+    .has-sidebar-left.mathbook-loading &,
+    .has-sidebar-left.mathbook-loaded & {
+        margin-left:0;
+    }
+
+    .has-sidebar-left.mathbook-loading &.closed,
+    .has-sidebar-left.mathbook-loaded &.closed {
+        margin-left: -$sidebar-width;
+    }
+
+    .sidebar-content {
+        width: $sidebar-width;
+    }
+
+    /* The table-of-contents itself */
+    #toc {
+        /* IMPORTANT height must be calculated by javascript. */
+
+        // TODO simplify/consolidate this
+        @import "toc";
+        @include toc-nav();
+
+        & {
+            font-size:1em;
+            background:transparent;
+            float:none;
+        }
+    }
+
+
+    .extras {
+        background:#444;
+
+        nav {
+            @include border-radius($border-radius-small);
+            a {
+                &, &:link, &:visited {
+                    display:block;
+
+                    color: white;
+                    background:#555;
+                    border-top:2px solid rgba(white,.2);
+                    border-bottom:1px solid rgba(black,.2);
+
+                    height: #{$line-height-base}em;
+                    line-height:$line-height-base;
+                    padding:#{$line-height-base/2}em;
+                    padding-top:0;
+                    padding-bottom:0;
+
+                    /* Subtract borders from height */
+                    box-sizing:border-box;
+                }
+
+                &:hover {
+                    background:#666;
+                    text-decoration:none;
+                }
+
+                &:active, &.active {
+                    text-decoration:underline;
+                    background:#444;
+                    border-top-color:rgba(black,.2);
+                    border-bottom-color:rgba(white,.2);
+                }
+
+                &:first-child {
+                    @include border-top-radius($border-radius-small);
+                    margin-top:0;
+                }
+
+                &:last-child {
+                    @include border-bottom-radius($border-radius-small);
+                }
+            }
+        }
+    }
+}
+
+#sidebar-right {
+    /* The right sidebar is not sticky, so we can use right:0;*/
+    position:absolute;
+    top:0;
+    right:0;
+    z-index:0;
+
+    & {
+        /* Default styles on load, before javascript loads */
+        margin-right:-$sidebar-width;
+        @media screen and (min-width: $screen-lg-min) {
+            /* Large */
+            margin-right:0;
+        }
+    }
+
+    .has-sidebar-right.mathbook-loading &,
+    .has-sidebar-right.mathbook-loaded & {
+        margin-right:0;
+    }
+
+    .has-sidebar-right.mathbook-loading &.closed,
+    .has-sidebar-right.mathbook-loaded &.closed {
+        //text-indent:-$sidebar-width / 10;
+        //margin-right:$sidebar-width / 10;
+        margin-right:-$sidebar-width;
+    }
+}
+
+.main {
+
+    & {
+        position:relative; // For toc content overlay at smaller screen sizes
+        z-index:10;
+
+        display:block;
+        width: auto;
+        min-height:100%;
+
+        margin:0;
+        padding:0;
+
+        background:white;
+
+        border:1px solid #ccc;
+        /* transparent instead of none to fix margin-top box-model issue */
+        border-top-color:transparent;
+        border-bottom-color:transparent;
+        @include box-shadow(rgba(black,.5) 0 5px 5px);
+    }
+
+
+    @media screen and (max-width: $screen-sm-min) {
+        /* Make space for navbar fixed to bottom of screen */
+        padding-bottom: $navbar-icon-box-size;
+    }
+
+    /*
+     * Sidebars
+     ***************************************************************************
+     */
+
+    // Set main-left state
+    // open-slide subtracts sidebar width from main width
+    // open-push pushes main to the side
+    // closed covers/hides the sidebar
+    @mixin main-left($state) {
+        @if($state == open-slide) {
+            margin-left:$sidebar-width;
+        } @else if($state == open-push){
+            margin-left:$sidebar-width;
+        } @else if($state == closed) {
+            margin-left:0;
+        }
+    }
+
+    // Set main-right state
+    // open-slide subtracts sidebar width from main width
+    // open-push pushes main to the side
+    // closed covers/hides the sidebar
+    @mixin main-right($state) {
+        @if($state == open-slide) {
+            margin-right:$sidebar-width;
+            right:auto;
+        } @else if($state == open-push){
+            right:$sidebar-width;
+            margin-right:0;
+        } @else if($state == closed) {
+            margin-right:0;
+            right:0;
+        }
+    }
+
+    /* Main with sidebar left without javascript*/
+    .has-sidebar-left & {
+        @include main-left(open-slide);
+        @media screen and (max-width: $screen-sm-min) {
+            @include main-left(closed);
+        }
+    }
+
+    /* Main with sidebar left open */
+    .has-sidebar-left.mathbook-loading &, 
+    .has-sidebar-left.mathbook-loaded & {
+        @include main-left(open-slide);
+        @media screen and (max-width: $screen-sm-min) {
+            /* Small */
+            @include main-left(open-push);
+        }
+    }
+
+    /* Main with sidebar left closed */
+    .has-sidebar-left.mathbook-loading &.sidebar-left-closed,
+    .has-sidebar-left.mathbook-loaded &.sidebar-left-closed {
+        @include main-left(closed);
+    }
+
+    /* Main with sidebar right without javascript */
+    .has-sidebar-right & {
+        @include main-right(closed);
+        @media screen and (min-width:$screen-lg-min) {
+            /* Large */
+            @include main-right(open-slide);
+        }
+    }
+
+    /* Main with sidebar right open */
+    .has-sidebar-right.mathbook-loading &,
+    .has-sidebar-right.mathbook-loaded & {
+        @include main-right(open-slide);
+        @media screen and (max-width: $screen-sm-min) {
+            /* Small */
+            @include main-right(open-push);
+        }
+    }
+
+    /* Main with sidebar right closed */
+    .has-sidebar-right.mathbook-loading &.sidebar-right-closed,
+    .has-sidebar-right.mathbook-loaded &.sidebar-right-closed {
+        @include main-right(closed);
+    }
+    /*
+     ***************************************************************************
+     */
+
     /* Root content wrapper (the page) */
-    //& > .article,
-    //& > .section,
     & > #content {
-        margin:3em; /* these are the page margins */
+        //margin:3em; /* these are the page margins */
+
+        /* center the content in the white abyss */
+        margin: 3em auto;
+        // TODO variable for this
+        max-width:600px;
+
+        @media screen and (max-width: 600px) {
+            /* Ensure margin between edges of screen and content */
+            margin: 3em .7em;
+        }
     }
 }
 
@@ -425,8 +917,3 @@ section {
     font-style:italic;
     font-weight:bold;
 }
-
-.next-button {
-    @include ui-button-directional($direction:right);
-}
-

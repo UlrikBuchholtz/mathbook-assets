@@ -69,15 +69,17 @@
 
 @mixin toc-nav() {
     & {
-        float: left;
-        width:$toc-width;
+        /*float: left;*/
+        width:$sidebar-width;
         margin:0;
         font-size: 85%;
         color: #390;
-        background: $gray-lighter;
+        background: $toc-bg;
         // Not sure about this one...we'll see
         overflow-y:auto;
         overflow-x:hidden;
+        /* Enable momentum scrolling on iOS */
+        -webkit-overflow-scrolling: touch;
     }
 
     a {
@@ -102,7 +104,7 @@
                 background: transparent ;
                 padding:.4em;
                 padding-left:($h-pad*2);
-                border-bottom:1px solid darken($toc-bg, 12%);
+                border-bottom:1px solid rgba(black, .12);
 
                 &:hover {
                     border-color:darken($toc-link-bg-hover, 12%);

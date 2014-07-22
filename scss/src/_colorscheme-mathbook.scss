@@ -52,7 +52,7 @@ $knowl-bg-color: desaturate(lighten($knowl-border-color, 17%), 15%);
 // -------------------------
 $header-title-color: $brand-primary;
 $header-subtitle-color: #777;
-$header-bg: white ;
+$header-bg: #fcfcfc;
 
 // Navbar
 // -----------------------
@@ -61,9 +61,9 @@ $navbar-bg: #eee;
 
 // Table of Contents
 // ------------------------
-$toc-bg: $navbar-bg;
+$toc-bg: transparent;
 
-$toc-link-bg:transparent;
+$toc-link-bg:$header-bg;
 $toc-link-bg-hover:$link-color;
 $toc-link-bg-active:$link-color;
 

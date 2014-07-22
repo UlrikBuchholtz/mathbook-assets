@@ -51,18 +51,21 @@ $knowl-bg-color: change-color($knowl-border-color, $saturation: 90% ,$lightness:
 // -------------------------
 $header-title-color: $brand-primary;
 $header-subtitle-color: #777;
-$header-bg: white ;
+$header-bg: #f9f9f9;
 
 // Navbar
 // -----------------------
 $navbar-color: $gray-dark;
 $navbar-bg: #eee;
+$navbar-shadow-color:rgba(black,.3);
+$navbar-shadow-spread: 5px;
+$navbar-shadow-offset: 2px;
 
 // Table of Contents
 // ------------------------
-$toc-bg: $navbar-bg;
+$toc-bg: transparent;
 
-$toc-link-bg:transparent;
+$toc-link-bg: rgba($header-bg,.8);
 $toc-link-bg-hover:$link-color;
 $toc-link-bg-active:$link-color;
 
