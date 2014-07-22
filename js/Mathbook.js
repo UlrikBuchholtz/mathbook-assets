@@ -88,10 +88,12 @@ var Mathbook = function(options) {
             debugName: "small", 
             minWidth: 0,
             onEnter: function(){
+                // This must come before adjusting sidebars
+                that.shouldSidebarsPush(true);
+
                 maxOpenSidebars = 1;
                 that.toggleSidebarLeft(false);
                 that.toggleSidebarRight(false);
-                that.shouldSidebarsPush(true);
                 
                 // with primary nav on bottom
                 that.initializeStickies(true);
@@ -101,10 +103,12 @@ var Mathbook = function(options) {
             debugName: "medium", 
             minWidth: 769, 
             onEnter: function() {
+                // This must come before adjusting sidebars
+                that.shouldSidebarsPush(false);
+
                 maxOpenSidebars = 1;
                 that.toggleSidebarLeft(true);
                 that.toggleSidebarRight(false);
-                that.shouldSidebarsPush(false);
 
                 that.initializeStickies(false);
             }
@@ -113,10 +117,12 @@ var Mathbook = function(options) {
             debugName: "large", 
             minWidth: 1200, 
             onEnter: function() {
+                // This must come before adjusting sidebars
+                that.shouldSidebarsPush(false);
+
                 maxOpenSidebars = 2;
                 that.toggleSidebarLeft(true);
                 that.toggleSidebarRight(true);
-                that.shouldSidebarsPush(false);
 
                 that.initializeStickies(false);
             }
@@ -482,7 +488,6 @@ var Mathbook = function(options) {
         this.$secondaryNavbarPrevious.height(viewportHeight);
     };
 
-
     /**
      * Sets whether sidebars should push or slide when opening.
      * Push fixes the width of the main content and moves it aside.
@@ -507,13 +512,7 @@ var Mathbook = function(options) {
                     && that.isSidebarLeftClosed()) 
                 {
                     that.unlockMainWidth();
-                } else {
-                    console.log("Trying to unlock width, but a sidebar is open.");
-                    console.log("sidebarLeftView.progress(): " 
-                            + that.sidebarLeftView.progress());
-                    console.log("sidebarRightView.progress(): " 
-                            + that.sidebarRightView.progress());
-                }
+                } 
             };
         } else {
             // Make sure it's not currently locked.

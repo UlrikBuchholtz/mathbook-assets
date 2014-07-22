@@ -144,6 +144,14 @@ var SidebarView = function(options) {
     };
 
     /**
+     * Recomputes the tween. Call this if the CSS class context of the
+     * sidebar elements has changed.
+     */
+    this.invalidate = function() {
+        this.timeline.invalidate();
+    };
+
+    /**
      * Returns the sidebar's width
      * @return {Number}
      */

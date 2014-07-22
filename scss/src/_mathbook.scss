@@ -365,12 +365,6 @@ body {
         /*@include background(linear-gradient(rgba(black,0), $navbar-shadow-color));*/
     /*}*/
 
-    /*.button {*/
-        /*float:left;*/
-        /*height:$navbar-icon-box-size;*/
-        /*width: 50%;*/
-    /*}*/
-
     @media screen and (max-width: $screen-sm-min) {
         /* Main nav takes over at small size */
         display:none;
@@ -589,21 +583,24 @@ body {
 
     // Set main-left state
     // open-slide subtracts sidebar width from main width
-    // open-push pushes main to the side
+    // open-push pushes main to the side, only supports one sidebar open
     // closed covers/hides the sidebar
     @mixin main-left($state) {
         @if($state == open-slide) {
             margin-left:$sidebar-width;
+            left:auto;
         } @else if($state == open-push){
-            margin-left:$sidebar-width;
+            margin-left:0;
+            left: $sidebar-width;
         } @else if($state == closed) {
             margin-left:0;
+            left:auto;
         }
     }
 
     // Set main-right state
     // open-slide subtracts sidebar width from main width
-    // open-push pushes main to the side
+    // open-push pushes main to the side, only supports one sidebar open
     // closed covers/hides the sidebar
     @mixin main-right($state) {
         @if($state == open-slide) {
