@@ -3,13 +3,16 @@
  ******************************************************************************/
 
 .MathJax_Display {
-    /* Allow mobile users to scroll equations 
-     * horizontally when they don't fit on the screen 
-     */
-    overflow-x:auto;
-    overflow-y:hidden;
-    padding-top:1px;
-    padding-bottom:1px;
+    padding-top:2px;
+    padding-bottom:2px;
+
+    @media screen and (max-width: $screen-lg-min) {
+        /* Allow users on smaller screens to scroll equations 
+         * horizontally when they don't fit on the screen 
+         */
+        overflow-x:auto;
+        overflow-y:hidden;
+    }
 }
 
 /* 
