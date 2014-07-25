@@ -1,7 +1,7 @@
 @import "../lib/ionicons/ionicons-variables";
 
 // potentially custom to mathbook
-$ionicons-font-path: "./fonts/ionicons/fonts";
+$ionicons-font-path: "ionicons/fonts";
 $ionicons-font-family: "Ionicons";
 $ionicons-version: "1.4.0";
 // we definitely don't want to marry ourselves to ionicons
@@ -10,10 +10,10 @@ $ionicons-prefix: icon-;
 
 /*!
   Ionicons, v#{$ionicons-version}
-    Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
-      https://twitter.com/helloimben  https://twitter.com/ionicframework
-        MIT License: https://github.com/driftyco/ionicons
-        */
+  Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
+  https://twitter.com/helloimben  https://twitter.com/ionicframework
+  MIT License: https://github.com/driftyco/ionicons
+*/
 
 // Use our version of the font file. It fixes firefox cross-domain problem.
 @import "ionicons-font";
