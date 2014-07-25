@@ -393,6 +393,7 @@ body {
 
     .next-button-sticky-wrapper, .next-button {
         float:right;
+        width:$navbar-icon-box-size;
 
         .next-button {
             float:none;
@@ -400,6 +401,7 @@ body {
     }
     .previous-button-sticky-wrapper, .previous-button {
         float:left;
+        width:$navbar-icon-box-size;
 
         .previous-button {
             float:none;
