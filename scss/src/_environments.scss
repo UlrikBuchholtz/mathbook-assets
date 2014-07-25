@@ -31,6 +31,9 @@
     @extend .definition-like;
 
     @include heading {
+        .type {
+            content: " ";
+        }
         .codenumber:after {
             content: ". ";
         }
@@ -84,4 +87,24 @@
     }
 
     margin:$line-height-em 0;
+}
+
+.exercise-like {
+    @include heading {
+        display:inline;
+        //font-family:inherit;
+        font-size: $font-size-h5;
+
+        font-weight:normal;
+        font-style:normal;
+
+        .counter:after, .title:after {
+            content: ". ";
+        }
+
+        // So that the header is inline with paragraph text 
+        & + p {
+            display:inline;
+        }
+    }
 }

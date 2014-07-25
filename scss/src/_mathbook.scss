@@ -858,7 +858,7 @@ section {
 
     /* Hide environment type on section headings */
     // TODO introduction/preface/conclusion too?
-    &.section, &.subsection, &.subsubsection {
+    &.section, &.subsection, &.subsubsection, &.references, &.exercises {
         @include heading {
             .type {
                 display:none;
