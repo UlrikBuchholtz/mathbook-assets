@@ -114,54 +114,15 @@ div.center img {
     text-align: center;
 }
 
-                                                                                                                                                                                                                                                                                                                                                                    }
-
-                                                                                                                                                                                                                                                                                                                                                                    div.quote {
-                                                                                                                                                                                                                                                                                                                                                                        padding-left: 40px;
-                                                                                                                                                                                                                                                                                                                                                                        padding-right: 10px;
-                                                                                                                                                                                                                                                                                                                                                                    }
-
-                                                                                                                                                                                                                                                                                                                                                                    .bib {
-                                                                                                                                                                                                                                                                                                                                                                        margin-bottom:10px;
-                                                                                                                                                                                                                                                                                                                                                                    }
-
-                                                                                                                                                                                                                                                                                                                                                                    .bibitem {
-                                                                                                                                                                                                                                                                                                                                                                        display: inline;
-                                                                                                                                                                                                                                                                                                                                                                        font-weight: bold;
-                                                                                                                                                                                                                                                                                                                                                                    }
-
-                                                                                                                                                                                                                                                                                                                                                                    .bibitem + .bibentry {
-                                                                                                                                                                                                                                                                                                                                                                        display: inline;
-                                                                                                                                                                                                                                                                                                                                                                    }
-
-                                                                                                                                                                                                                                                                                                                                                                    .abstract h5:after {
-                                                                                                                                                                                                                                                                                                                                                                        content: "";
-                                                                                                                                                                                                                                                                                                                                                                    }
-
-                                                                                                                                                                                                                                                                                                                                                                    .abstract + .preface {
-                                                                                                                                                                                                                                                                                                                                                                        margin-top: 35px;
-                                                                                                                                                                                                                                                                                                                                                                    }
-
-                                                                                                                                                                                                                                                                                                                                                                    .abstract h5 {
-                                                                                                                                                                                                                                                                                                                                                                        font-size: 20px;
-                                                                                                                                                                                                                                                                                                                                                                    }
-
-                                                                                                                                                                                                                                                                                                                                                                    .preface h5 {
-                                                                                                                                                                                                                                                                                                                                                                        font-size: 20px;
-                                                                                                                                                                                                                                                                                                                                                                    }
-
-*[knowl] {
-    border-bottom: 1px dotted #00a;
+.abstract + .preface {
+    margin-top: 35px;
 }
 
 #navbar #toc h2 + h2 {
     margin-top: 5px;
 }
 
-.example-like, .exercise-like {
-    margin: 1.42857em 0;
-}
-
+// TODO copy exercise like to others
 .example-like > .heading, .exercise-like > .heading, .remark-like > .heading, aside-like > .heading, .exercise-like > h5, .example-like > h5, .remark-like > h5, .aside-like > h5 {
     display: inline;
     font-weight: bold;
@@ -208,49 +169,6 @@ article.example-like > article.remark-like {
     background-color: maroon;
     color: #FFEECC;
     font-size: 
-}
-
-section.chapter > h1 .type {
-
-    font-size: 30px;
-}
-
-section.chapter > h1 .codenumber {
-
-    font-size: 30px;
-}
-
-section.chapter > h1 .codenumber:after {
-    /*
-    content: ": ";
-     */
-}
-
-section.chapter > h1 .title {
-
-    font-size: 30px;
-    margin-top:10px;
-    /*
-    display: inline;
-     */
-}
-
-section.chapter > h2 {
-
-    font-size: 24px;
-
-}
-
-// TODO should be safe to remove. Add margin after .chapter-toc if necessary
-h2:last-child {
-    /* for the chapter pages with section links at the bottom */
-    margin-bottom: 100px;
-}
-
-// TODO remove, I assume this is a retired experiment
-code.inline {
-    background: none;
-    border: none;
 }
 
 // TODO integrate this somehow!

@@ -18,8 +18,6 @@
             content: ". ";
         }
     }
-    // TODO what is this?!
-    font-size: 1.05em;
     margin:$line-height-em 0;
 }
 
@@ -121,19 +119,54 @@
 
 .remark-like {
     @extend .definition-like;
+    @extend %heading-inline;
 }
 
 .example-like {
     @extend .definition-like;
     @extend %hint-container;
+    @extend %heading-inline;
 }
 
 .exercise-like {
     @extend .definition-like;
     @extend %hint-container;
+    @extend %heading-inline;
 
+    @include heading {
+        // TODO this should be true for all titles by default
+        .type:after {
+            content: "";
+        }
+        
+        // TODO this should be true for all titles by default
+        .codenumber:before {
+            content: " ";
+        }
+
+        // TODO this should be true for all titles by default
+        .codenumber:after {
+            content: "";
+        }
+
+        // TODO this should be true for all titles by default
+        .title:after {
+            content: "";
+        }
+
+        // TODO this should be true for all titles by default
+        .title:before {
+            content: " ";
+        }
+
+        &:after {
+            content: ". ";
+        }
+    }
 }
 
+// TODO what is this?
+// TODO tie values into variables for vertical rythym
 .aside-like {
     padding: 8px 15px 10px 15px;
     margin: 5px 0px 5px 10px;
@@ -143,25 +176,5 @@
     .aside-like {
         background-color: rgb(250,255,245);
         border: 1px dotted #aaa;
-    }
-}
-
-.exercise-like {
-    @include heading {
-        display:inline;
-        //font-family:inherit;
-        font-size: $font-size-h5;
-
-        font-weight:normal;
-        font-style:normal;
-
-        .counter:after, .title:after {
-            content: ". ";
-        }
-
-        // So that the header is inline with paragraph text 
-        & + p {
-            display:inline;
-        }
     }
 }

@@ -712,8 +712,9 @@ body {
 /* Abstract for papers? */
 .abstract {
     @include heading {
+        font-size:$font-size-h2;
         &:after {
-            content: ". ";
+            content: "";
         }
     }
 }
@@ -777,6 +778,7 @@ section {
         }
     }
 
+    &.abstract,
     &.introduction,
     &.preface, 
     &.acknowledgements, 

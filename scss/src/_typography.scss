@@ -10,6 +10,7 @@
     @include typography-link();
     @include typography-headings();
     @include typography-paragraph();
+    @include typography-blockquote();
     @include typography-code();
     @include typography-code-inline();
     @include typography-lists();
@@ -86,6 +87,13 @@
         }
     }
 
+}
+
+@mixin typography-blockquote() {
+    blockquote, .blockquote, .quote {
+        padding-left:40px;
+        padding-right:10px;
+    }
 }
 
 // Code blocks

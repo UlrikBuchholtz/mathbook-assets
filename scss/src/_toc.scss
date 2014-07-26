@@ -90,6 +90,11 @@
         @include toc-heading();
     }
 
+    /* from addon.css. Not sure what it's for. */
+    h2 + h2 {
+        margin-top:5px;
+    }
+
     ul {
         margin: 0px;
         padding: 0px;
