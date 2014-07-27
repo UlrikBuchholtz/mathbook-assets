@@ -2,6 +2,69 @@
 @import "compass/css3/user-interface";
 @import "triangle";
 
+// TODO refactor into icon-button? parameter for icon-only breakpoint? 
+@mixin navbar-button($icon, $icon-side:left) {
+    text-align:$icon-side;
+    @include with-icon(
+        $icon, 
+        $navbar-icon-size, 
+        $navbar-icon-box-size, 
+        $icon-side);
+    @media screen and (max-width: $screen-sm-min) {
+        text-align:center;
+        /* On small screens, use icon only */
+        @include without-text($navbar-icon-size, $navbar-icon-box-size);
+    } 
+}
+
+// You can customize the icon element like so:
+//     @include with-icon() {
+//         background: red;
+//     }
+@mixin with-icon(
+    $icon-content: "", 
+    $icon-size:1em, 
+    $icon-box-size: 1.4em,
+    $icon-side:left
+){
+    @if $icon-side == left {
+        padding-left:$icon-box-size;
+    } @else if $icon-side == right {
+        padding-right:$icon-box-size;
+    }
+
+    // We use the pseudo variable to decide which pseudo selector to use
+    // This way, left icons use before, right use after
+    &:before {
+        content: $icon-content; // TODO change to menu icon
+        font-size:$icon-size;
+        font-family: $font-family-icon;
+        line-height:$icon-box-size;
+        width:$icon-box-size;
+        text-align:center;
+        text-indent:0; /* So text isn't removed from this too */
+
+        position:absolute;
+        #{$icon-side}: 0;
+        top:0;
+
+        // Allow caller to easily customize the icon
+        @content;
+    }
+}
+
+@mixin without-text($width:1em, $icon-box-size: 1.4em) {
+    padding:0;
+    @include hide-text();
+
+    &:before {
+        /* Force icon to center */
+        left:50%;
+        right:auto;
+        margin-left:-$icon-box-size/2;
+    }
+}
+
 @mixin ui() {
     .ui-link {
         @include ui-link();

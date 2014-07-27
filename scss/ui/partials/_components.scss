@@ -1,0 +1,24 @@
+@import "mixins/buttons";
+@import "knowl";
+
+/* 
+ * Table-of-contents for chapter/section/etc summary pages 
+ */
+.summary-links {
+    font-size:$font-size-h3;
+
+    a {
+        @include ui-link-directional();
+    }
+}
+
+// TODO bring knowl selectors up out of mixin file
+@include knowl();
+
+/* restyle knowls at first and third depth */
+.knowl-output, .knowl-output  .knowl-output  .knowl-output {
+    @include knowl-output();
+    @import "exercises"; // TODO what's going on here ?
+    @include exercise($knowl-border-color);
+    @include exercisegroup($knowl-border-color, darken($knowl-border-color, 0%));
+}

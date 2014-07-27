@@ -1,0 +1,64 @@
+// Secondary navbar
+
+@import "mixins/buttons";
+
+& {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:0;
+
+    @media screen and (max-width: $screen-sm-min) {
+        /* Main nav takes over at small size */
+        display:none;
+    }
+
+    .previous-button {
+        /* ion-chevron-left */
+        @include navbar-button("\f124");
+    }
+
+    .next-button {
+        /* ion-chevron-right */
+        @include navbar-button("\f125", right);
+    }
+
+    .next-button, .previous-button {
+        width:$navbar-icon-box-size;
+        @include without-text($navbar-icon-size, $navbar-icon-box-size);
+
+        border:none;
+        background:transparent;
+        opacity:.5;
+        @include transition-property(opacity,background-color);
+        @include transition-duration(200ms);
+
+        &:hover {
+            background:rgba($gray-lighter, .5);
+            opacity:1;
+        }
+
+        &:before {
+            top:50%;
+            margin-top: - $navbar-icon-box-size/2;
+        }
+    }
+
+    .next-button-sticky-wrapper, .next-button {
+        float:right;
+        width:$navbar-icon-box-size;
+
+        .next-button {
+            float:none;
+        }
+    }
+    .previous-button-sticky-wrapper, .previous-button {
+        float:left;
+        width:$navbar-icon-box-size;
+
+        .previous-button {
+            float:none;
+        }
+    }
+}

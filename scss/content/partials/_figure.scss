@@ -35,22 +35,7 @@ figure {
             text-align: center;
         }
 
-        @include heading {
-            font-weight: bold;
-
-            .type { 
-                &:after { content: " "; }
-            }
-
-            .title {
-                &:after { content: " ";}
-            }
-
-            .codenumber {
-                font-weight: bold;
-                &:after { content: " ";}
-            }
-        }
+        @include heading();
 
         &.wrap {
             margin: 10px;

@@ -1,0 +1,42 @@
+/*******************************************************************************
+ * MATHBOOK UI MODULE
+ *
+ * Here we define the layout and style the user interface that houses the 
+ * mathbook content. 
+ ******************************************************************************/
+
+// NOTE:
+// This file is a general overview of the module. 
+// It should only include variables and imports.
+
+////////////////////////////////////////////////////////////////////////////////
+// CONFIG DEFAULTS 
+////////////////////////////////////////////////////////////////////////////////
+
+// These can be overriden from above. See sass documentation for !default
+
+$ui-color-base: #ddd !default;
+$ui-content-max-width: 600px !default;
+$ui-line-height-base: 1.4 !default;
+
+// TODO xs necessary?
+$ui-screen-xs-min;
+$ui-screen-sm-min;
+$ui-screen-md-min;
+$ui-screen-lg-min;
+
+$ui-navbar-icon-box-size;
+
+////////////////////////////////////////////////////////////////////////////////
+// PARTIALS 
+////////////////////////////////////////////////////////////////////////////////
+
+// The main layout
+@import "partials/layout";
+
+// Components that should be globally available (buttons, summary-links, etc) 
+@import "partials/components";
+
+// Mathjax overrides specific to the mathbook layout 
+@import "partials/mathjax";
+@import "partials/icons";

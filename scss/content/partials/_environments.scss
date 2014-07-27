@@ -1,0 +1,101 @@
+@import "mixins/environment";
+
+/*******************************************************************************
+ * Environments
+ ******************************************************************************/
+
+
+.definition-like {
+    @extend %environment-base;
+}
+
+.theorem-like {
+    @extend %environment-base;
+
+    p, ol, ul {
+        font-style: italic;
+    }
+
+    .statement {
+
+        display:inline;
+
+        p:first-child {
+            display:inline;
+        }
+
+        &:last-child, &:last-of-type {
+            margin-bottom:0;
+        }
+    }
+}
+
+.proof {
+    // @davidfarmer has asked that we keep proofs separate in CSS output
+    // so we use the mixin rather than extending %environment-base
+    @include environment-base();
+
+    @include heading-selector {
+        font-style: italic;
+
+        /* We place dots after each token instead 
+         * so we don't get a double dot after "Proof" */
+        &:after {
+            content: "";
+        }
+    }
+
+    /* Period after "Proof" */
+    @include heading-type($after: ". ");
+    /* Period after codenumber, if there is one. */
+    @include heading-codenumber($after: ". ");
+    /* Period after title if there is one. */
+    @include heading-title($after: ". ");
+
+    /* Dotted border to denote proof */
+    padding-right: 6px;
+    border-right: 1px dotted #aaa;
+    padding-bottom: -5px;
+
+    &:after {
+        content:"\220E";
+        display:block;
+        text-align:right;
+
+        // TODO convert to em
+        // From addon
+        margin-top: -15px;
+        margin-bottom: 5px;
+        margin-right: -7px;
+    }
+}
+
+.remark-like {
+    @extend %environment-base;
+}
+
+.example-like {
+    @extend %environment-base;
+}
+
+.exercise-like {
+    @extend %environment-base;
+}
+
+// TODO what is this?
+// TODO tie values into variables for vertical rythym
+.aside-like {
+    @extend %environment-base;
+
+    // From addon
+    // -------------
+    padding: 8px 15px 10px 15px;
+    margin: 5px 0px 5px 10px;
+    background-color: rgb(245,250,255);
+    border: 2px solid rgb(220,235,250);
+
+    .aside-like {
+        background-color: rgb(250,255,245);
+        border: 1px dotted #aaa;
+    }
+}

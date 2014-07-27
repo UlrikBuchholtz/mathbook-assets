@@ -1,0 +1,13 @@
+/* The right sidebar is not sticky, so we can use right:0;*/
+
+& {
+    top:0;
+    right:0;
+    width: $ui-sidebar-right-width;
+
+    @include sliding-sidebars-sidebar(
+        $side: right,
+        $default-open-min: $ui-screen-lg-min,
+        $sidebar-width: $ui-sidebar-right-width
+    );
+}

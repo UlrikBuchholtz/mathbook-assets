@@ -1,0 +1,81 @@
+// Sidebar left
+@import "mixins/sliding-sidebars";
+@import "mixins/navtree";
+
+& {
+    width: $ui-sidebar-left-width;
+}
+
+.has-sidebar-left & {
+    @include sliding-sidebars-sidebar(
+        $side:left,
+        $default-open-min: $ui-screen-sm-min,
+        $sidebar-width: $ui-sidebar-left-width
+    );
+}
+
+/* The table-of-contents itself */
+#toc {
+    /* IMPORTANT height must be calculated by javascript. */
+    width:$sidebar-width;
+    margin:0;
+    font-size:1em;
+
+    // Not sure about this one...we'll see
+    overflow-y:auto;
+    overflow-x:hidden;
+    /* Enable momentum scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+
+    @include navtree();
+}
+
+
+.extras {
+    background:#444;
+
+    nav {
+        @include border-radius($border-radius-small);
+        a {
+            &, &:link, &:visited {
+                display:block;
+
+                color: white;
+                background:#555;
+                border-top:2px solid rgba(white,.2);
+                border-bottom:1px solid rgba(black,.2);
+
+                height: #{$line-height-base}em;
+                line-height:$line-height-base;
+                padding:#{$line-height-base/2}em;
+                padding-top:0;
+                padding-bottom:0;
+
+                /* Subtract borders from height */
+                box-sizing:border-box;
+            }
+
+            &:hover {
+                background:#666;
+                text-decoration:none;
+            }
+
+            &:active, &.active {
+                text-decoration:underline;
+                background:#444;
+                border-top-color:rgba(black,.2);
+                border-bottom-color:rgba(white,.2);
+            }
+
+            &:first-child {
+                @include border-top-radius($border-radius-small);
+                margin-top:0;
+            }
+
+            &:last-child {
+                @include border-bottom-radius($border-radius-small);
+            }
+        }
+    }
+}
+

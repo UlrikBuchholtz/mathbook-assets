@@ -1,9 +1,13 @@
 @import "compass";
-@import "utilities";
+@import "shared/utilities";
+
+$masthead-title-color: $brand-primary;
+$masthead-bg-color: change-color($ui-color-base, $lightness:98%) !default;
+$masthead-subtitle-color: change-color($masthead-bg-color, $lightness:47%) !default;
 
 & {
     position: relative; 
-    background: $header-bg;
+    background: $masthead-bg-color;
     min-height:inherit;
     border:none;
     @include box-shadow(none);

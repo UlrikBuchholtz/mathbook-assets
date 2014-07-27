@@ -1,0 +1,22 @@
+// These can be overriden from above. See Sass Docs on !default.
+$mathbook-primary: #2655a4 !default;
+$mathbook-secondary: #45A861 !default;
+
+// Here we preserve the hue but explicitly set the saturation and lightness to
+// values that we know work well with our theme
+$brand-primary:         change-color($mathbook-primary,$saturation:62%, $lightness:40%);
+$brand-primary-light:   lighten($brand-primary,20%);
+$brand-primary-dark:    darken($brand-primary,20%);
+
+$brand-secondary:        change-color($mathbook-secondary, $saturation:62%, $lightness:40%);
+$brand-secondary-light:  lighten($brand-secondary,20%);
+$brand-secondary-dark:   darken($brand-secondary, 20%);
+
+$brand-success:         #719900 !default;
+$brand-warning:         #b58900 !default;
+$brand-danger:          #d9534f !default;
+$brand-info:            #2aa198 !default;
+
+////////////////////////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,96 @@
+// Mixins for the sliding sidebar functionality
+
+// Defaults
+
+@mixin sliding-sidebars-sidebar(
+    $side, // left|right
+    $default-open-min,
+    $sidebar-width
+) {
+    & {
+        position:absolute;
+        /* Default styles on load, before javascript loads */
+        margin-#{$side}:0;
+        @media screen and (max-width: $default-open-min) {
+            /* Small */
+            margin-#{$side}:-$sidebar-width;
+        }
+    }
+
+    .mathbook-loading &,
+    .mathbook-loaded & {
+        margin-#{$side}:0;
+    }
+
+    .mathbook-loading &.closed,
+    .mathbook-loaded &.closed {
+        margin-#{$side}: -$sidebar-width;
+    }
+
+    .sidebar-content {
+        width: $sidebar-width;
+    }
+}
+
+@mixin sliding-sidebars-main() {
+    /* Must be relative to support sidebar offsets */
+    position: relative;
+    width: auto;
+    /*z-index:10;*/
+}
+
+// Main left styles
+// @param $side - left|right
+// @param $slide-min - the min width at which sidebars slide instead of push
+// @param $default-open-min - min width at which this is open by default
+// @param $sidebar-width - the width of the sidebar
+@mixin sliding-sidebars-main-side(
+    $side,
+    $slide-min,
+    $default-open-min,
+    $sidebar-width
+) {
+
+    /* Main with sidebar left without javascript*/
+    & {
+        @include sliding-sidebars-main-left-state($side, open-slide, $sidebar-width);
+        @media screen and (max-width: $default-open-min) {
+            @include sliding-sidebars-main-left-state($side, closed, $sidebar-width);
+        }
+    }
+
+    /* Main with sidebar left open */
+    .mathbook-loading &, 
+    .mathbook-loaded & {
+        @include sliding-sidebars-main-left-state($side, open-slide, $sidebar-width);
+        @media screen and (max-width: $slide-min) {
+            @include sliding-sidebars-main-left-state($side, open-push, $sidebar-width);
+        }
+    }
+
+    /* Main with sidebar left closed */
+    .mathbook-loading &.sidebar-#{$side}-closed,
+    .mathbook-loaded &.sidebar-#{$side}-closed {
+        @include sliding-sidebars-main-left-state($side, closed, $sidebar-width);
+    }
+}
+
+// Set main-left state
+// @param $side - left|right
+// @param $state
+//     * open-slide subtracts sidebar width from main width
+//     * open-push pushes main to the side, only supports one sidebar open
+//     * closed covers/hides the sidebar
+// @param $sidebar-width - the width of the sidebar
+@mixin sliding-sidebars-main-side-state($side, $state, $sidebar-width) {
+    @if($state == open-slide) {
+        margin-#{$side}:$sidebar-width;
+        #{$side}:auto;
+    } @else if($state == open-push){
+        #{$side}: $sidebar-width;
+        margin-#{$side}:0;
+    } @else if($state == closed) {
+        margin-#{$side}:0;
+        #{$side}:auto;
+    }
+}

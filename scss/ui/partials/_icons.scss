@@ -1,4 +1,4 @@
-@import "../lib/ionicons/ionicons-variables";
+@import "lib/ionicons/ionicons-variables";
 
 // potentially custom to mathbook
 $ionicons-font-path: "ionicons/fonts";
@@ -16,11 +16,11 @@ $ionicons-prefix: icon-;
 */
 
 // Use our version of the font file. It fixes firefox cross-domain problem.
-@import "ionicons-font";
-@import "../lib/ionicons/ionicons-animation";
-
+@import "../lib_extensions/ionicons-font";
 // Import our modified version that only font-faces :before
-@import "ionicons-icons";
+@import "../lib_extensions/ionicons-icons";
+//@import "lib/ionicons/ionicons-animation";
+
 
 /*!
 * Add a margin to any element with a class starting with the #{$ionicons-prefix}

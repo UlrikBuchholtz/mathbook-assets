@@ -1,9 +1,12 @@
 /*******************************************************************************
  * Content
  ******************************************************************************/
-@import "typography";
+@import "shared/typography";
 @include typography();
 
-@import "figure";
-@import "table";
-@import "environments";
+@import "partials/sections";
+@import "partials/environments";
+@import "partials/figure";
+@import "partials/table";
+@import "partials/bib";
+@import "partials/mathjax";

@@ -14,6 +14,9 @@
     @include typography-code();
     @include typography-code-inline();
     @include typography-lists();
+    @include typography-address();
+
+    @include typography-terminology();
 }
 
 // TODO does this belong here?
@@ -221,4 +224,18 @@
     }
 }
 
+@mixin typography-terminology() {
+    .terminology {
+        font-style:italic;
+        font-weight:bold;
+    }
+}
 
+@mixin typography-address() {
+    address {
+        padding:0;
+        margin:0;
+        line-height: inherit;
+        font-style: inherit;
+    }
+}

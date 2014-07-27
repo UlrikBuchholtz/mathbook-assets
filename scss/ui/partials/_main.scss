@@ -1,0 +1,61 @@
+// Main element
+
+@import "mixins/sliding-sidebars";
+
+& {
+    display:block;
+    min-height:100%;
+
+    margin:0;
+    padding:0;
+
+    background:white;
+
+    border:1px solid #ccc;
+    // TODO find a different solution. 
+    // This has causes one pixel to be missing from left/right sidebars 
+    /* transparent instead of none to prevent margins from collapsing */
+    border-top-color:transparent;
+    border-bottom-color:transparent;
+
+    @include box-shadow(rgba(black,.5) 0 5px 5px);
+
+    @media screen and (max-width: $ui-screen-sm-min) {
+        /* Make space for navbar fixed to bottom of screen */
+        padding-bottom: $ui-navbar-icon-box-size;
+    }
+
+    // Styles required to make sliding sidebars work.
+    @include sliding-sidebars-main();
+}
+
+/**
+ * Container for main content. 
+ * This is bound to a comfortable max-width for reading.
+ */
+#content {
+    margin: 3em auto;
+    max-width: $ui-content-max-width;
+    @media screen and (max-width: $ui-content-max-width) {
+        margin:3em #{$ui-line-height-base/2}em;
+    }
+}
+
+
+.has-sidebar-left & {
+    @include sliding-sidebars-main-left(
+        $side: left,
+        $slide-min: $ui-screen-sm-min,
+        $default-open-min: $ui-screen-sm-min,
+        $sidebar-width: $ui-sidebar-left-width
+    );
+}
+
+.has-sidebar-right & {
+    @include sliding-sidebars-main-right(
+        $side: right,
+        $slide-min: $ui-screen-sm-min,
+        $default-open-min: $ui-screen-lg-min
+        $sidebar-width: $ui-sidebar-right-width
+    );
+}

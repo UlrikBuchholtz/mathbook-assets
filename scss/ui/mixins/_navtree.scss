@@ -1,8 +1,49 @@
-@import "compass/css3";
-@import "triangle";
+// TODO expose parameters
+// TODO support more than two levels
 
-@mixin toc-link() {
+@mixin navtree() {
+    a {
+        @include navtree-link();
+    }
+
+    h2 {
+        @include navtree-heading();
+    }
+
+    ul {
+        margin: 0px;
+        padding: 0px;
+        list-style-type: none;
+
+        li {
+            display: block;
+            margin: 0px;
+            padding: 0px;
+
+            a {
+                background: transparent ;
+                padding:.4em;
+                padding-left:($h-pad*2);
+
+                // TODO does border need to be here?
+                border-bottom:1px solid rgba(black, .12);
+
+                &:hover {
+                    border-color:darken($toc-link-bg-hover, 12%);
+                }
+            }
+
+            &:last-child a {
+                border-bottom: none;
+            }
+        }
+    }
+}
+
+// TODO this mixin might not be limited to navtrees 
+@mixin navtree-link() {
     &, &:link, &:visited, &:hover, &:active {
+        position:relative;
         display:block; 
         color: $toc-link-color;
         background: $toc-link-bg;
@@ -14,13 +55,12 @@
     }
 
     &.active, &:active {
-        position:relative;
         color:$toc-link-color-active;
         background: $toc-link-bg-active;
     }
 }
 
-@mixin toc-heading() {
+@mixin navtree-heading() {
     & {
         display:block;
         font-family: sans-serif;
@@ -64,61 +104,5 @@
         color: $toc-heading-color-hover;
         background: $toc-heading-bg-hover;
         border-color:darken($toc-link-bg-hover,10%);
-    }
-}
-
-@mixin toc-nav() {
-    & {
-        /*float: left;*/
-        width:$sidebar-width;
-        margin:0;
-        font-size: 85%;
-        color: #390;
-        background: $toc-bg;
-        // Not sure about this one...we'll see
-        overflow-y:auto;
-        overflow-x:hidden;
-        /* Enable momentum scrolling on iOS */
-        -webkit-overflow-scrolling: touch;
-    }
-
-    a {
-        @include toc-link();
-    }
-
-    h2 {
-        @include toc-heading();
-    }
-
-    /* from addon.css. Not sure what it's for. */
-    h2 + h2 {
-        margin-top:5px;
-    }
-
-    ul {
-        margin: 0px;
-        padding: 0px;
-        list-style-type: none;
-
-        li {
-            display: block;
-            margin: 0px;
-            padding: 0px;
-
-            a {
-                background: transparent ;
-                padding:.4em;
-                padding-left:($h-pad*2);
-                border-bottom:1px solid rgba(black, .12);
-
-                &:hover {
-                    border-color:darken($toc-link-bg-hover, 12%);
-                }
-            }
-
-            &:last-child a {
-                border-bottom: none;
-            }
-        }
     }
 }

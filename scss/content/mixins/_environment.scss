@@ -1,0 +1,61 @@
+@import "mixins/heading";
+
+$environment-heading-after: ". " !default;
+
+// Note: in Sass the %placeholder is a special selector that has no output 
+// unless used in an @extend directive.
+
+// Here I am providing both a placeholder class (denoted by %) and a mixin.
+// @extend-ing the placeholder  creates a comma separated list in the CSS.
+// This is preferred because it produces less total CSS output
+// and the resulting CSS output is easier to edit manually
+
+// However, if you wish to separate two items in the CSS output,
+// or it is infeasible to @extend the placholder,
+// use the corresponding mixin (with @include) to inject the rules directly
+
+%environment-base {
+    @include environment-base();
+}
+
+%environment-heading-inline {
+    @include environment-heading-inline();
+}
+
+%environment-heading-block {
+    @include environment-heading-block();
+}
+
+// Defaults for environments
+@mixin environment-base() {
+    @include heading($heading-after:$environment-heading-after) {
+        font-size: $font-size-h5;
+    }
+
+    // Default inline heading
+    @include environment-heading-inline();
+
+    margin:$line-height-em 0;
+}
+
+// Force environment heading to be inline
+@mixin environment-heading-inline() {
+    @include heading-selector {
+        display:inline;
+
+        & + p {
+            display:inline;
+        }
+    }
+}
+
+// Force environment heading to be block
+@mixin environment-heading-block() {
+    @include heading-selector {
+        display:block;
+
+        & + p {
+            display:block;
+        }
+    }
+}
