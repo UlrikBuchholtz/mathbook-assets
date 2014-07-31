@@ -7,7 +7,7 @@
     $default-open-min,
     $sidebar-width
 ) {
-    & {
+    .has-sidebar-#{$side} & {
         position:absolute;
         /* Default styles on load, before javascript loads */
         margin-#{$side}:0;
@@ -17,13 +17,13 @@
         }
     }
 
-    .mathbook-loading &,
-    .mathbook-loaded & {
+    .has-sidebar-#{$side}.mathbook-loading &,
+    .has-sidebar-#{$side}.mathbook-loaded & {
         margin-#{$side}:0;
     }
 
-    .mathbook-loading &.closed,
-    .mathbook-loaded &.closed {
+    .has-sidebar-#{$side}.mathbook-loading &.closed,
+    .has-sidebar-#{$side}.mathbook-loaded &.closed {
         margin-#{$side}: -$sidebar-width;
     }
 
@@ -52,26 +52,26 @@
 ) {
 
     /* Main with sidebar left without javascript*/
-    & {
-        @include sliding-sidebars-main-left-state($side, open-slide, $sidebar-width);
+    .has-sidebar-#{$side} & {
+        @include sliding-sidebars-main-side-state($side, open-slide, $sidebar-width);
         @media screen and (max-width: $default-open-min) {
-            @include sliding-sidebars-main-left-state($side, closed, $sidebar-width);
+            @include sliding-sidebars-main-side-state($side, closed, $sidebar-width);
         }
     }
 
     /* Main with sidebar left open */
-    .mathbook-loading &, 
-    .mathbook-loaded & {
-        @include sliding-sidebars-main-left-state($side, open-slide, $sidebar-width);
+    .has-sidebar-#{$side}.mathbook-loading &, 
+    .has-sidebar-#{$side}.mathbook-loaded & {
+        @include sliding-sidebars-main-side-state($side, open-slide, $sidebar-width);
         @media screen and (max-width: $slide-min) {
-            @include sliding-sidebars-main-left-state($side, open-push, $sidebar-width);
+            @include sliding-sidebars-main-side-state($side, open-push, $sidebar-width);
         }
     }
 
     /* Main with sidebar left closed */
-    .mathbook-loading &.sidebar-#{$side}-closed,
-    .mathbook-loaded &.sidebar-#{$side}-closed {
-        @include sliding-sidebars-main-left-state($side, closed, $sidebar-width);
+    .has-sidebar-#{$side}.mathbook-loading &.sidebar-#{$side}-closed,
+    .has-sidebar-#{$side}.mathbook-loaded &.sidebar-#{$side}-closed {
+        @include sliding-sidebars-main-side-state($side, closed, $sidebar-width);
     }
 }
 

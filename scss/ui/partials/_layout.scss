@@ -1,3 +1,4 @@
+@import "../ui_config";
 // This provides an overview of the layout and how the root level
 // elements of the page fit together.
 
@@ -7,7 +8,7 @@ html, body {
 }
 
 body {
-    background: $ui-color-base;
+    background: $ui-color-bg;
 }
 
 /** 
@@ -26,7 +27,7 @@ body {
  * Contains the book title and navigation.
  */
 #masthead {
-    @import "partials/masthead";
+    @import "./masthead";
 }
 
 /**
@@ -34,7 +35,7 @@ body {
  * Contains primary actions for navigation or layout control
  */
 #primary-navbar, #primary-navbar-sticky-wrapper {
-    @import "partials/primary-navbar";
+    @import "./primary-navbar";
 
     // TODO move into partial
     /**
@@ -45,7 +46,7 @@ body {
          * At small screens, the navbar is fixed to bottom,
          * so the sticky wrapper should collapse.
          */
-        @media screen and (max-width: $screen-sm-min) {
+        @media screen and (max-width: $ui-screen-sm-min) {
             height:0;
         }
     }
@@ -56,7 +57,7 @@ body {
  * Contains secondary actions for navigation or layout control
  */
 #secondary-navbar {
-    @import "partials/secondary-navbar";
+    @import "./secondary-navbar";
 }
 
 /**
@@ -69,16 +70,16 @@ body {
 }
 
 #sidebar-left, #sidebar-left-sticky-wrapper {
-    @import "partials/sidebar-left";
+    @import "./sidebar-left";
 }
 
 #sidebar-right {
-    @import "partials/sidebar-right";
+    @import "./sidebar-right";
 }
 
 /**
  * Container for the main focus/purpose of the page.
  */
 #main, .main {
-    @import "partials/main";
+    @import "./main";
 }

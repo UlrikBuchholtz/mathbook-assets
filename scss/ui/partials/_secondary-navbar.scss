@@ -1,6 +1,11 @@
+@import "../ui_config";
 // Secondary navbar
 
-@import "mixins/buttons";
+@import "../mixins/buttons";
+@import "compass/css3";
+
+$secondary-navbar-icon-size: $ui-icon-size;
+$secondary-navbar-icon-box-size: $ui-icon-box-size;
 
 & {
     position:absolute;
@@ -9,7 +14,7 @@
     right:0;
     height:0;
 
-    @media screen and (max-width: $screen-sm-min) {
+    @media screen and (max-width: $ui-screen-sm-min) {
         /* Main nav takes over at small size */
         display:none;
     }
@@ -24,9 +29,9 @@
         @include navbar-button("\f125", right);
     }
 
+    /* Navbar button overrides */
     .next-button, .previous-button {
-        width:$navbar-icon-box-size;
-        @include without-text($navbar-icon-size, $navbar-icon-box-size);
+        width:$secondary-navbar-icon-box-size;
 
         border:none;
         background:transparent;
@@ -41,24 +46,42 @@
 
         &:before {
             top:50%;
-            margin-top: - $navbar-icon-box-size/2;
+            margin-top: - $secondary-navbar-icon-box-size/2;
         }
+    }
+    
+    .next-button {
+        @include without-text(
+            $secondary-navbar-icon-size,
+            $secondary-navbar-icon-box-size,
+            right);
+    }
+
+    .previous-button {
+        @include without-text(
+            $secondary-navbar-icon-size,
+            $secondary-navbar-icon-box-size,
+            left);
     }
 
     .next-button-sticky-wrapper, .next-button {
         float:right;
-        width:$navbar-icon-box-size;
+        width:$secondary-navbar-icon-box-size;
 
         .next-button {
             float:none;
+            position:absolute;
+            top:0;
         }
     }
     .previous-button-sticky-wrapper, .previous-button {
         float:left;
-        width:$navbar-icon-box-size;
+        width:$secondary-navbar-icon-box-size;
 
         .previous-button {
             float:none;
+            position:absolute;
+            top:0;
         }
     }
 }

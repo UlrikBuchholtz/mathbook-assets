@@ -1,6 +1,10 @@
 // TODO make more portable with default module variables pattern
 @import "compass/css3/user-interface";
-@import "triangle";
+@import "compass/css3/box-shadow";
+@import "compass/css3/images";
+@import "compass/css3/border-radius";
+@import "compass/typography/text/replacement";
+@import "./triangle";
 
 // TODO refactor into icon-button? parameter for icon-only breakpoint? 
 @mixin navbar-button($icon, $icon-side:left) {
@@ -46,16 +50,17 @@
 
         position:absolute;
         #{$icon-side}: 0;
-        top:0;
+        top:50%;
+        margin-top: -$icon-box-size/2;
 
         // Allow caller to easily customize the icon
         @content;
     }
 }
 
-@mixin without-text($width:1em, $icon-box-size: 1.4em) {
+@mixin without-text($width:1em, $icon-box-size: 1.4em, $direction: left) {
     padding:0;
-    @include hide-text();
+    @include hide-text($direction);
 
     &:before {
         /* Force icon to center */
@@ -97,8 +102,8 @@
 // Standard link
 @mixin ui-link(
     $color: $link-color, 
-    $color-hover:$link-hover-color) 
-{
+    $color-hover:$link-hover-color
+){
     &, &:link, &:visited {
         color: $color;
         text-decoration: none;

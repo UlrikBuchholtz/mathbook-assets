@@ -1,5 +1,5 @@
-@import "mixins/buttons";
-@import "knowl";
+@import "../ui_config";
+@import "../mixins/buttons";
 
 /* 
  * Table-of-contents for chapter/section/etc summary pages 
@@ -13,12 +13,12 @@
 }
 
 // TODO bring knowl selectors up out of mixin file
-@include knowl();
+/*@include knowl();*/
 
 /* restyle knowls at first and third depth */
-.knowl-output, .knowl-output  .knowl-output  .knowl-output {
-    @include knowl-output();
-    @import "exercises"; // TODO what's going on here ?
-    @include exercise($knowl-border-color);
-    @include exercisegroup($knowl-border-color, darken($knowl-border-color, 0%));
-}
+/*.knowl-output, .knowl-output  .knowl-output  .knowl-output {*/
+    /*@include knowl-output();*/
+    /*@import "exercises"; // TODO what's going on here ?*/
+    /*@include exercise($knowl-border-color);*/
+    /*@include exercisegroup($knowl-border-color, darken($knowl-border-color, 0%));*/
+/*}*/

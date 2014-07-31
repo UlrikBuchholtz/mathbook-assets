@@ -1,9 +1,12 @@
+@import "../ui_config";
 @import "compass";
-@import "shared/utilities";
+@import "../../shared/utilities";
 
-$masthead-title-color: $brand-primary;
-$masthead-bg-color: change-color($ui-color-base, $lightness:98%) !default;
+// Note: These variables should only depend on ui module variables
+$masthead-bg-color: change-color($ui-color-bg, $lightness:97%) !default;
+$masthead-title-color: $ui-color-primary;
 $masthead-subtitle-color: change-color($masthead-bg-color, $lightness:47%) !default;
+$masthead-font-family: $ui-font-family-heading;
 
 & {
     position: relative; 
@@ -14,12 +17,12 @@ $masthead-subtitle-color: change-color($masthead-bg-color, $lightness:47%) !defa
 }
 
 .banner {
-    border-bottom:1px solid darken($header-bg, 15%);
+    border-bottom:1px solid darken($masthead-bg-color, 15%);
     /* to ensure children's margin-top works */
     border-top:1px solid transparent;
 
     .container {
-        padding:.01em $h-pad;
+        padding:1px $ui-font-size-base;
     }
 
     // We use the em function to convert font-sizes defined in pixels
@@ -44,15 +47,15 @@ $masthead-subtitle-color: change-color($masthead-bg-color, $lightness:47%) !defa
 }
 
 #logo-link {
-    $line-height-h1: ($font-size-h1 * $line-height-base);
-    $line-height-h1-top:($line-height-h1 - $font-size-h1)/2;
+    $line-height-h1: ($ui-font-size-h1 * $ui-line-height-base);
+    $line-height-h1-top:($line-height-h1 - $ui-font-size-h1)/2;
 
     $size: $font-size-h1*$line-height-base - $line-height-h1-top;
 
     position:relative;
     float:left;
     font-size: $size;
-    margin-right:$font-size-base;
+    margin-right:$ui-font-size-base;
     margin-left: $line-height-h1-top;
     text-align:center;
 
@@ -85,11 +88,11 @@ $masthead-subtitle-color: change-color($masthead-bg-color, $lightness:47%) !defa
         }
 
         &:hover:before {
-            color: $brand-primary;
+            color: $ui-color-primary;
         }
 
         &:active:before {
-            color: $brand-secondary;
+            color: $ui-color-secondary;
         }
     }
 
@@ -101,7 +104,7 @@ $masthead-subtitle-color: change-color($masthead-bg-color, $lightness:47%) !defa
     }
 
     /* On mobile phones */
-    @media screen and (max-width:$screen-xs-min) {
+    @media screen and (max-width:$ui-screen-xs-min) {
         display:block;
         float:none;
         margin:.5em 0;
@@ -109,14 +112,14 @@ $masthead-subtitle-color: change-color($masthead-bg-color, $lightness:47%) !defa
 }
 /* IMPORTANT: #title is deprecated!*/
 #title, .title {
-    color: $header-title-color;
-    font-size:em($font-size-h1, $font-size-base);
+    color: $masthead-title-color;
+    font-size:em($ui-font-size-h1, $ui-font-size-base);
     margin-left:0;
     margin-bottom:.15em;
     min-height:inherit;
 
     // Override addon
-    font-family:$headings-font-family;
+    font-family:$masthead-font-family;
 
     .subtitle {
         &:before {
@@ -125,20 +128,20 @@ $masthead-subtitle-color: change-color($masthead-bg-color, $lightness:47%) !defa
     }
 
     /* On mobile phones */
-    @media screen and (max-width:$screen-xs-min) {
+    @media screen and (max-width:$ui-screen-xs-min) {
         margin-top:0;
     }
 }
 
 /* IMPORTANT: #byline is deprecated! */
 #byline, .byline {
-    color: $header-subtitle-color;
-    font-size: em(.6*$font-size-h1, $font-size-base);
+    color: $masthead-subtitle-color;
+    font-size: em(.6*$ui-font-size-h1, $ui-font-size-base);
     font-weight:normal;
     margin:0;
     margin-bottom:1em;
     min-height:inherit;
 
     // Override addon
-    font-family:$headings-font-family;
+    font-family:$masthead-font-family;
 }

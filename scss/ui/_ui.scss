@@ -7,25 +7,9 @@
 
 // NOTE:
 // This file is a general overview of the module. 
-// It should only include variables and imports.
+// It should only include imports and comments
 
-////////////////////////////////////////////////////////////////////////////////
-// CONFIG DEFAULTS 
-////////////////////////////////////////////////////////////////////////////////
-
-// These can be overriden from above. See sass documentation for !default
-
-$ui-color-base: #ddd !default;
-$ui-content-max-width: 600px !default;
-$ui-line-height-base: 1.4 !default;
-
-// TODO xs necessary?
-$ui-screen-xs-min;
-$ui-screen-sm-min;
-$ui-screen-md-min;
-$ui-screen-lg-min;
-
-$ui-navbar-icon-box-size;
+@import "ui_config";
 
 ////////////////////////////////////////////////////////////////////////////////
 // PARTIALS 

@@ -1,6 +1,6 @@
 // Typography
 @import "compass";
-@import "ui";
+/*@import "ui";*/
 
 @mixin typography() {
     body {
@@ -20,9 +20,31 @@
 }
 
 // TODO does this belong here?
-@mixin typography-link() {
+@mixin typography-link(
+    $color: $link-color, 
+    $color-hover:$link-hover-color
+) {
     a {
-        @include ui-link();
+        &, &:link, &:visited {
+            color: $color;
+            text-decoration: none;
+            font-family:inherit; // Overide beezer.css
+        }
+
+        &:hover,
+        &:focus {
+            color: $color-hover;
+            text-decoration: underline;
+            cursor:pointer;
+        }
+
+        &:focus {
+          // Default
+          outline: thin dotted $color-hover;
+          // WebKit
+          outline: 5px auto -webkit-focus-ring-color;
+          outline-offset: -2px;
+        }
     }
 }
 

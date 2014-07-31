@@ -1,6 +1,8 @@
+@import "../ui_config";
 // Main element
 
-@import "mixins/sliding-sidebars";
+@import "compass/css3";
+@import "../mixins/sliding-sidebars";
 
 & {
     display:block;
@@ -22,11 +24,25 @@
 
     @media screen and (max-width: $ui-screen-sm-min) {
         /* Make space for navbar fixed to bottom of screen */
-        padding-bottom: $ui-navbar-icon-box-size;
+        padding-bottom: $ui-navbar-height;
     }
 
     // Styles required to make sliding sidebars work.
     @include sliding-sidebars-main();
+
+    @include sliding-sidebars-main-side(
+        $side: left,
+        $slide-min: $ui-screen-sm-min,
+        $default-open-min: $ui-screen-sm-min,
+        $sidebar-width: $ui-sidebar-left-width
+    );
+
+    @include sliding-sidebars-main-side(
+        $side: right,
+        $slide-min: $ui-screen-sm-min,
+        $default-open-min: $ui-screen-lg-min,
+        $sidebar-width: $ui-sidebar-right-width
+    );
 }
 
 /**
@@ -41,21 +57,3 @@
     }
 }
 
-
-.has-sidebar-left & {
-    @include sliding-sidebars-main-left(
-        $side: left,
-        $slide-min: $ui-screen-sm-min,
-        $default-open-min: $ui-screen-sm-min,
-        $sidebar-width: $ui-sidebar-left-width
-    );
-}
-
-.has-sidebar-right & {
-    @include sliding-sidebars-main-right(
-        $side: right,
-        $slide-min: $ui-screen-sm-min,
-        $default-open-min: $ui-screen-lg-min
-        $sidebar-width: $ui-sidebar-right-width
-    );
-}

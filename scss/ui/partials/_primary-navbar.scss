@@ -1,19 +1,36 @@
-// Primary navbar
+@import "../ui_config";
+@import "../mixins/buttons";
+@import "compass/css3";
 
-@import "mixins/buttons";
+////////////////////////////////////////////////////////////////////////////////
+// Config
+////////////////////////////////////////////////////////////////////////////////
+// Note: These variables should only depend on ui module variables
 
 $navbar-color:change-color($ui-color-base, $lightness: 20%) !default;
-$navbar-bg: change-color($ui-color-base, $lightness: 93%) !default;
+$navbar-bg-color: change-color($ui-color-base, $lightness: 93%) !default;
+
+$navbar-border-width: 1px !default;
 
 $navbar-shadow-color:rgba(black,.3) !default;
 $navbar-shadow-spread: 5px !default;
 $navbar-shadow-offset: 2px !default;
 
-$navbar-border-width: 1px !default;
+$navbar-top-box-shadow:
+    $navbar-shadow-color 0 $navbar-shadow-offset $navbar-shadow-spread;
+$navbar-bottom-box-shadow:
+    $navbar-shadow-color 0 -$navbar-shadow-offset $navbar-shadow-spread;
+
+$navbar-icon-size: $ui-icon-size;
+$navbar-icon-box-size: $ui-icon-box-size;
+
+////////////////////////////////////////////////////////////////////////////////
+// Styles
+////////////////////////////////////////////////////////////////////////////////
 
 & { 
-    background:$navbar-bg;
-    border-bottom:$navbar-border-width solid darken($navbar-bg, 15%);
+    background:$navbar-bg-color;
+    border-bottom:$navbar-border-width solid darken($navbar-bg-color, 15%);
     z-index:200;
     height: 2.8em;
     font-family: $font-family-serif;
@@ -28,8 +45,7 @@ $navbar-border-width: 1px !default;
     top:0;
     right:0;
     left:0;
-    @include box-shadow(
-        $navbar-shadow-color 0 $navbar-shadow-offset $navbar-shadow-spread);
+    @include box-shadow( $navbar-top-box-shadow);
 }
 
 @media screen and (max-width: $ui-screen-sm-min) {
@@ -43,9 +59,8 @@ $navbar-border-width: 1px !default;
         bottom:0;
         left:0;
         right:0;
-        background:$navbar-bg;
-        @include box-shadow(
-            $navbar-shadow-color 0 -$navbar-shadow-offset $navbar-shadow-spread);
+        background:$navbar-bg-color;
+        @include box-shadow($navbar-bottom-box-shadow);
     }
 }
 
@@ -76,7 +91,7 @@ $navbar-border-width: 1px !default;
     outline:none; /* Don't display outline on click */
 
     border:1px solid; 
-    border-color:darken($navbar-bg, 30%);
+    border-color:darken($navbar-bg-color, 30%);
     border-top:none;
     border-bottom:none;
 
@@ -85,12 +100,12 @@ $navbar-border-width: 1px !default;
 
     /* hover state */
     &:hover {
-        background-color:lighten($navbar-bg, 5%);
+        background-color:lighten($navbar-bg-color, 5%);
     }
 
     /* active/pressed state */
     &.active, &:active {
-        background-color:darken($navbar-bg, 5%);
+        background-color:darken($navbar-bg-color, 5%);
         @include box-shadow(rgba(black,.5) 0 2px 5px inset);
     }
     //----------------------------------------------------
@@ -99,8 +114,8 @@ $navbar-border-width: 1px !default;
     @media screen and (max-width:$ui-screen-sm-min) {
 
         @include without-text(
-            $ui-navbar-icon-box-size, 
-            $ui-navbar-icon-box-size);
+            $navbar-icon-box-size, 
+            $navbar-icon-box-size);
 
         float:left;
         text-align:center;
@@ -175,6 +190,8 @@ $navbar-border-width: 1px !default;
     /*On big screens, 
      * we use the prev/next inside the main container */
     .next-button, .previous-button {
-        display:none;
+        &, &:link, &:visited, &:hover, &:active {
+            display:none;
+        }
     }
 }
