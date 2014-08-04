@@ -18,6 +18,4 @@
 @include reset-html5();
 
 @import "ui/ui";
-#content {
-    @import "content/content";
-}
+@import "mathbook-content";
