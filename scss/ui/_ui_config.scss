@@ -26,16 +26,34 @@ $ui-color-base: #ddd !default;
 
 $ui-color-bg: change-color($ui-color-base, $lightness:87%);
 
+// Applied to inline ui links
+//---------------------------
+$ui-link-color: $ui-color-primary !default;
+$ui-link-color-hover: lighten($ui-link-color, 10%) !default;
+$ui-link-color-active: darken($ui-link-color, 10%) !default;
+$ui-link-bg: transparent;
+$ui-link-bg-hover: transparent;
+$ui-link-bg-active: transparent;
+
+// Applied only to block links
+//----------------------------
+$ui-link-block-color: $ui-color-primary !default;
+$ui-link-block-color-hover: white !default;
+$ui-link-block-color-active: white !default;
+$ui-link-block-bg: change-color($ui-color-bg, $lightness:94%) !default;
+$ui-link-block-bg-hover: $ui-color-primary !default;
+$ui-link-block-bg-active: $ui-color-primary !default;
+
 $ui-content-max-width: 600px !default;
 
 // font-size-base must match the font-size placed on body anywhere else
 $ui-font-size-base: 14px !default;
-$ui-font-size-h1:            floor($ui-font-size-base * 2) !default;// ~32px 
-$ui-font-size-h2:            floor($ui-font-size-base * 1.85) !default;  
-$ui-font-size-h3:            ceil($ui-font-size-base * 1.5) !default; 
-$ui-font-size-h4:            ceil($ui-font-size-base * 1.3)!default;
-$ui-font-size-h5:            ceil($ui-font-size-base * 1.15) !default;
-$ui-font-size-h6:            $ui-font-size-base !default; 
+$ui-font-size-h1: floor($ui-font-size-base * 2) !default;// ~32px 
+$ui-font-size-h2: floor($ui-font-size-base * 1.85) !default;  
+$ui-font-size-h3: ceil($ui-font-size-base * 1.5) !default; 
+$ui-font-size-h4: ceil($ui-font-size-base * 1.3)!default;
+$ui-font-size-h5: ceil($ui-font-size-base * 1.15) !default;
+$ui-font-size-h6: $ui-font-size-base !default; 
 $ui-line-height-base:        1.428571429 !default; // 20/14
 $ui-line-height-computed:    floor($ui-font-size-base * $ui-line-height-base) !default; // ~20px
 $ui-line-height-em:          #{$ui-line-height-base}em;

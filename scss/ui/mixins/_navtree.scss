@@ -3,13 +3,13 @@
 // TODO should we encapsulate defaults and just expose primary/secondary/base?
 // TODO support more than two levels
 
-$navtree-link-color: $ui-color-primary !default;
-$navtree-link-color-hover: white !default;
-$navtree-link-color-active: white !default;
+$navtree-link-color: $ui-link-block-color !default;
+$navtree-link-color-hover: $ui-link-block-color-hover !default;
+$navtree-link-color-active: $ui-link-block-color-active !default;
 
-$navtree-link-bg: change-color($ui-color-bg, $lightness:94%) !default;
-$navtree-link-bg-hover: $ui-color-primary !default;
-$navtree-link-bg-active: $ui-color-primary !default;
+$navtree-link-bg: $ui-link-block-bg !default;
+$navtree-link-bg-hover: $ui-link-block-bg-hover !default;
+$navtree-link-bg-active: $ui-link-block-bg-active !default;
 
 $navtree-heading-color: white !default;
 $navtree-heading-color-hover: $navtree-link-color-hover !default;
@@ -36,6 +36,11 @@ $navtree-heading-bg-active: $navtree-link-bg-active !default;
     $heading-bg-hover: $navtree-heading-bg-hover,
     $heading-bg-active: $navtree-heading-bg-active
 ) {
+
+    & {
+        font-family:$ui-font-family-base;
+    }
+
     a {
         @include navtree-link(
             $color: $link-color,
@@ -106,9 +111,13 @@ $navtree-heading-bg-active: $navtree-link-bg-active !default;
     $bg-hover: $navtree-link-bg-hover,
     $bg-active: $navtree-link-bg-active
 ) {
-    &, &:link, &:visited, &:hover, &:active {
-        position:relative;
+    & {
         display:block; 
+        position:relative;
+        font-family:$ui-font-family-base;
+    }
+
+    &, &:link, &:visited, &:hover, &:active {
         color: $color;
         background: $bg;
         text-decoration:none;
@@ -136,7 +145,7 @@ $navtree-heading-bg-active: $navtree-link-bg-active !default;
 ) {
     & {
         display:block;
-        font-family: $ui-font-family-sans-serif;
+        font-family: $ui-font-family-heading;
         font-size: 100%;
         margin: 0;
     }
@@ -155,6 +164,11 @@ $navtree-heading-bg-active: $navtree-link-bg-active !default;
             $bg-hover: $bg-hover,
             $bg-active: $bg-active
         );
+
+        & {
+            /* Inherit the heading font-family */
+            font-family: inherit;
+        }
     }
 
     /* Props shared by headings and heading-links */

@@ -3,7 +3,7 @@
 @import "../../shared/utilities";
 
 // Note: These variables should only depend on ui module variables
-$masthead-bg-color: change-color($ui-color-bg, $lightness:97%) !default;
+$masthead-bg-color: change-color($ui-color-bg, $lightness:98%) !default;
 $masthead-title-color: $ui-color-primary;
 $masthead-subtitle-color: change-color($masthead-bg-color, $lightness:47%) !default;
 $masthead-font-family: $ui-font-family-heading;
@@ -25,10 +25,7 @@ $masthead-font-family: $ui-font-family-heading;
         padding:1px $ui-font-size-base;
     }
 
-    // We use the em function to convert font-sizes defined in pixels
-    // to ems so that we can scale all the fonts in the banner together
-    /* On mobile phones */
-    @media screen and (max-width:$screen-xs-min) {
+    @media screen and (max-width:$ui-screen-xs-min) {
         font-size:.8em;
     }
 }
@@ -37,20 +34,20 @@ $masthead-font-family: $ui-font-family-heading;
     @include clearfix();
 
     /* On mobile phones */
-    @media screen and (max-width:$screen-xs-min) {
+    @media screen and (max-width:$ui-screen-xs-min) {
         text-align:center;
     }
 }
 
 #logo-link, #title {
-    margin-top: $font-size-base;
+    margin-top: $ui-font-size-base;
 }
 
 #logo-link {
     $line-height-h1: ($ui-font-size-h1 * $ui-line-height-base);
     $line-height-h1-top:($line-height-h1 - $ui-font-size-h1)/2;
 
-    $size: $font-size-h1*$line-height-base - $line-height-h1-top;
+    $size: $ui-font-size-h1*$ui-line-height-base - $line-height-h1-top;
 
     position:relative;
     float:left;
@@ -69,9 +66,9 @@ $masthead-font-family: $ui-font-family-heading;
     &:empty {
 
         /*width:1em;*/
-        /*height:em($font-size-h1 * $line-height-base, $font-size-base);*/
-        /*margin-top:em($font-size-base + $line-height-h1-top, $font-size-base);*/
-        /*//margin-top:$font-size-base;*/
+        /*height:em($ui-font-size-h1 * $ui-line-height-base, $ui-font-size-base);*/
+        /*margin-top:em($ui-font-size-base + $line-height-h1-top, $ui-font-size-base);*/
+        /*//margin-top:$ui-font-size-base;*/
         /*height:$size;*/
 
         &:before { 

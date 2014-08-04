@@ -1,13 +1,15 @@
-$heading-type-before:"" !default;
-$heading-type-after:"" !default;
-$heading-codenumber-before:" " !default;
-$heading-codenumber-after:"" !default;
-$heading-title-before:" " !default;
-$heading-title-after:"";
-$heading-before:"";
-$heading-after:" ";
+$heading-type-before:none !default;
+$heading-type-after:" " !default;
+$heading-codenumber-before:none !default;
+$heading-codenumber-after:" " !default;
+$heading-title-before:none !default;
+$heading-title-after:" " !default;
+$heading-before:none !default;
+$heading-after:" " !default;
 
-
+////////////////////////////////////////////////////////////////////////////////
+// MIXINS 
+////////////////////////////////////////////////////////////////////////////////
 
 // Mixin for quickly and consistently outputting the heading selector
 @mixin heading-selector() {
@@ -31,12 +33,19 @@ $heading-after:" ";
     $title-before:$heading-title-before,
     $title-after:$heading-title-after,
     $heading-before:$heading-before,
-    $heading-after:$heading-after,
+    $heading-after:$heading-after
 ) {
     // These come first so that the user can override them
     @include heading-type($type-before, $type-after);
     @include heading-codenumber($codenumber-before, $codenumber-after);
     @include heading-title($title-before, $title-after);
+
+    .type, .codenumber, .title {
+        /* Hide the space after the last element */
+        &:last-child:after {
+            display:none;
+        }
+    }
 
     @include heading-selector() {
 
@@ -46,11 +55,19 @@ $heading-after:" ";
         }
 
         &:before {
-            content:$heading-before;
+            @if($heading-before == none) {
+                display:none;
+            } else {
+                content:$heading-before;
+            }
         }
 
         &:after {
-            content:$heading-after;
+            @if($heading-after == none) {
+                display:none;
+            } else {
+                content:$heading-after;
+            }
         }
 
         // allow property inclusion. See usage comment. 
@@ -63,10 +80,18 @@ $heading-after:" ";
     @include heading-selector() {
         .type {
             &:before {
-                content: $before;
+                @if($before == none) {
+                    display:none;
+                } else {
+                    content: $before;
+                }
             }
             &:after {
-                content: $after;
+                @if($after == none) {
+                    display:none;
+                } else {
+                    content: $after;
+                }
             }
 
             @content;
@@ -81,10 +106,18 @@ $heading-after:" ";
     @include heading-selector() {
         .codenumber {
             &:before {
-                content: $title;
+                @if($before == none) {
+                    display:none;
+                } else {
+                    content: $before;
+                }
             }
             &:after {
-                content: $title;
+                @if($after == none) {
+                    display:none;
+                } else {
+                    content: $after;
+                }
             }
 
             @content;
@@ -99,27 +132,23 @@ $heading-after:" ";
     @include heading-selector() {
         .title {
             &:before {
-                content: $before;
+                @if($before == none) {
+                    display:none;
+                } else {
+                    content: $before;
+                }
             }
             &:after {
-                content: $after;
+                @if($after == none) {
+                    display:none;
+                } else {
+                    content: $after;
+                }
             }
 
             @content;
         }
     }
-}
-
-%heading-no-type {
-    @include heading-no-type();
-}
-
-%heading-no-codenumber {
-    @include heading-no-codenumber();
-}
-
-%heading-no-title {
-    @include heading-no-title();
 }
 
 @mixin heading-no-type() {
@@ -139,3 +168,20 @@ $heading-after:" ";
         display:none;
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// PLACEHOLDERS 
+////////////////////////////////////////////////////////////////////////////////
+
+%heading-no-type {
+    @include heading-no-type();
+}
+
+%heading-no-codenumber {
+    @include heading-no-codenumber();
+}
+
+%heading-no-title {
+    @include heading-no-title();
+}
+

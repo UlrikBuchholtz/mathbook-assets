@@ -6,19 +6,30 @@
 @import "compass/typography/text/replacement";
 @import "./triangle";
 
-// TODO refactor into icon-button? parameter for icon-only breakpoint? 
-@mixin navbar-button($icon, $icon-side:left) {
+@mixin icon-button(
+    $icon, // The content of the icon (match to icon font values)
+    $icon-size, // The size of the icon itself 
+    $icon-box-size, // The size of the icon and it's surrounding padding 
+    $icon-side:left, // The side of the box on which to place the icon
+    $icon-only-breakpoint:infinity  // Point below which button is icon only
+) {
     text-align:$icon-side;
     @include with-icon(
         $icon, 
-        $navbar-icon-size, 
-        $navbar-icon-box-size, 
+        $icon-size, 
+        $icon-box-size, 
         $icon-side);
-    @media screen and (max-width: $screen-sm-min) {
+
+    @if($icon-only-breakpoint == infinity) {
         text-align:center;
-        /* On small screens, use icon only */
-        @include without-text($navbar-icon-size, $navbar-icon-box-size);
-    } 
+        @include without-text($icon-size, $icon-box-size);
+    } @else {
+        @media screen and (max-width: $icon-only-breakpoint) {
+            /* icon only */
+            text-align:center;
+            @include without-text($icon-size, $icon-box-size);
+        } 
+    }
 }
 
 // You can customize the icon element like so:
@@ -37,12 +48,13 @@
         padding-right:$icon-box-size;
     }
 
+
     // We use the pseudo variable to decide which pseudo selector to use
     // This way, left icons use before, right use after
     &:before {
         content: $icon-content; // TODO change to menu icon
         font-size:$icon-size;
-        font-family: $font-family-icon;
+        font-family: $ui-font-family-icon;
         line-height:$icon-box-size;
         width:$icon-box-size;
         text-align:center;
@@ -126,18 +138,28 @@
 @mixin ui-link-directional (
     $direction: right,
 
-    $color: $toc-link-color,
-    $bg: $gray-lighter,
-    $arrow-color: $gray-light, 
+    $color: $ui-link-block-color,
+    $color-hover: $ui-link-block-color-hover,
+    $color-active: $ui-link-block-color-active,
 
-    $color-hover: $toc-link-color-hover,
-    $bg-hover: $toc-link-bg-hover,
-    $arrow-color-hover: $toc-link-color-hover, 
+    $bg: $ui-link-block-bg,
+    $bg-hover: $ui-link-block-bg-hover,
+    $bg-active: $ui-link-block-bg-active,
 
-    $color-active: $toc-link-color-active,
-    $bg-active: $toc-link-bg-active,
-    $arrow-color-active: $toc-link-color-active 
+    $arrow-color: default, 
+    $arrow-color-hover: default, 
+    $arrow-color-active: default 
 ) {
+
+    @if($arrow-color == default) {
+        $arrow-color: darken($bg, 10%);
+    }
+    @if($arrow-color-hover == default) {
+        $arrow-color-hover: $color-hover;
+    }
+    @if($arrow-color-active == default) {
+        $arrow-color-active: $color-active;
+    }
 
     // Due to the rotation, these are opposite (width is height)
     $triangle-height: .4em;
@@ -149,7 +171,7 @@
         text-decoration:none;
         padding:.7em;
         margin-bottom:.175em;
-        background: $gray-lighter;
+        background: $bg;
         text-decoration:none;
         @include border-radius(3px);
         
@@ -173,7 +195,7 @@
             @include triangle($direction: $direction, 
                               $width:$triangle-width,
                               $height:$triangle-height,
-                              $color:$gray-light);
+                              $color:$arrow-color);
         }
     }
     
@@ -187,7 +209,7 @@
             @include triangle($direction:$direction, 
                               $width:$triangle-width,
                               $height:$triangle-height,
-                              $color:$color-hover);
+                              $color:$arrow-color-hover);
         }
     }
 
@@ -202,7 +224,7 @@
             @include triangle($direction:$direction, 
                               $width:$triangle-width,
                               $height:$triangle-height,
-                              $color:$color-active);
+                              $color:$arrow-color-active);
         }
     }
 
@@ -215,14 +237,13 @@
 @mixin ui-button-directional(
     $direction: right,
 
-    $color: $toc-link-color,
-    $bg: $gray-lighter,
+    $color: $ui-link-block-color,
+    $color-hover: $ui-link-block-color-hover,
+    $color-active: $ui-link-block-color-active,
 
-    $color-hover: $toc-link-color-hover,
-    $bg-hover: $toc-link-bg-hover,
-
-    $color-active: $toc-link-color-active,
-    $bg-active: $toc-link-bg-active
+    $bg: $ui-link-block-bg,
+    $bg-hover: $ui-link-block-bg-hover,
+    $bg-active: $ui-link-block-bg-active
 ) {
 
     // Due to the rotation, these are opposite (width is height)

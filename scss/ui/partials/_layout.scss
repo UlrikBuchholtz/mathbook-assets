@@ -1,4 +1,5 @@
 @import "../ui_config";
+@import "../../shared/typography";
 // This provides an overview of the layout and how the root level
 // elements of the page fit together.
 
@@ -9,6 +10,7 @@ html, body {
 
 body {
     background: $ui-color-bg;
+    @include typography-base();
 }
 
 /** 

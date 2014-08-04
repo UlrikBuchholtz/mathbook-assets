@@ -1,5 +1,5 @@
-@import "mixins/heading"
-@import "mixins/section";
+@import "../mixins/heading";
+@import "../mixins/section";
 
 .chapter {
     @extend %section-base;
@@ -17,7 +17,7 @@
 
         .type, .codenumber {
             /* Chapter type prefix is smaller (as in LaTeX) */
-            font-size: $prefix-font-size;
+            font-size: $heading-type-font-size;
         }
     }
 

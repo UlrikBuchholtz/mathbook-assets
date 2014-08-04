@@ -1,0 +1,24 @@
+@import "../../shared/typography";
+
+pre,
+code,
+kbd,
+samp,
+.code,
+.CodeMirror,
+.sagecell .CodeMirror {
+    font-family: $typography-font-family-monospace;
+}
+
+pre, .CodeMirror, .sagecell .CodeMirror {
+    @include typography-code();
+}
+
+p code, p .code {
+    @include typography-code-inline();
+}
+
+.CodeMirror, .sagecell .CodeMirror {
+    padding:0;
+}
+

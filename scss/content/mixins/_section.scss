@@ -1,4 +1,4 @@
-@import "mixins/heading";
+@import "heading";
 
 $section-base-heading-font-size: $font-size-h2 !default;
 $section-base-margin:#{2*$line-height-base}em 0 !default;
@@ -15,11 +15,6 @@ $section-base-margin:#{2*$line-height-base}em 0 !default;
 // or it is infeasible to @extend the placholder,
 // use the corresponding mixin (with @include) to inject the rules directly
 
-%section-base {
-    @include section-base();
-}
-
-
 @mixin section-base() {
     @include heading() {
         font-size:$section-base-heading-font-size;
@@ -27,3 +22,9 @@ $section-base-margin:#{2*$line-height-base}em 0 !default;
 
     margin: $section-base-margin;
 }
+
+%section-base {
+    @include section-base();
+}
+
+

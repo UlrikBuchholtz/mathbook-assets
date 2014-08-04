@@ -1,4 +1,4 @@
-@import "mixins/heading";
+@import "heading";
 
 $environment-heading-after: ". " !default;
 
@@ -14,17 +14,9 @@ $environment-heading-after: ". " !default;
 // or it is infeasible to @extend the placholder,
 // use the corresponding mixin (with @include) to inject the rules directly
 
-%environment-base {
-    @include environment-base();
-}
-
-%environment-heading-inline {
-    @include environment-heading-inline();
-}
-
-%environment-heading-block {
-    @include environment-heading-block();
-}
+////////////////////////////////////////////////////////////////////////////////
+// MIXINS
+////////////////////////////////////////////////////////////////////////////////
 
 // Defaults for environments
 @mixin environment-base() {
@@ -58,4 +50,20 @@ $environment-heading-after: ". " !default;
             display:block;
         }
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// PLACEHOLDERS 
+////////////////////////////////////////////////////////////////////////////////
+
+%environment-base {
+    @include environment-base();
+}
+
+%environment-heading-inline {
+    @include environment-heading-inline();
+}
+
+%environment-heading-block {
+    @include environment-heading-block();
 }

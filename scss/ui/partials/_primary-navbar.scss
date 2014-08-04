@@ -24,6 +24,17 @@ $navbar-bottom-box-shadow:
 $navbar-icon-size: $ui-icon-size;
 $navbar-icon-box-size: $ui-icon-box-size;
 
+// Some curry for navbar-buttons
+@mixin navbar-button($icon, $side: left) {
+    $icon-only-breakpoint: $ui-screen-sm-min;
+    @include icon-button(
+        $icon, 
+        $navbar-icon-size, 
+        $navbar-icon-box-size, 
+        $side,
+        $icon-only-breakpoint);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Styles
 ////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +44,7 @@ $navbar-icon-box-size: $ui-icon-box-size;
     border-bottom:$navbar-border-width solid darken($navbar-bg-color, 15%);
     z-index:200;
     height: 2.8em;
-    font-family: $font-family-serif;
+    font-family: $ui-font-family-serif;
 
     /* Smoothly transition box-shadow when navbar sticks/unsticks */
     @include single-transition(box-shadow, 400ms);
@@ -137,14 +148,6 @@ $navbar-icon-box-size: $ui-icon-box-size;
 #sidebar-left-toggle-button, #sidebar-right-toggle-button {
     position:relative;
     height:2.8em;
-    /*On big screens, */
-    @media screen and (min-width: $screen-sm-min + 1) {
-        &.active {
-            /* Show text if hidden and match sidebar width */
-            text-indent:0;
-            width:$sidebar-width;
-        }
-    }
 }
 
 #sidebar-left-toggle-button {
@@ -153,6 +156,15 @@ $navbar-icon-box-size: $ui-icon-box-size;
 
     .has-sidebar-left & {
         display:block;
+    }
+
+    /*On big screens, */
+    @media screen and (min-width: $ui-screen-sm-min + 1) {
+        &.active {
+            /* Show text if hidden and match sidebar width */
+            text-indent:0;
+            width:$ui-sidebar-left-width;
+        }
     }
 
     /* ion-navicon-round */
@@ -170,9 +182,15 @@ $navbar-icon-box-size: $ui-icon-box-size;
     /* ion-chatbox */
     @include navbar-button("\f2e1");
 
-    /* Large, float left*/
-    @media screen and (min-width: $screen-sm-min + 1) {
+    /*On big screens, */
+    @media screen and (min-width: $ui-screen-sm-min + 1) {
         float:right;
+
+        &.active {
+            /* Show text if hidden and match sidebar width */
+            text-indent:0;
+            width:$ui-sidebar-right-width;
+        }
     }
 }
 
