@@ -1,8 +1,12 @@
-/*
- * Specify counters in reverse order (most-specific to least-specific). 
- * The first counter will be incremented.
- */
-@mixin numbering-heading($counters...) {
+@import "../_content_config.scss";
+
+// This was used to automatically number sections from a starting number
+// specified in a data- attribute. We've switched from CSS numbering to
+// explicit HTML numbering, but this file remains in case it is useful.
+
+// Specify counters in reverse order (most-specific to least-specific). 
+// The first counter will be incremented.
+@mixin css-numbering-heading($counters...) {
     $heading-prefix: "\0000a0\0000a0"; // no-wrap spaces
     @each $counter in $counters {
         $heading-prefix: counter($counter) "." $heading-prefix;
@@ -26,7 +30,7 @@
     }
 }
 
-@mixin numbering-nocount() {
+@mixin css-numbering-nocount() {
 
     & > h1, & > header > h1, & > hgroup > h1 {
         &:before {

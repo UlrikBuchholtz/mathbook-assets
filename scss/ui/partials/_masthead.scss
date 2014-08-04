@@ -1,6 +1,7 @@
 @import "../ui_config";
-@import "compass";
 @import "../../shared/utilities";
+@import "compass/css3/box-shadow";
+@import "compass/utilities/general/clearfix";
 
 // Note: These variables should only depend on ui module variables
 $masthead-bg-color: change-color($ui-color-bg, $lightness:98%) !default;

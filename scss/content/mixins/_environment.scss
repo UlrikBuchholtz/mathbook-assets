@@ -1,3 +1,5 @@
+@import "../_content_config.scss";
+@import "../../shared/_typography.scss";
 @import "heading";
 
 $environment-heading-after: ". " !default;
@@ -21,13 +23,13 @@ $environment-heading-after: ". " !default;
 // Defaults for environments
 @mixin environment-base() {
     @include heading($heading-after:$environment-heading-after) {
-        font-size: $font-size-h5;
+        font-size: $typography-font-size-h5;
     }
 
     // Default inline heading
     @include environment-heading-inline();
 
-    margin:$line-height-em 0;
+    margin:$typography-line-height-em 0;
 }
 
 // Force environment heading to be inline

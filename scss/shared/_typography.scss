@@ -16,7 +16,9 @@ $typography-headings-color: inherit !default;
 $typography-headings-font-weight: 700;
 $typography-headings-line-height:    1.1 !default;
 
-$typography-font-size-base: 14px !default;
+$typography-font-size-base: 16px !default;
+$typography-font-size-large: ceil($typography-font-size-base * 1.25) !default; // ~18px
+$typography-font-size-small: ceil($typography-font-size-base * 0.85) !default; // ~12px
 $typography-font-size-h1: floor($typography-font-size-base * 2) !default;// ~32px 
 $typography-font-size-h2: floor($typography-font-size-base * 1.85) !default;  
 $typography-font-size-h3: ceil($typography-font-size-base * 1.5) !default; 
@@ -40,11 +42,11 @@ $typography-code-border-radius: .2em !default;
 $typography-code-scrollable-max-height:   340px !default;
 
 // Flag for whether or not to import the google font url when @included
+$typography-google-fonts-url: 
+    "http://fonts.googleapis.com/css?family=PT+Serif:400,700" !default;
 $typography-should-import-google-fonts: true !default;
 
-// Typography
-@import "compass";
-/*@import "ui";*/
+@import "compass/css3/border-radius";
 
 @mixin typography() {
     & {
@@ -327,9 +329,9 @@ $typography-should-import-google-fonts: true !default;
     }
 }
 
-@mixin typography-google-font-import() {
+@mixin typography-google-fonts-import() {
     @if ($typography-should-import-google-fonts) {
         $typography-should-import-google-fonts: false;
-        @import url($typography-google-font-url);
+        @import url($typography-google-fonts-url);
     }
 }

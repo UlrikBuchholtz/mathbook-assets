@@ -1,15 +1,4 @@
-$brand-primary: #2655a4 !default;
-$brand-secondary: #45A861 !default;
-$brand-base: #ddd !default;
-
-$brand-success:         #5cb85c !default;
-$brand-warning:         #f0ad4e !default;
-$brand-danger:          #d9534f !default;
-$brand-info:            #5bc0de !default;
-
-$typography-google-font-url: 
-    "http://fonts.googleapis.com/css?family=PT+Serif:400,700";
-
+@import "colors";
 
 // We want to use some of the defaults from typography
 @import "../shared/typography";

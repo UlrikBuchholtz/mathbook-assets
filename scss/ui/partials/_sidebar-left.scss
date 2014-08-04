@@ -2,7 +2,6 @@
 // Sidebar left
 @import "../mixins/sliding-sidebars";
 @import "../mixins/navtree";
-@import "compass/css3";
 
 & {
     @include sliding-sidebars-sidebar(

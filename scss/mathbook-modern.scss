@@ -1,77 +1,23 @@
-// Grays
-// -------------------------
+/**!
+* The default styles for Mathbook-based textbooks.
+*
+* @author Michael DuBois (michael@michaeldubois.me)
+*/
+@import "config/config";
 
+// Load google fonts via standard CSS import
+// This is a little slower than a <link> in HTML, but maintains
+// separation of concerns.
+@import "shared/typography";
+@include typography-google-fonts-import();
 
-// Brand colors
-// -------------------------
+/**
+ * Reset HTML to iron out browser inconsistencies
+ */
+@import "compass/reset/utilities";
+@include reset-html5();
 
-/*$brand-primary:         #2655a4 !default;*/
-/*$brand-primary-light:   lighten($brand-primary,20%);*/
-/*$brand-primary-dark:    darken($brand-primary,20%);*/
-
-/*$brand-secondary:        #45A861 !default;*/
-/*$brand-secondary-light:       lighten($brand-secondary,20%);*/
-/*$brand-secondary-dark:       darken($brand-secondary, 20%);*/
-
-/*$brand-success:         #719900 !default;*/
-/*$brand-warning:         #b58900 !default;*/
-/*$brand-danger:          #d9534f !default;*/
-/*$brand-info:            #2aa198 !default;*/
-
-
-// Links
-// -------------------------
-/*$link-color:               $brand-primary !default;*/
-/*$link-hover-color:         darken($link-color, 15%) !default;*/
-/*$link-tooltip-color:       $brand-info;*/
-/*$link-tooltip-color-hover: darken($brand-info, 15%);*/
-
-// Knowls
-// -------------------------
-/*$knowl-link-color: saturate($brand-primary, 10%);*/
-/*$knowl-link-color-hover: saturate(darken($brand-primary, 10%), 10%); */
-
-/*$knowl-border-width:10px;*/
-/*$knowl-padding:10px;*/
-
-/*$knowl-border-color: desaturate(lighten($brand-primary, 50%), 10%);*/
-/*$knowl-border-color: change-color($brand-primary, $saturation: 100% ,$lightness: 92%);*/
-/*$knowl-border-color-bold: $knowl-border-color;*/
-
-/*$knowl-within-knowl-bg-color: white;*/
-/*$knowl-bg-color: desaturate(lighten($knowl-border-color, 10%), 6%);*/
-/*$knowl-bg-color: change-color($knowl-border-color, $saturation: 90% ,$lightness: 99%);*/
-
-// Header
-// -------------------------
-/*$header-title-color: $brand-primary;*/
-/*$header-subtitle-color: #777;*/
-/*$header-bg: #f9f9f9;*/
-
-// Navbar
-// -----------------------
-/*$navbar-color: $gray-dark;*/
-/*$navbar-bg: #eee;*/
-/*$navbar-shadow-color:rgba(black,.3);*/
-/*$navbar-shadow-spread: 5px;*/
-/*$navbar-shadow-offset: 2px;*/
-
-// Table of Contents
-// ------------------------
-/*$toc-bg: transparent;*/
-
-/*$toc-link-bg: rgba($header-bg,.8);*/
-/*$toc-link-bg-hover:$link-color;*/
-/*$toc-link-bg-active:$link-color;*/
-
-/*$toc-link-color:$brand-primary;*/
-/*$toc-link-color-hover:white;*/
-/*$toc-link-color-active:white;*/
-
-/*$toc-heading-bg: $brand-secondary; */
-/*$toc-heading-bg-hover: $toc-link-bg-hover; */
-
-/*$toc-heading-color: white;*/
-/*$toc-heading-color-hover: $toc-link-color-hover ;*/
-
-@import "mathbook";
+@import "ui/ui";
+#content {
+    @import "content/content";
+}

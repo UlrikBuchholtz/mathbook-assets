@@ -2,7 +2,8 @@
 // Secondary navbar
 
 @import "../mixins/buttons";
-@import "compass/css3";
+@import "compass/css3/box-shadow";
+@import "compass/css3/transition";
 
 $secondary-navbar-icon-size: $ui-icon-size;
 $secondary-navbar-icon-box-size: $ui-icon-box-size;

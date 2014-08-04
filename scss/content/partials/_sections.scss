@@ -1,19 +1,21 @@
+@import "../_content_config.scss";
 @import "../mixins/heading";
 @import "../mixins/section";
+@import "../../shared/typography";
 
 .chapter {
     @extend %section-base;
 
-    $heading-title-font-size: $font-size-h2;
-    $heading-type-font-size:$font-size-h3;
+    $heading-title-font-size: $typography-font-size-h2;
+    $heading-type-font-size: $typography-font-size-h3;
 
     @include heading() {
         /* 
          * We use font-size-base to calculate proper line-heights 
          * for vertical rythym
          */
-        font-size: $font-size-base;
-        margin-bottom: em(2*$line-height-computed);
+        font-size: $typography-font-size-base;
+        margin-bottom: em(2*$typography-line-height-computed);
 
         .type, .codenumber {
             /* Chapter type prefix is smaller (as in LaTeX) */
@@ -26,7 +28,8 @@
         font-size:$heading-title-font-size;
         // Set margin of one standard line-height
         // but using em relative to this element's font-size
-        margin-top:em($line-height-computed, $heading-title-font-size);
+        margin-top: em($typography-line-height-computed, 
+                       $heading-title-font-size);
     }
 
     /** 
@@ -40,11 +43,11 @@
     & > header {
 
         & {
-            margin-bottom: em(2*$line-height-computed);
+            margin-bottom: em(2*$typography-line-height-computed);
         }
 
         @include heading() {
-            margin-bottom: em($line-height-computed);
+            margin-bottom: em($typography-line-height-computed);
         }
 
         @include heading-title() {
@@ -54,7 +57,7 @@
 
         .byline {
             margin:0;
-            color: $gray-light;
+            color: $content-gray-light;
             &:before { content: "By "; }
         }
     }
@@ -70,16 +73,16 @@
     .abstract,
     .acknowledgements {
         @include heading-selector {
-            font-size: $font-size-h3;
+            font-size: $typography-font-size-h3;
         }
 
         .subsection {
             @include heading-selector {
-                font-size: $font-size-h4;
+                font-size: $typography-font-size-h4;
             }
 
             .subsubsection {
-                font-size: $font-size-h5;
+                font-size: $typography-font-size-h5;
             }
         }
     }
@@ -92,12 +95,12 @@
     /* Scale child headings */
     .subsection {
         @include heading-selector {
-            font-size: $font-size-h3;
+            font-size: $typography-font-size-h3;
         }
 
         .subsubsection {
             @include heading-selector {
-                font-size: $font-size-h4;
+                font-size: $typography-font-size-h4;
             }
         }
     }
@@ -110,7 +113,7 @@
     /* Scale child headings */
     .subsubsection {
         @include heading-selector {
-            font-size: $font-size-h3;
+            font-size: $typography-font-size-h3;
         }
     }
 }
@@ -147,7 +150,7 @@
     .contributors {
         text-align:center;
         font-style:normal;
-        color: $gray-dark;
+        color: $content-gray-dark;
     }
 }
 

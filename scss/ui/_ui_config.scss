@@ -1,3 +1,4 @@
+@import "../shared/typography";
 ////////////////////////////////////////////////////////////////////////////////
 // DEFAULT CONFIG 
 ////////////////////////////////////////////////////////////////////////////////
@@ -31,9 +32,9 @@ $ui-color-bg: change-color($ui-color-base, $lightness:87%);
 $ui-link-color: $ui-color-primary !default;
 $ui-link-color-hover: lighten($ui-link-color, 10%) !default;
 $ui-link-color-active: darken($ui-link-color, 10%) !default;
-$ui-link-bg: transparent;
-$ui-link-bg-hover: transparent;
-$ui-link-bg-active: transparent;
+$ui-link-bg: transparent !default;
+$ui-link-bg-hover: transparent !default;
+$ui-link-bg-active: transparent !default;
 
 // Applied only to block links
 //----------------------------
@@ -44,36 +45,50 @@ $ui-link-block-bg: change-color($ui-color-bg, $lightness:94%) !default;
 $ui-link-block-bg-hover: $ui-color-primary !default;
 $ui-link-block-bg-active: $ui-color-primary !default;
 
-$ui-content-max-width: 600px !default;
-
+// So... this is a little unweildy, but it allows the flexibility to
+// change the ui font-sizes independently of other modules.
 // font-size-base must match the font-size placed on body anywhere else
-$ui-font-size-base: 14px !default;
-$ui-font-size-h1: floor($ui-font-size-base * 2) !default;// ~32px 
-$ui-font-size-h2: floor($ui-font-size-base * 1.85) !default;  
-$ui-font-size-h3: ceil($ui-font-size-base * 1.5) !default; 
-$ui-font-size-h4: ceil($ui-font-size-base * 1.3)!default;
-$ui-font-size-h5: ceil($ui-font-size-base * 1.15) !default;
-$ui-font-size-h6: $ui-font-size-base !default; 
-$ui-line-height-base:        1.428571429 !default; // 20/14
-$ui-line-height-computed:    floor($ui-font-size-base * $ui-line-height-base) !default; // ~20px
-$ui-line-height-em:          #{$ui-line-height-base}em;
+$ui-font-size-base: $typography-font-size-base !default;
+$ui-font-size-h1: $typography-font-size-h1 !default;
+$ui-font-size-h2: $typography-font-size-h2 !default;  
+$ui-font-size-h3: $typography-font-size-h3 !default; 
+$ui-font-size-h4: $typography-font-size-h4 !default;
+$ui-font-size-h5: $typography-font-size-h5 !default;
+$ui-font-size-h6: $typography-font-size-h6 !default; 
+
+$ui-line-height-base:     $typography-line-height-base !default; 
+$ui-line-height-computed: $typography-line-height-computed !default;
+$ui-line-height-em:       $typography-line-height-em;
 
 // Space between screen edge and text in UI
 $ui-screen-edge-margin:$ui-font-size-base;
 
-$ui-font-family-sans-serif: sans-serif !default;
-$ui-font-family-serif: serif !default;
+$ui-font-family-sans-serif: $typography-font-family-sans-serif !default;
+$ui-font-family-serif: $typography-font-family-serif !default;
 $ui-font-family-base: $ui-font-family-sans-serif !default;
 $ui-font-family-heading: $ui-font-family-serif !default;
-$ui-font-family-icon: "Ionicons" !default;
 
+$ui-border-radius-small:3px;
+$ui-boder-radius-medium:4px;
+$ui-border-radius-large:5px;
+
+// Icons
+$ui-font-family-icon: "Ionicons" !default;
 $ui-icon-size: $ui-font-size-base !default;
 $ui-icon-box-size:2*$ui-line-height-base*$ui-icon-size !default;
 
+// Navbar
 $ui-navbar-height:$ui-icon-box-size;
+
+// Sidebars
 $ui-sidebar-left-width: 240px !default;
 $ui-sidebar-right-width: $ui-sidebar-left-width !default;
 
+// Content container
+$ui-content-max-width: 600px !default;
+
+// Media queries
+//------------------------------------------------------------------------------
 $ui-screen-xs-min: 480px !default;
 $ui-screen-sm-min: 768px !default;
 $ui-screen-md-min: 992px !default;
@@ -84,6 +99,3 @@ $ui-screen-xs-max: ($ui-screen-sm-min - 1) !default;
 $ui-screen-sm-max: ($ui-screen-md-min - 1) !default;
 $ui-screen-md-max: ($ui-screen-lg-min - 1) !default;
 
-$ui-border-radius-small:3px;
-$ui-boder-radius-medium:4px;
-$ui-border-radius-large:5px;

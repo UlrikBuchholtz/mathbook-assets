@@ -1,4 +1,8 @@
-@import "config/base";
+@import "config/config";
+@import "shared/typography";
+
+@include typography-google-fonts-import();
+
 /*******************************************************************************
  * BEGIN Standalone Mathbook Content Styles
  ******************************************************************************/

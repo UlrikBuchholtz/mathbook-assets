@@ -1,7 +1,9 @@
+@import "../_content_config.scss";
 @import "heading";
+@import "../../shared/_typography.scss";
 
-$section-base-heading-font-size: $font-size-h2 !default;
-$section-base-margin:#{2*$line-height-base}em 0 !default;
+$section-base-heading-font-size: $typography-font-size-h2 !default;
+$section-base-margin:#{2*$typography-line-height-base}em 0 !default;
 
 // Note: in Sass the %placeholder is a special selector that has no output 
 // unless used in an @extend directive.
