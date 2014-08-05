@@ -4,7 +4,6 @@
 
 & {
     display:block;
-    min-height:100%;
 
     margin:0;
     padding:0;
@@ -12,11 +11,25 @@
     background:white;
 
     border:1px solid #ccc;
-    // TODO find a different solution. 
-    // This has causes one pixel to be missing from left/right sidebars 
-    /* transparent instead of none to prevent margins from collapsing */
-    border-top-color:transparent;
-    border-bottom-color:transparent;
+    border-top:none;
+    border-bottom:none;
+
+    /***************************************************************************
+     * There are a few ways to fix the #content's top/botom margin collapsing 
+     * inside this element.
+     **************************************************************************/
+    /* Method 1 */
+    padding-top:1px;
+    padding-bottom: 1px;
+
+    /* Method 2 - will clip anything positioned absolutely outside borders */
+    /*overflow:hidden;*/
+
+    /* Method 3 - looks bad because of 1px break in left/right borders */
+    /*border-top:1px solid transparent;*/
+    /*border-bottom: 1px solid transparent;*/
+
+    /**************************************************************************/
 
     @include box-shadow(rgba(black,.5) 0 5px 5px);
 
