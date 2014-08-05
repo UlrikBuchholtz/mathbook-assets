@@ -1,0 +1,66 @@
+@import "../ui_config";
+// Sidebar left
+@import "../mixins/sliding-sidebars";
+@import "../mixins/navtree";
+
+& {
+    @include sliding-sidebars-sidebar(
+        $side:left,
+        $default-open-min: $ui-screen-sm-min,
+        $sidebar-width: $ui-sidebar-left-width
+    );
+}
+
+
+/* The table-of-contents itself */
+#toc {
+    /* IMPORTANT height must be calculated by javascript. */
+    width:$ui-sidebar-left-width;
+    margin:0;
+    font-size:1em;
+
+    // Not sure about this one...we'll see
+    overflow-y:auto;
+    overflow-x:hidden;
+    /* Enable momentum scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+
+    @include navtree();
+}
+
+
+.extras {
+    nav {
+        a {
+            &, &:link, &:visited {
+                display:block;
+
+                color: white;
+                background:change-color($ui-color-bg, $lightness:27%);
+                border-top:2px solid rgba(white,.2);
+                border-bottom:1px solid rgba(black,.2);
+
+                height: #{$ui-line-height-base}em;
+                line-height:$ui-line-height-base;
+                padding:#{$ui-line-height-base/2}em;
+                padding-top:0;
+                padding-bottom:0;
+
+                text-decoration:none;
+            }
+
+            &:hover {
+                background:change-color($ui-color-bg, $lightness:44%);
+                text-decoration:none;
+            }
+
+            &:active, &.active {
+                text-decoration:underline;
+                background:change-color($ui-color-bg, $lightness:33%);
+                border-top-color:rgba(black,.2);
+                border-bottom-color:rgba(white,.2);
+            }
+        }
+    }
+}
+

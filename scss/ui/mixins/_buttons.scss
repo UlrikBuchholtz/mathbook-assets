@@ -1,0 +1,315 @@
+// TODO make more portable with default module variables pattern
+@import "compass/css3/user-interface";
+@import "compass/css3/box-shadow";
+@import "compass/css3/images";
+@import "compass/css3/border-radius";
+@import "compass/typography/text/replacement";
+@import "./triangle";
+
+@mixin icon-button(
+    $icon, // The content of the icon (match to icon font values)
+    $icon-size, // The size of the icon itself 
+    $icon-box-size, // The size of the icon and it's surrounding padding 
+    $icon-side:left, // The side of the box on which to place the icon
+    $icon-only-breakpoint:infinity  // Point below which button is icon only
+) {
+    text-align:$icon-side;
+    @include with-icon(
+        $icon, 
+        $icon-size, 
+        $icon-box-size, 
+        $icon-side);
+
+    @if($icon-only-breakpoint == infinity) {
+        text-align:center;
+        @include without-text($icon-size, $icon-box-size);
+    } @else {
+        @media screen and (max-width: $icon-only-breakpoint) {
+            /* icon only */
+            text-align:center;
+            @include without-text($icon-size, $icon-box-size);
+        } 
+    }
+}
+
+// You can customize the icon element like so:
+//     @include with-icon() {
+//         background: red;
+//     }
+@mixin with-icon(
+    $icon-content: "", 
+    $icon-size:1em, 
+    $icon-box-size: 1.4em,
+    $icon-side:left
+){
+    @if $icon-side == left {
+        padding-left:$icon-box-size;
+    } @else if $icon-side == right {
+        padding-right:$icon-box-size;
+    }
+
+
+    // We use the pseudo variable to decide which pseudo selector to use
+    // This way, left icons use before, right use after
+    &:before {
+        content: $icon-content; // TODO change to menu icon
+        font-size:$icon-size;
+        font-family: $ui-font-family-icon;
+        line-height:$icon-box-size;
+        width:$icon-box-size;
+        text-align:center;
+        text-indent:0; /* So text isn't removed from this too */
+
+        position:absolute;
+        #{$icon-side}: 0;
+        top:50%;
+        margin-top: -$icon-box-size/2;
+
+        // Allow caller to easily customize the icon
+        @content;
+    }
+}
+
+@mixin without-text($width:1em, $icon-box-size: 1.4em, $direction: left) {
+    padding:0;
+    @include hide-text($direction);
+
+    &:before {
+        /* Force icon to center */
+        left:50%;
+        right:auto;
+        margin-left:-$icon-box-size/2;
+    }
+}
+
+@mixin ui() {
+    .ui-link {
+        @include ui-link();
+    }
+    .ui-link-directional-right {
+        @include ui-link-directional($direction:right);
+    }
+    .ui-link-directional-left {
+        @include ui-link-directional($direction:left);
+    }
+    .ui-button-directional-right {
+        @include ui-button-directional($direction:right);
+    }
+    .ui-button-directional-left {
+        @include ui-button-directional($direction:left);
+    }
+}
+
+// WebKit-style focus
+// Taken from sass-blueprint
+// https://github.com/thomas-mcdonald/bootstrap-sass/blob/34d538dc33b302a02e86ccec3e0a93fbf41f0bfa/vendor/assets/stylesheets/bootstrap/_mixins.scss
+@mixin ui-tab-focus() {
+  // Default
+  outline: thin dotted #333;
+  // WebKit
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+// Standard link
+@mixin ui-link(
+    $color: $link-color, 
+    $color-hover:$link-hover-color
+){
+    &, &:link, &:visited {
+        color: $color;
+        text-decoration: none;
+        font-family:inherit; // Overide beezer.css
+    }
+
+    &:hover,
+    &:focus {
+        color: $color-hover;
+        text-decoration: underline;
+        cursor:pointer;
+    }
+
+    &:focus {
+      @include ui-tab-focus();
+    }
+}
+
+// Large, button-like links with arrows for linking to other pages
+@mixin ui-link-directional (
+    $direction: right,
+
+    $color: $ui-link-block-color,
+    $color-hover: $ui-link-block-color-hover,
+    $color-active: $ui-link-block-color-active,
+
+    $bg: $ui-link-block-bg,
+    $bg-hover: $ui-link-block-bg-hover,
+    $bg-active: $ui-link-block-bg-active,
+
+    $arrow-color: default, 
+    $arrow-color-hover: default, 
+    $arrow-color-active: default 
+) {
+
+    @if($arrow-color == default) {
+        $arrow-color: darken($bg, 10%);
+    }
+    @if($arrow-color-hover == default) {
+        $arrow-color-hover: $color-hover;
+    }
+    @if($arrow-color-active == default) {
+        $arrow-color-active: $color-active;
+    }
+
+    // Due to the rotation, these are opposite (width is height)
+    $triangle-height: .4em;
+    $triangle-width: .8em;
+
+    &, &:visited {
+        position:relative;
+        display:block;
+        text-decoration:none;
+        padding:.7em;
+        margin-bottom:.175em;
+        background: $bg;
+        text-decoration:none;
+        @include border-radius(3px);
+        
+        // Place arrow on correct side
+        @if $direction == right {
+            padding-right:1.7em;
+            &:after { right:1em; }
+        } @else {
+            padding-left: 1.7em;
+            &:after { left: 1em; }
+        }
+
+        &:after {
+            content: "";
+            position:absolute;
+
+            /* center vertically */
+            top:50%;
+            margin-top:-.5*$triangle-width;
+
+            @include triangle($direction: $direction, 
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$arrow-color);
+        }
+    }
+    
+    &:hover {
+        color: $color-hover;
+        background: $bg-hover;
+        text-decoration:none;
+        cursor:pointer;
+
+        &:after {
+            @include triangle($direction:$direction, 
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$arrow-color-hover);
+        }
+    }
+
+    &:active {
+        position:relative;
+        color:$color-active;
+        background: $bg-active;
+        text-decoration:none;
+        @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
+
+        &:after {
+            @include triangle($direction:$direction, 
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$arrow-color-active);
+        }
+    }
+
+    &:focus {
+        @include ui-tab-focus();
+    }
+}
+
+// Button with an arrow on one side
+@mixin ui-button-directional(
+    $direction: right,
+
+    $color: $ui-link-block-color,
+    $color-hover: $ui-link-block-color-hover,
+    $color-active: $ui-link-block-color-active,
+
+    $bg: $ui-link-block-bg,
+    $bg-hover: $ui-link-block-bg-hover,
+    $bg-active: $ui-link-block-bg-active
+) {
+
+    // Due to the rotation, these are opposite (width is height)
+    $triangle-width: $line-height-base*1em;
+    $triangle-height: $triangle-width / 2;
+
+    // TODO linear gradient?
+    position:relative;
+    color: $color;
+    background: $bg;
+    text-decoration:none;
+    padding: 0 .5em;
+    @include user-select(none);
+
+    // Place arrow on correct side
+    @if $direction == right {
+        /* round corners opposite arrow */
+        @include border-left-radius($border-radius-base);
+        &:after {right: 0; margin-right:-$triangle-height;}
+    } @else {
+        /* round corners opposite arrow */
+        @include border-right-radius($border-radius-base);
+        &:after {left: 0; margin-left:-$triangle-height;}
+    }
+
+    &:after {
+        content: "";
+        position: absolute;
+        top:0;
+
+        @include triangle($direction: $direction, 
+                          $width:$triangle-width,
+                          $height:$triangle-height,
+                          $color:$bg);
+    }
+
+    &:hover {
+        color: $color-hover;
+        background: $bg-hover;
+        text-decoration:none;
+        cursor:pointer;
+        &:after {
+            @include triangle($direction: $direction, 
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$bg-hover);
+        }
+    }
+
+    &:active {
+        color: $color-active;
+        background: $bg-active;
+        text-decoration:none;
+        @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
+
+        &:after {
+            @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
+            @include triangle($direction: $direction, 
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$bg-active);
+        }
+    }
+
+    &:focus {
+        // TODO improve focus interaction with arrow
+        @include ui-tab-focus();
+    }
+}

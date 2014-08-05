@@ -1,0 +1,21 @@
+/**!
+* The default styles for Mathbook-based textbooks.
+*
+* @author Michael DuBois (michael@michaeldubois.me)
+*/
+@import "config/config";
+
+// Load google fonts via standard CSS import
+// This is a little slower than a <link> in HTML, but maintains
+// separation of concerns.
+@import "shared/typography";
+@include typography-google-fonts-import();
+
+/**
+ * Reset HTML to iron out browser inconsistencies
+ */
+@import "compass/reset/utilities";
+@include reset-html5();
+
+@import "ui/ui";
+@import "mathbook-content";

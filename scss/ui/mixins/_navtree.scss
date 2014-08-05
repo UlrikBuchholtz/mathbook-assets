@@ -1,0 +1,202 @@
+/*@import "../ui-config";*/
+@import "../../shared/utilities";
+// TODO should we encapsulate defaults and just expose primary/secondary/base?
+// TODO support more than two levels
+
+$navtree-link-color: $ui-link-block-color !default;
+$navtree-link-color-hover: $ui-link-block-color-hover !default;
+$navtree-link-color-active: $ui-link-block-color-active !default;
+
+$navtree-link-bg: $ui-link-block-bg !default;
+$navtree-link-bg-hover: $ui-link-block-bg-hover !default;
+$navtree-link-bg-active: $ui-link-block-bg-active !default;
+
+$navtree-heading-color: white !default;
+$navtree-heading-color-hover: $navtree-link-color-hover !default;
+$navtree-heading-color-active: $navtree-link-color-active !default;
+
+$navtree-heading-bg: $ui-color-secondary !default;
+$navtree-heading-bg-hover: $navtree-link-bg-hover !default;
+$navtree-heading-bg-active: $navtree-link-bg-active !default;
+
+@mixin navtree(
+    $link-color: $navtree-link-color,
+    $link-color-hover: $navtree-link-color-hover,
+    $link-color-active: $navtree-link-color-active,
+
+    $link-bg: $navtree-link-bg,
+    $link-bg-hover: $navtree-link-bg-hover,
+    $link-bg-active: $navtree-link-bg-active,
+
+    $heading-color: $navtree-heading-color,
+    $heading-color-hover: $navtree-heading-color-hover,
+    $heading-color-active: $navtree-heading-color-active,
+
+    $heading-bg: $navtree-heading-bg,
+    $heading-bg-hover: $navtree-heading-bg-hover,
+    $heading-bg-active: $navtree-heading-bg-active
+) {
+
+    & {
+        font-family:$ui-font-family-base;
+    }
+
+    a {
+        @include navtree-link(
+            $color: $link-color,
+            $color-hover: $link-color-hover,
+            $color-active: $link-color-active,
+
+            $bg: $link-bg,
+            $bg-hover: $link-bg-hover,
+            $bg-active: $link-bg-active
+        );
+    }
+
+    h2 {
+        @include navtree-heading(
+            $color: $heading-color,
+            $color-hover: $heading-color-hover,
+            $color-active: $heading-color-active,
+
+            $bg: $heading-bg,
+            $bg-hover: $heading-bg-hover,
+            $bg-active: $heading-bg-active
+        );
+    }
+
+    ul {
+        margin: 0px;
+        padding: 0px;
+        list-style-type: none;
+
+        li {
+            display: block;
+            margin: 0px;
+            padding: 0px;
+
+            a {
+                $padding: .4em;
+                $border-bottom-width:em(1px, $ui-font-size-base);
+                background: transparent ;
+                padding:.4em;
+                padding-left:1em;
+
+                /* Bias text baseline towards lower half to account for border-bottom */
+                padding-top: $padding + $border-bottom-width;
+                padding-bottom: $padding - $border-bottom-width;
+
+                // TODO does border need to be here?
+                border-bottom:$border-bottom-width solid darken($link-bg, 12%);
+
+                &:hover {
+                    border-color:darken($link-bg-hover, 12%);
+                }
+            }
+
+            &:last-child a {
+                border-bottom: none;
+            }
+        }
+    }
+}
+
+// TODO this mixin might not be limited to navtrees 
+@mixin navtree-link(
+    $color: $navtree-link-color,
+    $color-hover: $navtree-link-color-hover,
+    $color-active: $navtree-link-color-active,
+
+    $bg: $navtree-link-bg,
+    $bg-hover: $navtree-link-bg-hover,
+    $bg-active: $navtree-link-bg-active
+) {
+    & {
+        display:block; 
+        position:relative;
+        font-family:$ui-font-family-base;
+    }
+
+    &, &:link, &:visited, &:hover, &:active {
+        color: $color;
+        background: $bg;
+        text-decoration:none;
+
+    }
+    &:hover {
+        color: $color-hover;
+        background: $bg-hover;
+    }
+
+    &.active, &:active {
+        color:$color-active;
+        background: $bg-active;
+    }
+}
+
+@mixin navtree-heading(
+    $color: $navtree-heading-color,
+    $color-hover: $navtree-heading-color-hover,
+    $color-active: $navtree-heading-color-active,
+
+    $bg: $navtree-heading-bg,
+    $bg-hover: $navtree-heading-bg-hover,
+    $bg-active: $navtree-heading-bg-active
+) {
+    & {
+        display:block;
+        font-family: $ui-font-family-heading;
+        font-size: 100%;
+        margin: 0;
+    }
+
+    &:first-child {
+        margin-top:0;
+    }
+
+    a {
+        @include navtree-link(
+            $color: $color,
+            $color-hover: $color-hover,
+            $color-active: $color-active,
+
+            $bg: $bg,
+            $bg-hover: $bg-hover,
+            $bg-active: $bg-active
+        );
+
+        & {
+            /* Inherit the heading font-family */
+            font-family: inherit;
+        }
+    }
+
+    /* Props shared by headings and heading-links */
+    &, a:link, a:visited {
+        $border-bottom-width: 2px;
+        $padding: 5px;
+
+        color: $color;
+        background: $bg;
+        border-bottom:$border-bottom-width solid darken($bg, 10%);
+
+        padding: $padding;
+        padding-left: 1em; /* left-indent */
+
+        /* Bias text baseline towards lower half to account for border-bottom */
+        padding-top: $padding + $border-bottom-width;
+        padding-bottom: $padding - $border-bottom-width;
+    }
+
+    /*Prop resets for headings containing links*/
+    &.link {
+      padding: 0px;
+      border-bottom:none;
+    }
+
+    a:hover {
+        color: $color-hover;
+        background: $bg-hover;
+        border-color:darken($bg-hover,10%);
+    }
+}

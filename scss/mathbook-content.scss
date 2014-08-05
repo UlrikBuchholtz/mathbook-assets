@@ -1,0 +1,16 @@
+@import "config/config";
+@import "shared/typography";
+
+@include typography-google-fonts-import();
+
+/*******************************************************************************
+ * BEGIN Standalone Mathbook Content Styles
+ ******************************************************************************/
+
+.mathbook-content {
+    @import "content/content";
+}
+
+/*******************************************************************************
+ * END Standalone Mathbook Content Styles
+ ******************************************************************************/

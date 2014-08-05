@@ -1,0 +1,32 @@
+@import "../_content_config.scss";
+@import "heading";
+@import "../../shared/_typography.scss";
+
+$section-base-heading-font-size: $typography-font-size-h2 !default;
+$section-base-margin:#{2*$typography-line-height-base}em 0 !default;
+
+// Note: in Sass the %placeholder is a special selector that has no output 
+// unless used in an @extend directive.
+
+// Here I am providing both a placeholder class (denoted by %) and a mixin.
+// @extend-ing the placeholder  creates a comma separated list in the CSS.
+// This is preferred because it produces less total CSS output
+// and the resulting CSS output is easier to edit manually
+
+// However, if you wish to separate two items in the CSS output,
+// or it is infeasible to @extend the placholder,
+// use the corresponding mixin (with @include) to inject the rules directly
+
+@mixin section-base() {
+    @include heading() {
+        font-size:$section-base-heading-font-size;
+    }
+
+    margin: $section-base-margin;
+}
+
+%section-base {
+    @include section-base();
+}
+
+

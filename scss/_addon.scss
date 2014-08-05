@@ -1,0 +1,193 @@
+.hint {
+    display:block;
+
+    [knowl] {
+        font-weight:lighter;
+    }
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+div.center img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.caption {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 100%;
+    text-align: center;
+}
+
+.caption .counter:after { content: " ";}
+
+/* above repeated for captions outside figures */
+
+.caption .heading {
+    font-weight: bold;
+}
+
+.caption .heading:after { content: " ";}
+
+.caption .counter {
+    font-weight: bold;
+}
+
+.unprocessed {
+    padding: 8px;
+    background-color: rgb(255,230,230)
+}
+
+.unprocessed .unprocessed {
+    margin: 8px;
+    background-color: rgb(255,200,255)
+}
+
+.unprocessed .unprocessed .unprocessed {
+    margin: 8px;
+    background-color: rgb(205,205,255)
+}
+
+.l {
+    text-align: left;
+}
+
+.c {
+    text-align: center;
+}
+
+.r {
+    text-align: right;
+}
+
+.vv {
+    border-left: 2px solid #000000;
+    border-right: 2px solid #000000;
+}
+
+.vcv {
+    border-left: 2px solid #000000;
+    border-right: 2px solid #000000;
+    text-align: center;
+}
+
+.vcvv {
+    border-left: 2px solid #000000;
+    border-right: 4px solid #000000;
+    text-align: center;
+}
+
+.vlv {
+    border-left: 2px solid #000000;
+    border-right: 2px solid #000000;
+    text-align: left;
+}
+
+.vrv {
+    border-left: 2px solid #000000;
+    border-right: 2px solid #000000;
+    text-align: right;
+}
+
+.rv {
+    border-right: 2px solid #000000;
+    text-align: right;
+}
+
+.lv {
+    border-right: 2px solid #000000;
+    text-align: left;
+}
+
+.cv {
+    border-right: 2px solid #000000;
+    text-align: center;
+}
+
+.Xv {
+    border-right: 2px solid #000000;
+    text-align: left;
+}
+.vc {
+    border-left: 2px solid #000000;
+    text-align: center;
+}
+
+.abstract + .preface {
+    margin-top: 35px;
+}
+
+#navbar #toc h2 + h2 {
+    margin-top: 5px;
+}
+
+// TODO copy exercise like to others
+.example-like > .heading, .exercise-like > .heading, .remark-like > .heading, aside-like > .heading, .exercise-like > h5, .example-like > h5, .remark-like > h5, .aside-like > h5 {
+    display: inline;
+    font-weight: bold;
+    font-size: 19px;
+    font-size: 1.05em;
+}
+
+.example-like > h5 + p, .exercise-like > h5 + p, .remark-like > h5 + p, .aside-like > h5 + p {
+    display: inline;
+}
+
+.exercise-like > h5:after, .example-like > h5:after, .remark-like > h5:after {
+    content:". ";
+}
+
+.exercise-like > h5 .counter:before, .example-like > h5 .counter:before, .remark-like > h5 .counter:before {
+    content:" ";
+}
+
+article.example-like > article.remark-like {
+    margin-top: 10pt;
+}
+
+.minipage  + .minipage {
+    display: inline-block;
+}
+
+#prevnext {
+    right: 20px;
+    margin-right: 1px;
+    margin-top: -45px;
+    margin-bottom: -10px;
+    text-align: right;
+    max-width: 960px;
+}
+
+/* 
+ * The next section link at the footer of a section
+ * TODO use link-directional mixin instead 
+ */
+.nextsection {
+    text-align: center;
+    padding: 10px;
+    background-color: maroon;
+    color: #FFEECC;
+    font-size: 
+}
+
+// TODO integrate this somehow!
+/* sup knowls are used for footnotes */
+sup [knowl] {
+    padding: 0px 0px 0px 3px;
+}
+
+sup .active[knowl] {
+    padding: 0px 0px 0px 3px;
+}
+
+sup [knowl]:hover {
+    padding: 0px 0px 0px 3px;
+}

@@ -1,0 +1,11 @@
+@import "./mixins/knowl";
+
+@include knowl();
+
+/* restyle knowls at first and third depth */
+.knowl-output, .knowl-output  .knowl-output  .knowl-output {
+    @include knowl-output();
+    @import "exercises"; // TODO what's going on here ?
+    @include exercise($knowl-border-color);
+    @include exercisegroup($knowl-border-color, darken($knowl-border-color, 0%));
+}

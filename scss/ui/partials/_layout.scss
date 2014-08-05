@@ -1,0 +1,87 @@
+@import "../ui_config";
+@import "../../shared/typography";
+// This provides an overview of the layout and how the root level
+// elements of the page fit together.
+
+html, body {
+    margin:0;
+    padding:0;
+}
+
+body {
+    background: $ui-color-bg;
+    @include typography-base();
+}
+
+/** 
+ * Containers restrict the max-width of content within elements 
+ * whose backgrounds must stretch to the width of the viewport. 
+ */
+.container {
+    margin:0;
+    /* But currently, we impose no max-width. 
+     * The actual text content of the book is handled separately.
+     */
+}
+
+/**
+ * The master header of the page. 
+ * Contains the book title and navigation.
+ */
+#masthead {
+    @import "./masthead";
+}
+
+/**
+ * Primary Navbar
+ * Contains primary actions for navigation or layout control
+ */
+#primary-navbar, #primary-navbar-sticky-wrapper {
+    @import "./primary-navbar";
+
+    // TODO move into partial
+    /**
+     * Wrapper added by jquery.sticky.js
+     */
+    &#primary-navbar-sticky-wrapper {
+        /**
+         * At small screens, the navbar is fixed to bottom,
+         * so the sticky wrapper should collapse.
+         */
+        @media screen and (max-width: $ui-screen-sm-min) {
+            height:0;
+        }
+    }
+}
+
+/**
+ * Secondary Navbar
+ * Contains secondary actions for navigation or layout control
+ */
+#secondary-navbar {
+    @import "./secondary-navbar";
+}
+
+/**
+ * Houses the page (everything that is not header or footer)
+ */
+.page {
+    position:relative;
+    /* Clip hidden sidebars */
+    overflow:hidden;
+}
+
+#sidebar-left, #sidebar-left-sticky-wrapper {
+    @import "./sidebar-left";
+}
+
+#sidebar-right {
+    @import "./sidebar-right";
+}
+
+/**
+ * Container for the main focus/purpose of the page.
+ */
+#main, .main {
+    @import "./main";
+}

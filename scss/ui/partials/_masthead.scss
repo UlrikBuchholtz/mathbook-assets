@@ -1,0 +1,145 @@
+@import "../ui_config";
+@import "../../shared/utilities";
+@import "compass/css3/box-shadow";
+@import "compass/utilities/general/clearfix";
+
+// Note: These variables should only depend on ui module variables
+$masthead-bg-color: change-color($ui-color-bg, $lightness:98%) !default;
+$masthead-title-color: $ui-color-primary;
+$masthead-subtitle-color: change-color($masthead-bg-color, $lightness:47%) !default;
+$masthead-font-family: $ui-font-family-heading;
+
+& {
+    position: relative; 
+    background: $masthead-bg-color;
+    min-height:inherit;
+    border:none;
+    @include box-shadow(none);
+}
+
+.banner {
+    border-bottom:1px solid darken($masthead-bg-color, 15%);
+    /* to ensure children's margin-top works */
+    border-top:1px solid transparent;
+
+    .container {
+        padding:1px $ui-font-size-base;
+    }
+
+    @media screen and (max-width:$ui-screen-xs-min) {
+        font-size:.8em;
+    }
+}
+
+#title-container, .title-container {
+    @include clearfix();
+
+    /* On mobile phones */
+    @media screen and (max-width:$ui-screen-xs-min) {
+        text-align:center;
+    }
+}
+
+#logo-link, #title {
+    margin-top: $ui-font-size-base;
+}
+
+#logo-link {
+    $line-height-h1: ($ui-font-size-h1 * $ui-line-height-base);
+    $line-height-h1-top:($line-height-h1 - $ui-font-size-h1)/2;
+
+    $size: $ui-font-size-h1*$ui-line-height-base - $line-height-h1-top;
+
+    position:relative;
+    float:left;
+    font-size: $size;
+    margin-right:$ui-font-size-base;
+    margin-left: $line-height-h1-top;
+    text-align:center;
+
+    img {
+        width:auto;
+        height:auto;
+        max-height: 2em;
+    }
+
+    /* Display placeholder icon for css3 browsers (progressive enhancement) */
+    &:empty {
+
+        /*width:1em;*/
+        /*height:em($ui-font-size-h1 * $ui-line-height-base, $ui-font-size-base);*/
+        /*margin-top:em($ui-font-size-base + $line-height-h1-top, $ui-font-size-base);*/
+        /*//margin-top:$ui-font-size-base;*/
+        /*height:$size;*/
+
+        &:before { 
+            content: "\f2d0"; /* ionicons book */
+            font-family: "Ionicons";
+            color: #ccc;
+
+            /*position:absolute;*/
+            /*[> centered vert and horiz<]*/
+            /*top:50%;*/
+            /*left:50%;*/
+            /*margin-top: -.5em;*/
+            /*margin-left: -.5em;*/
+        }
+
+        &:hover:before {
+            color: $ui-color-primary;
+        }
+
+        &:active:before {
+            color: $ui-color-secondary;
+        }
+    }
+
+    /* Override addons */
+    &:link, &:hover, &:active {
+        background:transparent;
+        border:none;
+        text-decoration:none;
+    }
+
+    /* On mobile phones */
+    @media screen and (max-width:$ui-screen-xs-min) {
+        display:block;
+        float:none;
+        margin:.5em 0;
+    }
+}
+/* IMPORTANT: #title is deprecated!*/
+#title, .title {
+    color: $masthead-title-color;
+    font-size:em($ui-font-size-h1, $ui-font-size-base);
+    margin-left:0;
+    margin-bottom:.15em;
+    min-height:inherit;
+
+    // Override addon
+    font-family:$masthead-font-family;
+
+    .subtitle {
+        &:before {
+            content: ": ";
+        }
+    }
+
+    /* On mobile phones */
+    @media screen and (max-width:$ui-screen-xs-min) {
+        margin-top:0;
+    }
+}
+
+/* IMPORTANT: #byline is deprecated! */
+#byline, .byline {
+    color: $masthead-subtitle-color;
+    font-size: em(.6*$ui-font-size-h1, $ui-font-size-base);
+    font-weight:normal;
+    margin:0;
+    margin-bottom:1em;
+    min-height:inherit;
+
+    // Override addon
+    font-family:$masthead-font-family;
+}

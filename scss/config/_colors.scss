@@ -1,0 +1,29 @@
+// Here we define the default color scheme.
+// These can be overriden from above. See Sass Docs on !default.
+$mathbook-primary: #2655a4 !default;
+$mathbook-secondary: #45A861 !default;
+$mathbook-base: #ddd !default;
+
+// Here we remap the parameters we get from above so we can
+// preserve the hue but explicitly set the saturation and lightness to
+// values that we know work well with our theme
+$brand-primary:         change-color($mathbook-primary,$saturation:62%, $lightness:40%);
+$brand-primary-light:   lighten($brand-primary,20%);
+$brand-primary-dark:    darken($brand-primary,20%);
+
+$brand-secondary:        change-color($mathbook-secondary, $saturation:62%, $lightness:40%);
+$brand-secondary-light:  lighten($brand-secondary,20%);
+$brand-secondary-dark:   darken($brand-secondary, 20%);
+
+// The base color of the interface
+// We allow the base color to take on the user's saturation level
+// Someday we might want to use this variable to  add support for 
+// a light/dark scheme option
+$brand-base: change-color($mathbook-base, $lightness: 87%);
+
+// Colors for message dialogs and such.
+// We don't let the user specify these. We could someday though.
+$brand-success:         #719900 !default;
+$brand-warning:         #b58900 !default;
+$brand-danger:          #d9534f !default;
+$brand-info:            #2aa198 !default;

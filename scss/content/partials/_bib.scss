@@ -1,0 +1,14 @@
+@import "../_content_config.scss";
+
+.bib {
+    margin-bottom:10px;
+}
+
+.bibitem {
+    display: inline;
+    font-weight: bold;
+}
+
+.bibitem + .bibentry {
+    display: inline;
+}
