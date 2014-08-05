@@ -3,6 +3,15 @@
  */
 var SidebarView = function(options) { 
 
+    var DEBUG = false;
+    // debug performs VERY slowly on mobile devices,
+    // so it's very important that we don't log things in production code
+    var debug = function() {
+        if(options.debug || DEBUG) {
+            console.log.apply(console, arguments);
+        }
+    }
+
     var defaults = {
         debugName: "SidebarView",
         toggleDuration: 400,

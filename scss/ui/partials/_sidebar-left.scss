@@ -2,6 +2,7 @@
 // Sidebar left
 @import "../mixins/sliding-sidebars";
 @import "../mixins/navtree";
+@import "compass/css3/transform";
 
 & {
     @include sliding-sidebars-sidebar(
@@ -14,18 +15,22 @@
 
 /* The table-of-contents itself */
 #toc {
-    /* IMPORTANT height must be calculated by javascript. */
-    width:$ui-sidebar-left-width;
-    margin:0;
-    font-size:1em;
-
-    // Not sure about this one...we'll see
-    overflow-y:auto;
-    overflow-x:hidden;
-    /* Enable momentum scrolling on iOS */
-    -webkit-overflow-scrolling: touch;
 
     @include navtree();
+
+    & {
+        /* IMPORTANT height must be calculated by javascript. */
+        width:$ui-sidebar-left-width;
+        margin:0;
+        font-size:1em;
+
+        // Not sure about this one...we'll see
+        overflow-y:auto;
+        overflow-x:hidden;
+        /* Enable momentum scrolling on iOS */
+        -webkit-overflow-scrolling: touch;
+    }
+
 }
 
 

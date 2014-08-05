@@ -4,6 +4,15 @@ var Mathbook = function(options) {
     var settings = $.extend({
     }, options);
 
+    var DEBUG = false;
+    // debug performs VERY slowly on mobile devices,
+    // so it's very important that we don't log things in production code
+    var debug = function() {
+        if(options.debug || DEBUG) {
+            console.log.apply(console, arguments);
+        }
+    }
+
 
     // Private vars
     // -------------------------------------------------------------------------
@@ -62,7 +71,7 @@ var Mathbook = function(options) {
          * Called when a Layout is applied.
          */
         this.enter = function() {
-            console.log("Entered Layout: " + this.debugName);
+            debug("Entered Layout: " + this.debugName);
             if(typeof this.onEnter === "function") {
                 this.onEnter.apply(this, arguments);
             }
@@ -72,7 +81,7 @@ var Mathbook = function(options) {
          * Called when a Layout is removed
          */
         this.exit = function() {
-            console.log("Exited Layout: " + this.debugName);
+            debug("Exited Layout: " + this.debugName);
             if(typeof this.onExit === "function") {
                 this.onExit.apply(this, arguments);
             }
@@ -281,7 +290,7 @@ var Mathbook = function(options) {
      * @param shouldOpen {Boolean}
      */
     this.toggleSidebarView = function(sidebarView, shouldOpen) {
-        console.log("Toggling " + sidebarView.debugName);
+        debug("Toggling " + sidebarView.debugName);
         sidebarView.toggle(shouldOpen);
     };
 
@@ -494,7 +503,7 @@ var Mathbook = function(options) {
      * @param shouldPush {Boolean} true to push, false to slide
      */
     this.shouldSidebarsPush = function(shouldSidebarsPush) {
-        console.log("shouldSidebarsPush? " + shouldSidebarsPush);
+        debug("shouldSidebarsPush? " + shouldSidebarsPush);
         var that = this;
         
         // TODO track current state? getter if no parameter?
@@ -536,7 +545,7 @@ var Mathbook = function(options) {
      * Locks the main element at it's current width
      */
     this.lockMainWidth = function() {
-        console.log("locking width");
+        debug("locking width");
         this.$main.width(this.$main.width());
     };
 
@@ -544,7 +553,7 @@ var Mathbook = function(options) {
      * Unlocks the main element width
      */
     this.unlockMainWidth = function() {
-        console.log("unlocking width");
+        debug("unlocking width");
         this.$main.width("");
     };
 
@@ -581,7 +590,7 @@ var Mathbook = function(options) {
             throw new Error(
                     "setLayout::newLayout must be of type Layout");
         }
-        console.log("Changing layout to " + newLayout.debugName);
+        debug("Changing layout to " + newLayout.debugName);
 
         currentLayout.exit();
         newLayout.enter();
@@ -599,7 +608,6 @@ if(document.readyState === "complete") {
 } else {
     // wait and init when the window is loaded
     $(window).load( function() {
-        console.log("Window loaded");
         mathbook = new Mathbook({});
     });
 }

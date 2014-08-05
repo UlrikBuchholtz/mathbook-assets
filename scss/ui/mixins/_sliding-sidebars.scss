@@ -1,3 +1,4 @@
+@import "compass/css3/transform";
 // Mixins for the sliding sidebar functionality
 
 // Defaults
@@ -20,6 +21,32 @@
     .has-sidebar-#{$side}.mathbook-loading &,
     .has-sidebar-#{$side}.mathbook-loaded & {
         margin-#{$side}:0;
+
+        /**
+         * Trick webkit browers into generating a compositing layer for this
+         * element so that we benefit from GPU acceleration.
+         *
+         * We config backface-visibility and perspective to improve performance
+         * See: http://stackoverflow.com/a/10133679/1599617
+         *
+         * IMPORTANT: this will reset the coordinate context for child elements
+         *            with fixed positioning.
+         */
+        @include translateZ(0);
+        @include backface-visibility(hidden);
+        @include perspective(1000);
+
+        &.stuck {
+            /*
+             * Stick containers can't have these properties when stuck
+             * because it will break fixed positioning of their child.
+             * Since removing the properties will slow down animations,
+             * we remove them only when stuck as a compromise.
+             */
+            @include transform(none);
+            @include backface-visibility(visible);
+            @include perspective(none);
+        }
     }
 
     .has-sidebar-#{$side}.mathbook-loading &.closed,
@@ -66,6 +93,20 @@
         @media screen and (max-width: $slide-min) {
             @include sliding-sidebars-main-side-state($side, open-push, $sidebar-width);
         }
+
+        /**
+         * Trick webkit browers into generating a compositing layer for this
+         * element so that we benefit from GPU acceleration.
+         *
+         * We config backface-visibility and perspective to improve performance
+         * See: http://stackoverflow.com/a/10133679/1599617
+         *
+         * IMPORTANT: this will reset the coordinate context for child elements
+         *            with fixed positioning.
+         */
+        @include translateZ(0);
+        @include backface-visibility(hidden);
+        @include perspective(1000);
     }
 
     /* Main with sidebar left closed */

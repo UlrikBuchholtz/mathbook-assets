@@ -3,6 +3,15 @@
  */
 var TouchController = function(options) {
 
+    var DEBUG = false;
+    // debug performs VERY slowly on mobile devices,
+    // so it's very important that we don't log things in production code
+    var debug = function() {
+        if(options.debug || DEBUG) {
+            console.log.apply(console, arguments);
+        }
+    }
+
     var defaults = {
         touchContainer: window,
         content: null,
@@ -72,6 +81,10 @@ var TouchController = function(options) {
         this.$touchContainer.on("touchstart.dragSidebar", function(e) {
             that.dragSidebarStart(e);
         });
+
+        // A fix for one-finger scrolling in iOS7
+        // See http://stackoverflow.com/a/18737266/1599617
+        $("#toc").on('touchstart', function(e){});
     };
 
     /**
@@ -80,7 +93,7 @@ var TouchController = function(options) {
      */
     this.dragSidebarStart = function(e) {
         startEvent = e;
-        //console.log(startEvent);
+        //debug(startEvent);
 
         // We only care about one touchpoint for this interaction
         if(activeTouch != null) {
@@ -168,7 +181,7 @@ var TouchController = function(options) {
      * Touchmove callback for sidebar drags
      */
     this.dragSidebarMove = function(moveEvent) {
-        //console.log(moveEvent);
+        //debug(moveEvent);
         var moveTouches = moveEvent.originalEvent.changedTouches;
         // We only care if there is a single touchpoint moving
         // and it is the touchpoint we're tracking.
@@ -186,7 +199,7 @@ var TouchController = function(options) {
                 if(Math.abs(dy) >= that.settings.scrollThreshold) {  
                     interactionType = INTERACTION_SCROLL;
                 }
-                moveEvent.preventDefault();
+                //moveEvent.preventDefault();
             } else if(interactionType === INTERACTION_SWIPE) {
                 // Cancel default browser handlers, including scroll
                 startEvent.preventDefault();
@@ -212,14 +225,14 @@ var TouchController = function(options) {
      * Touchend callback for sidebar drags
      */
     this.dragSidebarEnd = function(endEvent) {
-        //console.log(endEvent);
+        //debug(endEvent);
 
         var endTouches = endEvent.originalEvent.changedTouches;
         var i=0;
         var length = endTouches.length;
         for(; i < length; i++) {
             if(endTouches[i].identifier == activeTouch.identifier) {
-                //console.log("Removing touch move listener.");
+                //debug("Removing touch move listener.");
 
                 // If the user dragged beyond inertial point, finish it
                 var inertiaThresholdRatio = that.settings.inertiaThresholdRatio;
