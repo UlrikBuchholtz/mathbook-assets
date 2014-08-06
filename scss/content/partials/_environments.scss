@@ -1,5 +1,6 @@
 @import "../_content_config.scss";
 @import "../mixins/environment";
+@import "../mixins/heading";
 
 /*******************************************************************************
  * Environments
@@ -38,12 +39,6 @@
 
     @include heading-selector {
         font-style: italic;
-
-        /* We place dots after each token instead 
-         * so we don't get a double dot after "Proof" */
-        &:after {
-            content: "";
-        }
     }
 
     /* Period after "Proof" */

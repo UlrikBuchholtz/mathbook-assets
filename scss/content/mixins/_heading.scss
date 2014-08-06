@@ -59,7 +59,7 @@ $heading-after:" " !default;
         &:before {
             @if($heading-before == none) {
                 display:none;
-            } else {
+            } @else {
                 content:$heading-before;
             }
         }
@@ -67,7 +67,7 @@ $heading-after:" " !default;
         &:after {
             @if($heading-after == none) {
                 display:none;
-            } else {
+            } @else {
                 content:$heading-after;
             }
         }
