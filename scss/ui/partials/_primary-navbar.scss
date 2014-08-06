@@ -128,9 +128,10 @@ $navbar-icon-box-size: $ui-icon-box-size;
 
     &.disabled {
         &, &:link, &:visited, &:hover, &:focus, &:active {
+            opacity:.5;
+            color: $navbar-color;
+            background:$navbar-bg-color;
             cursor:default;
-            background:transparent;
-            color: darken($navbar-bg-color, 20%);
             @include box-shadow(none);
         }
     }
@@ -225,21 +226,6 @@ $navbar-icon-box-size: $ui-icon-box-size;
         .sidebar-right-toggle-button {
             width: $ui-sidebar-right-width;
         }
-    }
-
-    .button {
-        color: darken($navbar-bg-color, 60%);
-        /*@include button-hide-text($navbar-icon-box-size, before, left, center);*/
-
-        &:hover, &:active, &:focus {
-            color: darken($navbar-bg-color, 80%);
-        }
-
-    }
-
-    .next-button {
-        // Since right-aligned, we need to hide the text differently.
-        /*@include button-hide-text($navbar-icon-box-size, after, right, center);*/
     }
 }
 
