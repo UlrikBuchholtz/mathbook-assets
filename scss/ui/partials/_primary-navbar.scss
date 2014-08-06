@@ -1,6 +1,7 @@
 @import "../ui_config";
 @import "../mixins/buttons";
 @import "compass/css3/transition";
+@import "compass/css3/box-sizing";
 @import "../../shared/_css_message.scss";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -89,7 +90,7 @@ $navbar-icon-box-size: $ui-icon-box-size;
     position:relative;
     /* subtract border and padding from width 
      * so we can set width precisely as percent */
-    box-sizing:border-box;
+    @include box-sizing(border-box);
     display:block;
 
     font-size:1em;
@@ -145,7 +146,7 @@ $navbar-icon-box-size: $ui-icon-box-size;
 %button-counts {
     .button {
         /* Ensure that border/padding is subtracted from percentage width */
-        box-sizing:border-box;
+        @include box-sizing(border-box);
     }
 
     &.button-count-1 .button {
