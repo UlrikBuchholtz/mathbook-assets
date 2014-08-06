@@ -125,6 +125,15 @@ $navbar-icon-box-size: $ui-icon-box-size;
     &.active, &:active {
         background-color:darken($navbar-bg-color, 5%);
     }
+
+    &.disabled {
+        &, &:link, &:visited, &:hover, &:focus, &:active {
+            cursor:default;
+            background:transparent;
+            color: darken($navbar-bg-color, 20%);
+            @include box-shadow(none);
+        }
+    }
     //----------------------------------------------------
 
     /* Icon only at small screen sizes */
@@ -226,14 +235,6 @@ $navbar-icon-box-size: $ui-icon-box-size;
             color: darken($navbar-bg-color, 80%);
         }
 
-        &.disabled {
-            &, &:link, &:visited, &:hover, &:focus, &:active {
-                cursor:default;
-                background:transparent;
-                color: darken($navbar-bg-color, 20%);
-                @include box-shadow(none);
-            }
-        }
     }
 
     .next-button {
