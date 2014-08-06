@@ -3,83 +3,215 @@
 @import "compass/css3/box-shadow";
 @import "compass/css3/images";
 @import "compass/css3/border-radius";
+@import "compass/css3/inline-block";
+@import "compass/css3/transition";
 @import "compass/typography/text/replacement";
+@import "compass/typography/text/ellipsis";
 @import "./triangle";
 
-@mixin icon-button(
+@mixin button-base() {
+    @include inline-block();
+
+    cursor:pointer;
+    @include user-select(none);
+    outline:none; /* Don't display outline on click */
+    @include ellipsis();
+
+    /** 
+     * Remove stupid firefox dotted border on button click 
+     * See http://stackoverflow.com/a/199319/1599617
+     */
+    &::-moz-focus-inner {
+        border: 0;
+    }
+}
+
+@mixin button-minimalist(
+    $color: $ui-link-color,
+    $color-hover: $ui-link-color-hover,
+    $color-active: $ui-link-color-active
+) {
+    @include button-base();
+    background: transparent;
+    color: $color;
+    border: 2px solid;
+    @include border-radius(2px);
+    @include transition-property(color, border-color);
+
+    &:hover, &:focus {
+        color: $color-hover;
+        border-color: $color-hover;
+    }
+
+    &:active, &.active {
+        color: $color-active;
+        border-color: $color-active;
+    }
+
+    &.disabled {
+        &:hover, &:focus, &:active, &.active {
+            cursor:default;
+            color:$color;
+            opacity:.5;
+        }
+    }
+}
+
+@mixin button-remove-link-properties($color: inherit) {
+    /* Remove link appearance */
+    &:link, &:visited, &:hover, &:focus, &:active {
+        color:$color;
+        text-decoration:none;
+    }
+}
+
+@mixin button-depressable() {
+    &:active, &.active {
+        @include box-shadow(rgba(black,.5) 0 2px 5px inset);
+    }
+}
+
+// Note that $icon-placement:inline will not work well with button-hide-text() 
+@mixin button-with-icon(
     $icon, // The content of the icon (match to icon font values)
     $icon-size, // The size of the icon itself 
     $icon-box-size, // The size of the icon and it's surrounding padding 
-    $icon-side:left, // The side of the box on which to place the icon
+    $icon-pseudo: before, // The pseduo-selector of the icon: before|after
+    $icon-placement: left // left | center | right | inline
+) {
+    @include button-icon($icon, $icon-size, $icon-box-size, $icon-pseudo);
+    @if($icon-placement != inline) {
+        @include button-icon-padding($icon-box-size, $icon-placement);
+        @include button-icon-absolute(
+                    $icon-box-size, 
+                    $icon-pseudo, 
+                    $icon-placement);
+    }
+}
+
+// Note that $icon-placement:inline will not work well with button-hide-text() 
+@mixin button-with-icon-responsive(
+    $icon, // The content of the icon (match to icon font values)
+    $icon-size, // The size of the icon itself 
+    $icon-box-size, // The size of the icon and it's surrounding padding 
+    $icon-pseudo: before,
+    $icon-placement:left, // left | center | right 
     $icon-only-breakpoint:infinity  // Point below which button is icon only
 ) {
-    text-align:$icon-side;
-    @include with-icon(
-        $icon, 
-        $icon-size, 
-        $icon-box-size, 
-        $icon-side);
+
+    // The inline option doesn't work with hide-text, so it is not supported.
+    // If the user uses it, we'll try to intelligently determine the placement.
+    /*@if($icon-placement == inline) {*/
+        /*@if($icon-pseudo == before) {*/
+            /*$icon-placement: left;*/
+        /*} @else {*/
+            /*$icon-placement: right;*/
+        /*}*/
+    /*}*/
+
+    $hide-direction: $icon-placement;
+    @if($icon-placement == center or $icon-placement == inline) {
+        $hide-direction: left;
+    }
+
+    @include button-with-icon(
+                $icon, 
+                $icon-size, 
+                $icon-box-size, 
+                $icon-pseudo, 
+                $icon-placement);
 
     @if($icon-only-breakpoint == infinity) {
-        text-align:center;
-        @include without-text($icon-size, $icon-box-size);
+        @include button-hide-text(
+            $icon-box-size,
+            $icon-pseudo,
+            $hide-direction);
     } @else {
         @media screen and (max-width: $icon-only-breakpoint) {
             /* icon only */
-            text-align:center;
-            @include without-text($icon-size, $icon-box-size);
+            @include button-hide-text(
+                $icon-box-size,
+                $icon-pseudo,
+                $hide-direction);
         } 
     }
 }
 
 // You can customize the icon element like so:
 //     @include with-icon() {
-//         background: red;
+//         color: red; /* icon will be red, element text remains normal */
 //     }
-@mixin with-icon(
-    $icon-content: "", 
-    $icon-size:1em, 
-    $icon-box-size: 1.4em,
-    $icon-side:left
+@mixin button-icon(
+    $icon-content, 
+    $icon-size, 
+    $icon-box-size,
+    $icon-pseudo: before
 ){
-    @if $icon-side == left {
-        padding-left:$icon-box-size;
-    } @else if $icon-side == right {
-        padding-right:$icon-box-size;
-    }
-
-
-    // We use the pseudo variable to decide which pseudo selector to use
-    // This way, left icons use before, right use after
-    &:before {
+    &:#{$icon-pseudo} {
         content: $icon-content; // TODO change to menu icon
+        text-align:center; // We want the icon to be centered within icon-box
         font-size:$icon-size;
         font-family: $ui-font-family-icon;
         line-height:$icon-box-size;
         width:$icon-box-size;
-        text-align:center;
         text-indent:0; /* So text isn't removed from this too */
-
-        position:absolute;
-        #{$icon-side}: 0;
-        top:50%;
-        margin-top: -$icon-box-size/2;
+        @include inline-block(baseline);
 
         // Allow caller to easily customize the icon
         @content;
     }
 }
 
-@mixin without-text($width:1em, $icon-box-size: 1.4em, $direction: left) {
-    padding:0;
-    @include hide-text($direction);
-
-    &:before {
-        /* Force icon to center */
-        left:50%;
-        right:auto;
-        margin-left:-$icon-box-size/2;
+@mixin button-icon-padding(
+    $icon-box-size,
+    $icon-placement:left    
+) {
+    @if $icon-placement == left {
+        padding-left:$icon-box-size;
+    } @else if $icon-placement == right {
+        padding-right:$icon-box-size;
     }
+}
+
+@mixin button-icon-absolute(
+    $icon-box-size,
+    $icon-pseudo:before,
+    $icon-placement: center // left|center|right
+) {
+
+    position:relative;
+
+    &:#{$icon-pseudo} {
+        position:absolute;
+
+        @if($icon-placement == center) {
+            left: 50%;
+            right:auto;
+            margin-left: -$icon-box-size/2;
+        } @else if($icon-placement == left) {
+            left: 0;
+            right:auto;
+        } @else {
+            right:0;
+            left:auto;
+        }
+
+        top:50%;
+        bottom: auto;
+        margin-top: -$icon-box-size/2;
+        @content;
+    }
+}
+
+@mixin button-hide-text(
+    $icon-box-size, 
+    $icon-pseudo: before,
+    $hide-direction: left,
+    $icon-placement: center
+) {
+    text-align:center;
+    @include hide-text($hide-direction);
+    @include button-icon-absolute($icon-box-size, $icon-pseudo, $icon-placement);
 }
 
 @mixin ui() {

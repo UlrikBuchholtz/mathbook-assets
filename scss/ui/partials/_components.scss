@@ -12,6 +12,40 @@
     }
 }
 
+// TODO does this belong in ui or content?
+.sagecell {
+
+    /*.sagecell_options {*/
+        /*float:none;*/
+        /*text-align:left;*/
+    /*}*/
+    
+    .ui-button {
+        /*float:right;*/
+        &.ui-state-default, &.ui-state-hover, &.ui-state-active, &.ui-state-focus {
+            /*@include button-minimalist($color: #999);*/
+            @include button-minimalist(
+                        $color: #888,
+                        $color-hover: $ui-color-secondary,
+                        $color-active: $ui-color-primary);
+            font-family: $ui-font-family-base;
+            font-size: $ui-font-size-base;
+            padding: 0 #{$ui-line-height-base/2}em;
+
+            @include button-depressable();
+        }
+
+        &.ui-button-text-only .ui-button-text {
+            padding:0;
+            line-height:1.3*$ui-line-height-base;
+        }
+    }
+
+    .sagecell_editor {
+        margin-bottom: #{$ui-line-height-computed*.4};
+    }
+}
+
 // TODO bring knowl selectors up out of mixin file
 /*@include knowl();*/
 

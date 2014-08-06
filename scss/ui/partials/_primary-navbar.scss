@@ -1,6 +1,9 @@
 @import "../ui_config";
 @import "../mixins/buttons";
 @import "compass/css3/transition";
+@import "compass/css3/box-sizing";
+@import "../../shared/_css_message.scss";
+@import "compass/utilities/general/clearfix";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Config
@@ -15,23 +18,25 @@ $navbar-border-width: 1px !default;
 $navbar-shadow-color:rgba(black,.3) !default;
 $navbar-shadow-spread: 5px !default;
 $navbar-shadow-offset: 2px !default;
+$navbar-bottom-shadow-offset: -$navbar-shadow-offset;
 
 $navbar-top-box-shadow:
-    $navbar-shadow-color 0 $navbar-shadow-offset $navbar-shadow-spread;
+    $navbar-shadow-color 0px $navbar-shadow-offset $navbar-shadow-spread;
 $navbar-bottom-box-shadow:
-    $navbar-shadow-color 0 -$navbar-shadow-offset $navbar-shadow-spread;
+    $navbar-shadow-color 0px $navbar-bottom-shadow-offset $navbar-shadow-spread;
 
 $navbar-icon-size: $ui-icon-size;
 $navbar-icon-box-size: $ui-icon-box-size;
 
 // Some curry for navbar-buttons
-@mixin navbar-button($icon, $side: left) {
+@mixin navbar-button($icon, $pseudo: before, $placement: inline) {
     $icon-only-breakpoint: $ui-screen-sm-min;
-    @include icon-button(
+    @include button-with-icon-responsive(
         $icon, 
         $navbar-icon-size, 
         $navbar-icon-box-size, 
-        $side,
+        $pseudo,
+        $placement,
         $icon-only-breakpoint);
 }
 
@@ -43,11 +48,13 @@ $navbar-icon-box-size: $ui-icon-box-size;
     background:$navbar-bg-color;
     border-bottom:$navbar-border-width solid darken($navbar-bg-color, 15%);
     z-index:200;
-    height: 2.8em;
+    height: $ui-navbar-height;
     font-family: $ui-font-family-serif;
 
     /* Smoothly transition box-shadow when navbar sticks/unsticks */
     @include single-transition(box-shadow, 400ms);
+
+    @include clearfix();
 }
 
 /* Styles applied to make the navbar persistently visible */
@@ -71,44 +78,44 @@ $navbar-icon-box-size: $ui-icon-box-size;
         left:0;
         right:0;
         background:$navbar-bg-color;
-        @include box-shadow($navbar-bottom-box-shadow);
+        @include box-shadow( $navbar-bottom-box-shadow);
     }
 }
 
 .button {
-    float:left;
-    position:relative;
-    /* subtract border and padding from width 
-     * so we can set width precisely as percent */
-    box-sizing:border-box;
-
-    // TODO move to a button mixin?
-    //----------------------------------------------------
-    /* Override link properties */
-    &, &:hover, &:visited, &:link, &:active {
-        display:block;
-        color: $navbar-color;
-        text-decoration:none;
-        background-color:transparent;
-    }
-
-    font-size:1em;
-    padding:0 1.4em;
-    margin:0;
-    line-height:2.8;
-
-    cursor:pointer;
-    @include user-select(none);
-    outline:none; /* Don't display outline on click */
-
-    border:1px solid; 
-    border-color:darken($navbar-bg-color, 30%);
-    border-top:none;
-    border-bottom:none;
-
+    @include button-base();
+    @include button-depressable();
     @include transition-property(text-indent,background-color);
     @include transition-duration(200ms);
+    /* subtract border and padding from width 
+     * so we can set width precisely as percent */
+    @include box-sizing(border-box);
 
+    float:left;
+    text-align:left;
+    position:relative;
+    display:block;
+
+    font-size:1em;
+    padding:0;
+    margin:0;
+    line-height:$navbar-icon-box-size;
+
+    border:1px solid; 
+    border-color:darken($navbar-bg-color, 20%);
+    border-bottom:none;
+    border-top:none;
+    border-right:none;
+
+    /* Override link properties */
+    &, &:hover, &:focus, &:visited, &:link, &:active {
+        text-decoration:none;
+    }
+
+    &, &:link, &:visited {
+        color: $navbar-color;
+        background-color:$navbar-bg-color;
+    }
     /* hover state */
     &:hover {
         background-color:lighten($navbar-bg-color, 5%);
@@ -117,21 +124,15 @@ $navbar-icon-box-size: $ui-icon-box-size;
     /* active/pressed state */
     &.active, &:active {
         background-color:darken($navbar-bg-color, 5%);
-        @include box-shadow(rgba(black,.5) 0 2px 5px inset);
     }
     //----------------------------------------------------
 
     /* Icon only at small screen sizes */
     @media screen and (max-width:$ui-screen-sm-min) {
-
-        @include without-text(
-            $navbar-icon-box-size, 
-            $navbar-icon-box-size);
-
+        /*@include button-hide-text($navbar-icon-box-size);*/
         float:left;
         text-align:center;
         margin:0;
-        width:25%;
         border-right:none;
 
         &:first-child {
@@ -145,17 +146,124 @@ $navbar-icon-box-size: $ui-icon-box-size;
     }
 }
 
-#sidebar-left-toggle-button, #sidebar-right-toggle-button {
-    position:relative;
-    height:2.8em;
+& > .button:first-child {
+    border-left:none;
 }
 
+/* Elements that contain a variable number of buttons should @extend this */
+%button-counts {
+    .button {
+        /* Ensure that border/padding is subtracted from percentage width */
+        @include box-sizing(border-box);
+    }
+
+    &.button-count-1 .button {
+        width:auto;
+    }
+    &.button-count-2 .button {
+        width:100/2 * 1% ;
+    }
+    &.button-count-3 .button {
+        width:100/3 * 1% ;
+    }
+    &.button-count-4 .button {
+        width:100/4 * 1% ;
+    }
+    &.button-count-5 .button {
+        width:100/5 * 1% ;
+    }
+}
+
+.navbar-bottom-buttons {
+    @extend %button-counts;
+
+    display:none;
+
+    @media screen and (max-width:$ui-screen-sm-min) {
+        display:block;
+    }
+}
+
+.navbar-top-buttons {
+    display:block;
+
+    @media screen and (max-width:$ui-screen-sm-min) {
+        display:none;
+    }
+}
+
+/**
+ * Elements for navigating the tree structure of the document
+ */
+.tree-nav {
+    @extend %button-counts;
+
+    & {
+        width:auto;
+    }
+
+    .has-sidebar-left & {
+        margin-left:240px;
+
+        .sidebar-left-toggle-button {
+            width: $ui-sidebar-left-width;
+        }
+    }
+
+    .has-sidebar-right & {
+        margin-right:240px;
+
+        .sidebar-right-toggle-button {
+            width: $ui-sidebar-right-width;
+        }
+    }
+
+    .button {
+        color: darken($navbar-bg-color, 60%);
+        /*@include button-hide-text($navbar-icon-box-size, before, left, center);*/
+
+        &:hover, &:active, &:focus {
+            color: darken($navbar-bg-color, 80%);
+        }
+
+        &.disabled {
+            &, &:link, &:visited, &:hover, &:focus, &:active {
+                cursor:default;
+                background:transparent;
+                color: darken($navbar-bg-color, 20%);
+                @include box-shadow(none);
+            }
+        }
+    }
+
+    .next-button {
+        // Since right-aligned, we need to hide the text differently.
+        /*@include button-hide-text($navbar-icon-box-size, after, right, center);*/
+    }
+}
+
+.sidebar-left-toggle-button, .sidebar-right-toggle-button {
+    position:relative;
+}
+
+
 #sidebar-left-toggle-button {
+    @include css-error(
+        "Markup Error: change #sidebar-left-toggle-button to .sidebar-left-toggle-button");
+}
+
+#sidebar-right-toggle-button {
+    @include css-error(
+        "Markup Error: change #sidebar-right-toggle-button to .sidebar-right-toggle-button");
+}
+
+.sidebar-left-toggle-button {
     /* Do not display if has-sidebar-left is missing */
     display:none;
 
     .has-sidebar-left & {
         display:block;
+        width:$ui-sidebar-left-width;
     }
 
     /*On big screens, */
@@ -169,18 +277,21 @@ $navbar-icon-box-size: $ui-icon-box-size;
 
     /* ion-navicon-round */
     @include navbar-button("\f20d");
+    padding:0;
 }
 
-#sidebar-right-toggle-button {
+.sidebar-right-toggle-button {
     /* Do not display if has-sidebar-right is missing */
     display:none;
 
     .has-sidebar-right & {
         display:block;
+        width: $ui-sidebar-right-width;
     }
 
     /* ion-chatbox */
     @include navbar-button("\f2e1");
+    padding:0;
 
     /*On big screens, */
     @media screen and (min-width: $ui-screen-sm-min + 1) {
@@ -194,6 +305,12 @@ $navbar-icon-box-size: $ui-icon-box-size;
     }
 }
 
+.up-button {
+    /* ion-chevron-up */
+    @include navbar-button("\f126");
+    text-align:center;
+}
+
 .previous-button {
     /* ion-chevron-left */
     @include navbar-button("\f124");
@@ -201,15 +318,6 @@ $navbar-icon-box-size: $ui-icon-box-size;
 
 .next-button {
     /* ion-chevron-right */
-    @include navbar-button("\f125", right);
-}
-
-@media screen and (min-width: $ui-screen-sm-min + 1) {
-    /*On big screens, 
-     * we use the prev/next inside the main container */
-    .next-button, .previous-button {
-        &, &:link, &:visited, &:hover, &:active {
-            display:none;
-        }
-    }
+    @include navbar-button("\f125", after);
+    text-align:right;
 }

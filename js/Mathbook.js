@@ -177,8 +177,8 @@ var Mathbook = function(options) {
         this.$sidebarLeftExtras = 
             this.$sidebarLeft.find(".extras").first();
 
-        this.$sidebarLeftToggle = $("#sidebar-left-toggle-button");
-        this.$sidebarRightToggle = $("#sidebar-right-toggle-button");
+        this.$sidebarLeftToggle = $(".sidebar-left-toggle-button");
+        this.$sidebarRightToggle = $(".sidebar-right-toggle-button");
     };
 
     /**
