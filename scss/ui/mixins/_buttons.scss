@@ -79,6 +79,10 @@
                     $icon-box-size, 
                     $icon-pseudo, 
                     $icon-placement);
+    } @else {
+        &:#{$icon-pseudo} {
+            @include inline-block(baseline);
+        }
     }
 }
 

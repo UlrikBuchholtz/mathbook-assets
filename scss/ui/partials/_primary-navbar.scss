@@ -3,6 +3,7 @@
 @import "compass/css3/transition";
 @import "compass/css3/box-sizing";
 @import "../../shared/_css_message.scss";
+@import "compass/utilities/general/clearfix";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Config
@@ -52,6 +53,8 @@ $navbar-icon-box-size: $ui-icon-box-size;
 
     /* Smoothly transition box-shadow when navbar sticks/unsticks */
     @include single-transition(box-shadow, 400ms);
+
+    @include clearfix();
 }
 
 /* Styles applied to make the navbar persistently visible */
@@ -84,13 +87,13 @@ $navbar-icon-box-size: $ui-icon-box-size;
     @include button-depressable();
     @include transition-property(text-indent,background-color);
     @include transition-duration(200ms);
+    /* subtract border and padding from width 
+     * so we can set width precisely as percent */
+    @include box-sizing(border-box);
 
     float:left;
     text-align:left;
     position:relative;
-    /* subtract border and padding from width 
-     * so we can set width precisely as percent */
-    @include box-sizing(border-box);
     display:block;
 
     font-size:1em;
@@ -99,9 +102,10 @@ $navbar-icon-box-size: $ui-icon-box-size;
     line-height:$navbar-icon-box-size;
 
     border:1px solid; 
-    border-color:darken($navbar-bg-color, 10%);
-    border-top:none;
+    border-color:darken($navbar-bg-color, 20%);
     border-bottom:none;
+    border-top:none;
+    border-right:none;
 
     /* Override link properties */
     &, &:hover, &:focus, &:visited, &:link, &:active {
@@ -140,6 +144,10 @@ $navbar-icon-box-size: $ui-icon-box-size;
             @include box-shadow(rgba(black,.5) 0 -2px 5px inset);
         }
     }
+}
+
+& > .button:first-child {
+    border-left:none;
 }
 
 /* Elements that contain a variable number of buttons should @extend this */
