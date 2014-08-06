@@ -1,0 +1,38 @@
+@import "../_content_config.scss";
+@import "../../shared/typography";
+
+@include typography-headings();
+@include typography-lists();
+
+a {
+    @include typography-link();
+}
+
+p {
+    @include typography-paragraph();
+}
+
+blockquote {
+    @include typography-blockquote();
+}
+
+address {
+    @include typography-address();
+}
+
+.code,
+.CodeMirror,
+.sagecell .CodeMirror {
+    font-family: $typography-font-family-monospace;
+    @include typography-code();
+}
+
+p .code {
+    @include typography-code-inline();
+}
+
+/* Since CodeMirror output contains a bunch of lines with their own padding */
+.CodeMirror, .sagecell .CodeMirror {
+    padding:0;
+}
+

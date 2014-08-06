@@ -1,5 +1,5 @@
 /*@import "../ui-config";*/
-@import "../../shared/utilities";
+@import "../../shared/_typography.scss";
 // TODO should we encapsulate defaults and just expose primary/secondary/base?
 // TODO support more than two levels
 
@@ -77,7 +77,7 @@ $navtree-heading-bg-active: $navtree-link-bg-active !default;
 
             a {
                 $padding: .4em;
-                $border-bottom-width:em(1px, $ui-font-size-base);
+                $border-bottom-width:typography-em(1px, $ui-font-size-base);
                 background: transparent ;
                 padding:.4em;
                 padding-left:1em;

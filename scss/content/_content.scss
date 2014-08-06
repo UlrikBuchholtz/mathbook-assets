@@ -1,12 +1,16 @@
 /*******************************************************************************
  * Content
  ******************************************************************************/
-@import "shared/typography";
-@include typography();
+@import "content_config";
+@import "../shared/typography";
 
+& {
+    @include typography-base();
+}
+
+@import "partials/typographic-elements";
 @import "partials/sections";
 @import "partials/environments";
 @import "partials/figure";
 @import "partials/table";
-@import "partials/code";
 @import "partials/bib";
