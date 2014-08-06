@@ -9,7 +9,7 @@ $secondary-navbar-icon-size: $ui-icon-size;
 $secondary-navbar-icon-box-size: $ui-icon-box-size;
 
 @mixin secondary-navbar-button($icon, $side:left) {
-    @include icon-button(
+    @include button-with-icon-responsive(
         $icon,
         $secondary-navbar-icon-size,
         $secondary-navbar-icon-box-size,
@@ -71,17 +71,11 @@ $secondary-navbar-icon-box-size: $ui-icon-box-size;
 }
 
 .next-button {
-    @include without-text(
-        $secondary-navbar-icon-size,
-        $secondary-navbar-icon-box-size,
-        right);
+    @include button-hide-text($secondary-navbar-icon-box-size, right);
 }
 
 .previous-button {
-    @include without-text(
-        $secondary-navbar-icon-size,
-        $secondary-navbar-icon-box-size,
-        left);
+    @include button-hide-text($secondary-navbar-icon-box-size,left);
 }
 
 .next-button-sticky-wrapper, .next-button {
