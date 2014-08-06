@@ -297,16 +297,13 @@
     $triangle-height: .4em;
     $triangle-width: .8em;
 
-    &, &:visited {
+    & {
         position:relative;
         display:block;
-        text-decoration:none;
         padding:.7em;
-        margin-bottom:.175em;
-        background: $bg;
-        text-decoration:none;
+        margin-bottom:#{$ui-line-height-base/4}em;
         @include border-radius(3px);
-        
+
         // Place arrow on correct side
         @if $direction == right {
             padding-right:1.7em;
@@ -330,12 +327,17 @@
                               $color:$arrow-color);
         }
     }
+    &, &:link, &:visited {
+        color: $color;
+        background: $bg;
+        text-decoration:none;
+        cursor:pointer;
+    }
     
     &:hover {
         color: $color-hover;
         background: $bg-hover;
         text-decoration:none;
-        cursor:pointer;
 
         &:after {
             @include triangle($direction:$direction, 
