@@ -1,0 +1,15 @@
+@mixin css-message($message, $color: white, $bg: #444) {
+    position:relative;
+    &:after {
+        position:absolute;
+        top:100%;
+        left:0;
+        content: $message;
+        color: $color;
+        background: $bg;
+    }
+}
+
+@mixin css-error($message) {
+    @include css-message($message, white, red);
+}

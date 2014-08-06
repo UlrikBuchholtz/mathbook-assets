@@ -59,7 +59,8 @@ body {
  * Contains secondary actions for navigation or layout control
  */
 #secondary-navbar {
-    @import "./secondary-navbar";
+    @import "../../shared/_css_message.scss";
+    @include css-error("Markup Error: #secondary-navbar is deprecated.");
 }
 
 /**
