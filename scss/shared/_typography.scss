@@ -335,3 +335,11 @@ $typography-should-import-google-fonts: true !default;
         @import url($typography-google-fonts-url);
     }
 }
+
+/* Converts px to em in a given font-size context */
+@function typography-em(
+    $target-px, 
+    $context-px: $typography-font-size-base 
+) {
+    @return ($target-px / $context-px) * 1em;
+}

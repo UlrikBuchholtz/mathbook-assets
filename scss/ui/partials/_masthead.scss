@@ -1,5 +1,5 @@
 @import "../ui_config";
-@import "../../shared/utilities";
+@import "../../shared/_typography.scss";
 @import "compass/css3/box-shadow";
 @import "compass/utilities/general/clearfix";
 
@@ -67,8 +67,8 @@ $masthead-font-family: $ui-font-family-heading;
     &:empty {
 
         /*width:1em;*/
-        /*height:em($ui-font-size-h1 * $ui-line-height-base, $ui-font-size-base);*/
-        /*margin-top:em($ui-font-size-base + $line-height-h1-top, $ui-font-size-base);*/
+        /*height:typography-em($ui-font-size-h1 * $ui-line-height-base, $ui-font-size-base);*/
+        /*margin-top:typography-em($ui-font-size-base + $line-height-h1-top, $ui-font-size-base);*/
         /*//margin-top:$ui-font-size-base;*/
         /*height:$size;*/
 
@@ -111,7 +111,7 @@ $masthead-font-family: $ui-font-family-heading;
 /* IMPORTANT: #title is deprecated!*/
 #title, .title {
     color: $masthead-title-color;
-    font-size:em($ui-font-size-h1, $ui-font-size-base);
+    font-size:typography-em($ui-font-size-h1, $ui-font-size-base);
     margin-left:0;
     margin-bottom:.15em;
     min-height:inherit;
@@ -134,7 +134,7 @@ $masthead-font-family: $ui-font-family-heading;
 /* IMPORTANT: #byline is deprecated! */
 #byline, .byline {
     color: $masthead-subtitle-color;
-    font-size: em(.6*$ui-font-size-h1, $ui-font-size-base);
+    font-size: typography-em(.6*$ui-font-size-h1, $ui-font-size-base);
     font-weight:normal;
     margin:0;
     margin-bottom:1em;
