@@ -214,8 +214,7 @@ var Mathbook = function(options) {
                 that.toggleSidebarView(that.sidebarLeftView)
             });
         } else {
-            // Ensure the CSS behaves appropriately
-            this.$body.removeClass(HAS_SIDEBAR_LEFT_CLASS);
+            console.log("This layout has no left sidebar.");
         }
 
         if(this.hasSidebarRight()) {
@@ -236,8 +235,7 @@ var Mathbook = function(options) {
                 that.toggleSidebarView(that.sidebarRightView)
             });
         } else {
-            // Ensure the CSS behaves appropriately
-            this.$body.removeClass(HAS_SIDEBAR_RIGHT_CLASS);
+            console.log("This layout has no right sidebar.");
         }
         
         if(this.hasSidebarRight() || this.hasSidebarLeft()) {
