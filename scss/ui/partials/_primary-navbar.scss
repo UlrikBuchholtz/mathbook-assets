@@ -256,6 +256,7 @@ $navbar-icon-box-size: $ui-icon-box-size;
 
     /* ion-navicon-round */
     @include navbar-button("\f20d");
+    padding:0;
 }
 
 .sidebar-right-toggle-button {
@@ -269,6 +270,7 @@ $navbar-icon-box-size: $ui-icon-box-size;
 
     /* ion-chatbox */
     @include navbar-button("\f2e1");
+    padding:0;
 
     /*On big screens, */
     @media screen and (min-width: $ui-screen-sm-min + 1) {
