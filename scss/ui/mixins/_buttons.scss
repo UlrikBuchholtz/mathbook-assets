@@ -4,6 +4,7 @@
 @import "compass/css3/images";
 @import "compass/css3/border-radius";
 @import "compass/css3/inline-block";
+@import "compass/css3/transition";
 @import "compass/typography/text/replacement";
 @import "compass/typography/text/ellipsis";
 @import "./triangle";
@@ -25,8 +26,12 @@
     }
 }
 
-@mixin button-minimalist() {
-    text-transform:uppercase;
+@mixin button-minimalist(
+    $color: $ui-link-color,
+    $color-hover: $ui-link-color-hover,
+    $color-active: $ui-link-color-active
+) {
+    @include button-base();
     background: transparent;
     color: $color;
     border: 2px solid;
@@ -35,10 +40,12 @@
 
     &:hover, &:focus {
         color: $color-hover;
+        border-color: $color-hover;
     }
 
     &:active, &.active {
         color: $color-active;
+        border-color: $color-active;
     }
 
     &.disabled {
