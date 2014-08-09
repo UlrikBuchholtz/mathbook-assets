@@ -180,26 +180,30 @@ $typography-should-import-google-fonts: true !default;
 }
 
 @mixin typography-paragraph() {
-    p {
+    & {
         margin: 0 0 #{$typography-line-height-base/2}em;
     }
+}
 
-    /* Not sure what this is?? */
-    /*.lead {*/
-        /*margin-bottom: $line-height-computed;*/
-        /*font-size: floor(($font-size-base * 1.15));*/
-        /*font-weight: 200;*/
-        /*line-height: 1.4;*/
+@mixin typography-paragraphy-lead() {
+    & {
+        margin-bottom: $typography-line-height-computed;
+        font-size: floor(($typography-font-size-base * 1.15));
+        font-weight: 200;
+        line-height: 1.4;
+    }
+}
 
-        /*@media (min-width: $screen-sm-min) {*/
-            /*font-size: ($font-size-base * 1.5);*/
-        /*}*/
-    /*}*/
-
+// A modification to the typography-paragraph-lead for mobile device size
+// Output this inside of the media-query of your choice
+@mixin typography-paragraph-lead-mobile() {
+    & {
+        font-size: ($typography-font-size-base * 1.5);
+    }
 }
 
 @mixin typography-blockquote() {
-    blockquote, .blockquote, .quote {
+    & {
         padding-left:40px;
         padding-right:10px;
     }
