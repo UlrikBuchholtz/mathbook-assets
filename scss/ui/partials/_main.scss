@@ -61,10 +61,29 @@
  * This is bound to a comfortable max-width for reading.
  */
 #content {
-    margin: 3em auto;
+    margin: $ui-content-margin auto;
+
+    /* Default left */
+    &, .layout-left & {
+        margin-left: $ui-content-margin;
+
+        /* Switch to centered at medium layout */
+        @media screen and (max-width: $ui-screen-md-min) {
+            margin: $ui-content-margin;
+        }
+
+    }
+
+    .layout-centered & {
+        margin: $ui-content-margin auto;
+    }
+
     max-width: $ui-content-max-width;
+
+    /* When viewport is smaller than the content width */
     @media screen and (max-width: $ui-content-max-width) {
-        margin:3em #{$ui-line-height-base/2}em;
+        /* Decrease the margins */
+        margin:$ui-content-margin $ui-content-margin-small;
     }
 }
 

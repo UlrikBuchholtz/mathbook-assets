@@ -86,6 +86,9 @@ $ui-sidebar-right-width: $ui-sidebar-left-width !default;
 
 // Content container
 $ui-content-max-width: 600px !default;
+$ui-content-margin: 3*$ui-line-height-computed;
+// Margin when width is less than content size 
+$ui-content-margin-small: $ui-line-height-computed/2;
 
 // Media queries
 //------------------------------------------------------------------------------
