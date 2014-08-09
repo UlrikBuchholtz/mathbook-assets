@@ -30,20 +30,23 @@ $heading-after:" " !default;
 @mixin heading(
     $type-before: $heading-type-before,
     $type-after: $heading-type-after,
+
     $codenumber-before: $heading-codenumber-before,
     $codenumber-after: $heading-codenumber-after,
+
     $title-before:$heading-title-before,
     $title-after:$heading-title-after,
+
     $heading-before:$heading-before,
     $heading-after:$heading-after
 ) {
-    // These come first so that the user can override them
+    // These come first so that the user can override them in @content
     @include heading-type($type-before, $type-after);
     @include heading-codenumber($codenumber-before, $codenumber-after);
     @include heading-title($title-before, $title-after);
 
     .type, .codenumber, .title {
-        /* Hide the space after the last element */
+        /* Hide the space after the last element, use .heading:after instead */
         &:last-child:after {
             display:none;
         }

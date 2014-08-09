@@ -41,12 +41,8 @@
         font-style: italic;
     }
 
-    /* Period after "Proof" */
+    /* Period after "Proof" even if followed by codenumber/title */
     @include heading-type($after: ". ");
-    /* Period after codenumber, if there is one. */
-    @include heading-codenumber($after: ". ");
-    /* Period after title if there is one. */
-    @include heading-title($after: ". ");
 
     /* Dotted border to denote proof */
     padding-right: 6px;
@@ -78,8 +74,8 @@
     @extend %environment-base;
 }
 
-// TODO what is this?
-// TODO tie values into variables for vertical rythym
+// TODO what is this? does it belong in content or ui?
+// TODO tie values into variables for vertical rythym and color
 .aside-like {
     @extend %environment-base;
 
