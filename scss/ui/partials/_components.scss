@@ -6,6 +6,7 @@
  */
 .summary-links {
     font-size:$ui-font-size-h3;
+    font-family: $ui-font-family-heading;
 
     a {
         @include ui-link-directional();
