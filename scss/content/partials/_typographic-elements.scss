@@ -1,3 +1,4 @@
+@import "../../shared/_css_message.scss";
 @import "../_content_config.scss";
 @import "../../shared/typography";
 
@@ -43,14 +44,19 @@ address {
     @include typography-address();
 }
 
-.code,
+.code {
+    @include css-error(
+        "Markup Error: .code is deprecated. Use .code-inline or .code-block.");
+}
+
+.code-block,
 .CodeMirror,
 .sagecell .CodeMirror {
     font-family: $typography-font-family-monospace;
     @include typography-code();
 }
 
-p .code {
+.code-inline {
     @include typography-code-inline();
 }
 
