@@ -15,7 +15,8 @@
          * for vertical rythym
          */
         font-size: $typography-font-size-base;
-        margin-bottom: typography-em(2*$typography-line-height-computed);
+        margin-bottom: typography-em($typography-line-height-computed, 
+                                     $typography-font-size-base);
 
         .type, .codenumber {
             /* Chapter type prefix is smaller (as in LaTeX) */
@@ -28,8 +29,8 @@
         font-size:$heading-title-font-size;
         // Set margin of one standard line-height
         // but using em relative to this element's font-size
-        margin-top: typography-em($typography-line-height-computed, 
-                       $heading-title-font-size);
+        margin-top: typography-em($typography-line-height-computed/2, 
+                                  $heading-title-font-size);
     }
 
     /** 
@@ -43,11 +44,14 @@
     & > header {
 
         & {
-            margin-bottom: typography-em(2*$typography-line-height-computed);
+            font-size: $typography-font-size-base;
+            margin-bottom: typography-em($typography-line-height-computed, 
+                                         $typography-font-size-base);
         }
 
         @include heading() {
-            margin-bottom: typography-em($typography-line-height-computed);
+            margin-bottom: typography-em($typography-line-height-computed, 
+                                         $typography-font-size-base);
         }
 
         @include heading-title() {
@@ -95,7 +99,7 @@
     /* Scale child headings */
     .subsection {
         @include heading-selector {
-            font-size: $typography-font-size-h3;
+            @extend %typography-h3;
         }
 
         .subsubsection {
