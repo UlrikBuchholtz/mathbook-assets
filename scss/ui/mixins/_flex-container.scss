@@ -1,0 +1,50 @@
+@import "compass/utilities/general/clearfix";
+@import "compass/css3/box-sizing";
+
+$flex-container-prefix: "flex" !default;
+$flex-container-child-selector: 
+    "." + $flex-container-prefix + "-child" !default;
+$flex-container-level-start: 1 !default;
+$flex-container-level-end: 6 !default;
+
+@mixin flex-container-child-width($num-children) {
+    width:100/$num-children * 1%;
+}
+
+
+/* Elements that contain a variable number of buttons should @extend this */
+@mixin flex-container(
+    $prefix: $flex-container-prefix,
+    $child-selector: $flex-container-child-selector,
+    $level-start: $flex-container-level-start,
+    $level-end: $flex-container-level-end 
+) {
+
+    #{$child-selector} {
+        @include box-sizing(border-box);
+    }
+
+    &, &.#{$prefix}-align-left {
+        #{$child-selector} {
+            float:left;
+        }
+    }
+
+    &.#{$prefix}-align-right {
+        #{$child-selector} {
+            float:right;
+        }
+
+    }
+
+    // Output a child-divisor-X class for each supported level
+    @for $i from $level-start to $level-end {
+        &.#{$prefix}-divisor-#{$i} > #{$child-selector} {
+            @include flex-container-child-width($i);
+        }
+    }
+}
+
+%flex-container {
+    @include flex-container();
+}

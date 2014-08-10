@@ -1,5 +1,21 @@
 @import "../ui_config";
 @import "../mixins/buttons";
+@import "../mixins/flex-container";
+
+/*
+ * Flex container that allows for a variable number of children
+ * use .flex-divisor-X where X is the number of children
+ * use .flex-child to denote children 
+ * use .flex-align-left or .flex-align-right to specify float of children
+ */
+.flex-container {
+    @include flex-container(
+        $prefix: "flex",
+        $child-selector: ".flex-child",
+        $level-start: 1,
+        $level-end: 6
+    );
+}
 
 /* 
  * Table-of-contents for chapter/section/etc summary pages 
