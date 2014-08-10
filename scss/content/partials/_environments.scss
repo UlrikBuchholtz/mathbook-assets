@@ -41,9 +41,6 @@
         font-style: italic;
     }
 
-    /* Period after "Proof" even if followed by codenumber/title */
-    @include heading-type($after: ". ");
-
     /* Dotted border to denote proof */
     padding-right: 6px;
     border-right: 1px dotted #aaa;
