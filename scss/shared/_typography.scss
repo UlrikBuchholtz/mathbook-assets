@@ -50,43 +50,7 @@ $typography-should-import-google-fonts: true !default;
 
 @import "compass/css3/border-radius";
 
-@mixin typography() {
-    & {
-        @include typography-base();
-    }
-
-    @include typography-headings();
-    @include typography-lists();
-
-    a {
-        @include typography-link();
-    }
-
-    p {
-        @include typography-paragraph();
-    }
-
-    blockquote {
-        @include typography-blockquote();
-    }
-
-    pre {
-        @include typography-code();
-    }
-
-    pre.scrollable {
-        @include typography-code-scrollable();
-    }
-
-    p code {
-        @include typography-code-inline();
-    }
-
-    address {
-        @include typography-address();
-    }
-}
-
+// Styles to apply to the root typography container, generally the body
 @mixin typography-base() {
     font-size: $typography-font-size-base;
     font-family:$typography-font-family-base;
@@ -128,6 +92,7 @@ $typography-should-import-google-fonts: true !default;
     }
 }
 
+// Base styles for all headings
 @mixin typography-heading-base(
     $color: $typography-headings-color,
     $font-family: $typography-headings-font-family,
@@ -138,6 +103,10 @@ $typography-should-import-google-fonts: true !default;
     color: $color;
 }
 
+// Font-size dependent styles for headings.
+// This mixin uses the base font-size and line-height to establish
+// the correct margin/line-height for maintaining the vertical rythym.
+// See http://webtypography.net/2.2.2 or google vertical rythym for more 
 @mixin typography-heading(
     $font-size,
     $margin-bottom-ratio: $typography-headings-margin-bottom-ratio,
@@ -151,6 +120,11 @@ $typography-should-import-google-fonts: true !default;
     margin-top: #{$margin-top-ratio*$line-height}em;
     margin-bottom: #{$margin-bottom-ratio*$line-height}em;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// HEADING PLACEHOLDERS
+////////////////////////////////////////////////////////////////////////////////
+// @extend these to give h1's and other elements the styles of an hX
 
 %typography-heading-base {
     @include typography-heading-base();
@@ -185,6 +159,10 @@ $typography-should-import-google-fonts: true !default;
     @extend %typography-heading-base;
     @include typography-heading($typography-font-size-h5);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// END HEADING PLACEHOLDERS
+////////////////////////////////////////////////////////////////////////////////
 
 
 @mixin typography-paragraph() {
