@@ -1,8 +1,31 @@
 @import "../_content_config.scss";
 @import "../../shared/typography";
 
-@include typography-headings();
 @include typography-lists();
+
+h1 {
+    @extend %typography-h1;
+}
+
+h2 {
+    @extend %typography-h2;
+}
+
+h3 {
+    @extend %typography-h3;
+}
+
+h4 {
+    @extend %typography-h4;
+}
+
+h5 {
+    @extend %typography-h5;
+}
+
+h6 {
+    @extend %typography-h6;
+}
 
 a {
     @include typography-link();

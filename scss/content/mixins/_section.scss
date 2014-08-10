@@ -3,7 +3,7 @@
 @import "../../shared/_typography.scss";
 
 $section-base-heading-font-size: $typography-font-size-h2 !default;
-$section-base-margin:#{2*$typography-line-height-base}em 0 !default;
+$section-base-margin: 0 0 1.5*$typography-line-height-computed 0 !default;
 
 // Note: in Sass the %placeholder is a special selector that has no output 
 // unless used in an @extend directive.
@@ -22,11 +22,9 @@ $section-base-margin:#{2*$typography-line-height-base}em 0 !default;
         font-size:$section-base-heading-font-size;
     }
 
-    margin: $section-base-margin;
+    margin:$section-base-margin;
 }
 
 %section-base {
     @include section-base();
 }
-
-
