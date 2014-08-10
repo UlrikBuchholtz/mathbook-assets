@@ -3,11 +3,16 @@
     &:after {
         position:absolute;
         top:0;
-        left:0;
+        left:100%;
+        padding:.5em;
         content: $message;
         color: $color;
         background: $bg;
         opacity:.9;
+        z-index:99999;
+        min-width:200px;
+        @include border-radius(5px);
+        @include border-top-left-radius(0);
     }
 }
 
