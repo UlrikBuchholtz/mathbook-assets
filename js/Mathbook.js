@@ -37,6 +37,10 @@ var Mathbook = function(options) {
     var MAIN_LEFT_CLOSED_CLASS = "sidebar-left-closed";
     var MAIN_RIGHT_OPEN_CLASS = "sidebar-right-open";
     var MAIN_RIGHT_CLOSED_CLASS = "sidebar-right-closed";
+    var BODY_LEFT_OPEN_CLASS = MAIN_LEFT_OPEN_CLASS;
+    var BODY_LEFT_CLOSED_CLASS = MAIN_LEFT_CLOSED_CLASS;
+    var BODY_RIGHT_OPEN_CLASS = MAIN_RIGHT_OPEN_CLASS;
+    var BODY_RIGHT_CLOSED_CLASS = MAIN_RIGHT_CLOSED_CLASS;
     // Ratio that sidebar must open before it will finish opening itself.
     var SIDEBAR_INERTIA_THRESHOLD_RATIO = .2;
     // Number of pixels touchpoint must move horizontally before is swipe
@@ -49,6 +53,7 @@ var Mathbook = function(options) {
     var that = this;
     var hashOnLoad;
     var isLayoutInitialized = false;
+    var _shouldSidebarsPush = false;
     var scrollingNav = null;
 
     this.$w = $(window);
@@ -215,7 +220,10 @@ var Mathbook = function(options) {
                 sidebarClosedClass: SIDEBAR_CLOSED_CLASS,
                 main: this.$main,
                 mainOpenClass: MAIN_LEFT_OPEN_CLASS,
-                mainClosedClass: MAIN_LEFT_CLOSED_CLASS
+                mainClosedClass: MAIN_LEFT_CLOSED_CLASS,
+                root: this.$body,
+                rootOpenClass: BODY_LEFT_OPEN_CLASS,
+                rootClosedClass: BODY_LEFT_CLOSED_CLASS
             });
 
             // Toggle button click handler
@@ -236,7 +244,10 @@ var Mathbook = function(options) {
                 sidebarClosedClass: SIDEBAR_CLOSED_CLASS,
                 main: this.$main,
                 mainOpenClass: MAIN_RIGHT_OPEN_CLASS,
-                mainClosedClass: MAIN_RIGHT_CLOSED_CLASS
+                mainClosedClass: MAIN_RIGHT_CLOSED_CLASS,
+                root: this.$body,
+                rootOpenClass: BODY_RIGHT_OPEN_CLASS,
+                rootClosedClass: BODY_RIGHT_CLOSED_CLASS
             });
 
             // Toggle button click handler
@@ -457,6 +468,10 @@ var Mathbook = function(options) {
         navbarHeight = this.$primaryNavbar.outerHeight();
         viewportHeight = windowHeight - navbarHeight;
 
+        if(this.shouldSidebarsPush()) {
+            this.$main.width(windowWidth);
+        }
+
         this.resizeContent(viewportHeight);
         this.resizeToc(viewportHeight);
         this.resizeSecondaryNav(viewportHeight);
@@ -503,41 +518,32 @@ var Mathbook = function(options) {
      * @param shouldPush {Boolean} true to push, false to slide
      */
     this.shouldSidebarsPush = function(shouldSidebarsPush) {
-        debug("shouldSidebarsPush? " + shouldSidebarsPush);
-        var that = this;
-        
-        // TODO track current state? getter if no parameter?
-        var onStart = null;
-        var onReverseComplete = null;
-
-        if(shouldSidebarsPush) {
-            onStart = function() {
-               that.lockMainWidth();
-            }; 
-            onReverseComplete = function() {
-                if(that.isSidebarRightClosed() 
-                    && that.isSidebarLeftClosed()) 
-                {
-                    that.unlockMainWidth();
-                } 
-            };
-        } else {
-            // Make sure it's not currently locked.
-            this.unlockMainWidth();
+        if(typeof shouldSidebarsPush == "undefined") {
+            return _shouldSidebarsPush;
         }
+        _shouldSidebarsPush = shouldSidebarsPush;
+        
 
         if(this.hasSidebarLeft()) {
-            this.sidebarLeftView
-                .eventCallback("onStart", onStart);
-            this.sidebarLeftView
-                .eventCallback("onReverseComplete", onReverseComplete);
+            this.setSidebarViewPush(_shouldSidebarsPush, this.sidebarLeftView);
         }
 
         if(this.hasSidebarRight()) {
-            this.sidebarRightView
-                .eventCallback("onStart", onStart);
-            this.sidebarRightView
-                .eventCallback("onReverseComplete", onReverseComplete);
+            this.setSidebarViewPush(_shouldSidebarsPush, this.sidebarRightView);
+        }
+
+        if(!_shouldSidebarsPush) {
+            this.unlockMainWidth();
+        }
+    }
+
+    this.setSidebarViewPush = function(shouldPush, sidebarView) {
+        if(shouldPush) {
+            sidebarView.on("onStart", this.lockMainWidth);
+            sidebarView.on("onReverseComplete", this.tryUnlockMainWidth);
+        } else {
+            sidebarView.off("onStart", this.lockMainWidth);
+            sidebarView.off("onReverseComplete", this.tryUnlockMainWidth);
         }
     }
 
@@ -546,7 +552,7 @@ var Mathbook = function(options) {
      */
     this.lockMainWidth = function() {
         debug("locking width");
-        this.$main.width(this.$main.width());
+        that.$main.width(that.$main.width());
     };
 
     /**
@@ -554,7 +560,18 @@ var Mathbook = function(options) {
      */
     this.unlockMainWidth = function() {
         debug("unlocking width");
-        this.$main.width("");
+        that.$main.width("");
+    };
+
+    /**
+     * Unlocks the main element width only if both sidebars are closed.
+     */
+    this.tryUnlockMainWidth = function () {
+        if(that.isSidebarRightClosed() 
+            && that.isSidebarLeftClosed()) 
+        {
+            that.unlockMainWidth();
+        } 
     };
 
     /**
