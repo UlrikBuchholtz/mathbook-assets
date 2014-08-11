@@ -135,3 +135,44 @@
         #{$side}:auto;
     }
 }
+
+@mixin sliding-sidebars-media-cramped-content(
+    $sidebar-left-width,
+    $sidebar-right-width,
+    $content-max-width,
+    $content-margin
+) {
+    
+    $breakpoint: $content-max-width + 2*$content-margin;
+    @media screen and (max-width: $breakpoint ) {
+    }
+
+
+    .sidebar-left-open & {
+        $breakpoint: $content-max-width 
+                     + $sidebar-left-width
+                     + 2*$content-margin;
+        @media screen and (max-width: $breakpoint) {
+            @content;
+        }
+    }
+
+    .sidebar-right-open & {
+        $breakpoint: $content-max-width 
+                     + $sidebar-right-width
+                     + 2*$content-margin;
+        @media screen and (max-width:$breakpoint) {
+            @content;
+        }
+    }
+
+    .sidebar-right-open.sidebar-left-open & {
+        $breakpoint: $content-max-width 
+                     + $sidebar-left-width 
+                     + $sidebar-right-width
+                     + 2*$content-margin;
+        @media screen and (max-width: $breakpoint ) {
+            @content;
+        }
+    }
+}

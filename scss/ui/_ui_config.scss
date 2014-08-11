@@ -91,10 +91,7 @@ $ui-content-margin: 2.5*$ui-line-height-computed;
 $ui-content-margin-small: $ui-line-height-computed/2;
 
 // An estimation of how much extra space long equations require.
-$ui-equation-fudge: 400px;
-// If you want equations to be bounded when the width begins to cut into
-// the content container, then uncomment this:
-/*$ui-equation-fudge: 2*$ui-content-margin;*/
+$ui-equation-fudge: 40px;
 
 // Media queries
 //------------------------------------------------------------------------------
