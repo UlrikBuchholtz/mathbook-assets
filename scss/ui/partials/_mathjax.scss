@@ -4,7 +4,7 @@
  * when there is a toc. 
  * To override, we must add body specificity.
  */
-body.has-sidebar-left #MathJax_Message {
+body.has-sidebar-left.sidebar-left-open #MathJax_Message {
     left: $ui-sidebar-left-width + .5*$ui-font-size-base;
 }
 
@@ -21,7 +21,9 @@ body #MathJax_Message {
 
     @media screen and (max-width: $ui-screen-sm-min) {
         /* Display above bottom navbar */
-        bottom: 1.5*$ui-navbar-height;
+        left:$ui-line-height-computed;
+        right:$ui-line-height-computed;
+        bottom: 1.2*$ui-navbar-height;
     }
 }
 
@@ -32,11 +34,52 @@ body #MathJax_Message {
     padding-top:2px;
     padding-bottom:2px;
 
-    @media screen and (max-width: $ui-screen-lg-min) {
+    @media screen and (max-width: $ui-screen-sm-min) {
         /* Allow users on smaller screens to scroll equations 
          * horizontally when they don't fit on the screen 
          */
         overflow-x:auto;
         overflow-y:hidden;
     }
+
+    .sidebar-left-open & {
+        $breakpoint: $ui-content-max-width 
+                     + $ui-sidebar-left-width
+                     + $ui-equation-fudge;
+        @media screen and (max-width: $breakpoint) {
+            /* Allow users on smaller screens to scroll equations 
+             * horizontally when they don't fit on the screen 
+             */
+            overflow-x:auto;
+            overflow-y:hidden;
+        }
+    }
+
+    .sidebar-right-open & {
+        $breakpoint: $ui-content-max-width 
+                     + $ui-sidebar-right-width
+                     + $ui-equation-fudge;
+        @media screen and (max-width:$breakpoint) {
+            /* Allow users on smaller screens to scroll equations 
+             * horizontally when they don't fit on the screen 
+             */
+            overflow-x:auto;
+            overflow-y:hidden;
+        }
+    }
+
+    .sidebar-right-open.sidebar-left-open & {
+        $breakpoint: $ui-content-max-width 
+                     + $ui-sidebar-left-width 
+                     + $ui-sidebar-right-width
+                     + $ui-equation-fudge;
+        @media screen and (max-width: $breakpoint ) {
+            /* Allow users on smaller screens to scroll equations 
+             * horizontally when they don't fit on the screen 
+             */
+            overflow-x:auto;
+            overflow-y:hidden;
+        }
+    }
 }
+
