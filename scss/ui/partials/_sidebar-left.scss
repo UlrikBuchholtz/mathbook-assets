@@ -24,7 +24,7 @@
     $base-indent:($ui-icon-box-size - $ui-icon-size)/2;
     $codenumber-width:1*$font-size;
     $codenumber-gutter-left:2*$font-size;
-    $codenumber-gutter-right:.5*$font-size;
+    $codenumber-gutter-right:.4*$font-size;
     $child-indent: $base-indent + $codenumber-width + $codenumber-gutter-right;
 
     & {
