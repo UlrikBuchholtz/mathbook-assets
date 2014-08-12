@@ -72,6 +72,11 @@ body {
     overflow:hidden;
 }
 
+/* The table-of-contents itself */
+#toc {
+    @import "../partials/toc";
+}
+
 #sidebar-left, #sidebar-left-sticky-wrapper {
     @import "./sidebar-left";
 }
