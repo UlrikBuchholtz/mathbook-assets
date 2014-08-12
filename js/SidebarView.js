@@ -2,6 +2,7 @@
  * A SidebarView that can be opened and closed with a TweenController
  */
 var SidebarView = function(options) { 
+    var that = this;
 
     var DEBUG = false;
     // debug performs VERY slowly on mobile devices,
@@ -49,10 +50,12 @@ var SidebarView = function(options) {
      */
     this.initialize =  function(options) {
         var settings = $.extend(defaults, options);
+        this.settings = settings;
         this.debugName = settings.debugName;
 
         this.$sidebar = $(settings.sidebar);
         this.$main = $(settings.main);
+        this.$root = $(settings.root);
 
         var toggleButtonTweener = 
             TweenLite.fromTo(
@@ -103,7 +106,47 @@ var SidebarView = function(options) {
             .add(toggleButtonTweener,0)
             .add(sidebarTweener,0)
             .add(mainTweener,0);
+
+        this.initializeEvents();
+
         this.timeline.pause().progress(0);
+    };
+
+    this.initializeEvents = function() {
+        
+        // See GSAP docs for available events, these are most of them
+        var supportedEvents = [
+                "onComplete",
+                "onReverseComplete",
+                "onStart",
+                "onUpdate"
+            ];
+
+        var numEvents = supportedEvents.length;
+        for(var i=0; i < numEvents; i++) {
+            var eventType = supportedEvents[i];
+            this.timeline.eventCallback(eventType, that.trigger, [eventType], that);
+        }
+
+        this.on("onStart", function() {
+            that.onOpen();
+        });
+
+        this.on("onReverseComplete", function() {
+            that.onClose();
+        });
+    };
+
+    this.onOpen = function() {
+        this.$root
+            .addClass(this.settings.rootOpenClass)
+            .removeClass(this.settings.rootClosedClass);
+    };
+
+    this.onClose = function() {
+        this.$root
+            .addClass(this.settings.rootClosedClass)
+            .removeClass(this.settings.rootOpenClass);
     };
 
     this.toggle = function(shouldToggleOpen) {
@@ -168,6 +211,9 @@ var SidebarView = function(options) {
         return this.$sidebar.width();
     };
 
+    /**
+     * Returns true if the sidebar is closed.
+     */
     this.isClosed = function() {
         return this.progress() == 0;
     };
@@ -183,3 +229,7 @@ var SidebarView = function(options) {
     // Call initialize
     this.initialize(options);
 }
+
+// Add BackboneEvents functionality
+BackboneEvents.mixin(SidebarView.prototype); 
+

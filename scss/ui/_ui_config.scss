@@ -90,6 +90,9 @@ $ui-content-margin: 2.5*$ui-line-height-computed;
 // Margin when width is less than content size 
 $ui-content-margin-small: $ui-line-height-computed/2;
 
+// An estimation of how much extra space long equations require.
+$ui-equation-fudge: 40px;
+
 // Media queries
 //------------------------------------------------------------------------------
 $ui-screen-xs-min: 480px !default;
