@@ -206,9 +206,16 @@
 @mixin button-hide-text(
     $icon-box-size, 
     $icon-pseudo: before,
-    $hide-direction: left,
+    $hide-direction: auto,
     $icon-placement: center
 ) {
+    @if($hide-direction == auto) {
+        $hide-direction: left;
+        @if($pseudo == after) {
+            $hide-direction: right;
+
+        }
+    }
     text-align:center;
     @include hide-text($hide-direction);
     @include button-icon-absolute($icon-box-size, $icon-pseudo, $icon-placement);

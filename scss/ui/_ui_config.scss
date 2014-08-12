@@ -82,11 +82,19 @@ $ui-border-radius-large:5px;
 
 // Icons
 $ui-font-family-icon: "Ionicons" !default;
+
+// Icon Sizing 
 $ui-icon-size: $ui-font-size-base !default;
-$ui-icon-box-size:2.2*$ui-line-height-base*$ui-icon-size !default;
+$ui-icon-box-size:2*$ui-line-height-base*$ui-icon-size !default;
+
+// Icon sizing touch 
+$ui-touch-scale: 1.25; // be careful, some intervals will cause blurry icons
+$ui-icon-size-touch: $ui-touch-scale*$ui-icon-size !default;
+$ui-icon-box-size-touch: $ui-touch-scale*$ui-icon-box-size !default;
 
 // Navbar
 $ui-navbar-height:$ui-icon-box-size;
+$ui-navbar-height-touch:$ui-icon-box-size-touch;
 
 // Sidebars
 $ui-sidebar-left-width: 240px !default;
