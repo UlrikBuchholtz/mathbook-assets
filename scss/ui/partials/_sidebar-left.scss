@@ -3,6 +3,7 @@
 @import "../mixins/sliding-sidebars";
 @import "../mixins/navtree";
 @import "compass/css3/transform";
+@import "compass/css3/inline-block";
 
 & {
     @include sliding-sidebars-sidebar(
@@ -16,19 +17,117 @@
 /* The table-of-contents itself */
 #toc {
 
-    @include navtree();
+    $font-size:.91*$ui-font-size-base;
+    $segment-height:1.5*$ui-line-height-computed;
+    $segment-line-height:.7*$ui-line-height-computed;
+    $segment-border-width: 1px;
+    $base-indent:($ui-icon-box-size - $ui-icon-size)/2;
+    $codenumber-width:1*$font-size;
+    $codenumber-gutter-left:2*$font-size;
+    $codenumber-gutter-right:.5*$font-size;
+    $child-indent: $base-indent + $codenumber-width + $codenumber-gutter-right;
 
     & {
         /* IMPORTANT height must be calculated by javascript. */
         width:$ui-sidebar-left-width;
         margin:0;
-        font-size:1em;
+        font-size:$font-size;
 
         // Not sure about this one...we'll see
         overflow-y:auto;
         overflow-x:hidden;
         /* Enable momentum scrolling on iOS */
         -webkit-overflow-scrolling: touch;
+    }
+
+    h2 {
+        & {
+            display:block;
+            font-family: $ui-font-family-heading;
+            font-size: 1em;
+            margin: 0;
+        }
+
+        a {
+            @include navtree-segment(
+                $font-size:.92*$ui-font-size-base,
+                $height: $segment-height,
+                $line-height:$segment-line-height,
+                $indent: $base-indent,
+
+                $border-width: $segment-border-width,
+                $border-color: darken($ui-toc-heading-bg, 10%),
+                $border-color-hover: darken($ui-toc-heading-bg-hover, 12%),
+
+                $color: $ui-toc-heading-color,
+                $color-hover: $ui-toc-heading-color-hover,
+                $color-active: $ui-toc-heading-color-active,
+
+                $bg: $ui-toc-heading-bg,
+                $bg-hover: $ui-toc-heading-bg-hover,
+                $bg-active: $ui-toc-heading-bg-active
+            );
+        }
+    }
+
+    .codenumber + .title {
+        @include inline-block(baseline);
+        margin-left:$codenumber-width + $codenumber-gutter-right;
+    } 
+
+    .codenumber {
+        position:absolute;
+        right:100%;
+        margin-right:-$codenumber-gutter-left;
+        text-align:right;
+    }
+
+    ul {
+        margin: 0px;
+        padding: 0px;
+        list-style-type: none;
+
+        li {
+            display: block;
+            margin: 0px;
+            padding: 0px;
+
+            $border-color: darken($ui-color-base, 12%);
+            $border-color-hover:darken($ui-link-block-bg-hover, 10%);
+
+            a {
+
+                @include navtree-segment(
+                    $font-size:$font-size,
+                    $height: $segment-height,
+                    $line-height:$segment-line-height,
+                    $indent: $child-indent,
+
+                    $border-width: $segment-border-width,
+                    $border-color: $border-color,
+                    $border-color-hover: $border-color-hover,
+
+                    $color: $ui-link-block-color,
+                    $color-hover: $ui-link-block-color-hover,
+                    $color-active: $ui-link-block-color-active,
+
+                    $bg: $ui-link-block-bg,
+                    $bg-hover: $ui-link-block-bg-hover,
+                    $bg-active: $ui-link-block-bg-active
+                );
+
+                @include navtree-segment-border-collapse(
+                    $border-width: $segment-border-width,
+                    $border-color-hover: $border-color-hover
+                );
+            }
+
+            &:last-child a {
+                @include navtree-segment-border-collapse-last-child(
+                    $border-color-hover: $border-color-hover
+                );
+            }
+        }
     }
 
 }

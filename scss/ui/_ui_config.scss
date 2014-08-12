@@ -45,6 +45,14 @@ $ui-link-block-bg: change-color($ui-color-bg, $lightness:94%) !default;
 $ui-link-block-bg-hover: $ui-color-primary !default;
 $ui-link-block-bg-active: $ui-color-primary !default;
 
+// Applied to navtree headers
+$ui-toc-heading-color: white;
+$ui-toc-heading-color-hover: $ui-link-block-color-hover;
+$ui-toc-heading-color-active: $ui-link-block-color-active;
+$ui-toc-heading-bg: $ui-color-secondary;
+$ui-toc-heading-bg-hover: $ui-link-block-bg-hover;
+$ui-toc-heading-bg-active: $ui-link-block-bg-active;
+
 // So... this is a little unweildy, but it allows the flexibility to
 // change the ui font-sizes independently of other modules.
 // font-size-base must match the font-size placed on body anywhere else
