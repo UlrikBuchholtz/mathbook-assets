@@ -11,7 +11,7 @@ $segment-border-width: 1px;
 $base-indent:($ui-icon-box-size - $ui-icon-size)/2;
 $base-indent-touch: ($ui-icon-box-size-touch - $ui-icon-size-touch)/2;
 
-$codenumber-width:1*$font-size;
+$codenumber-width:.5*$font-size;
 $codenumber-gutter-right:.5*$font-size;
 
 $title-offset:$codenumber-width + $codenumber-gutter-right;
