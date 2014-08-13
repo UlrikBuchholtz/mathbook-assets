@@ -277,7 +277,7 @@ $round-to-the-nearest-half-line: true;
     ul,
     ol {
         margin-top: 0;
-        margin-bottom: ($typography-line-height-computed / 2);
+        @include margin-trailer;
         ul,
         ol {
             margin-bottom: 0;
@@ -311,11 +311,11 @@ $round-to-the-nearest-half-line: true;
     // Description Lists
     dl {
         margin-top: 0; // Remove browser default
-        margin-bottom: $typography-line-height-computed;
+        @include margin-trailer;
     }
     dt,
     dd {
-        line-height: $typography-line-height-base;
+        @include adjust-font-size-to($typography-font-size-base);
     }
     dt {
         font-weight: bold;
@@ -331,7 +331,6 @@ $round-to-the-nearest-half-line: true;
         margin:0;
         line-height: inherit;
         font-style: inherit;
-
     }
 }
 
