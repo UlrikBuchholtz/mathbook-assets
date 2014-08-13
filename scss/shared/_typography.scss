@@ -165,9 +165,10 @@ $typography-should-import-google-fonts: true !default;
 ////////////////////////////////////////////////////////////////////////////////
 
 
-@mixin typography-paragraph() {
+@mixin typography-paragraph($line-height: $typography-line-height-computed) {
     & {
-        margin: 0 0 #{$typography-line-height-base/2}em;
+        margin: 0 0 $line-height/2;
+        line-height:$line-height;
     }
 }
 
