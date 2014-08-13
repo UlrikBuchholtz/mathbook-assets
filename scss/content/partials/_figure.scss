@@ -1,13 +1,18 @@
+@import "../../shared/_typography.scss";
 @import "../_content_config.scss";
 
 figure {
 
-    margin-top: 10px;
+    & {
+        /* maintain vertical rhythym with line-height sized trailing margin */
+        @include margin-trailer;
+    }
 
     &.wrap {
         float: right;
         margin-right: 0;
-        margin-left: 30px;
+        /*margin-left:30px;*/
+        margin-left:$base-rhythm-unit;
 
         img { width: 250px; }
     }
@@ -30,18 +35,20 @@ figure {
 
     figcaption {
         & { 
-            margin-top: 10px;
+            @include adjust-font-size-to($typography-font-size-base);
+            /*margin-top:10px;*/
+            @include margin-leader;
             margin-left: auto;
             margin-right: auto;
-            font-size: 100%;
             text-align: center;
         }
 
         @include heading();
 
         &.wrap {
-            margin: 10px;
-            font-size: 100%;
+            /*margin:10px;*/
+            margin-left: $base-half-leader;
+            margin-right: $base-half-leader;
             text-align: center;
         }
     }

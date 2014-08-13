@@ -15,22 +15,25 @@
          * for vertical rythym
          */
         font-size: $typography-font-size-base;
-        margin-bottom: typography-em($typography-line-height-computed, 
-                                     $typography-font-size-base);
+        /*margin-bottom: typography-em($typography-line-height-computed, */
+                                     /*$typography-font-size-base);*/
+        @include margin-trailer;
 
         .type, .codenumber {
             /* Chapter type prefix is smaller (as in LaTeX) */
-            font-size: $heading-type-font-size;
+            //font-size: $heading-type-font-size;
+            @include typography-heading($heading-type-font-size);
         }
     }
 
     @include heading-title($before: "", $after: "") {
         display:block;
-        font-size:$heading-title-font-size;
-        // Set margin of one standard line-height
-        // but using em relative to this element's font-size
-        margin-top: typography-em($typography-line-height-computed/2, 
-                                  $heading-title-font-size);
+        /*font-size:$heading-title-font-size;*/
+        /*// Set margin of one standard line-height*/
+        /*// but using em relative to this element's font-size*/
+        /*margin-top: typography-em($typography-line-height-computed/2, */
+                                  /*$heading-title-font-size);*/
+        @include typography-heading($heading-title-font-size);
     }
 
     /** 
@@ -45,13 +48,15 @@
 
         & {
             font-size: $typography-font-size-base;
-            margin-bottom: typography-em($typography-line-height-computed, 
-                                         $typography-font-size-base);
+            /*margin-bottom: typography-em($typography-line-height-computed, */
+                                         /*$typography-font-size-base);*/
+            @include margin-trailer;
         }
 
         @include heading() {
-            margin-bottom: typography-em($typography-line-height-computed, 
-                                         $typography-font-size-base);
+            /*margin-bottom: typography-em($typography-line-height-computed, */
+                                         /*$typography-font-size-base);*/
+            @include margin-trailer;
         }
 
         @include heading-title() {
@@ -99,12 +104,12 @@
     /* Scale child headings */
     .subsection {
         @include heading-selector {
-            @extend %typography-h3;
+            @include typography-heading($typography-font-size-h3);
         }
 
         .subsubsection {
             @include heading-selector {
-                font-size: $typography-font-size-h4;
+                @include typography-heading($typography-font-size-h4);
             }
         }
     }
@@ -117,7 +122,7 @@
     /* Scale child headings */
     .subsubsection {
         @include heading-selector {
-            font-size: $typography-font-size-h3;
+            @include typography-heading($typography-font-size-h3);
         }
     }
 }

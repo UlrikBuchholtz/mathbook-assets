@@ -1,6 +1,3 @@
-// Styling for standard typographic elements.
-// Note: Mixins with plural names output fully-functionaly CSS, 
-// whereas singular names should be mixed directly into a custom selector.
 
 $typography-font-family-sans-serif:   
     "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
@@ -48,12 +45,17 @@ $typography-google-fonts-url:
     "http://fonts.googleapis.com/css?family=PT+Serif:400,700" !default;
 $typography-should-import-google-fonts: true !default;
 
+// Compass Vertical Rhythm
+//------------------------
+$round-to-the-nearest-half-line: true;
+@import "compass/typography/vertical_rhythm";
+
 @import "compass/css3/border-radius";
 
 // Styles to apply to the root typography container, generally the body
 @mixin typography-base() {
-    font-size: $typography-font-size-base;
     font-family:$typography-font-family-base;
+    @include establish-baseline($typography-font-size-base);
 }
 
 // TODO does this belong here?
@@ -103,22 +105,24 @@ $typography-should-import-google-fonts: true !default;
     color: $color;
 }
 
-// Font-size dependent styles for headings.
-// This mixin uses the base font-size and line-height to establish
-// the correct margin/line-height for maintaining the vertical rythym.
-// See http://webtypography.net/2.2.2 or google vertical rythym for more 
-@mixin typography-heading(
-    $font-size,
-    $margin-bottom-ratio: $typography-headings-margin-bottom-ratio,
-    $line-height-base:$typography-line-height-base,
-    $font-size-base:$typography-font-size-base
-) {
-    $line-height:2*$typography-font-size-h6 / $typography-line-height-computed;
-    $margin-top-ratio: 1-$margin-bottom-ratio;
-    font-size: $font-size; 
-    line-height: $line-height;
-    margin-top: #{$margin-top-ratio*$line-height}em;
-    margin-bottom: #{$margin-bottom-ratio*$line-height}em;
+@mixin typography-heading($font-size) {
+    @if($font-size == h1) {
+        $font-size: $typography-font-size-h1;
+    } @else if($font-size == h2) {
+        $font-size: $typography-font-size-h2;
+    } @else if($font-size == h3) {
+        $font-size: $typography-font-size-h3;
+    } @else if($font-size == h4) {
+        $font-size: $typography-font-size-h4;
+    } @else if($font-size == h5) {
+        $font-size: $typography-font-size-h5;
+    } @else if($font-size == h6) {
+        $font-size: $typography-font-size-h6;
+    }
+
+    @include adjust-font-size-to($font-size);
+    @include margin-leader(1,$font-size);
+    @include margin-trailer(.5,$font-size);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -132,32 +136,32 @@ $typography-should-import-google-fonts: true !default;
 
 %typography-h1 {
     @extend %typography-heading-base;
-    @include typography-heading($typography-font-size-h1);
+    @include typography-heading(h1);
 }
 
 %typography-h2 {
     @extend %typography-heading-base;
-    @include typography-heading($typography-font-size-h2);
+    @include typography-heading(h2);
 }
 
 %typography-h3 {
     @extend %typography-heading-base;
-    @include typography-heading($typography-font-size-h3);
+    @include typography-heading(h3);
 }
 
 %typography-h4 {
     @extend %typography-heading-base;
-    @include typography-heading($typography-font-size-h4);
+    @include typography-heading(h4);
 }
 
 %typography-h5{
     @extend %typography-heading-base;
-    @include typography-heading($typography-font-size-h5);
+    @include typography-heading(h5);
 }
 
 %typography-h6{
     @extend %typography-heading-base;
-    @include typography-heading($typography-font-size-h5);
+    @include typography-heading(h6);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -165,19 +169,24 @@ $typography-should-import-google-fonts: true !default;
 ////////////////////////////////////////////////////////////////////////////////
 
 
-@mixin typography-paragraph($line-height: $typography-line-height-computed) {
+@mixin typography-paragraph() {
     & {
-        margin: 0 0 $line-height/2;
-        line-height:$line-height;
+        /* Reset margins */
+        margin:0;
+
+        @include adjust-font-size-to($typography-font-size-base);
+
+        /* We only want bottom margins on paragraphs */
+        @include margin-trailer;
     }
 }
 
 @mixin typography-paragraph-lead() {
     & {
-        margin-bottom: $typography-line-height-computed;
-        font-size: floor(($typography-font-size-base * 1.15));
+        margin:0;
+        @include adjust-font-size-to(floor($typography-font-size-base*1.15));
+        @include margin-trailer;
         font-weight: 200;
-        line-height: 1.4;
     }
 }
 
@@ -185,14 +194,15 @@ $typography-should-import-google-fonts: true !default;
 // Output this inside of the media-query of your choice
 @mixin typography-paragraph-lead-mobile() {
     & {
-        font-size: ($typography-font-size-base * 1.5);
+        @include adjust-font-size-to(floor($typography-font-size-base*1.5));
     }
 }
 
 @mixin typography-blockquote() {
     & {
-        padding-left:40px;
-        padding-right:10px;
+        padding-left:2*$base-rhythm-unit;
+        
+        padding-right:$base-rhythm-unit/2;
     }
 }
 
@@ -206,13 +216,14 @@ $typography-should-import-google-fonts: true !default;
 ) {
     & {
         font-family: $font-family;
-        padding: (($typography-line-height-computed - 1) / 2);
-        line-height: 1;
         background: $bg-color;
         color: $color;
-        border:1px solid $border-color;
         word-break: break-all;
         word-wrap: break-word;
+        //padding: (($typography-line-height-computed - 1) / 2);
+        //border:1px solid $border-color;
+        @include rhythm-borders(1px, 1, $typography-font-size-base, solid);
+        border-color: $border-color;
         @include border-radius(.2em);
 
         // Account for some code outputs that place code tags in pre tags
@@ -246,12 +257,16 @@ $typography-should-import-google-fonts: true !default;
 
     & {
         margin:0 1px; // override beezer.css
-        padding: 0px 5px;
-        font-size: 80%;
+        //font-size: 80%;
+        @include adjust-font-size-to(.9*$typography-font-size-base);
         white-space: nowrap;
         color: $color;
         background: $bg-color;
         border:1px solid $border-color;
+        // This is kind of abusing the vertical rhythm,
+        // but we don't want the padding from inline code on two
+        // adjacent lines to overlap
+        padding:$base-half-leader/2 $base-leader;
         @include border-radius(.2em);
     }
 }
@@ -262,7 +277,7 @@ $typography-should-import-google-fonts: true !default;
     ul,
     ol {
         margin-top: 0;
-        margin-bottom: ($typography-line-height-computed / 2);
+        @include margin-trailer;
         ul,
         ol {
             margin-bottom: 0;
@@ -296,11 +311,11 @@ $typography-should-import-google-fonts: true !default;
     // Description Lists
     dl {
         margin-top: 0; // Remove browser default
-        margin-bottom: $typography-line-height-computed;
+        @include margin-trailer;
     }
     dt,
     dd {
-        line-height: $typography-line-height-base;
+        @include adjust-font-size-to($typography-font-size-base);
     }
     dt {
         font-weight: bold;
@@ -316,7 +331,6 @@ $typography-should-import-google-fonts: true !default;
         margin:0;
         line-height: inherit;
         font-style: inherit;
-
     }
 }
 

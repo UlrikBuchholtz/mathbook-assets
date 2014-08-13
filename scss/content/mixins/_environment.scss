@@ -1,7 +1,9 @@
 @import "../_content_config.scss";
 @import "../../shared/_typography.scss";
+@import "compass/typography/vertical_rhythm";
 @import "heading";
 
+$environment-heading-font-size: $typography-font-size-h5 !default;
 $environment-heading-after: ". " !default;
 
 // Note: in Sass the %placeholder is a special selector that has no output 
@@ -23,13 +25,14 @@ $environment-heading-after: ". " !default;
 // Defaults for environments
 @mixin environment-base() {
     @include heading($heading-after:$environment-heading-after) {
-        font-size: $typography-font-size-h5;
+        @include typography-heading($environment-heading-font-size);
     }
 
     // Default inline heading
     @include environment-heading-inline();
 
-    margin:$typography-line-height-em 0;
+    // One line-height bottom margin
+    @include margin-trailer;
 }
 
 // Force environment heading to be inline

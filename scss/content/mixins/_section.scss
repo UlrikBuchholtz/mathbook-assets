@@ -2,9 +2,6 @@
 @import "heading";
 @import "../../shared/_typography.scss";
 
-$section-base-heading-font-size: $typography-font-size-h2 !default;
-$section-base-margin: 0 0 1.5*$typography-line-height-computed 0 !default;
-
 // Note: in Sass the %placeholder is a special selector that has no output 
 // unless used in an @extend directive.
 
@@ -19,10 +16,10 @@ $section-base-margin: 0 0 1.5*$typography-line-height-computed 0 !default;
 
 @mixin section-base() {
     @include heading() {
-        font-size:$section-base-heading-font-size;
+        @include adjust-font-size-to($typography-font-size-h2);
     }
-
-    margin:$section-base-margin;
+    
+    margin-bottom:2*$base-rhythm-unit;
 }
 
 %section-base {
