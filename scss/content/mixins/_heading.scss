@@ -87,14 +87,14 @@ $heading-after:" " !default;
             &:before {
                 @if($before == none) {
                     display:none;
-                } else {
+                } @else {
                     content: $before;
                 }
             }
             &:after {
                 @if($after == none) {
                     display:none;
-                } else {
+                } @else {
                     content: $after;
                 }
             }
@@ -113,14 +113,14 @@ $heading-after:" " !default;
             &:before {
                 @if($before == none) {
                     display:none;
-                } else {
+                } @else {
                     content: $before;
                 }
             }
             &:after {
                 @if($after == none) {
                     display:none;
-                } else {
+                } @else {
                     content: $after;
                 }
             }
@@ -139,14 +139,14 @@ $heading-after:" " !default;
             &:before {
                 @if($before == none) {
                     display:none;
-                } else {
+                } @else {
                     content: $before;
                 }
             }
             &:after {
                 @if($after == none) {
                     display:none;
-                } else {
+                } @else {
                     content: $after;
                 }
             }
