@@ -21,10 +21,12 @@
 //    $variable: yellow !default;
 //    $variable: blue !default; // winning default 
 
+// Color defaults
 $ui-color-primary: orange !default;
 $ui-color-secondary: blue !default;
 $ui-color-base: #ddd !default;
 
+// Background color of ui
 $ui-color-bg: change-color($ui-color-base, $lightness:87%);
 
 // Applied to inline ui links
@@ -56,6 +58,7 @@ $ui-font-size-h4: $typography-font-size-h4 !default;
 $ui-font-size-h5: $typography-font-size-h5 !default;
 $ui-font-size-h6: $typography-font-size-h6 !default; 
 
+// Line-heights
 $ui-line-height-base:     $typography-line-height-base !default; 
 $ui-line-height-computed: $typography-line-height-computed !default;
 $ui-line-height-em:       $typography-line-height-em;
@@ -63,11 +66,13 @@ $ui-line-height-em:       $typography-line-height-em;
 // Space between screen edge and text in UI
 $ui-screen-edge-margin:$ui-font-size-base;
 
+// Font families
 $ui-font-family-sans-serif: $typography-font-family-sans-serif !default;
 $ui-font-family-serif: $typography-font-family-serif !default;
 $ui-font-family-base: $ui-font-family-sans-serif !default;
 $ui-font-family-heading: $ui-font-family-serif !default;
 
+// Border radius
 $ui-border-radius-small:3px;
 $ui-boder-radius-medium:4px;
 $ui-border-radius-large:5px;

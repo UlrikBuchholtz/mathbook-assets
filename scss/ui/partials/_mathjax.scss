@@ -35,6 +35,14 @@ body #MathJax_Message {
     padding-top:2px;
     padding-bottom:2px;
 
+    /* 
+     * Force margins MathJax_Display's to obey our vertical rhythm.
+     * It won't be perfect, because their interior sizing will not match our
+     * vertical rhythm, but we can at least make the margins match.
+     */
+    @include margin-leader;
+    @include margin-trailer;
+
     @media screen and (max-width: $ui-screen-sm-min) {
         /* Allow users on smaller screens to scroll equations 
          * horizontally when they don't fit on the screen 

@@ -37,15 +37,19 @@
     // so we use the mixin rather than extending %environment-base
     @include environment-base();
 
-    @include heading-selector {
-        font-style: italic;
-        font-weight:normal;
-    }
+    & {
+        @include heading-selector {
+            font-style: italic;
+            font-weight:normal;
+            /* It helps to have a little bit of extra space after proof */
+            margin-right:.25em;
+        }
 
-    /* Dotted border to denote proof */
-    padding-right: 6px;
-    border-right: 1px dotted #aaa;
-    padding-bottom: -5px;
+        /* Dotted border to denote proof */
+        padding-right: 6px;
+        border-right: 1px dotted #aaa;
+        padding-bottom: -5px;
+    }
 
     &:after {
         content:"\220E";

@@ -55,8 +55,7 @@ $heading-after:" " !default;
     @include heading-selector() {
 
         & {
-            font-weight:bold;
-            font-style:normal;
+            @include typography-heading-base();
         }
 
         &:before {
