@@ -15,28 +15,6 @@
     );
 }
 
-
-/* The table-of-contents itself */
-#toc {
-
-    @include navtree();
-
-    & {
-        /* IMPORTANT height must be calculated by javascript. */
-        width:$ui-sidebar-left-width;
-        margin:0;
-        font-size:1em;
-
-        // Not sure about this one...we'll see
-        overflow-y:auto;
-        overflow-x:hidden;
-        /* Enable momentum scrolling on iOS */
-        -webkit-overflow-scrolling: touch;
-    }
-
-}
-
-
 .extras {
 
     & {

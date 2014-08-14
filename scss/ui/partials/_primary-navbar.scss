@@ -25,19 +25,24 @@ $navbar-top-box-shadow:
 $navbar-bottom-box-shadow:
     $navbar-shadow-color 0px $navbar-bottom-shadow-offset $navbar-shadow-spread;
 
-$navbar-icon-size: $ui-icon-size;
-$navbar-icon-box-size: $ui-icon-box-size;
-
 // Some curry for navbar-buttons
 @mixin navbar-button($icon, $pseudo: before, $placement: inline) {
-    $icon-only-breakpoint: $ui-screen-sm-min;
-    @include button-with-icon-responsive(
+    @include button-with-icon(
         $icon, 
-        $navbar-icon-size, 
-        $navbar-icon-box-size, 
+        $ui-icon-size, 
+        $ui-icon-box-size, 
         $pseudo,
-        $placement,
-        $icon-only-breakpoint);
+        $placement);
+
+    @media screen and (max-width:$ui-screen-sm-min) {
+        @include button-with-icon(
+            $icon, 
+            $ui-icon-size-touch, 
+            $ui-icon-box-size-touch, 
+            $pseudo,
+            $placement);
+        @include button-hide-text($ui-icon-box-size-touch, $pseudo, $placement);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -55,6 +60,10 @@ $navbar-icon-box-size: $ui-icon-box-size;
     @include single-transition(box-shadow, 400ms);
 
     @include clearfix();
+
+    @media screen and (max-width: $ui-screen-sm-min) {
+        height:$ui-navbar-height-touch;
+    }
 }
 
 /* Styles applied to make the navbar persistently visible */
@@ -99,7 +108,7 @@ $navbar-icon-box-size: $ui-icon-box-size;
     font-size:1em;
     padding:0;
     margin:0;
-    line-height:$navbar-icon-box-size;
+    line-height:$ui-icon-box-size;
 
     border:1px solid; 
     border-color:darken($navbar-bg-color, 20%);
@@ -144,6 +153,7 @@ $navbar-icon-box-size: $ui-icon-box-size;
         text-align:center;
         margin:0;
         border-right:none;
+        line-height: $ui-icon-box-size-touch;
 
         &:first-child {
             border-left:none;
