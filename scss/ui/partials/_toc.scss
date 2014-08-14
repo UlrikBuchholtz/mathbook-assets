@@ -112,7 +112,7 @@ h2 {
     text-align:right;
 
     @media screen and (max-width: $ui-screen-sm-min) {
-        margin-right:-($base-indent-touch);
+        margin-right:-($base-indent-touch+$codenumber-width);
     }
 }
 
