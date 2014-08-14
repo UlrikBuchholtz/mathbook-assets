@@ -48,7 +48,7 @@ $typography-should-import-google-fonts: true !default;
 // Compass Vertical Rhythm
 //------------------------------------------------------------------------------
 $base-font-size: $typography-font-size-base;
-$base-line-height: $typography-line-height-base;
+$base-line-height: $typography-line-height-computed;
 $round-to-nearest-half-line:true; // super important for reasonable headings
 $relative-font-sizing: true; // uses ems instead of pixels
 @import "compass/typography/vertical_rhythm";
