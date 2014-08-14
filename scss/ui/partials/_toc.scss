@@ -4,20 +4,27 @@
 
 $font-size:.91*$ui-font-size-base;
 
-$segment-height:1.5*$ui-line-height-computed;
-$segment-line-height:.7*$ui-line-height-computed;
-$segment-border-width: 1px;
-
-$base-indent:($ui-icon-box-size - $ui-icon-size)/2;
-$base-indent-touch: ($ui-icon-box-size-touch - $ui-icon-size-touch)/2;
-
 $codenumber-width:.5*$font-size;
 $codenumber-gutter-right:.5*$font-size;
 
 $title-offset:$codenumber-width + $codenumber-gutter-right;
 
+// Used for headings and, on mobile, for both headings and children
+$segment-height:1.5*$ui-line-height-computed;
+$segment-line-height:.7*$ui-line-height-computed;
+$segment-border-width: 1px;
+
+// Child segments on desktop
+$child-segment-height:1*$ui-line-height-computed;
+$child-segment-line-height:.7*$ui-line-height-computed;
+$child-segment-border-width: 1px;
+
+$base-indent:($ui-icon-box-size - $ui-icon-size)/2;
+$base-indent-touch: ($ui-icon-box-size-touch - $ui-icon-size-touch)/2;
+
 $child-indent: $base-indent + $title-offset;
 $child-indent-touch: $base-indent-touch + $title-offset;
+
 
 & {
     /* IMPORTANT height must be calculated by javascript. */
@@ -120,11 +127,11 @@ ul {
 
             @include navtree-segment(
                 $font-size:$font-size,
-                $height: $segment-height,
-                $line-height:$segment-line-height,
+                $height: $child-segment-height,
+                $line-height:$child-segment-line-height,
                 $indent: $child-indent,
 
-                $border-width: $segment-border-width,
+                $border-width: $child-segment-border-width,
                 $border-color: $border-color,
                 $border-color-hover: $border-color-hover,
 
