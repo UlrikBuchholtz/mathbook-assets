@@ -91,7 +91,7 @@
         $content-margin: $ui-content-margin
     ) {
         /* Decrease the margins */
-        margin:$ui-content-margin $ui-content-margin-small;
+        margin:$ui-content-margin-sm;
     }
 
     /* Since sidebars push open in the small layout, 
@@ -116,7 +116,18 @@
         .sidebar-right-open &, 
         .sidebar-left-open.sidebar-right-open & {
             /* Decrease the margins */
-            margin:$ui-content-margin $ui-content-margin-small;
+            margin:$ui-content-margin-sm;
+        }
+    }
+
+    /* And even smaller margins at extra small layouts */ 
+    @media screen and (max-width: $ui-screen-xs-min) {
+        &,
+        .sidebar-left-open &,
+        .sidebar-right-open &, 
+        .sidebar-left-open.sidebar-right-open & {
+            /* Decrease the margins */
+            margin:$ui-content-margin-xs;
         }
     }
 }

@@ -109,7 +109,8 @@ $ui-sidebar-right-width: $ui-sidebar-left-width !default;
 $ui-content-max-width: 600px !default;
 $ui-content-margin: 2.5*$ui-line-height-computed;
 // Margin when width is less than content size 
-$ui-content-margin-small: $ui-line-height-computed/2;
+$ui-content-margin-sm:1.5*$ui-line-height-computed ;
+$ui-content-margin-xs:$ui-line-height-computed/2 ;
 
 // An estimation of how much extra space long equations require.
 $ui-equation-fudge: 40px;
