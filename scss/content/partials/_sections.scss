@@ -82,16 +82,16 @@
     .abstract,
     .acknowledgements {
         @include heading-selector {
-            font-size: $typography-font-size-h3;
+            @include typography-heading($typography-font-size-h3);
         }
 
         .subsection {
             @include heading-selector {
-                font-size: $typography-font-size-h4;
+                @include typography-heading($typography-font-size-h4);
             }
 
             .subsubsection {
-                font-size: $typography-font-size-h5;
+                @include typography-heading($typography-font-size-h5);
             }
         }
     }

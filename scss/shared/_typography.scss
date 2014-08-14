@@ -46,11 +46,16 @@ $typography-google-fonts-url:
 $typography-should-import-google-fonts: true !default;
 
 // Compass Vertical Rhythm
-//------------------------
-$round-to-the-nearest-half-line: true;
+//------------------------------------------------------------------------------
+$base-font-size: $typography-font-size-base;
+$base-line-height: $typography-line-height-base;
+$round-to-nearest-half-line:true; // super important for reasonable headings
+$relative-font-sizing: true; // uses ems instead of pixels
 @import "compass/typography/vertical_rhythm";
 
+
 @import "compass/css3/border-radius";
+
 
 // Styles to apply to the root typography container, generally the body
 @mixin typography-base() {
