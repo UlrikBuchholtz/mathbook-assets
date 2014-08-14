@@ -34,6 +34,9 @@
         /*margin-top: typography-em($typography-line-height-computed/2, */
                                   /*$heading-title-font-size);*/
         @include typography-heading($heading-title-font-size);
+
+        /* Force a half-line leader */
+        @include margin-leader(.5, $heading-title-font-size);
     }
 
     /** 
@@ -82,16 +85,16 @@
     .abstract,
     .acknowledgements {
         @include heading-selector {
-            font-size: $typography-font-size-h3;
+            @include typography-heading($typography-font-size-h3);
         }
 
         .subsection {
             @include heading-selector {
-                font-size: $typography-font-size-h4;
+                @include typography-heading($typography-font-size-h4);
             }
 
             .subsubsection {
-                font-size: $typography-font-size-h5;
+                @include typography-heading($typography-font-size-h5);
             }
         }
     }
