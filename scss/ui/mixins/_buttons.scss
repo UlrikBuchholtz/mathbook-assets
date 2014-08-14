@@ -15,7 +15,7 @@
     cursor:pointer;
     @include user-select(none);
     outline:none; /* Don't display outline on click */
-    @include ellipsis();
+    @include button-truncate-with-ellipsis();
 
     /** 
      * Remove stupid firefox dotted border on button click 
@@ -24,6 +24,30 @@
     &::-moz-focus-inner {
         border: 0;
     }
+}
+
+// Adapted from compass/typography/text/ellipsis
+// This version provides a means to disable the effect.
+@mixin button-truncate-with-ellipsis($enabled:true, $no-wrap: true) {
+    $text-overflow:ellipsis;
+    @if($enabled==true) {
+        @if $no-wrap {
+            white-space: nowrap;
+        }
+        overflow: hidden;
+    } @else {
+        @if $no-wrap {
+            white-space: normal;
+        }
+        overflow:visible;
+        $text-overflow: clip;
+    }
+    // Use compass' experimental mixin 
+    // to provide browser prefixes where necessary
+    @include experimental(
+                text-overflow, 
+                $text-overflow, 
+                not -moz, not -webkit, -o, -ms, not -khtml, official);
 }
 
 @mixin button-minimalist(
@@ -213,9 +237,12 @@
         $hide-direction: left;
         @if($pseudo == after) {
             $hide-direction: right;
-
         }
     }
+
+    // Disable ellipsis
+    @include button-truncate-with-ellipsis(false);
+
     text-align:center;
     @include hide-text($hide-direction);
     @include button-icon-absolute($icon-box-size, $icon-pseudo, $icon-placement);
