@@ -2,7 +2,8 @@
 @import "../mixins/navtree";
 @import "compass/css3/inline-block";
 
-$font-size:.91*$ui-font-size-base;
+$font-multiplier: .92;
+$font-size:$font-multiplier * $ui-font-size-base;
 
 $codenumber-width:.5*$font-size;
 $codenumber-gutter-right:.5*$font-size;
@@ -10,12 +11,12 @@ $codenumber-gutter-right:.5*$font-size;
 $title-offset:$codenumber-width + $codenumber-gutter-right;
 
 // Used for headings and, on mobile, for both headings and children
-$segment-height:1.5*$ui-line-height-computed;
+$segment-height:(1.25/$font-multiplier)*$ui-line-height-computed;
 $segment-line-height:.7*$ui-line-height-computed;
 $segment-border-width: 1px;
 
 // Child segments on desktop
-$child-segment-height:1*$ui-line-height-computed;
+$child-segment-height:(1/$font-multiplier)*$ui-line-height-computed;
 $child-segment-line-height:.7*$ui-line-height-computed;
 $child-segment-border-width: 1px;
 
@@ -43,11 +44,16 @@ h2 {
     & {
         display:block;
         font-family: $ui-font-family-heading;
-        font-size: 1em;
+        font-weight:700;
+        font-size: 1em; /* Set font size on ToC */
         margin: 0;
     }
 
     a {
+
+        $border-color: darken($ui-toc-heading-bg, 7%);
+        $border-color-hover: darken($ui-toc-heading-bg-hover, 10%);
+
         @include navtree-segment(
             $font-size:$font-size,
             $height: $segment-height,
@@ -55,8 +61,8 @@ h2 {
             $indent: $base-indent,
 
             $border-width: $segment-border-width,
-            $border-color: darken($ui-toc-heading-bg, 10%),
-            $border-color-hover: darken($ui-toc-heading-bg-hover, 12%),
+            $border-color: $border-color,
+            $border-color-hover: $border-color-hover,
 
             $color: $ui-toc-heading-color,
             $color-hover: $ui-toc-heading-color-hover,
@@ -75,8 +81,8 @@ h2 {
                 $indent: $base-indent-touch,
 
                 $border-width: $segment-border-width,
-                $border-color: darken($ui-toc-heading-bg, 10%),
-                $border-color-hover: darken($ui-toc-heading-bg-hover, 12%),
+                $border-color: $border-color,
+                $border-color-hover: $border-color-hover,
 
                 $color: $ui-toc-heading-color,
                 $color-hover: $ui-toc-heading-color-hover,
@@ -120,7 +126,7 @@ ul {
         margin: 0px;
         padding: 0px;
 
-        $border-color: darken($ui-color-base, 12%);
+        $border-color: darken($ui-color-bg, 5%);
         $border-color-hover:darken($ui-link-block-bg-hover, 10%);
 
         a {
