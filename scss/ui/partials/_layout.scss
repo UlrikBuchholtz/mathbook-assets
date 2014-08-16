@@ -20,27 +20,57 @@ body {
  * whose backgrounds must stretch to the width of the viewport. 
  */
 .container {
+    $content-outer-width:$ui-content-max-width + 2*$ui-content-margin;
+
     margin:0;
 
     @include transition-property(width);
     @include transition-duration($sliding-sidebars-transition-duration);
 
-    &, &.layout-left {
-        max-width: $ui-content-max-width + 2*$ui-content-margin;
+    &, &.layout-left, .layout-left & {
+        max-width: $content-outer-width;
     }
 
-    .has-sidebar-left & {
-        max-width: $ui-content-max-width + 2*$ui-content-margin + $ui-sidebar-left-width;
+    &.has-sidebar-left, .has-sidebar-left & {
+        max-width: $content-outer-width + $ui-sidebar-left-width;
     }
 
-    .has-sidebar-right & {
+    &.has-sidebar-right, .has-sidebar-right & {
         max-width:none;
     }
 
+    &.layout-centered,
     .layout-centered &,
     .has-sidebar-left.has-sidebar-right & {
         max-width: none;
     }
+}
+
+.centered-container {
+
+    $content-outer-width:$ui-content-max-width + 2*$ui-content-margin;
+
+    margin:0 auto;
+
+    & {
+        max-width: $content-outer-width;
+    }
+
+    &.has-sidebar-right, .has-sidebar-left & {
+        max-width: $content-outer-width + $ui-sidebar-left-width;
+    }
+
+    &.has-sidebar-right, .has-sidebar-right & {
+        max-width: $content-outer-width + $ui-sidebar-right-width;
+    }
+
+    &.has-sidebar-left.has-sidebar-right,
+    .has-sidebar-left.has-sidebar-right & {
+        max-width: $content-outer-width 
+                   + $ui-sidebar-left-width 
+                   + $ui-sidebar-right-width;
+    }
+
 }
 
 /**
