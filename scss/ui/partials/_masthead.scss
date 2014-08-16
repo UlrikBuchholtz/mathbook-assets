@@ -29,10 +29,13 @@ $masthead-font-family: $ui-font-family-heading;
 }
 
 #title-container, .title-container {
+    font-size: 1em;
+    padding-left: $ui-left-margin;
     @include clearfix();
 
     /* On mobile phones */
     @media screen and (max-width:$ui-screen-xs-min) {
+        padding:0;
         text-align:center;
     }
 
@@ -44,8 +47,7 @@ $masthead-font-family: $ui-font-family-heading;
     float:left;
     font-size: $ui-font-size-base;
     @include margin-leader(.5);
-    margin-right:rhythm(.5);
-    margin-left: rhythm(.5);
+    margin-left: $ui-left-margin;
     text-align:center;
 
     img {
@@ -96,8 +98,6 @@ $masthead-font-family: $ui-font-family-heading;
     min-height:inherit;
 
     margin:0;
-    margin-left:0;
-
     @include adjust-font-size-to($font-size);
     @include margin-leader(.5, $font-size);;
 
