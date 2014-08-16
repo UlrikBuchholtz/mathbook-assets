@@ -104,6 +104,7 @@ $ui-navbar-height-touch:$ui-icon-box-size-touch;
 // Sidebars
 $ui-sidebar-left-width: 240px !default;
 $ui-sidebar-right-width: $ui-sidebar-left-width !default;
+$sliding-sidebar-transition-duration: 400ms;
 
 // Content container
 $ui-content-max-width: 600px !default;

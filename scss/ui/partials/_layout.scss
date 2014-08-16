@@ -1,6 +1,7 @@
 @import "../ui_config";
 @import "../../shared/typography";
 @import "../mixins/sliding-sidebars";
+@import "compass/css3/transition";
 // This provides an overview of the layout and how the root level
 // elements of the page fit together.
 
@@ -20,9 +21,22 @@ body {
  */
 .container {
     margin:0;
-    /* But currently, we impose no max-width. 
-     * The actual text content of the book is handled separately.
-     */
+
+    @include transition-property(width);
+    @include transition-duration($sliding-sidebars-transition-duration);
+
+    .has-sidebar-left & {
+        max-width: $ui-content-max-width + 2*$ui-content-margin + $ui-sidebar-left-width;
+    }
+
+    .has-sidebar-right & {
+        max-width:none;
+    }
+
+    .has-sidebar-left.has-sidebar-right &,
+    .layout-centered & {
+        max-width: none;
+    }
 }
 
 /**
@@ -80,6 +94,15 @@ body {
 
 /* Note: The #sidebar-left-sticky-wrapper is added by javascript on page load */
 .page > #sidebar-left, #sidebar-left-sticky-wrapper {
+
+    & {
+        display:none;
+    }
+
+    .has-sidebar-left & {
+        display:block;
+    }
+
     @include sliding-sidebars-sidebar(
         $side:left,
         $default-open-min: $ui-screen-sm-min,
