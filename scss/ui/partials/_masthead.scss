@@ -22,13 +22,10 @@ $masthead-font-family: $ui-font-family-heading;
     /* to ensure children's margin-top works */
     border-top:1px solid transparent;
 
-    .container {
-        padding:1px $ui-font-size-base;
+    @media screen and (max-width:$ui-screen-xs-min) {
+        padding: 0 $ui-content-margin-xs;
     }
 
-    @media screen and (max-width:$ui-screen-xs-min) {
-        font-size:.8em;
-    }
 }
 
 #title-container, .title-container {
@@ -38,52 +35,33 @@ $masthead-font-family: $ui-font-family-heading;
     @media screen and (max-width:$ui-screen-xs-min) {
         text-align:center;
     }
-}
 
-#logo-link, #title {
 }
 
 #logo-link {
-    $line-height-h1: ($ui-font-size-h1 * $ui-line-height-base);
-    $line-height-h1-top:($line-height-h1 - $ui-font-size-h1)/2;
-
-    $size: $ui-font-size-h1*$ui-line-height-base - $line-height-h1-top;
-    $size: 1.5*$base-rhythm-unit;
 
     position:relative;
     float:left;
-    font-size: $size;
-    @include margin-leader(1, $size);
-    margin-right:$ui-font-size-base;
-    margin-left: $line-height-h1-top;
+    font-size: $ui-font-size-base;
+    @include margin-leader(.5);
+    margin-right:rhythm(.5);
+    margin-left: rhythm(.5);
     text-align:center;
 
     img {
         width:auto;
         height:auto;
-        max-height: 2em;
+        max-height:rhythm(3);
     }
 
     /* Display placeholder icon for css3 browsers (progressive enhancement) */
     &:empty {
 
-        /*width:1em;*/
-        /*height:typography-em($ui-font-size-h1 * $ui-line-height-base, $ui-font-size-base);*/
-        /*margin-top:typography-em($ui-font-size-base + $line-height-h1-top, $ui-font-size-base);*/
-        /*//margin-top:$ui-font-size-base;*/
-        /*height:$size;*/
-
         &:before { 
             content: "\f2d0"; /* ionicons book */
             font-family: "Ionicons";
+            font-size:inherit;
             color: #ccc;
-
-            /*position:absolute;*/
-            /*[> centered vert and horiz<]*/
-            /*top:50%;*/
-            /*left:50%;*/
-            /*margin-top: -.5em;*/
-            /*margin-left: -.5em;*/
         }
 
         &:hover:before {
@@ -104,24 +82,24 @@ $masthead-font-family: $ui-font-family-heading;
 
     /* On mobile phones */
     @media screen and (max-width:$ui-screen-xs-min) {
-        $size: 2*$base-rhythm-unit;
         display:block;
         float:none;
-        font-size:$size;
-        @include margin-leader(1, $size);
-        @include margin-trailer(1, $size);
+        margin:0;
+        @include margin-leader(.5);
+        max-height:rhythm(2.5);
     }
 }
 /* IMPORTANT: #title is deprecated!*/
 #title, .title {
+    $font-size: $ui-font-size-h1;
     color: $masthead-title-color;
-    /*font-size:typography-em($ui-font-size-h1, $ui-font-size-base);*/
+    min-height:inherit;
+
     margin:0;
     margin-left:0;
-    /*margin-bottom:.15em;*/
-    @include adjust-font-size-to($ui-font-size-h1);
-    @include margin-leader(.5, $ui-font-size-h1);;
-    min-height:inherit;
+
+    @include adjust-font-size-to($font-size);
+    @include margin-leader(.5, $font-size);;
 
     // Override addon
     font-family:$masthead-font-family;
@@ -134,7 +112,10 @@ $masthead-font-family: $ui-font-family-heading;
 
     /* On mobile phones */
     @media screen and (max-width:$ui-screen-xs-min) {
+        $font-size: $ui-font-size-h3;
         margin-top:0;
+        @include adjust-font-size-to($font-size);
+        @include margin-leader(.5, $font-size);;
     }
 }
 
@@ -150,4 +131,11 @@ $masthead-font-family: $ui-font-family-heading;
 
     // Override addon
     font-family:$masthead-font-family;
+
+    @media screen and (max-width:$ui-screen-xs-min) {
+        $font-size: $ui-font-size-h6;
+        margin-top:0;
+        @include adjust-font-size-to($font-size);
+        @include margin-trailer(.5, $font-size);;
+    }
 }
