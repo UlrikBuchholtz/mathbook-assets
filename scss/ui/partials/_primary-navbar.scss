@@ -137,7 +137,7 @@ $navbar-bottom-box-shadow:
 
     &.disabled {
         &, &:link, &:visited, &:hover, &:focus, &:active {
-            opacity:.5;
+            opacity:.4;
             color: $navbar-color;
             background:$navbar-bg-color;
             cursor:default;
