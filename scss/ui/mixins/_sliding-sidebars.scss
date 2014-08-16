@@ -1,12 +1,15 @@
 @import "compass/css3/transform";
+@import "compass/css3/transition";
 // Mixins for the sliding sidebar functionality
 
 // Defaults
+$sliding-sidebars-transition-duration: 400ms !default;
 
 @mixin sliding-sidebars-sidebar(
     $side, // left|right
     $default-open-min,
-    $sidebar-width
+    $sidebar-width,
+    $transition-duration: $sliding-sidebars-transition-duration
 ) {
     .has-sidebar-#{$side} & {
         position:absolute;
@@ -16,10 +19,13 @@
             /* Small */
             margin-#{$side}:-$sidebar-width;
         }
+
+        @include transition-property(margin-#{$side});
+        @include transition-duration($transition-duration);
     }
 
-    .has-sidebar-#{$side}.mathbook-loading &,
-    .has-sidebar-#{$side}.mathbook-loaded & {
+    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-open &,
+    .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-open & {
         margin-#{$side}:0;
 
         /**
@@ -49,8 +55,8 @@
         }
     }
 
-    .has-sidebar-#{$side}.mathbook-loading &.closed,
-    .has-sidebar-#{$side}.mathbook-loaded &.closed {
+    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-closed &,
+    .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-closed & {
         margin-#{$side}: -$sidebar-width;
     }
 
@@ -59,11 +65,23 @@
     }
 }
 
-@mixin sliding-sidebars-main() {
+@mixin sliding-sidebars-main(
+    $transition-duration: $sliding-sidebars-transition-duration
+) {
     /* Must be relative to support sidebar offsets */
     position: relative;
     width: auto;
     /*z-index:10;*/
+    @include transition-duration($transition-duration);
+    .has-sidebar-left {
+        @include transition-property(margin-left, left);
+    }
+    .has-sidebar-right {
+        @include transition-property(margin-right, right);
+    }
+    .has-sidebar-left.has-sidebar-right {
+        @include transition-property(margin-left, margin-right,left,right);
+    }
 }
 
 // Main left styles
@@ -75,7 +93,8 @@
     $side,
     $slide-min,
     $default-open-min,
-    $sidebar-width
+    $sidebar-width,
+    $transition-duration: $sliding-sidebars-transition-duration
 ) {
 
     /* Main with sidebar left without javascript*/
@@ -87,8 +106,8 @@
     }
 
     /* Main with sidebar left open */
-    .has-sidebar-#{$side}.mathbook-loading &, 
-    .has-sidebar-#{$side}.mathbook-loaded & {
+    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-open &, 
+    .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-open & {
         @include sliding-sidebars-main-side-state($side, open-slide, $sidebar-width);
         @media screen and (max-width: $slide-min) {
             @include sliding-sidebars-main-side-state($side, open-push, $sidebar-width);
@@ -110,10 +129,14 @@
     }
 
     /* Main with sidebar left closed */
-    .has-sidebar-#{$side}.mathbook-loading &.sidebar-#{$side}-closed,
-    .has-sidebar-#{$side}.mathbook-loaded &.sidebar-#{$side}-closed {
+    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-closed &,
+    .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-closed & {
         @include sliding-sidebars-main-side-state($side, closed, $sidebar-width);
+        @media screen and (max-width: $slide-min) {
+            @include sliding-sidebars-main-side-state($side, closed-push, $sidebar-width);
+        }
     }
+
 }
 
 // Set main-left state
@@ -124,12 +147,22 @@
 //     * closed covers/hides the sidebar
 // @param $sidebar-width - the width of the sidebar
 @mixin sliding-sidebars-main-side-state($side, $state, $sidebar-width) {
+    $other-side: left;
+    @if($side == left) {
+        $other-side: right;
+    }
+
     @if($state == open-slide) {
         margin-#{$side}:$sidebar-width;
         #{$side}:auto;
     } @else if($state == open-push){
+        /* Must force other-side to auto so we can push from the right */
+        #{$other-side}:-$sidebar-width !important;
         #{$side}: $sidebar-width;
         margin-#{$side}:0;
+    } @else if($state == closed-push) {
+        margin-#{$side}:0;
+        #{$side}:0;
     } @else if($state == closed) {
         margin-#{$side}:0;
         #{$side}:auto;

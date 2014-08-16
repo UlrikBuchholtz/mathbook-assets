@@ -1,5 +1,6 @@
 @import "../ui_config";
 @import "../../shared/typography";
+@import "../mixins/sliding-sidebars";
 // This provides an overview of the layout and how the root level
 // elements of the page fit together.
 
@@ -79,6 +80,14 @@ body {
 
 #sidebar-left, #sidebar-left-sticky-wrapper {
     @import "./sidebar-left";
+}
+
+.page > #sidebar-left, #sidebar-left-sticky-wrapper {
+    @include sliding-sidebars-sidebar(
+        $side:left,
+        $default-open-min: $ui-screen-sm-min,
+        $sidebar-width: $ui-sidebar-left-width
+    );
 }
 
 #sidebar-right {

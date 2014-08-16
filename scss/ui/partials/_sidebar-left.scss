@@ -1,18 +1,12 @@
 @import "../ui_config";
 @import "../../shared/_typography.scss";
 // Sidebar left
-@import "../mixins/sliding-sidebars";
 @import "../mixins/navtree";
 @import "../mixins/buttons";
 @import "compass/css3/transform";
 @import "compass/css3/text-shadow";
 
 & {
-    @include sliding-sidebars-sidebar(
-        $side:left,
-        $default-open-min: $ui-screen-sm-min,
-        $sidebar-width: $ui-sidebar-left-width
-    );
 }
 
 .extras {
