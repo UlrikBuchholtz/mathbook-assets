@@ -78,13 +78,7 @@ body {
     @import "../partials/toc";
 }
 
-#sidebar-left, #sidebar-left-sticky-wrapper {
-
-    .extras {
-        @import "sidebar-extras";
-    }
-}
-
+/* Note: The #sidebar-left-sticky-wrapper is added by javascript on page load */
 .page > #sidebar-left, #sidebar-left-sticky-wrapper {
     @include sliding-sidebars-sidebar(
         $side:left,
@@ -118,6 +112,12 @@ body {
         display:block;
     }
 
+}
+
+.sidebar-content {
+    .extras {
+        @import "sidebar-extras";
+    }
 }
 
 /**

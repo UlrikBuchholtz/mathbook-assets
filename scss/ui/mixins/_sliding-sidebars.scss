@@ -40,14 +40,14 @@ $sliding-sidebars-transition-duration: 400ms !default;
         @include transition-duration($transition-duration);
     }
 
-    .has-sidebar-#{$side}.mathbook-loading &.sidebar-#{$side}-open,
-    .has-sidebar-#{$side}.mathbook-loaded &.sidebar-#{$side}-open {
+    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-open &,
+    .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-open & {
         margin-#{$side}:0;
 
     }
 
-    .has-sidebar-#{$side}.mathbook-loading &.sidebar-#{$side}-closed,
-    .has-sidebar-#{$side}.mathbook-loaded &.sidebar-#{$side}-closed {
+    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-closed &,
+    .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-closed & {
         margin-#{$side}: -$sidebar-width;
     }
 
@@ -97,8 +97,8 @@ $sliding-sidebars-transition-duration: 400ms !default;
     }
 
     /* Main with sidebar left open */
-    .has-sidebar-#{$side}.mathbook-loading &.sidebar-#{$side}-open, 
-    .has-sidebar-#{$side}.mathbook-loaded &.sidebar-#{$side}-open {
+    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-open &, 
+    .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-open & {
         @include sliding-sidebars-main-side-state($side, open-slide, $sidebar-width);
         @media screen and (max-width: $slide-min) {
             @include sliding-sidebars-main-side-state($side, open-push, $sidebar-width);
@@ -106,8 +106,8 @@ $sliding-sidebars-transition-duration: 400ms !default;
     }
 
     /* Main with sidebar left closed */
-    .has-sidebar-#{$side}.mathbook-loading &.sidebar-#{$side}-closed,
-    .has-sidebar-#{$side}.mathbook-loaded &.sidebar-#{$side}-closed {
+    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-closed &,
+    .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-closed & {
         @include sliding-sidebars-main-side-state($side, closed, $sidebar-width);
         @media screen and (max-width: $slide-min) {
             @include sliding-sidebars-main-side-state($side, closed-push, $sidebar-width);

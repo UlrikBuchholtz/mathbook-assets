@@ -329,11 +329,6 @@ var Mathbook = function(options) {
             // Update the position in case scroll is already below
             // the stickyifying point
             this.$sidebarLeft.sticky("update");
-            
-            // switch the sidebarLeftView to the sticky wrapper
-            this.sidebarLeftView.reset({
-                el: "#sidebar-left-sticky-wrapper"
-            });
         }
     };
 
@@ -373,7 +368,7 @@ var Mathbook = function(options) {
                 inactiveClass: TOGGLE_BUTTON_INACTIVE_CLASS,
             });
             this.sidebarLeftView = new ToggleView({
-                el: this.$sidebarLeft, // We want classes to be applied here
+                el: this.$body, // We want classes to be applied here
                 activeClass : SIDEBAR_LEFT_OPEN_CLASS,
                 inactiveClass :SIDEBAR_LEFT_CLOSED_CLASS,
                 onActivate: function() {
@@ -383,12 +378,6 @@ var Mathbook = function(options) {
                     that.onSidebarClose()
                 }
             });
-            this.mainLeftView = new ToggleView({
-                el: this.$main,
-                activeClass: SIDEBAR_LEFT_OPEN_CLASS,
-                inactiveClass: SIDEBAR_LEFT_CLOSED_CLASS
-            });
-
             // Toggle button click handler
             this.$sidebarLeftToggleButton.on('click', function() { 
                 that.toggleSidebarLeft();
@@ -402,7 +391,7 @@ var Mathbook = function(options) {
                 inactiveClass: TOGGLE_BUTTON_INACTIVE_CLASS,
             });
             this.sidebarRightView = new ToggleView({
-                el: this.$sidebarRight, // We want classes to be applied here
+                el: this.$body, // We want classes to be applied here
                 activeClass : SIDEBAR_RIGHT_OPEN_CLASS,
                 inactiveClass :SIDEBAR_RIGHT_CLOSED_CLASS,
                 onActivate: function() {
@@ -411,11 +400,6 @@ var Mathbook = function(options) {
                 onDeactivate: function() {
                     that.onSidebarClose()
                 }
-            });
-            this.mainRightView = new ToggleView({
-                el: this.$main,
-                activeClass: SIDEBAR_RIGHT_OPEN_CLASS,
-                inactiveClass: SIDEBAR_RIGHT_CLOSED_CLASS
             });
 
             // Toggle button click handler
@@ -448,7 +432,6 @@ var Mathbook = function(options) {
             }
             this.sidebarLeftToggleButtonView.toggle(shouldOpen);
             this.sidebarLeftView.toggle(shouldOpen);
-            this.mainLeftView.toggle(shouldOpen);
         }
     };
 
@@ -471,7 +454,6 @@ var Mathbook = function(options) {
             }
             this.sidebarRightToggleButtonView.toggle(shouldOpen);
             this.sidebarRightView.toggle(shouldOpen);
-            this.mainRightView.toggle(shouldOpen);
         }
     };
 
