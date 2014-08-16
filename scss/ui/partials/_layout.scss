@@ -13,6 +13,12 @@ html, body {
 body {
     background: $ui-color-bg;
     @include typography-base();
+
+    &.centered-container {
+        border:1px solid darken($ui-color-bg, 10%);
+        border-top:none;
+        border-bottom:none;
+    }
 }
 
 /** 
@@ -56,7 +62,7 @@ body {
         max-width: $content-outer-width;
     }
 
-    &.has-sidebar-right, .has-sidebar-left & {
+    &.has-sidebar-left, .has-sidebar-left & {
         max-width: $content-outer-width + $ui-sidebar-left-width;
     }
 
@@ -147,6 +153,11 @@ body {
     // This is for performance, if you see bugs with the fixed positioning
     // or "sticky" behavior of the sidebar, try removing it.
     @include sliding-sidebars-compositing-layer();
+
+    .sidebar-left-closed & {
+        position:absolute !important;
+    }
+
 }
 
 #sidebar-right {
