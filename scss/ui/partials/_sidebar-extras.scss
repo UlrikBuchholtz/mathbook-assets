@@ -1,0 +1,87 @@
+@import "../ui_config";
+@import "../../shared/_typography.scss";
+@import "../mixins/navtree";
+@import "../mixins/buttons";
+@import "compass/css3/transform";
+@import "compass/css3/text-shadow";
+
+& {
+    position:relative;
+}
+
+/* Add a "shadow" to the element above extras */
+&:before {
+    content: "";
+    position:absolute;
+    right:0;
+    top:0;
+    left:0;
+
+    // Spread of "shadow"
+    height:5px;
+    margin-top:-5px;
+
+    @include background(linear-gradient(bottom, rgba(black,.5), rgba(black,0)));
+    z-index:200;
+
+    /* 
+     * Allow click/hover events to pass through on browsers that support it
+     * We don't care too much about browsers that don't support since this
+     * object is so small.
+     */
+    pointer-events:none;
+}
+
+a {
+    &, &:link, &:visited {
+        display:block;
+
+       // @include navtree-segment(
+       //     $font-size: .91*$typography-font-size-base,
+       //     $height: $base-rhythm-unit,
+       //     $line-height: .7*$base-rhythm-unit,
+       //     $indent: $base-leader,
+
+       //     $color: darken(white, 5%),
+       //     $color-hover: white,
+       //     $color-active:white,
+
+       //     $bg:change-color($ui-color-bg, $lightness:27%),
+       //     $bg-hover:change-color($ui-color-bg, $lightness:30%),
+       //     $bg-active:change-color($ui-color-bg, $lightness:33%)
+       // 
+       // );
+
+        color: darken(white,15%);
+        background:change-color($ui-color-bg, $lightness:27%);
+        /*border-top:2px solid rgba(white,.2);*/
+        /*border-bottom:1px solid rgba(black,.2);*/
+
+        @include adjust-font-size-to($typography-font-size-base);
+        @include leading-border(2px,.25, $typography-font-size-base, solid);
+        @include padding-trailer(.25,$typography-font-size-base);
+        padding-left: $base-leader;
+        padding-right: $base-leader;
+        border-color: rgba(black,.3);
+
+        text-decoration:none;
+    }
+
+    &:hover {
+        color: white;
+        background:change-color($ui-color-bg, $lightness:30%);
+        text-decoration:none;
+        text-shadow:0 -2px 2px rgba(black,.5);
+    }
+
+    &:active, &.active {
+        color: white;
+        text-decoration:none;
+        background:change-color($ui-color-bg, $lightness:24%);
+        /*border-top-color:rgba(black,.2);*/
+        /*border-bottom-color:rgba(white,.2);*/
+    }
+
+    @include button-depressable();
+}
+

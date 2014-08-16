@@ -1,5 +1,6 @@
 @import "../ui_config";
 @import "../../shared/typography";
+@import "../mixins/sliding-sidebars";
 // This provides an overview of the layout and how the root level
 // elements of the page fit together.
 
@@ -77,12 +78,46 @@ body {
     @import "../partials/toc";
 }
 
-#sidebar-left, #sidebar-left-sticky-wrapper {
-    @import "./sidebar-left";
+/* Note: The #sidebar-left-sticky-wrapper is added by javascript on page load */
+.page > #sidebar-left, #sidebar-left-sticky-wrapper {
+    @include sliding-sidebars-sidebar(
+        $side:left,
+        $default-open-min: $ui-screen-sm-min,
+        $sidebar-width: $ui-sidebar-left-width
+    );
+}
+#sidebar-left {
+    // This is for performance, if you see bugs with the fixed positioning
+    // or "sticky" behavior of the sidebar, try removing it.
+    @include sliding-sidebars-compositing-layer();
 }
 
 #sidebar-right {
-    @import "./sidebar-right";
+
+    & {
+        display:none;
+        @include sliding-sidebars-sidebar(
+            $side: right,
+            $default-open-min: $ui-screen-lg-min,
+            $sidebar-width: $ui-sidebar-right-width
+        );
+        // This is for performance
+        @include sliding-sidebars-compositing-layer();
+        top:0;
+        /* The right sidebar is not sticky, so we can use right:0;*/
+        right:0;
+    }
+
+    .has-sidebar-right & {
+        display:block;
+    }
+
+}
+
+.sidebar-content {
+    .extras {
+        @import "sidebar-extras";
+    }
 }
 
 /**
@@ -90,4 +125,23 @@ body {
  */
 #main, .main {
     @import "./main";
+
+    & {
+        // Styles required to make sliding sidebars work.
+        @include sliding-sidebars-main();
+        @include sliding-sidebars-main-side(
+            $side: left,
+            $slide-min: $ui-screen-sm-min,
+            $default-open-min: $ui-screen-sm-min,
+            $sidebar-width: $ui-sidebar-left-width
+        );
+
+        @include sliding-sidebars-main-side(
+            $side: right,
+            $slide-min: $ui-screen-sm-min,
+            $default-open-min: $ui-screen-lg-min,
+            $sidebar-width: $ui-sidebar-right-width
+        );
+        @include sliding-sidebars-compositing-layer();
+    }
 }

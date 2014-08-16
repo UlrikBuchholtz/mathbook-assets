@@ -29,34 +29,84 @@ var Mathbook = function(options) {
     // SIDEBAR SETTINGS
     var SIDEBAR_TOGGLE_DURATION = .4; // seconds
     var TOGGLE_BUTTON_ACTIVE_CLASS = "active";
+    var TOGGLE_BUTTON_INACTIVE_CLASS = "";
     var HAS_SIDEBAR_LEFT_CLASS = "has-sidebar-left";
     var HAS_SIDEBAR_RIGHT_CLASS = "has-sidebar-right";
-    var SIDEBAR_OPEN_CLASS = "open";
-    var SIDEBAR_CLOSED_CLASS = "closed";
-    var MAIN_LEFT_OPEN_CLASS = "sidebar-left-open";
-    var MAIN_LEFT_CLOSED_CLASS = "sidebar-left-closed";
-    var MAIN_RIGHT_OPEN_CLASS = "sidebar-right-open";
-    var MAIN_RIGHT_CLOSED_CLASS = "sidebar-right-closed";
-    var BODY_LEFT_OPEN_CLASS = MAIN_LEFT_OPEN_CLASS;
-    var BODY_LEFT_CLOSED_CLASS = MAIN_LEFT_CLOSED_CLASS;
-    var BODY_RIGHT_OPEN_CLASS = MAIN_RIGHT_OPEN_CLASS;
-    var BODY_RIGHT_CLOSED_CLASS = MAIN_RIGHT_CLOSED_CLASS;
-    // Ratio that sidebar must open before it will finish opening itself.
-    var SIDEBAR_INERTIA_THRESHOLD_RATIO = .2;
-    // Number of pixels touchpoint must move horizontally before is swipe
-    var SWIPE_THRESHOLD = 30;
-    // Number of pixels touchpoint must move vertically before is scroll
-    var SCROLL_THRESHOLD = 30;
-    // Pixels distance from edge of screen that is considered edge for touch
-    var TOUCH_SCREEN_EDGE_FUDGE = 5;
+    var SIDEBAR_LEFT_OPEN_CLASS = "sidebar-left-open";
+    var SIDEBAR_LEFT_CLOSED_CLASS = "sidebar-left-closed";
+    var SIDEBAR_RIGHT_OPEN_CLASS = "sidebar-right-open";
+    var SIDEBAR_RIGHT_CLOSED_CLASS = "sidebar-right-closed";
 
     var that = this;
     var hashOnLoad;
     var isLayoutInitialized = false;
     var _shouldSidebarsPush = false;
     var scrollingNav = null;
+    var hasSidebarLeft, 
+        hasSidebarRight, 
+        isSidebarLeftClosed, 
+        isSidebarRightClosed;
 
     this.$w = $(window);
+
+    /** 
+     * Constructor for ToggleView objects
+     * These can be used for both toggle buttons and sidebars
+     */
+    var ToggleView = function(options) {
+
+        var defaults = {
+            isActive: false
+        };
+
+        var settings;
+
+        this.initialize = function(options) {
+            settings = defaults;
+            this.reset(options);
+        }
+
+        // Private vars
+
+        this.toggle = function(shouldActivate) {
+            // If not explicitly set, toggle to opposite state
+            if(typeof shouldActivate == "undefined"){
+                shouldActivate = !this.isActive();
+            }
+
+            if(shouldActivate) {
+                if(typeof this.onActivate == "function") {
+                    this.onActivate.call(this.$el.get());
+                }
+                this.$el.addClass(settings.activeClass);
+                this.$el.removeClass(settings.inactiveClass);
+            } else {
+                if(typeof this.onDeactivate == "function") {
+                    this.onDeactivate.call(this.$el.get());
+                }
+                this.$el.addClass(settings.inactiveClass);
+                this.$el.removeClass(settings.activeClass);
+            }
+
+            settings.isActive = shouldActivate;
+        };
+
+        this.reset = function(options) {
+            settings = $.extend(settings,options);
+            this.$el = $(settings.el);
+            this.onActivate = settings.onActivate;
+            this.onDeactivate = settings.onDeactivate;
+            //this.toggle(this.isActive());
+        }
+
+        this.isActive = function () {
+            return settings.isActive;
+        }
+
+
+        // Call init
+        this.initialize(options);
+    }
 
     /**
      * Constructor for Layout objects that hold configurations for different
@@ -191,160 +241,15 @@ var Mathbook = function(options) {
         this.$sidebarLeftExtras = 
             this.$sidebarLeft.find(".extras").first();
 
-        this.$sidebarLeftToggle = $(".sidebar-left-toggle-button");
-        this.$sidebarRightToggle = $(".sidebar-right-toggle-button");
-    };
+        this.$sidebarLeftToggleButton = $(".sidebar-left-toggle-button");
+        this.$sidebarRightToggleButton = $(".sidebar-right-toggle-button");
 
-    /**
-     * Initializes SidebarViews and registers listeners
-     */
-    this.initializeSidebars = function() {
-        var that = this;
-
-        // Add sidebar right open classes before GSAP can screw up
-        // the addClass functionality on $main
-        //if(this.hasSidebarRight()) {
-            //this.$main.addClass(MAIN_RIGHT_OPEN_CLASS);
-            //this.$sidebarRight.addClass(SIDEBAR_OPEN_CLASS);
-        //}
-
-        if(this.hasSidebarLeft()) {
-            //this.$sidebarLeft.addClass(SIDEBAR_OPEN_CLASS);
-            //this.$main.addClass(MAIN_LEFT_OPEN_CLASS);
-            this.sidebarLeftView = new SidebarView({
-                debugName: "sidebarLeftView",
-                toggleDuration:SIDEBAR_TOGGLE_DURATION,
-                toggleButton: this.$sidebarLeftToggle,
-                sidebar: this.$sidebarLeft,
-                sidebarOpenClass: SIDEBAR_OPEN_CLASS,
-                sidebarClosedClass: SIDEBAR_CLOSED_CLASS,
-                main: this.$main,
-                mainOpenClass: MAIN_LEFT_OPEN_CLASS,
-                mainClosedClass: MAIN_LEFT_CLOSED_CLASS,
-                root: this.$body,
-                rootOpenClass: BODY_LEFT_OPEN_CLASS,
-                rootClosedClass: BODY_LEFT_CLOSED_CLASS
-            });
-
-            // Toggle button click handler
-            this.$sidebarLeftToggle.on('click', function() { 
-                that.toggleSidebarView(that.sidebarLeftView)
-            });
-        } else {
-            console.log("This layout has no left sidebar.");
-        }
-
-        if(this.hasSidebarRight()) {
-            this.sidebarRightView = new SidebarView({
-                debugName: "sidebarRightView",
-                toggleDuration:SIDEBAR_TOGGLE_DURATION,
-                toggleButton: this.$sidebarRightToggle,
-                sidebar: this.$sidebarRight,
-                sidebarOpenClass: SIDEBAR_OPEN_CLASS,
-                sidebarClosedClass: SIDEBAR_CLOSED_CLASS,
-                main: this.$main,
-                mainOpenClass: MAIN_RIGHT_OPEN_CLASS,
-                mainClosedClass: MAIN_RIGHT_CLOSED_CLASS,
-                root: this.$body,
-                rootOpenClass: BODY_RIGHT_OPEN_CLASS,
-                rootClosedClass: BODY_RIGHT_CLOSED_CLASS
-            });
-
-            // Toggle button click handler
-            this.$sidebarRightToggle.on('click', function() {
-                that.toggleSidebarView(that.sidebarRightView)
-            });
-        } else {
-            console.log("This layout has no right sidebar.");
-        }
-        
-        if(this.hasSidebarRight() || this.hasSidebarLeft()) {
-            this.touchController = new TouchController({
-                content: this.$content,
-                sidebarLeftView: this.sidebarLeftView,
-                sidebarRightView: this.sidebarRightView,
-                screenEdgeFudge: TOUCH_SCREEN_EDGE_FUDGE,
-                inertiaThresholdRatio: SIDEBAR_INERTIA_THRESHOLD_RATIO,
-                swipeThreshold: SWIPE_THRESHOLD,
-                scrollThreshold: SCROLL_THRESHOLD
-            });
-        }
-
-    };
-
-    /**
-     * Toggles the left sidebar to the shouldOpen state 
-     * or the reverse of the current state if shouldOpen is undefined.
-     * @param shouldOpen {Boolean}
-     */
-    this.toggleSidebarLeft = function(shouldOpen) {
-        if(this.hasSidebarLeft()) {
-            this.toggleSidebarView(this.sidebarLeftView, shouldOpen);
-        }
-    };
-
-    /**
-     * Toggles the right sidebar to the shouldOpen state
-     * or the reverse of the current state if shouldOpen is undefined.
-     * @param shouldOpen {Boolean}
-     */
-    this.toggleSidebarRight = function(shouldOpen) {
-        if(this.hasSidebarRight()) {
-            this.toggleSidebarView(this.sidebarRightView, shouldOpen);
-        }
-    };
-
-    /**
-     * Toggles the given sidebarView to the given shouldOpen state
-     * or the reverse of the current state if shouldOpen is undefined.
-     * @param sidebarView {SidebarView} 
-     * @param shouldOpen {Boolean}
-     */
-    this.toggleSidebarView = function(sidebarView, shouldOpen) {
-        debug("Toggling " + sidebarView.debugName);
-        sidebarView.toggle(shouldOpen);
-    };
-
-    /**
-     * Returns true if the left sidebar is present in HTML 
-     */
-    this.hasSidebarLeft = function() {
-        // To be safe, we'll require everything
-        return this.$sidebarLeft.size() > 0
-            && this.$sidebarLeftToggle.size() > 0
-            && this.$main.size() > 0;
-    };
-
-    /**
-     * Returns true if the right sidebar is present in HTML
-     */
-    this.hasSidebarRight = function() {
-        // To be safe, we'll require everything
-        return this.$sidebarRight.size() > 0
-            && this.$sidebarRightToggle.size() > 0
-            && this.$main.size() > 0;
-    };
-
-    /**
-     * Returns true if left sidebar is closed or not present
-     */
-    this.isSidebarLeftClosed = function() {
-        var isClosed = 
-            !that.hasSidebarLeft()
-            || that.sidebarLeftView.isClosed();
-        return isClosed;
+        // Cache values
+        hasSidebarLeft = this.hasSidebarLeft();
+        hasSidebarRight = this.hasSidebarRight();
     };
 
 
-    /**
-     * Returns true if the right sidebar is closed or not present.
-     */
-    this.isSidebarRightClosed = function() {
-        var isClosed = 
-            !that.hasSidebarRight()
-            || that.sidebarRightView.isClosed();
-        return isClosed;
-    };
 
     /** 
     * By default, MathJax scrolls the window to the hash location
@@ -407,7 +312,7 @@ var Mathbook = function(options) {
         }
 
         // Stick left sidebar
-        if(this.hasSidebarLeft()) {
+        if(hasSidebarLeft) {
             this.$sidebarLeft.unstick();
 
             // If primaryNavbar is top, offset sidebar by it's height,
@@ -445,6 +350,209 @@ var Mathbook = function(options) {
             //onLoad: function() { that.onStickyNavLoaded() }
         //});
     };
+
+    ////////////////////////////////////////////////////////////////////////////
+    // SIDEBAR METHODS
+    ////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Initializes SidebarViews and registers listeners
+     */
+    this.initializeSidebars = function() {
+        var that = this;
+
+        if(hasSidebarLeft) {
+            this.sidebarLeftToggleButtonView = new ToggleView({
+                el: this.$sidebarLeftToggleButton,
+                activeClass: TOGGLE_BUTTON_ACTIVE_CLASS,
+                inactiveClass: TOGGLE_BUTTON_INACTIVE_CLASS,
+            });
+            this.sidebarLeftView = new ToggleView({
+                el: this.$body, // We want classes to be applied here
+                activeClass : SIDEBAR_LEFT_OPEN_CLASS,
+                inactiveClass :SIDEBAR_LEFT_CLOSED_CLASS,
+                onActivate: function() {
+                    that.onSidebarOpen();
+                },
+                onDeactivate: function() {
+                    that.onSidebarClose()
+                }
+            });
+            // Toggle button click handler
+            this.$sidebarLeftToggleButton.on('click', function() { 
+                that.toggleSidebarLeft();
+            });
+        }
+
+        if(hasSidebarRight) {
+            this.sidebarRightToggleButtonView = new ToggleView({
+                el: this.$sidebarRightToggleButton,
+                activeClass: TOGGLE_BUTTON_ACTIVE_CLASS,
+                inactiveClass: TOGGLE_BUTTON_INACTIVE_CLASS,
+            });
+            this.sidebarRightView = new ToggleView({
+                el: this.$body, // We want classes to be applied here
+                activeClass : SIDEBAR_RIGHT_OPEN_CLASS,
+                inactiveClass :SIDEBAR_RIGHT_CLOSED_CLASS,
+                onActivate: function() {
+                    that.onSidebarOpen();
+                },
+                onDeactivate: function() {
+                    that.onSidebarClose()
+                }
+            });
+
+            // Toggle button click handler
+            this.$sidebarRightToggleButton.on('click', function() {
+                that.toggleSidebarRight();
+            });
+        }
+        
+    };
+
+    /**
+     * Toggles the left sidebar to the shouldOpen state 
+     * or the reverse of the current state if shouldOpen is undefined.
+     * @param shouldOpen {Boolean}
+     */
+    this.toggleSidebarLeft = function(shouldOpen) {
+        if(hasSidebarLeft) {
+            if(typeof shouldOpen == "undefined") {
+                shouldOpen = this.isSidebarLeftClosed();
+            }
+            console.log("maxOpenSidebars: " + maxOpenSidebars);
+            console.log("shouldOpen: " + maxOpenSidebars);
+            console.log("is other open?: " + !this.isSidebarRightClosed());
+            if(shouldOpen 
+               && maxOpenSidebars == 1
+               && !this.isSidebarRightClosed()  
+            ){
+                console.log("Should close other");
+                this.toggleSidebarRight(false);
+            }
+            this.sidebarLeftToggleButtonView.toggle(shouldOpen);
+            this.sidebarLeftView.toggle(shouldOpen);
+        }
+    };
+
+    /**
+     * Toggles the right sidebar to the shouldOpen state
+     * or the reverse of the current state if shouldOpen is undefined.
+     * @param shouldOpen {Boolean}
+     */
+    this.toggleSidebarRight = function(shouldOpen) {
+        if(hasSidebarRight) {
+            if(typeof shouldOpen == "undefined") {
+                shouldOpen = this.isSidebarRightClosed();
+            }
+            if(shouldOpen 
+               && maxOpenSidebars == 1
+               && !this.isSidebarLeftClosed()  
+            ){
+                console.log("Should close other");
+                this.toggleSidebarLeft(false);
+            }
+            this.sidebarRightToggleButtonView.toggle(shouldOpen);
+            this.sidebarRightView.toggle(shouldOpen);
+        }
+    };
+
+    /**
+     * Returns true if the left sidebar is present in HTML 
+     * Use the cached variable instead of this function.
+     */
+    this.hasSidebarLeft = function() {
+        // To be safe, we'll require everything
+        return this.$sidebarLeft.size() > 0
+            && this.$sidebarLeftToggleButton.size() > 0
+            && this.$main.size() > 0;
+    };
+
+    /**
+     * Returns true if the right sidebar is present in HTML
+     * Use the cached variable instead of this function.
+     */
+    this.hasSidebarRight = function() {
+        // To be safe, we'll require everything
+        return this.$sidebarRight.size() > 0
+            && this.$sidebarRightToggleButton.size() > 0
+            && this.$main.size() > 0;
+    };
+
+    /**
+     * Sets whether sidebars should push or slide when opening.
+     * Push fixes the width of the main content and moves it aside.
+     * Slide subtracts the sidebar's width from the main width.
+     *
+     * @param shouldPush {Boolean} true to push, false to slide
+     */
+    this.shouldSidebarsPush = function(shouldSidebarsPush) {
+        if(typeof shouldSidebarsPush == "undefined") {
+            return _shouldSidebarsPush;
+        }
+        _shouldSidebarsPush = shouldSidebarsPush;
+        
+        if(!_shouldSidebarsPush) {
+            this.unlockMainWidth();
+        }
+    };
+
+    /**
+     * Called when a sidebar begins pushing
+     */
+    this.onSidebarOpen = function () {
+        if(this.shouldSidebarsPush()) {
+            this.lockMainWidth();
+        }
+    };
+
+    /**
+     * Called when a sidebar closes
+     */
+    this.onSidebarClose = function() {
+        if(this.shouldSidebarsPush()) {
+            // Unlock the main element width only if both sidebars are closed.
+            if(this.isSidebarRightClosed() 
+                && this.isSidebarLeftClosed()) 
+            {
+                this.unlockMainWidth();
+            } 
+        }
+    };
+
+    /** 
+     * Returns true if right sidebar is closed or non-existant
+     */
+    this.isSidebarRightClosed = function() {
+        return (!hasSidebarRight || !this.sidebarRightView.isActive());
+    }
+
+    /** 
+     * Returns true if left sidebar is closed or non-existant
+     */
+    this.isSidebarLeftClosed = function() {
+        return (!hasSidebarLeft || !this.sidebarLeftView.isActive());
+    }
+
+    /**
+     * Locks the main element at it's current width
+     */
+    this.lockMainWidth = function() {
+        debug("locking width");
+        that.$main.width(that.$main.width());
+    };
+
+    /**
+     * Unlocks the main element width
+     */
+    this.unlockMainWidth = function() {
+        debug("unlocking width");
+        that.$main.width("");
+    };
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // RESIZING METHODS
+    ////////////////////////////////////////////////////////////////////////////
 
     /**
      * Called when the browser resizes
@@ -511,70 +619,6 @@ var Mathbook = function(options) {
     };
 
     /**
-     * Sets whether sidebars should push or slide when opening.
-     * Push fixes the width of the main content and moves it aside.
-     * Slide subtracts the sidebar's width from the main width.
-     *
-     * @param shouldPush {Boolean} true to push, false to slide
-     */
-    this.shouldSidebarsPush = function(shouldSidebarsPush) {
-        if(typeof shouldSidebarsPush == "undefined") {
-            return _shouldSidebarsPush;
-        }
-        _shouldSidebarsPush = shouldSidebarsPush;
-        
-
-        if(this.hasSidebarLeft()) {
-            this.setSidebarViewPush(_shouldSidebarsPush, this.sidebarLeftView);
-        }
-
-        if(this.hasSidebarRight()) {
-            this.setSidebarViewPush(_shouldSidebarsPush, this.sidebarRightView);
-        }
-
-        if(!_shouldSidebarsPush) {
-            this.unlockMainWidth();
-        }
-    }
-
-    this.setSidebarViewPush = function(shouldPush, sidebarView) {
-        if(shouldPush) {
-            sidebarView.on("onStart", this.lockMainWidth);
-            sidebarView.on("onReverseComplete", this.tryUnlockMainWidth);
-        } else {
-            sidebarView.off("onStart", this.lockMainWidth);
-            sidebarView.off("onReverseComplete", this.tryUnlockMainWidth);
-        }
-    }
-
-    /**
-     * Locks the main element at it's current width
-     */
-    this.lockMainWidth = function() {
-        debug("locking width");
-        that.$main.width(that.$main.width());
-    };
-
-    /**
-     * Unlocks the main element width
-     */
-    this.unlockMainWidth = function() {
-        debug("unlocking width");
-        that.$main.width("");
-    };
-
-    /**
-     * Unlocks the main element width only if both sidebars are closed.
-     */
-    this.tryUnlockMainWidth = function () {
-        if(that.isSidebarRightClosed() 
-            && that.isSidebarLeftClosed()) 
-        {
-            that.unlockMainWidth();
-        } 
-    };
-
-    /**
      * Returns the correct layout for given browser width
      * @param width {Number} browser width
      * @return {Layout} the layout to apply
@@ -623,7 +667,7 @@ var Mathbook = function(options) {
 if(document.readyState === "complete") {
     mathbook = new Mathbook({});
 } else {
-    // wait and init when the window is loaded
+    // wait and init when the DOM is fully loaded
     $(window).load( function() {
         mathbook = new Mathbook({});
     });
