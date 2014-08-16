@@ -20,8 +20,8 @@ $child-segment-height:(1/$font-multiplier)*$ui-line-height-computed;
 $child-segment-line-height:.7*$ui-line-height-computed;
 $child-segment-border-width: 1px;
 
-$base-indent:($ui-icon-box-size - $ui-icon-size)/2;
-$base-indent-touch: ($ui-icon-box-size-touch - $ui-icon-size-touch)/2;
+$base-indent:$ui-left-margin;
+$base-indent-touch: $ui-left-margin-touch;
 
 $child-indent: $base-indent + $title-offset;
 $child-indent-touch: $base-indent-touch + $title-offset;
