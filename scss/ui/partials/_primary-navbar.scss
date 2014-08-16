@@ -114,7 +114,7 @@ $navbar-bottom-box-shadow:
     border-color:darken($navbar-bg-color, 20%);
     border-bottom:none;
     border-top:none;
-    border-right:none;
+    border-left:none;
 
     /* Override link properties */
     &, &:hover, &:focus, &:visited, &:link, &:active {
@@ -152,12 +152,7 @@ $navbar-bottom-box-shadow:
         float:left;
         text-align:center;
         margin:0;
-        border-right:none;
         line-height: $ui-icon-box-size-touch;
-
-        &:first-child {
-            border-left:none;
-        }
 
         &.active, &:active {
             /* Vertically flip shadow for lower navbar */
@@ -166,8 +161,8 @@ $navbar-bottom-box-shadow:
     }
 }
 
-& > .button:first-child {
-    border-left:none;
+& > .button:last-child {
+    border-right:none;
 }
 
 /* Elements that contain a variable number of buttons should @extend this */
