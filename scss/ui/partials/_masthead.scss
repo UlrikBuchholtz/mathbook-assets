@@ -41,7 +41,6 @@ $masthead-font-family: $ui-font-family-heading;
 }
 
 #logo-link, #title {
-    margin-top: $ui-font-size-base;
 }
 
 #logo-link {
@@ -49,10 +48,12 @@ $masthead-font-family: $ui-font-family-heading;
     $line-height-h1-top:($line-height-h1 - $ui-font-size-h1)/2;
 
     $size: $ui-font-size-h1*$ui-line-height-base - $line-height-h1-top;
+    $size: 1.5*$base-rhythm-unit;
 
     position:relative;
     float:left;
     font-size: $size;
+    @include margin-leader(1, $size);
     margin-right:$ui-font-size-base;
     margin-left: $line-height-h1-top;
     text-align:center;
@@ -103,17 +104,23 @@ $masthead-font-family: $ui-font-family-heading;
 
     /* On mobile phones */
     @media screen and (max-width:$ui-screen-xs-min) {
+        $size: 2*$base-rhythm-unit;
         display:block;
         float:none;
-        margin:.5em 0;
+        font-size:$size;
+        @include margin-leader(1, $size);
+        @include margin-trailer(1, $size);
     }
 }
 /* IMPORTANT: #title is deprecated!*/
 #title, .title {
     color: $masthead-title-color;
-    font-size:typography-em($ui-font-size-h1, $ui-font-size-base);
+    /*font-size:typography-em($ui-font-size-h1, $ui-font-size-base);*/
+    margin:0;
     margin-left:0;
-    margin-bottom:.15em;
+    /*margin-bottom:.15em;*/
+    @include adjust-font-size-to($ui-font-size-h1);
+    @include margin-leader(.5, $ui-font-size-h1);;
     min-height:inherit;
 
     // Override addon
@@ -133,11 +140,12 @@ $masthead-font-family: $ui-font-family-heading;
 
 /* IMPORTANT: #byline is deprecated! */
 #byline, .byline {
+    $font-size: $ui-font-size-h4;
     color: $masthead-subtitle-color;
-    font-size: typography-em(.6*$ui-font-size-h1, $ui-font-size-base);
     font-weight:normal;
     margin:0;
-    margin-bottom:1em;
+    @include adjust-font-size-to($font-size);
+    @include margin-trailer(.5, $font-size);
     min-height:inherit;
 
     // Override addon
