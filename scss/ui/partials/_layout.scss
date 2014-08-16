@@ -25,6 +25,10 @@ body {
     @include transition-property(width);
     @include transition-duration($sliding-sidebars-transition-duration);
 
+    &, &.layout-left {
+        max-width: $ui-content-max-width + 2*$ui-content-margin;
+    }
+
     .has-sidebar-left & {
         max-width: $ui-content-max-width + 2*$ui-content-margin + $ui-sidebar-left-width;
     }
@@ -33,8 +37,8 @@ body {
         max-width:none;
     }
 
-    .has-sidebar-left.has-sidebar-right &,
-    .layout-centered & {
+    .layout-centered &,
+    .has-sidebar-left.has-sidebar-right & {
         max-width: none;
     }
 }
