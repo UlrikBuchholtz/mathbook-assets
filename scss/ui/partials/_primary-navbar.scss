@@ -1,5 +1,6 @@
 @import "../ui_config";
 @import "../mixins/buttons";
+@import "../mixins/flex-container";
 @import "compass/css3/transition";
 @import "compass/css3/box-sizing";
 @import "../../shared/_css_message.scss";
@@ -14,6 +15,12 @@ $navbar-color:change-color($ui-color-base, $lightness: 20%) !default;
 $navbar-bg-color: change-color($ui-color-base, $lightness: 93%) !default;
 
 $navbar-border-width: 1px !default;
+$navbar-border-color: darken($navbar-bg-color, 20%);
+$navbar-border:$navbar-border-width solid $navbar-border-color;
+
+$toolbar-border-width: $navbar-border-width;
+$toolbar-border-color: $navbar-border-color;
+$toolbar-border:$toolbar-border-width solid $toolbar-border-color;
 
 $navbar-shadow-color:rgba(black,.3) !default;
 $navbar-shadow-spread: 5px !default;
@@ -25,33 +32,13 @@ $navbar-top-box-shadow:
 $navbar-bottom-box-shadow:
     $navbar-shadow-color 0px $navbar-bottom-shadow-offset $navbar-shadow-spread;
 
-// Some curry for navbar-buttons
-@mixin navbar-button($icon, $pseudo: before, $placement: inline) {
-    @include button-with-icon(
-        $icon, 
-        $ui-icon-size, 
-        $ui-icon-box-size, 
-        $pseudo,
-        $placement);
-
-    @media screen and (max-width:$ui-screen-sm-min) {
-        @include button-with-icon(
-            $icon, 
-            $ui-icon-size-touch, 
-            $ui-icon-box-size-touch, 
-            $pseudo,
-            $placement);
-        @include button-hide-text($ui-icon-box-size-touch, $pseudo, $placement);
-    }
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 // Styles
 ////////////////////////////////////////////////////////////////////////////////
 
 & { 
     background:$navbar-bg-color;
-    border-bottom:$navbar-border-width solid darken($navbar-bg-color, 15%);
+    border-bottom:$navbar-border;
     z-index:200;
     height: $ui-navbar-height;
     font-family: $ui-font-family-serif;
@@ -61,60 +48,59 @@ $navbar-bottom-box-shadow:
 
     @include clearfix();
 
-    @media screen and (max-width: $ui-screen-sm-min) {
-        height:$ui-navbar-height-touch;
-    }
-}
-
-/* Styles applied to make the navbar persistently visible */
-.stuck & {
-    position:fixed;
-    top:0;
-    right:0;
-    left:0;
-    @include box-shadow( $navbar-top-box-shadow);
-}
-
-@media screen and (max-width: $ui-screen-sm-min) {
     /* 
-     * At small screen sizes, turn the navbar into a full bar along bottom 
-     * When stuck and when not stuck. We don't care about stuck at this size.
+     * Styles applied to make the navbar persistently visible 
+     * when it's sticky-wrapper is stuck
      */
-    &, .stuck & {
+    .stuck & {
         position:fixed;
-        top: auto;
-        bottom:0;
-        left:0;
+        top:0;
         right:0;
-        background:$navbar-bg-color;
-        @include box-shadow( $navbar-bottom-box-shadow);
+        left:0;
+        @include box-shadow( $navbar-top-box-shadow);
     }
+
+    @media screen and (max-width: $ui-screen-sm-min) {
+        /* 
+         * At small screen sizes, turn the navbar into a full bar along bottom 
+         * When stuck and when not stuck. We don't care about stuck at this size
+         */
+        &, .stuck & {
+            position:fixed;
+            top: auto;
+            bottom:0;
+            left:0;
+            right:0;
+            background:$navbar-bg-color;
+            @include box-shadow( $navbar-bottom-box-shadow);
+            height:$ui-navbar-height-touch;
+        }
+    }
+
 }
 
+/*******************************************************************************
+ * BUTTONS
+ ******************************************************************************/
 .button {
     @include button-base();
     @include button-depressable();
     @include transition-property(text-indent,background-color);
     @include transition-duration(200ms);
-    /* subtract border and padding from width 
-     * so we can set width precisely as percent */
-    @include box-sizing(border-box);
 
     float:left;
     text-align:left;
     position:relative;
     display:block;
 
+    /* subtract border and padding from width 
+     * so we can set width precisely as percent */
+    @include box-sizing(border-box);
+
     font-size:1em;
     padding:0;
     margin:0;
     line-height:$ui-icon-box-size;
-
-    border:1px solid; 
-    border-color:darken($navbar-bg-color, 20%);
-    border-bottom:none;
-    border-top:none;
-    border-left:none;
 
     /* Override link properties */
     &, &:hover, &:focus, &:visited, &:link, &:active {
@@ -161,92 +147,32 @@ $navbar-bottom-box-shadow:
     }
 }
 
-& > .button:last-child {
-    border-right:none;
-}
+/*******************************************************************************
+ * SPECIFIC BUTTONS
+ ******************************************************************************/
 
-/* Elements that contain a variable number of buttons should @extend this */
-%button-counts {
-    .button {
-        /* Ensure that border/padding is subtracted from percentage width */
-        @include box-sizing(border-box);
-    }
-
-    &.button-count-1 .button {
-        width:auto;
-    }
-    &.button-count-2 .button {
-        width:100/2 * 1% ;
-    }
-    &.button-count-3 .button {
-        width:100/3 * 1% ;
-    }
-    &.button-count-4 .button {
-        width:100/4 * 1% ;
-    }
-    &.button-count-5 .button {
-        width:100/5 * 1% ;
-    }
-}
-
-.navbar-bottom-buttons {
-    @extend %button-counts;
-
-    display:none;
+// Some curry for navbar-buttons
+@mixin navbar-button($icon, $pseudo: before, $placement: inline) {
+    @include button-with-icon(
+        $icon, 
+        $ui-icon-size, 
+        $ui-icon-box-size, 
+        $pseudo,
+        $placement);
 
     @media screen and (max-width:$ui-screen-sm-min) {
-        display:block;
-    }
-}
-
-.navbar-top-buttons {
-    display:block;
-
-    @media screen and (max-width:$ui-screen-sm-min) {
-        display:none;
-    }
-}
-
-/**
- * Elements for navigating the tree structure of the document
- */
-.tree-nav {
-    @extend %button-counts;
-
-    & {
-        width:auto;
-    }
-
-    .has-sidebar-left & {
-        margin-left:240px;
-
-        .sidebar-left-toggle-button {
-            width: $ui-sidebar-left-width;
-        }
-    }
-
-    .has-sidebar-right & {
-        margin-right:240px;
-
-        .sidebar-right-toggle-button {
-            width: $ui-sidebar-right-width;
-        }
+        @include button-with-icon(
+            $icon, 
+            $ui-icon-size-touch, 
+            $ui-icon-box-size-touch, 
+            $pseudo,
+            $placement);
+        @include button-hide-text($ui-icon-box-size-touch, $pseudo, $placement);
     }
 }
 
 .sidebar-left-toggle-button, .sidebar-right-toggle-button {
     position:relative;
-}
-
-
-#sidebar-left-toggle-button {
-    @include css-error(
-        "Markup Error: change #sidebar-left-toggle-button to .sidebar-left-toggle-button");
-}
-
-#sidebar-right-toggle-button {
-    @include css-error(
-        "Markup Error: change #sidebar-right-toggle-button to .sidebar-right-toggle-button");
 }
 
 .sidebar-left-toggle-button {
@@ -313,3 +239,126 @@ $navbar-bottom-box-shadow:
     @include navbar-button("\f125", after);
     text-align:right;
 }
+
+.settings-button {
+    /* ion-android-settings */
+    @include navbar-button("\f2f7");
+}
+
+/*******************************************************************************
+ * TOOLBAR 
+ ******************************************************************************/
+
+/**
+ * Toolbar of buttons and miscellany
+ */
+.toolbar {
+    // flex container with support for 1 to 6 children
+    // the sizing of the children is determined by .toolbar-divisor-X
+    @include flex-container("toolbar", ".toolbar-item", 1, 6);
+
+    .toolbar:first-child .toolbar-item:first-child {
+        border-left:none;
+    }
+
+    .toolbar:last-child .toolbar-item:last-child {
+        border-right:none;
+    }
+
+    /**
+     * Make this item's bottom edge clear floated toolbar-items 
+     * so that our borders display correctly 
+     */
+    @include clearfix();
+}
+
+/** 
+ * Establish borders on toolbar-items, 
+ * but ensure adjacent borders do not double up 
+ * BEWARE: THERE BE DRAGONS HERE. 
+ */
+// TODO could be refactored into a flex-container mixin?
+.toolbar, .toolbar > .toolbar-item, .button {
+    border:$toolbar-border;
+    border-top:none;
+    border-bottom:none;
+    border-right:none;
+
+    /* subtract border and padding from width 
+     * so we can set width precisely as percent */
+    @include box-sizing(border-box);
+
+    /* First child defers to left border of parent 
+     * If toolbar itself is a first-child, we assume it is adjacent with
+     * the screen or the edge of a parent toolbar
+     */
+    &:first-child {
+        border-left:none;
+    }
+
+    /* Last child defers to right border of parent 
+     * If toolbar itself is a last-child, we assume it is adjacent with
+     * the screen or the edge of a parent toolbar
+     */
+    &:last-child {
+        border-right:none;
+    }
+}
+
+/*
+ * Order is reversed when we float right
+ * So we need to swap first and last on toolbar-item-children 
+ * BEWARE: THERE BE DRAGONS HERE. 
+ */
+// TODO could be refactored into a flex-container mixin?
+.toolbar.toolbar-align-right {
+    & > .toolbar-item:first-child {
+        border-right:none;
+        border-left:$toolbar-border;
+    }
+
+    & > .toolbar-item:last-child {
+        border-left:none;
+    }
+}
+
+/*******************************************************************************
+ * TOP VS BOTTOM 
+ ******************************************************************************/
+
+.navbar-bottom-buttons {
+    display:none;
+
+    @media screen and (max-width:$ui-screen-sm-min) {
+        display:block;
+    }
+}
+
+.navbar-top-buttons {
+    display:block;
+
+    .toolbar {
+        .has-sidebar-left & {
+            margin-left:240px;
+            border-right:$toolbar-border;
+
+            .sidebar-left-toggle-button {
+                width: $ui-sidebar-left-width;
+            }
+        }
+
+        .has-sidebar-right & {
+            margin-right:240px;
+            border-right:none;
+
+            .sidebar-right-toggle-button {
+                width: $ui-sidebar-right-width;
+            }
+        }
+    }
+
+    @media screen and (max-width:$ui-screen-sm-min) {
+        display:none;
+    }
+}
+
