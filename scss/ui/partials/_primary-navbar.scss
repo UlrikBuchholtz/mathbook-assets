@@ -1,5 +1,6 @@
 @import "../ui_config";
 @import "../mixins/buttons";
+@import "../mixins/flex-container";
 @import "compass/css3/transition";
 @import "compass/css3/box-sizing";
 @import "../../shared/_css_message.scss";
@@ -165,33 +166,8 @@ $navbar-bottom-box-shadow:
     border-right:none;
 }
 
-/* Elements that contain a variable number of buttons should @extend this */
-%button-counts {
-    .button {
-        /* Ensure that border/padding is subtracted from percentage width */
-        @include box-sizing(border-box);
-    }
-
-    &.button-count-1 .button {
-        width:auto;
-    }
-    &.button-count-2 .button {
-        width:100/2 * 1% ;
-    }
-    &.button-count-3 .button {
-        width:100/3 * 1% ;
-    }
-    &.button-count-4 .button {
-        width:100/4 * 1% ;
-    }
-    &.button-count-5 .button {
-        width:100/5 * 1% ;
-    }
-}
 
 .navbar-bottom-buttons {
-    @extend %button-counts;
-
     display:none;
 
     @media screen and (max-width:$ui-screen-sm-min) {
@@ -202,36 +178,37 @@ $navbar-bottom-box-shadow:
 .navbar-top-buttons {
     display:block;
 
+    .toolbar {
+        .has-sidebar-left & {
+            margin-left:240px;
+
+            .sidebar-left-toggle-button {
+                width: $ui-sidebar-left-width;
+            }
+        }
+
+        .has-sidebar-right & {
+            margin-right:240px;
+
+            .sidebar-right-toggle-button {
+                width: $ui-sidebar-right-width;
+            }
+        }
+    }
+
     @media screen and (max-width:$ui-screen-sm-min) {
         display:none;
     }
 }
 
+
 /**
  * Elements for navigating the tree structure of the document
  */
-.tree-nav {
-    @extend %button-counts;
-
-    & {
-        width:auto;
-    }
-
-    .has-sidebar-left & {
-        margin-left:240px;
-
-        .sidebar-left-toggle-button {
-            width: $ui-sidebar-left-width;
-        }
-    }
-
-    .has-sidebar-right & {
-        margin-right:240px;
-
-        .sidebar-right-toggle-button {
-            width: $ui-sidebar-right-width;
-        }
-    }
+.toolbar {
+    // flex container with support for 1 to 6 children
+    // the sizing of the children is determined by .toolbar-divisor-X
+    @include flex-container("toolbar", ".toolbar-item", 1, 6);
 }
 
 .sidebar-left-toggle-button, .sidebar-right-toggle-button {
@@ -312,4 +289,9 @@ $navbar-bottom-box-shadow:
     /* ion-chevron-right */
     @include navbar-button("\f125", after);
     text-align:right;
+}
+
+.settings-button {
+    /* ion-android-settings */
+    @include navbar-button("\f2f7");
 }
