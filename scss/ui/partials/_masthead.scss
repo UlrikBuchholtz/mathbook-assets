@@ -1,7 +1,13 @@
 @import "../ui_config";
-@import "../../shared/_typography.scss";
+
 @import "compass/css3/box-shadow";
 @import "compass/utilities/general/clearfix";
+@import "compass/css3/inline-block";
+
+// For icon variables
+@import "lib/ionicons/ionicons-variables";
+
+@import "../../shared/_typography.scss";
 
 // Note: These variables should only depend on ui module variables
 $masthead-bg-color: change-color($ui-color-bg, $lightness:98%) !default;
@@ -22,10 +28,11 @@ $masthead-font-family: $ui-font-family-heading;
     /* to ensure children's margin-top works */
     border-top:1px solid transparent;
 
+    @include clearfix();
+
     @media screen and (max-width:$ui-screen-xs-min) {
         padding: 0 $ui-content-margin-xs;
     }
-
 }
 
 #title-container, .title-container {
@@ -38,31 +45,54 @@ $masthead-font-family: $ui-font-family-heading;
         padding:0;
         text-align:center;
     }
-
 }
 
 #logo-link {
 
     position:relative;
     float:left;
-    font-size: $ui-font-size-base;
-    @include margin-leader(.5);
+
+    $font-size:2.5*$base-line-height; // must be px
+    font-size:$font-size;
+    @include margin-leader(.5, $font-size);
+
     margin-left: $ui-left-margin;
     text-align:center;
+    line-height:1; /* Must be 1 so that icon placeholder is centered */
 
     img {
         width:auto;
         height:auto;
-        max-height:rhythm(3);
+
+        /* Allow font-size to control height 
+         * so that icon placeholder height matches */
+        max-height:1em;
     }
 
     /* Display placeholder icon for css3 browsers (progressive enhancement) */
     &:empty {
 
+        $icon-scale-factor: 1;
+
         &:before { 
-            content: "\f2d0"; /* ionicons book */
+
+            &, .mathbook-book & {
+                content: $ionicon-var-android-book;
+            }
+
+            .mathbook-article & {
+                content: $ionicon-var-document-text;
+            }
+
             font-family: "Ionicons";
-            font-size:inherit;
+            font-size:$icon-scale-factor*1em;
+
+            /* Center the icon in a square the size of the parent's font-size */
+            line-height:1/$icon-scale-factor;
+            width: (1/$icon-scale-factor)*1em;
+            @include inline-block();
+            text-align:center;
+
             color: #ccc;
         }
 
@@ -87,8 +117,10 @@ $masthead-font-family: $ui-font-family-heading;
         display:block;
         float:none;
         margin:0;
-        @include margin-leader(.5);
-        max-height:rhythm(2.5);
+
+        $font-size:2.5*$base-line-height; // must be px
+        font-size:$font-size;
+        @include margin-leader(.5, $font-size);
     }
 }
 /* IMPORTANT: #title is deprecated!*/
@@ -113,7 +145,6 @@ $masthead-font-family: $ui-font-family-heading;
     /* On mobile phones */
     @media screen and (max-width:$ui-screen-xs-min) {
         $font-size: $ui-font-size-h3;
-        margin-top:0;
         @include adjust-font-size-to($font-size);
         @include margin-leader(.5, $font-size);;
     }

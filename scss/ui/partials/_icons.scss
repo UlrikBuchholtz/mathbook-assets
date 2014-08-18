@@ -17,8 +17,10 @@ $ionicons-prefix: icon-;
 
 // Use our version of the font file. It fixes firefox cross-domain problem.
 @import "../lib_extensions/ionicons-font";
-// Import our modified version that only font-faces :before
-@import "../lib_extensions/ionicons-icons";
+
+
+// We don't need these.
+//@import "../lib_extensions/ionicons-icons";
 //@import "lib/ionicons/ionicons-animation";
 
 
@@ -26,6 +28,6 @@ $ionicons-prefix: icon-;
 * Add a margin to any element with a class starting with the #{$ionicons-prefix}
 * prefix.
 */
-[class^="#{$ionicons-prefix}"]:before, [class*=" #{$ionicons-prefix}"]:before {
-    margin-right:.5em;
-}
+/*[class^="#{$ionicons-prefix}"]:before, [class*=" #{$ionicons-prefix}"]:before {*/
+    /*margin-right:.5em;*/
+/*}*/

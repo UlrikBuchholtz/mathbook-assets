@@ -1,31 +1,15 @@
 @import "../_content_config.scss";
 @import "../../shared/_typography.scss";
-@import "compass/typography/vertical_rhythm";
-@import "heading";
+@import "../../shared/_heading.scss";
 
 $environment-heading-font-size: $typography-font-size-h5 !default;
 $environment-heading-after: ". " !default;
 
-// Note: in Sass the %placeholder is a special selector that has no output 
-// unless used in an @extend directive.
-
-// Here I am providing both a placeholder class (denoted by %) and a mixin.
-// @extend-ing the placeholder  creates a comma separated list in the CSS.
-// This is preferred because it produces less total CSS output
-// and the resulting CSS output is easier to edit manually
-
-// However, if you wish to separate two items in the CSS output,
-// or it is infeasible to @extend the placholder,
-// use the corresponding mixin (with @include) to inject the rules directly
-
-////////////////////////////////////////////////////////////////////////////////
-// MIXINS
-////////////////////////////////////////////////////////////////////////////////
-
 // Defaults for environments
-@mixin environment-base() {
-    @include heading($heading-after:$environment-heading-after) {
-        @include typography-heading($environment-heading-font-size);
+@mixin environment-base {
+    @include heading-selector {
+        @include heading-base($heading-after:$environment-heading-after);
+        @include typography-heading-size($environment-heading-font-size);
     }
 
     // Default inline heading
@@ -36,7 +20,7 @@ $environment-heading-after: ". " !default;
 }
 
 // Force environment heading to be inline
-@mixin environment-heading-inline() {
+@mixin environment-heading-inline {
     @include heading-selector {
         display:inline;
 
@@ -47,7 +31,7 @@ $environment-heading-after: ". " !default;
 }
 
 // Force environment heading to be block
-@mixin environment-heading-block() {
+@mixin environment-heading-block {
     @include heading-selector {
         display:block;
 
@@ -55,20 +39,4 @@ $environment-heading-after: ". " !default;
             display:block;
         }
     }
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// PLACEHOLDERS 
-////////////////////////////////////////////////////////////////////////////////
-
-%environment-base {
-    @include environment-base();
-}
-
-%environment-heading-inline {
-    @include environment-heading-inline();
-}
-
-%environment-heading-block {
-    @include environment-heading-block();
 }

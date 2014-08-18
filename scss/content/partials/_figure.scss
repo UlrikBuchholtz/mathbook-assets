@@ -1,5 +1,6 @@
-@import "../../shared/_typography.scss";
 @import "../_content_config.scss";
+@import "../../shared/_typography.scss";
+@import "../../shared/heading";
 
 figure {
 
@@ -12,7 +13,7 @@ figure {
         float: right;
         margin-right: 0;
         /*margin-left:30px;*/
-        margin-left:$base-rhythm-unit;
+        margin-left:rhythm(1);
 
         img { width: 250px; }
     }
@@ -34,19 +35,17 @@ figure {
     }
 
     figcaption {
+        /* We treat figcaptions just like headings */
+        @include heading-base;
+
         & { 
             @include adjust-font-size-to($typography-font-size-base);
-            /*margin-top:10px;*/
+            margin: 0 auto;
             @include margin-leader;
-            margin-left: auto;
-            margin-right: auto;
             text-align: center;
         }
 
-        @include heading();
-
         &.wrap {
-            /*margin:10px;*/
             margin-left: $base-half-leader;
             margin-right: $base-half-leader;
             text-align: center;
