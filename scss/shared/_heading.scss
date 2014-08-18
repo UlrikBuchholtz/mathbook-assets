@@ -1,0 +1,127 @@
+@import "typography";
+
+$heading-type-before:none !default;
+$heading-type-after:" " !default;
+$heading-codenumber-before:none !default;
+$heading-codenumber-after:" " !default;
+$heading-title-before:none !default;
+$heading-title-after:" " !default;
+$heading-before:none !default;
+$heading-after:" " !default;
+
+////////////////////////////////////////////////////////////////////////////////
+// MIXINS 
+////////////////////////////////////////////////////////////////////////////////
+
+// Mixin for quickly and consistently outputting the heading selector
+@mixin heading-selector {
+    & > .heading, & > header > .heading {
+        @content;
+    }
+}
+
+@mixin heading-set-before-after($before: none, $after: none) {
+    &:before {
+        @if($before == none) {
+            display:none;
+        } @else {
+            content: $before;
+        }
+    }
+    &:after {
+        @if($after == none) {
+            display:none;
+        } @else {
+            content: $after;
+        }
+    }
+}
+
+@mixin heading-hide-type() {
+    .type {
+        display:none;
+    }
+}
+
+@mixin heading-hide-codenumber() {
+    .codenumber { 
+        display:none;
+    }
+}
+
+@mixin heading-hide-title() {
+    .title {
+        display:none;
+    }
+}
+
+// The base styles for Mathbook headings
+@mixin heading-base(
+    $type-before: $heading-type-before,
+    $type-after: $heading-type-after,
+
+    $codenumber-before: $heading-codenumber-before,
+    $codenumber-after: $heading-codenumber-after,
+
+    $title-before:$heading-title-before,
+    $title-after:$heading-title-after,
+
+    $heading-before:$heading-before,
+    $heading-after:$heading-after
+) {
+    & {
+        @include typography-heading-base;
+    }
+
+    &:before {
+        @if($heading-before == none) {
+            display:none;
+        } @else {
+            content:$heading-before;
+        }
+    }
+
+    &:after {
+        @if($heading-after == none) {
+            display:none;
+        } @else {
+            content:$heading-after;
+        }
+    }
+
+    .type {
+        @include heading-set-before-after($type-before, $type-after);
+    }
+
+    .codenumber {
+        @include heading-set-before-after(
+                    $codenumber-before, 
+                    $codenumber-after);
+    }
+
+    .title {
+        @include heading-set-before-after($title-before, $title-after);
+    }
+
+    .type, .codenumber, .title {
+        /**
+         *  Hide the space after the last element, 
+         * defer to .heading:after instead 
+         */
+        &:last-child:after {
+            display:none;
+        }
+    }
+
+    &.hide-type {
+        @include heading-hide-type();
+    }
+
+    &.hide-codenumber {
+        @include heading-hide-codenumber();
+    }
+
+    &.hide-title {
+        @include heading-hide-title();
+    }
+}

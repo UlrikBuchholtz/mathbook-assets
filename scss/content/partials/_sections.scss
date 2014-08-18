@@ -1,42 +1,68 @@
 @import "../_content_config.scss";
-@import "../mixins/heading";
-@import "../mixins/section";
 @import "../../shared/typography";
+@import "../../shared/heading";
+@import "../mixins/section";
+
+section, .section-like {
+    @include section-base;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NESTING
+////////////////////////////////////////////////////////////////////////////////
+
+// TODO it would be better not to style the `section` tag directly
+
+section, .section-like {
+    @include section-level(0);
+
+    section, .section-like {
+        @include section-level(1);
+
+        section, .section-like {
+            @include section-level(2);
+
+            section, .section-like {
+                @include section-level(3);
+            }
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// TYPE-SPECIFIC STYLES 
+////////////////////////////////////////////////////////////////////////////////
+
+// TODO these could go in seperate partials. Up to you.
 
 .chapter {
-    @extend %section-base;
-
+    $context-font-size:$typography-font-size-base;
     $heading-title-font-size: $typography-font-size-h2;
     $heading-type-font-size: $typography-font-size-h3;
 
-    @include heading() {
+    /**
+     * In LaTeX, Chapter headings are broken onto two lines... so here we go...
+     */
+    @include heading-selector {
         /* 
-         * We use font-size-base to calculate proper line-heights 
-         * for vertical rythym
+         * We use font-size-base so that ems are relative to base font size
+         * within this context 
          */
-        font-size: $typography-font-size-base;
-        /*margin-bottom: typography-em($typography-line-height-computed, */
-                                     /*$typography-font-size-base);*/
-        @include margin-trailer;
+        font-size: $context-font-size;
+        @include margin-trailer(1, $context-font-size);
 
         .type, .codenumber {
             /* Chapter type prefix is smaller (as in LaTeX) */
-            //font-size: $heading-type-font-size;
-            @include typography-heading($heading-type-font-size);
+            @include typography-heading-size($heading-type-font-size);
         }
-    }
 
-    @include heading-title($before: "", $after: "") {
-        display:block;
-        /*font-size:$heading-title-font-size;*/
-        /*// Set margin of one standard line-height*/
-        /*// but using em relative to this element's font-size*/
-        /*margin-top: typography-em($typography-line-height-computed/2, */
-                                  /*$heading-title-font-size);*/
-        @include typography-heading($heading-title-font-size);
+        .title {
+            display:block;
+            @include typography-heading-size($heading-title-font-size);
 
-        /* Force a half-line leader */
-        @include margin-leader(.5, $heading-title-font-size);
+            /* Force a half-line leader */
+            @include margin-leader(.5, $heading-title-font-size);
+        }
     }
 
     /** 
@@ -50,111 +76,29 @@
     & > header {
 
         & {
-            font-size: $typography-font-size-base;
-            /*margin-bottom: typography-em($typography-line-height-computed, */
-                                         /*$typography-font-size-base);*/
-            @include margin-trailer;
+            font-size: $context-font-size;
+            @include margin-trailer(1, $context-font-size);
         }
 
-        @include heading() {
-            /*margin-bottom: typography-em($typography-line-height-computed, */
-                                         /*$typography-font-size-base);*/
-            @include margin-trailer;
-        }
-
-        @include heading-title() {
-            /* The margin goes on the header element instead */
-            margin-bottom:0;
+        @include heading-selector {
+            .title {
+                display:block;
+                /* The margin goes on the header element instead */
+                margin-bottom:0;
+            }
         }
 
         .byline {
+            font-size:inherit;
             margin:0;
+            @include margin-leader(.5, $context-font-size);
             color: $content-gray-light;
             &:before { content: "By "; }
         }
     }
-
-    /* Scale child headings */
-    .section, 
-    .exercises,
-    .references,
-    .abstract,
-    .preface, 
-    .introduction, 
-    .conclusion, 
-    .abstract,
-    .acknowledgements {
-        @include heading-selector {
-            @include typography-heading($typography-font-size-h3);
-        }
-
-        .subsection {
-            @include heading-selector {
-                @include typography-heading($typography-font-size-h4);
-            }
-
-            .subsubsection {
-                @include typography-heading($typography-font-size-h5);
-            }
-        }
-    }
 }
-
-.section {
-    @extend %section-base;
-    @extend %heading-no-type;
-
-    /* Scale child headings */
-    .subsection {
-        @include heading-selector {
-            @include typography-heading($typography-font-size-h3);
-        }
-
-        .subsubsection {
-            @include heading-selector {
-                @include typography-heading($typography-font-size-h4);
-            }
-        }
-    }
-}
-
-.subsection {
-    @extend %section-base;
-    @extend %heading-no-type;
-
-    /* Scale child headings */
-    .subsubsection {
-        @include heading-selector {
-            @include typography-heading($typography-font-size-h3);
-        }
-    }
-}
-
-.subsubsection {
-    @extend %section-base;
-    @extend %heading-no-type;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// SPECIAL SECTIONS
-////////////////////////////////////////////////////////////////////////////////
-
-.exercises {
-    @extend %section-base;
-    @extend %heading-no-type;
-}
-
-.references {
-    @extend %section-base;
-    @extend %heading-no-type;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// TYPED SECTIONS
-////////////////////////////////////////////////////////////////////////////////
 
 .frontmatter {
-    @extend %section-base;
     @include heading-selector {
         text-align:center;
     }
@@ -164,34 +108,4 @@
         font-style:normal;
         color: $content-gray-dark;
     }
-}
-
-.abstract {
-    @extend %section-base;
-    @extend %heading-no-codenumber;
-}
-
-.preface {
-    @extend %section-base;
-    @extend %heading-no-codenumber;
-}
-
-.introduction {
-    @extend %section-base;
-    @extend %heading-no-codenumber;
-}
-
-.conclusion {
-    @extend %section-base;
-    @extend %heading-no-codenumber;
-}
-
-.acknowledgements {
-    @extend %section-base;
-    @extend %heading-no-codenumber;
-}
-
-.author-biographies {
-    @extend %section-base;
-    @extend %heading-no-codenumber;
 }

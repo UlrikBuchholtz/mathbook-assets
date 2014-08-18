@@ -1,3 +1,4 @@
+@import "compass/css3/border-radius";
 
 $typography-font-family-sans-serif:   
     "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
@@ -51,10 +52,9 @@ $base-font-size: $typography-font-size-base;
 $base-line-height: $typography-line-height-computed;
 $round-to-nearest-half-line:true; // super important for reasonable headings
 $relative-font-sizing: true; // uses ems instead of pixels
+// We import it here so we can override some of the default variables with
+// typography module variables.
 @import "compass/typography/vertical_rhythm";
-
-
-@import "compass/css3/border-radius";
 
 
 // Styles to apply to the root typography container, generally the body
@@ -110,7 +110,7 @@ $relative-font-sizing: true; // uses ems instead of pixels
     color: $color;
 }
 
-@mixin typography-heading($font-size) {
+@mixin typography-heading-size($font-size) {
     @if($font-size == h1) {
         $font-size: $typography-font-size-h1;
     } @else if($font-size == h2) {
@@ -129,50 +129,6 @@ $relative-font-sizing: true; // uses ems instead of pixels
     @include margin-leader(1,$font-size);
     @include margin-trailer(.5,$font-size);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// HEADING PLACEHOLDERS
-////////////////////////////////////////////////////////////////////////////////
-// @extend these to give h1's and other elements the styles of an hX
-
-%typography-heading-base {
-    @include typography-heading-base();
-}
-
-%typography-h1 {
-    @extend %typography-heading-base;
-    @include typography-heading(h1);
-}
-
-%typography-h2 {
-    @extend %typography-heading-base;
-    @include typography-heading(h2);
-}
-
-%typography-h3 {
-    @extend %typography-heading-base;
-    @include typography-heading(h3);
-}
-
-%typography-h4 {
-    @extend %typography-heading-base;
-    @include typography-heading(h4);
-}
-
-%typography-h5{
-    @extend %typography-heading-base;
-    @include typography-heading(h5);
-}
-
-%typography-h6{
-    @extend %typography-heading-base;
-    @include typography-heading(h6);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// END HEADING PLACEHOLDERS
-////////////////////////////////////////////////////////////////////////////////
-
 
 @mixin typography-paragraph() {
     & {

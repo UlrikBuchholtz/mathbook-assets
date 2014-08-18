@@ -1,11 +1,18 @@
 @import "../_content_config.scss";
+@import "../../shared/typography";
+@import "../../shared/heading";
 @import "../mixins/environment";
-@import "../mixins/heading";
 
 /*******************************************************************************
  * Environments
  ******************************************************************************/
 
+// A placeholder class for @extending. 
+// This will not output CSS unless it is @extended.
+// See SASS docs for more details.
+%environment-base {
+    @include environment-base();
+}
 
 .definition-like {
     @extend %environment-base;

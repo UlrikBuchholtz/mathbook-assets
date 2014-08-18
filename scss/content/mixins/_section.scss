@@ -1,27 +1,38 @@
 @import "../_content_config.scss";
-@import "heading";
-@import "../../shared/_typography.scss";
+@import "../../shared/typography";
+@import "../../shared/heading";
 
-// Note: in Sass the %placeholder is a special selector that has no output 
-// unless used in an @extend directive.
+// I've opted for zero-indexed since, unlike hX, sections wrap content
+// the first section level is more of a root than h1
+// Feel free to switch to one-indexed if it makes more sense to you
 
-// Here I am providing both a placeholder class (denoted by %) and a mixin.
-// @extend-ing the placeholder  creates a comma separated list in the CSS.
-// This is preferred because it produces less total CSS output
-// and the resulting CSS output is easier to edit manually
+// The number of lines between sections
+$section-margin-lines: 2.5 !default;
 
-// However, if you wish to separate two items in the CSS output,
-// or it is infeasible to @extend the placholder,
-// use the corresponding mixin (with @include) to inject the rules directly
+$section-heading-size-level-0: h2 !default;
+$section-heading-size-level-1: h3 !default;
+$section-heading-size-level-2: h4 !default;
+$section-heading-size-level-3: h5 !default;
 
 @mixin section-base() {
-    @include heading() {
-        @include adjust-font-size-to($typography-font-size-h2);
+    @include heading-selector {
+        @include heading-base;
     }
-    
-    margin-bottom:2.5*$base-rhythm-unit;
+    @include margin-trailer($section-margin-lines);
 }
 
-%section-base {
-    @include section-base();
+@mixin section-level($level) {
+
+    $font-size: $section-heading-size-level-0;
+    @if ($level == 1) {
+        $font-size: $section-heading-size-level-1;
+    } @else if($level == 2) {
+        $font-size: $section-heading-size-level-2;
+    } @else if($level == 3) {
+        $font-size: $section-heading-size-level-3;
+    }
+
+    @include heading-selector {
+        @include typography-heading-size($font-size);
+    }
 }
