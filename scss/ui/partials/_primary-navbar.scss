@@ -1,10 +1,15 @@
 @import "../ui_config";
-@import "../mixins/buttons";
-@import "../mixins/flex-container";
+
 @import "compass/css3/transition";
 @import "compass/css3/box-sizing";
-@import "../../shared/_css_message.scss";
 @import "compass/utilities/general/clearfix";
+
+// For icon variables
+@import "lib/ionicons/ionicons-variables";
+
+@import "../mixins/buttons";
+@import "../mixins/flex-container";
+@import "../../shared/_css_message.scss";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Config
@@ -193,8 +198,7 @@ $navbar-bottom-box-shadow:
         }
     }
 
-    /* ion-navicon-round */
-    @include navbar-button("\f20d");
+    @include navbar-button($ionicon-var-navicon-round);
     padding:0;
 }
 
@@ -207,8 +211,7 @@ $navbar-bottom-box-shadow:
         width: $ui-sidebar-right-width;
     }
 
-    /* ion-chatbox */
-    @include navbar-button("\f2e1");
+    @include navbar-button($ionicon-var-chatbox);
     padding:0;
 
     /*On big screens, */
@@ -224,25 +227,21 @@ $navbar-bottom-box-shadow:
 }
 
 .up-button {
-    /* ion-chevron-up */
-    @include navbar-button("\f126");
+    @include navbar-button($ionicon-var-chevron-up);
     text-align:center;
 }
 
 .previous-button {
-    /* ion-chevron-left */
-    @include navbar-button("\f124");
+    @include navbar-button($ionicon-var-chevron-left);
 }
 
 .next-button {
-    /* ion-chevron-right */
-    @include navbar-button("\f125", after);
+    @include navbar-button($ionicon-var-chevron-right, after);
     text-align:right;
 }
 
 .settings-button {
-    /* ion-android-settings */
-    @include navbar-button("\f2f7");
+    @include navbar-button($ionicon-var-android-settings);
 }
 
 /*******************************************************************************
