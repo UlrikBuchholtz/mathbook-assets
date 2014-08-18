@@ -73,21 +73,7 @@ $heading-after:" " !default;
         @include typography-heading-base;
     }
 
-    &:before {
-        @if($heading-before == none) {
-            display:none;
-        } @else {
-            content:$heading-before;
-        }
-    }
-
-    &:after {
-        @if($heading-after == none) {
-            display:none;
-        } @else {
-            content:$heading-after;
-        }
-    }
+    @include heading-set-before-after($heading-before, $heading-after);
 
     .type {
         @include heading-set-before-after($type-before, $type-after);
