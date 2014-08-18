@@ -15,14 +15,8 @@ $flex-container-level-end: 6 !default;
 /* Elements that contain a variable number of buttons should @extend this */
 @mixin flex-container(
     $prefix: $flex-container-prefix,
-    $child-selector: $flex-container-child-selector,
-    $level-start: $flex-container-level-start,
-    $level-end: $flex-container-level-end 
+    $child-selector: $flex-container-child-selector
 ) {
-
-    #{$child-selector} {
-        @include box-sizing(border-box);
-    }
 
     &, &.#{$prefix}-align-left {
         #{$child-selector} {
@@ -36,11 +30,33 @@ $flex-container-level-end: 6 !default;
         }
 
     }
+}
 
+@mixin flex-children-widths(
+    $prefix: $flex-container-prefix,
+    $child-selector: $flex-container-child-selector,
+    $level-start: $flex-container-level-start,
+    $level-end: $flex-container-level-end 
+) {
     // Output a child-divisor-X class for each supported level
     @for $i from $level-start to $level-end {
         &.#{$prefix}-divisor-#{$i} > #{$child-selector} {
             @include flex-container-child-width($i);
+        }
+    }
+}
+
+
+@mixin flex-children(
+    $prefix: $flex-container-prefix,
+    $child-selector: $flex-container-child-selector,
+    $level-start: $flex-container-level-start,
+    $level-end: $flex-container-level-end 
+) {
+    // Output a child-divisor-X class for each supported level
+    @for $i from $level-start to $level-end {
+        &.#{$prefix}-divisor-#{$i} > #{$child-selector} {
+            @content;
         }
     }
 }

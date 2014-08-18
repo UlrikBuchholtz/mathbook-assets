@@ -248,19 +248,90 @@ $navbar-bottom-box-shadow:
  * TOOLBAR 
  ******************************************************************************/
 
+
+/**
+ * Establish borders on toolbar-items, 
+ */
+.toolbar, .toolbar > .toolbar-item, .button {
+    /* Use a left border */
+    border:$toolbar-border;
+    border-top:none;
+    border-bottom:none;
+    border-right:none;
+
+    /* subtract border and padding from width 
+     * so we can set width precisely as percent */
+    @include box-sizing(border-box);
+}
+
 /**
  * Toolbar of buttons and miscellany
  */
 .toolbar {
     // flex container with support for 1 to 6 children
     // the sizing of the children is determined by .toolbar-divisor-X
-    @include flex-container("toolbar", ".toolbar-item", 1, 6);
+    $prefix: "toolbar";
+    $child-selector: ".toolbar-item";
+    $level-start: 1;
+    $level-end: 6;
+    @include flex-container($prefix, $child-selector);
+    @include flex-children-widths($prefix, $child-selector, $level-start, $level-end);
 
-    .toolbar:first-child .toolbar-item:first-child {
+    /** 
+     * Ensure adjacent borders do not double up 
+     * BEWARE: THERE BE DRAGONS HERE. 
+     */
+    &, &.toolbar-align-left {
+        // Apply some styles to flex-children
+        @include flex-children($prefix, $child-selector, $level-start, $level-end) {
+
+            /* First child defers to left border of parent 
+             * If toolbar itself is a first-child, we assume it is adjacent with
+             * the screen or the edge of a parent toolbar
+             */
+            &:first-child {
+                border-left:none;
+            }
+
+            /* Last child defers to right border of parent 
+             * If toolbar itself is a last-child, we assume it is adjacent with
+             * the screen or the edge of a parent toolbar
+             */
+            &:last-child {
+                border-right:none;
+            }
+
+            &:first-child:last-child  {
+                border-left:none;
+                border-right: $toolbar-border;
+            }
+        }
+    }
+
+    /*
+     * Order is reversed when we float right
+     * So we need to swap first and last on toolbar-item-children 
+     * BEWARE: THERE BE DRAGONS HERE. 
+     */
+    &.toolbar-align-right {
+        // Apply some styles to flex-children
+        @include flex-children($prefix, $child-selector, $level-start, $level-end) {
+            &:first-child, &:first-child:last-child {
+                border-right:none;
+                border-left:$toolbar-border;
+            }
+
+            &:last-child {
+                border-left:none;
+            }
+        }
+    }
+
+    &:first-child {
         border-left:none;
     }
 
-    .toolbar:last-child .toolbar-item:last-child {
+    &:last-child {
         border-right:none;
     }
 
@@ -271,53 +342,14 @@ $navbar-bottom-box-shadow:
     @include clearfix();
 }
 
-/** 
- * Establish borders on toolbar-items, 
- * but ensure adjacent borders do not double up 
- * BEWARE: THERE BE DRAGONS HERE. 
- */
-// TODO could be refactored into a flex-container mixin?
-.toolbar, .toolbar > .toolbar-item, .button {
-    border:$toolbar-border;
-    border-top:none;
-    border-bottom:none;
-    border-right:none;
-
-    /* subtract border and padding from width 
-     * so we can set width precisely as percent */
-    @include box-sizing(border-box);
-
-    /* First child defers to left border of parent 
-     * If toolbar itself is a first-child, we assume it is adjacent with
-     * the screen or the edge of a parent toolbar
-     */
-    &:first-child {
-        border-left:none;
-    }
-
-    /* Last child defers to right border of parent 
-     * If toolbar itself is a last-child, we assume it is adjacent with
-     * the screen or the edge of a parent toolbar
-     */
-    &:last-child {
-        border-right:none;
-    }
-}
-
-/*
- * Order is reversed when we float right
- * So we need to swap first and last on toolbar-item-children 
- * BEWARE: THERE BE DRAGONS HERE. 
- */
-// TODO could be refactored into a flex-container mixin?
-.toolbar.toolbar-align-right {
-    & > .toolbar-item:first-child {
-        border-right:none;
-        border-left:$toolbar-border;
-    }
-
-    & > .toolbar-item:last-child {
-        border-left:none;
+.toolbar.toolbar-borderless {
+    &, &.toolbar-align-right, &.toolbar-align-left {
+        &, & > .toolbar-item {
+            border-left:none;
+            border-right:none;
+            border-top:none;
+            border-bottom:none;
+        }
     }
 }
 
