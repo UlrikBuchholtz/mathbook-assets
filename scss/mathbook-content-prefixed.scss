@@ -1,4 +1,4 @@
-@import "config/config";
+@import "config";
 @import "shared/typography";
 
 @include typography-google-fonts-import();
@@ -8,6 +8,7 @@
  ******************************************************************************/
 
 .mathbook-content {
+    @include typography-base();
     @import "content/content";
 }
 

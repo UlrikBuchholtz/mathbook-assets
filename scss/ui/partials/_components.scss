@@ -2,6 +2,7 @@
 @import "../mixins/_navtree.scss";
 @import "../mixins/buttons";
 @import "../mixins/flex-container";
+@import "../../shared/knowl";
 
 /* 
  * Table-of-contents for chapter/section/etc summary pages 
@@ -72,12 +73,8 @@
     
     .ui-button {
         /*float:right;*/
-        &.ui-state-default, &.ui-state-hover, &.ui-state-active, &.ui-state-focus {
-            /*@include button-minimalist($color: #999);*/
-            @include button-minimalist(
-                        $color: #888,
-                        $color-hover: $ui-color-secondary,
-                        $color-active: $ui-color-primary);
+        &.ui-state-default, &.ui-state-hover, &.ui-state-active, &.ui-state-focus, &.ui-corner-all {
+            @include button-standard;
             font-family: $ui-font-family-base;
             font-size: $ui-font-size-base;
             padding: 0 #{$ui-line-height-base/2}em;

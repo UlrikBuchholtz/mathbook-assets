@@ -7,6 +7,7 @@
 @import "compass/css3/transition";
 @import "compass/typography/text/replacement";
 @import "compass/typography/text/ellipsis";
+@import "compass/utilities/color/contrast";
 @import "./triangle";
 
 @mixin button-base() {
@@ -59,10 +60,11 @@
     background: transparent;
     color: $color;
     border: 2px solid;
+    font-weight:bold;
     @include border-radius(2px);
     @include transition-property(color, border-color);
 
-    &:hover, &:focus {
+    &:hover, &:focus, &.hover, &.focus {
         color: $color-hover;
         border-color: $color-hover;
     }
@@ -72,11 +74,78 @@
         border-color: $color-active;
     }
 
-    &.disabled {
-        &:hover, &:focus, &:active, &.active {
+    &.disabled, &[disabled] {
+        &, &:hover, &:focus, &:active, &.active {
             cursor:default;
             color:$color;
             opacity:.5;
+        }
+    }
+}
+
+@mixin button-standard-base() {
+    @include button-base();
+    border-width:1px;
+    border-style:solid;
+    font-weight:bold;
+    @include border-radius(3px);
+}
+
+@mixin button-standard-state(
+    $state: default,
+    $base-color :$ui-color-base
+) {
+    $bg-color-light: lighten($base-color, 5%);
+    $bg-color-lighter: lighten($base-color, 10%);
+    $bg-color-dark: darken($base-color, 10%);
+    $bg-color-darker: darken($base-color, 20%);
+
+    $color-dark:desaturate(darken($base-color, 65%), 20%);
+    $color-light:lighten($base-color, 100%);
+    $color: contrast-color($bg-color-darker, $color-dark, $color-light );
+
+    @if($state == default or $state == disabled) {
+        color:$color;
+        border-color:$bg-color-dark;
+        @include background-image(linear-gradient($bg-color-light, $bg-color-dark));
+    } 
+    
+    @if($state == hover or $state == focus) {
+        color: $color;
+        @include background-image(linear-gradient($bg-color-lighter, $bg-color-darker));
+        border-color:$bg-color-dark;
+    } @else if($state == active) {
+        color: $color;
+        @include button-depressable();
+        @include background-image(linear-gradient($bg-color-darker,$bg-color-light));
+        border-color:$bg-color-darker;
+    } @else if($state == disabled) {
+        opacity: .5;
+    }
+}
+
+@mixin button-standard(
+    $base-color-default: $ui-color-base,
+    $base-color-hover: $ui-color-base,
+    $base-color-active: $brand-primary-light
+) {
+
+    & {
+        @include button-standard-base();
+        @include button-standard-state(default, $base-color-default);
+    }
+    
+    &:hover, &:focus, &.hover, &.focus {
+        @include button-standard-state(hover, $base-color-hover);
+    }
+
+    &:active, &.active {
+        @include button-standard-state(active, $base-color-active);
+    }
+
+    &.disabled, &[disabled] {
+        &, &:hover, &.hover, &:focus, &.focus, &:active, &.active {
+            @include button-standard-state(disabled, $base-color-default);
         }
     }
 }

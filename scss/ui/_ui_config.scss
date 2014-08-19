@@ -22,8 +22,6 @@
 //    $variable: blue !default; // winning default 
 
 // Color defaults
-$ui-color-primary: orange !default;
-$ui-color-secondary: blue !default;
 $ui-color-base: #ddd !default;
 
 // Background color of ui
@@ -31,7 +29,7 @@ $ui-color-bg: change-color($ui-color-base, $lightness:87%);
 
 // Applied to inline ui links
 //---------------------------
-$ui-link-color: $ui-color-primary !default;
+$ui-link-color: $brand-primary !default;
 $ui-link-color-hover: lighten($ui-link-color, 10%) !default;
 $ui-link-color-active: darken($ui-link-color, 10%) !default;
 $ui-link-bg: transparent !default;
@@ -40,18 +38,18 @@ $ui-link-bg-active: transparent !default;
 
 // Applied only to block links
 //----------------------------
-$ui-link-block-color: $ui-color-primary !default;
+$ui-link-block-color: $brand-primary !default;
 $ui-link-block-color-hover: white !default;
 $ui-link-block-color-active: white !default;
 $ui-link-block-bg: change-color($ui-color-bg, $lightness:94%) !default;
-$ui-link-block-bg-hover: $ui-color-primary !default;
-$ui-link-block-bg-active: $ui-color-primary !default;
+$ui-link-block-bg-hover: $brand-primary !default;
+$ui-link-block-bg-active: $brand-primary !default;
 
 // Applied to navtree headers
 $ui-toc-heading-color: white;
 $ui-toc-heading-color-hover: $ui-link-block-color-hover;
 $ui-toc-heading-color-active: $ui-link-block-color-active;
-$ui-toc-heading-bg: $ui-color-secondary;
+$ui-toc-heading-bg: $brand-secondary;
 $ui-toc-heading-bg-hover: $ui-link-block-bg-hover;
 $ui-toc-heading-bg-active: $ui-link-block-bg-active;
 

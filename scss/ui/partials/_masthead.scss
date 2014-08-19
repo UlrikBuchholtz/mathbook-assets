@@ -11,7 +11,7 @@
 
 // Note: These variables should only depend on ui module variables
 $masthead-bg-color: change-color($ui-color-bg, $lightness:98%) !default;
-$masthead-title-color: $ui-color-primary;
+$masthead-title-color: $brand-primary;
 $masthead-subtitle-color: change-color($masthead-bg-color, $lightness:47%) !default;
 $masthead-font-family: $ui-font-family-heading;
 
@@ -97,11 +97,11 @@ $masthead-font-family: $ui-font-family-heading;
         }
 
         &:hover:before {
-            color: $ui-color-primary;
+            color: $brand-primary;
         }
 
         &:active:before {
-            color: $ui-color-secondary;
+            color: $brand-secondary;
         }
     }
 

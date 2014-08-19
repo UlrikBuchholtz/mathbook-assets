@@ -16,7 +16,7 @@ $navtree-heading-color: white !default;
 $navtree-heading-color-hover: $navtree-link-color-hover !default;
 $navtree-heading-color-active: $navtree-link-color-active !default;
 
-$navtree-heading-bg: $ui-color-secondary !default;
+$navtree-heading-bg: $brand-secondary !default;
 $navtree-heading-bg-hover: $navtree-link-bg-hover !default;
 $navtree-heading-bg-active: $navtree-link-bg-active !default;
 
@@ -118,8 +118,10 @@ $navtree-segment-font-size: 16 !default;
         background: $bg-active;
     }
 
-    // box-shadow inset on click
-    @include button-depressable();
+    &:active {
+        /* Depressed state on click but not when marked active */
+        @include button-depressable();
+    }
 }
 
 @mixin navtree-segment-border-collapse(
