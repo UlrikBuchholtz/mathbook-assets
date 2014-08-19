@@ -37,7 +37,7 @@
         & {
             font-family: $ui-font-family-heading;
 
-            @media screen and (max-width: $ui-screen-xs-min) {
+            @media screen and (max-width: $screen-xs-min) {
                 font-size:.8em;
             }
         }

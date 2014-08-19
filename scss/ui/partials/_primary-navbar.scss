@@ -65,7 +65,7 @@ $navbar-bottom-box-shadow:
         @include box-shadow( $navbar-top-box-shadow);
     }
 
-    @media screen and (max-width: $ui-screen-sm-min) {
+    @media screen and (max-width: $screen-sm-min) {
         /* 
          * At small screen sizes, turn the navbar into a full bar along bottom 
          * When stuck and when not stuck. We don't care about stuck at this size
@@ -138,7 +138,7 @@ $navbar-bottom-box-shadow:
     //----------------------------------------------------
 
     /* Icon only at small screen sizes */
-    @media screen and (max-width:$ui-screen-sm-min) {
+    @media screen and (max-width:$screen-sm-min) {
         /*@include button-hide-text($navbar-icon-box-size);*/
         float:left;
         text-align:center;
@@ -165,7 +165,7 @@ $navbar-bottom-box-shadow:
         $pseudo,
         $placement);
 
-    @media screen and (max-width:$ui-screen-sm-min) {
+    @media screen and (max-width:$screen-sm-min) {
         @include button-with-icon(
             $icon, 
             $ui-icon-size-touch, 
@@ -190,7 +190,7 @@ $navbar-bottom-box-shadow:
     }
 
     /*On big screens, */
-    @media screen and (min-width: $ui-screen-sm-min + 1) {
+    @media screen and (min-width: $screen-sm-min + 1) {
         &.active {
             /* Show text if hidden and match sidebar width */
             text-indent:0;
@@ -215,7 +215,7 @@ $navbar-bottom-box-shadow:
     padding:0;
 
     /*On big screens, */
-    @media screen and (min-width: $ui-screen-sm-min + 1) {
+    @media screen and (min-width: $screen-sm-min + 1) {
         float:right;
 
         &.active {
@@ -360,7 +360,7 @@ $navbar-bottom-box-shadow:
 .navbar-bottom-buttons {
     display:none;
 
-    @media screen and (max-width:$ui-screen-sm-min) {
+    @media screen and (max-width:$screen-sm-min) {
         display:block;
     }
 }
@@ -388,7 +388,7 @@ $navbar-bottom-box-shadow:
         }
     }
 
-    @media screen and (max-width:$ui-screen-sm-min) {
+    @media screen and (max-width:$screen-sm-min) {
         display:none;
     }
 }

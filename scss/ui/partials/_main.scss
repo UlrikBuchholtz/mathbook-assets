@@ -36,7 +36,7 @@
 
     @include box-shadow(rgba(black,.5) 0 5px 5px);
 
-    @media screen and (max-width: $ui-screen-sm-min) {
+    @media screen and (max-width: $screen-sm-min) {
         /* Make space for navbar fixed to bottom of screen */
         padding-bottom: $ui-navbar-height;
     }
@@ -46,15 +46,15 @@
 
     @include sliding-sidebars-main-side(
         $side: left,
-        $slide-min: $ui-screen-sm-min,
-        $default-open-min: $ui-screen-sm-min,
+        $slide-min: $screen-sm-min,
+        $default-open-min: $screen-sm-min,
         $sidebar-width: $ui-sidebar-left-width
     );
 
     @include sliding-sidebars-main-side(
         $side: right,
-        $slide-min: $ui-screen-sm-min,
-        $default-open-min: $ui-screen-lg-min,
+        $slide-min: $screen-sm-min,
+        $default-open-min: $screen-lg-min,
         $sidebar-width: $ui-sidebar-right-width
     );
 }
@@ -74,7 +74,7 @@
          * Switch to centered at medium layout
          * Only matters when sidebar is closed
          */
-        @media screen and (max-width: $ui-screen-md-min) {
+        @media screen and (max-width: $screen-md-min) {
             margin: $ui-content-margin auto;
         }
 
@@ -102,7 +102,7 @@
         /* Since sidebars push open in the small layout, 
          * we want consistent  margins regardless of the sidebar states
          */
-        @media screen and (max-width: $ui-screen-sm-min) {
+        @media screen and (max-width: $screen-sm-min) {
             &,
             .sidebar-left-open &,
             .sidebar-right-open &, 
@@ -126,7 +126,7 @@
         }
 
         /* And even smaller margins at extra small layouts */ 
-        @media screen and (max-width: $ui-screen-xs-min) {
+        @media screen and (max-width: $screen-xs-min) {
             &,
             .sidebar-left-open &,
             .sidebar-right-open &, 

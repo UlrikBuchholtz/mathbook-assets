@@ -103,7 +103,7 @@ body {
          * At small screens, the navbar is fixed to bottom,
          * so the sticky wrapper should collapse.
          */
-        @media screen and (max-width: $ui-screen-sm-min) {
+        @media screen and (max-width: $screen-sm-min) {
             height:0;
         }
     }
@@ -145,7 +145,7 @@ body {
 
     @include sliding-sidebars-sidebar(
         $side:left,
-        $default-open-min: $ui-screen-sm-min,
+        $default-open-min: $screen-sm-min,
         $sidebar-width: $ui-sidebar-left-width
     );
 }
@@ -166,7 +166,7 @@ body {
         display:none;
         @include sliding-sidebars-sidebar(
             $side: right,
-            $default-open-min: $ui-screen-lg-min,
+            $default-open-min: $screen-lg-min,
             $sidebar-width: $ui-sidebar-right-width
         );
         // This is for performance
@@ -199,15 +199,15 @@ body {
         @include sliding-sidebars-main();
         @include sliding-sidebars-main-side(
             $side: left,
-            $slide-min: $ui-screen-sm-min,
-            $default-open-min: $ui-screen-sm-min,
+            $slide-min: $screen-sm-min,
+            $default-open-min: $screen-sm-min,
             $sidebar-width: $ui-sidebar-left-width
         );
 
         @include sliding-sidebars-main-side(
             $side: right,
-            $slide-min: $ui-screen-sm-min,
-            $default-open-min: $ui-screen-lg-min,
+            $slide-min: $screen-sm-min,
+            $default-open-min: $screen-lg-min,
             $sidebar-width: $ui-sidebar-right-width
         );
         @include sliding-sidebars-compositing-layer();

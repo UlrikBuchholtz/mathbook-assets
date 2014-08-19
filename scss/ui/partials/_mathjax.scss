@@ -20,7 +20,7 @@ body #MathJax_Message {
     z-index:1000;
     bottom: .5*$ui-font-size-base;
 
-    @media screen and (max-width: $ui-screen-sm-min) {
+    @media screen and (max-width: $screen-sm-min) {
         /* Display above bottom navbar */
         left:$ui-line-height-computed;
         right:$ui-line-height-computed;
@@ -43,7 +43,7 @@ body #MathJax_Message {
     @include margin-leader;
     @include margin-trailer;
 
-    @media screen and (max-width: $ui-screen-sm-min) {
+    @media screen and (max-width: $screen-sm-min) {
         /* Allow users on smaller screens to scroll equations 
          * horizontally when they don't fit on the screen 
          */
