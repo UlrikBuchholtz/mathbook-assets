@@ -24,9 +24,7 @@ $knowl-nested-bg-color: white !default;
 $knowl-border-width:12px !default;
 $knowl-border-radius: 4px !default;
 
-$knowl-nested-border-color: darken($knowl-border-color,10%) !default;
 $knowl-nested-border-width: $knowl-border-width / 2 !default;
-$knowl-nested-border-radius: 4px !default;
 
 $knowl-has-ragged-top: true !default;
 $knowl-ragged-top-height: 12px !default;

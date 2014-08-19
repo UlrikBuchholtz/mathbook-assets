@@ -6,58 +6,40 @@
     @include knowl-link();
 }
 
+$level-1-border-color: darken($knowl-border-color, 5%);
+$level-2-border-color: darken($knowl-border-color, 10%);
+$level-3-border-color: darken($knowl-border-color, 15%);
+
 /* restyle knowls at first and third depth */
 .knowl-output {
-    $zig-zag-height: rhythm(.5);
     @include knowl-output();
 
-    & {
-        position:relative;
-        border-top-width:1px;
-        margin-top:$zig-zag-height;
-
-        @include border-top-radius(0);
-    }
-
-    &:before {
-        content:"";
-        position:absolute;
-        position:absolute;
-        top:0;
-        left:0;
-        right:0;
-        margin-top: -$zig-zag-height;
-        margin-left:-$knowl-border-width;
-        margin-right:-$knowl-border-width;
-        @include zig-zag-edge($knowl-border-color,  $zig-zag-height);
-    }
-
-
-    $code-border-color: $knowl-nested-border-color;
+    $code-border-color: $level-1-border-color;
     $code-bg-color: $knowl-nested-bg-color;
     @import "code";
 }
 
 .knowl-output .knowl-output {
+
     @include knowl-output(
         $bg-color: $knowl-nested-bg-color,
         $border-width: $knowl-nested-border-width,
-        $border-color: $knowl-nested-border-color,
-        $border-radius: $knowl-nested-border-radius
+        $border-color: $level-1-border-color
     );
 
-    $code-border-color: $knowl-border-color;
+    $code-border-color: $level-2-border-color;
     $code-bg-color:$knowl-bg-color;
     @import "code";
 }
 
 .knowl-output .knowl-output .knowl-output {
+
     @include knowl-output(
         $border-width: $knowl-nested-border-width,
-        $border-radius: $knowl-nested-border-radius
+        $border-color: $level-2-border-color
     );
 
-    $code-border-color: $knowl-nested-border-color;
+    $code-border-color: $level-3-border-color;
     $code-bg-color:$knowl-nested-bg-color;
     @import "code";
 }
