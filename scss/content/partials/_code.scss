@@ -1,0 +1,32 @@
+@import "../../shared/_typography.scss";
+
+// These variables can be configured by import context
+// This allows code to appear differently in knowls
+$code-border-color: #ddd !default;
+$code-bg-color: #eee !default;
+
+
+.code {
+    @include css-error(
+        "Markup Error: .code is deprecated. Use .code-inline or .code-block.");
+}
+
+.code-block,
+.CodeMirror,
+.sagecell .CodeMirror {
+    @include typography-code(
+        $bg-color: $code-bg-color, 
+        $border-color: $code-border-color);
+}
+
+.code-inline {
+    @include typography-code-inline(
+        $bg-color: $code-bg-color, 
+        $border-color: $code-border-color);
+}
+
+/* Since CodeMirror output contains a bunch of lines with their own padding */
+.CodeMirror, .sagecell .CodeMirror {
+    padding:0;
+}
+

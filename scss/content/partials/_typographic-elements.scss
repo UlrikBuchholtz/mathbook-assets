@@ -54,24 +54,3 @@ address {
     @include typography-address();
 }
 
-.code {
-    @include css-error(
-        "Markup Error: .code is deprecated. Use .code-inline or .code-block.");
-}
-
-.code-block,
-.CodeMirror,
-.sagecell .CodeMirror {
-    font-family: $typography-font-family-monospace;
-    @include typography-code();
-}
-
-.code-inline {
-    @include typography-code-inline();
-}
-
-/* Since CodeMirror output contains a bunch of lines with their own padding */
-.CodeMirror, .sagecell .CodeMirror {
-    padding:0;
-}
-

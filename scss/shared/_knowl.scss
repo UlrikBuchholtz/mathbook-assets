@@ -1,41 +1,37 @@
-// Knowl
-@import "shared/typography";
+@import "compass/css3/inline-block";
+@import "compass/css3/border-radius";
 
-$brand-primary: gray !default;
+// Knowl
+$knowl-color-base: gray !default;
 
 // Link colors
-$knowl-link-color: saturate($brand-primary, 10%) !default;
-$knowl-link-color-hover: saturate(darken($brand-primary, 10%), 10%) !default; 
+$knowl-link-color: saturate($knowl-color-base, 10%) !default;
+$knowl-link-color-hover: saturate(darken($knowl-color-base, 10%), 10%) !default; 
+$knowl-link-border-radius: 3px !default;
 
 // Border colors
-$knowl-border-color: change-color($brand-primary, 
+$knowl-border-color: change-color($knowl-color-base, 
                                   $saturation: 100%,
                                   $lightness: 92%) !default;
-$knowl-border-color-bold: $knowl-border-color !default;
 
 // Background colors
 $knowl-bg-color: change-color($knowl-border-color, 
                               $saturation: 90% ,
                               $lightness: 99%) !default;
-$knowl-within-knowl-bg-color: white !default;
+$knowl-nested-bg-color: white !default;
 
 // Layout
-$knowl-border-width:10px !default;
-$knowl-padding:10px !default;
-$knowl-link-border-radius: 3px !default;
+$knowl-border-width:12px !default;
 $knowl-border-radius: 4px !default;
 
-@mixin knowl() {
-    /* The knowl drawer */
-    .knowl-output {
-        @include knowl-output();
-    }
+$knowl-nested-border-color: darken($knowl-border-color,10%) !default;
+$knowl-nested-border-width: $knowl-border-width / 2 !default;
+$knowl-nested-border-radius: 4px !default;
 
-    /* Links that open knowls */
-    *[knowl] {
-        @include knowl-link();
-    }
-}
+$knowl-has-ragged-top: true !default;
+$knowl-ragged-top-height: 12px !default;
+$knowl-padding:12px !default;
+$knowl-margin-bottom: 12px !default;
 
 @mixin knowl-link(
     $color: $knowl-link-color,
@@ -81,18 +77,44 @@ $knowl-border-radius: 4px !default;
 
 @mixin knowl-output(
     $bg-color: $knowl-bg-color,
-    $child-bg-color: $knowl-child-bg-color,
     $border-width: $knowl-border-width,
     $border-color: $knowl-border-color,
-    $border-color-bold: $knowl-border-color-bold,
+    $border-radius: $knowl-border-radius,
     $margin-bottom: $knowl-margin-bottom,
-    $border-radius: $knowl-border-radius
+    $has-ragged-top: $knowl-has-ragged-top,
+    $ragged-top-height: $knowl-ragged-top-height
 ) {
     & {
-        border: $border-width solid $knowl-border-color;
+        border: $border-width solid $border-color;
         background: $bg-color;
-        @include border-radius($border-radius-large);
-        margin-bottom:$line-height-computed;
+        @include border-radius($border-radius);
+        margin-bottom:$margin-bottom;
+    }
+
+    // TODO could be refactored into seperate mixin so that option could
+    //      be exposed with a class on body
+    @if($has-ragged-top) {
+        & {
+            position:relative;
+            /* Keep a small border to maintain margin-collapse */
+            border-top-width:1px;
+            margin-top:$ragged-top-height;
+
+            @include border-top-radius(0);
+        }
+
+        &:before {
+            content:"";
+            position:absolute;
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            margin-top: -$ragged-top-height;
+            margin-left:-$border-width;
+            margin-right:-$border-width;
+            @include zig-zag-edge($border-color,  $ragged-top-height);
+        }
     }
 
     .knowl-footer {
@@ -103,31 +125,9 @@ $knowl-border-radius: 4px !default;
         padding:1px 0px 1px $border-width;
     }
 
-    // TODO recursive solution?
-    & .knowl-output {
-        & {
-            border-color: $border-color-bold;
-            background: $child-bg-color;
-        }
-
-        /* All knowls within knowls should have this  */
-        &, & > .knowl-output {
-            border-width: $border-width / 2;
-            border-bottom-width: $border-width;
-        }
-
-        .knowl-footer {
-            color: darken($border-color, 60%);
-            // color: desaturate(darken($border-color-bold, 60%), 80%) ;
-            background: $border-color-bold;
-        }
-    }
-
     .knowl-content {
-        padding: $knowl-padding;
+        /* Better to apply a margin, so that heading margins collapse */
+        padding:0;
+        margin: $knowl-padding;
     }
-
-    @include typography-code-inline(white, $knowl-border-color);
-    @include typography-code($bg-color: white, 
-                             $border-color: $knowl-border-color-bold);
 }

@@ -1,0 +1,63 @@
+@import "../../shared/knowl";
+@import "../../shared/zig-zag";
+
+/* Links that open knowls */
+*[knowl] {
+    @include knowl-link();
+}
+
+/* restyle knowls at first and third depth */
+.knowl-output {
+    $zig-zag-height: rhythm(.5);
+    @include knowl-output();
+
+    & {
+        position:relative;
+        border-top-width:1px;
+        margin-top:$zig-zag-height;
+
+        @include border-top-radius(0);
+    }
+
+    &:before {
+        content:"";
+        position:absolute;
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        margin-top: -$zig-zag-height;
+        margin-left:-$knowl-border-width;
+        margin-right:-$knowl-border-width;
+        @include zig-zag-edge($knowl-border-color,  $zig-zag-height);
+    }
+
+
+    $code-border-color: $knowl-nested-border-color;
+    $code-bg-color: $knowl-nested-bg-color;
+    @import "code";
+}
+
+.knowl-output .knowl-output {
+    @include knowl-output(
+        $bg-color: $knowl-nested-bg-color,
+        $border-width: $knowl-nested-border-width,
+        $border-color: $knowl-nested-border-color,
+        $border-radius: $knowl-nested-border-radius
+    );
+
+    $code-border-color: $knowl-border-color;
+    $code-bg-color:$knowl-bg-color;
+    @import "code";
+}
+
+.knowl-output .knowl-output .knowl-output {
+    @include knowl-output(
+        $border-width: $knowl-nested-border-width,
+        $border-radius: $knowl-nested-border-radius
+    );
+
+    $code-border-color: $knowl-nested-border-color;
+    $code-bg-color:$knowl-nested-bg-color;
+    @import "code";
+}
