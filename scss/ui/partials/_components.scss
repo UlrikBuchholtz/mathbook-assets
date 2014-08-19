@@ -15,16 +15,30 @@
         $color-hover: $ui-link-block-color-hover;
         $color-active: $ui-link-block-color-active;
 
+        $bg: $ui-link-block-bg;
+        $bg-hover: $ui-link-block-bg-hover;
+        $bg-active: $ui-link-block-bg-active;
+
+        $codenumber-opacity: .8;
+
         @include ui-link-directional(
             $font-size: $font-size,
 
             $color: $color,
             $color-hover: $color-hover,
-            $color-active: $color-active
+            $color-active: $color-active,
+
+            $bg: $bg,
+            $bg-hover: $bg-hover,
+            $bg-active: $bg-active
         );
 
         & {
             font-family: $ui-font-family-heading;
+
+            @media screen and (max-width: $ui-screen-xs) {
+                font-size:.8em;
+            }
         }
 
         $codenumber-gutter: $ui-line-height-computed;
@@ -35,15 +49,15 @@
         );
 
         .codenumber {
-            color: rgba($color, .6);
+            color: darken($bg, 50%);
         }
 
         &:hover .codenumber {
-            color: rgba($color-hover, .6);
+            color: rgba($color-hover, $codenumber-opacity);
         }
 
         &:active .codenumber {
-            color: rgba($color-active, .6);
+            color: rgba($color-active, $codenumber-opacity);
         }
     }
 }
