@@ -302,6 +302,7 @@
 
 // Large, button-like links with arrows for linking to other pages
 @mixin ui-link-directional (
+    $font-size,
     $direction: right,
 
     $color: $ui-link-block-color,
@@ -318,7 +319,7 @@
 ) {
 
     @if($arrow-color == default) {
-        $arrow-color: darken($bg, 10%);
+        $arrow-color: darken($bg, 15%);
     }
     @if($arrow-color-hover == default) {
         $arrow-color-hover: $color-hover;
@@ -328,23 +329,29 @@
     }
 
     // Due to the rotation, these are opposite (width is height)
-    $triangle-height: .4em;
     $triangle-width: .8em;
+    $triangle-height: $triangle-width/2;
+    $padding-horizontal: rhythm(1, $font-size);
+    $padding-vertical:rhythm(.5, $font-size);
+
+    // In this particular case, .25 seems reasonable
+    $margin-vertical: rhythm(.25, $font-size);
 
     & {
         position:relative;
         display:block;
-        padding:.7em;
-        margin-bottom:#{$ui-line-height-base/5}em;
+        @include adjust-font-size-to($font-size);
+        padding: $padding-vertical $padding-horizontal;
+        margin-bottom: $margin-vertical;
         @include border-radius(3px);
 
         // Place arrow on correct side
         @if $direction == right {
-            padding-right:1.7em;
-            &:after { right:1em; }
+            padding-right:2*$padding-horizontal + $triangle-height;
+            &:after { right: $padding-horizontal; }
         } @else {
-            padding-left: 1.7em;
-            &:after { left: 1em; }
+            padding-left: 2*$padding-horizontal + $triangle-height;
+            &:after { left: $padding-horizontal; }
         }
 
         &:after {
@@ -423,7 +430,8 @@
     color: $color;
     background: $bg;
     text-decoration:none;
-    padding: 0 .5em;
+    padding-right:rhythm(.5);
+    padding-left:rhythm(.5);
     @include user-select(none);
 
     // Place arrow on correct side

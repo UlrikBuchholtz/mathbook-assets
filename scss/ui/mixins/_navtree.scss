@@ -22,18 +22,50 @@ $navtree-heading-bg-active: $navtree-link-bg-active !default;
 
 $navtree-segment-font-size: 16 !default;
 
-
-// TODO this mixin might not be limited to navtrees 
-@mixin navtree-link(
-    $color: $navtree-link-color,
-    $color-hover: $navtree-link-color-hover,
-    $color-active: $navtree-link-color-active,
-
-    $bg: $navtree-link-bg,
-    $bg-hover: $navtree-link-bg-hover,
-    $bg-active: $navtree-link-bg-active
-) {
+@mixin navtree-codenumber($indent, $width) {
+    position:absolute;
+    right:100%;
+    margin-right:-($indent+$width);
+    text-align:right;
 }
+
+@mixin navtree-codenumber-title(
+    $codenumber-width,
+    $codenumber-gutter-right
+
+) {
+    @include inline-block(baseline);
+    margin-left: $codenumber-width + $codenumber-gutter-right; 
+}
+
+@mixin navtree-codenumber-container($indent) {
+    padding-left: $indent;
+}
+
+@mixin navtree-codenumber-support(
+    $indent,
+    $codenumber-width,
+    $codenumber-gutter-right,
+    $codenumber-selector: ".codenumber",
+    $title-selector: ".title"
+) {
+
+    & {
+        @include navtree-codenumber-container($indent);
+    }
+
+    #{$codenumber-selector} + #{$title-selector} {
+        @include navtree-codenumber-title(
+                   $codenumber-width, 
+                   $codenumber-gutter-right);
+
+    }
+
+    #{$codenumber-selector} {
+        @include navtree-codenumber($indent, $codenumber-width);
+    }
+}
+
 
 @mixin navtree-segment(
     $font-size: $navtree-font-size-base,

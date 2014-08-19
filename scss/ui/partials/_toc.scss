@@ -97,22 +97,14 @@ h2 {
 }
 
 .codenumber + .title {
-    @include inline-block(baseline);
-    margin-left: $title-offset; // subtract the padding
-
-    @media screen and (max-width: $ui-screen-sm-min) {
-        margin-left: $title-offset;
-    }
+    @include navtree-codenumber-title($codenumber-width, $codenumber-gutter-right);
 } 
 
 .codenumber {
-    position:absolute;
-    right:100%;
-    margin-right:-($base-indent+$codenumber-width);
-    text-align:right;
+    @include navtree-codenumber($base-indent, $codenumber-width);
 
     @media screen and (max-width: $ui-screen-sm-min) {
-        margin-right:-($base-indent-touch+$codenumber-width);
+        @include navtree-codenumber($base-indent-touch, $codenumber-width);
     }
 }
 
