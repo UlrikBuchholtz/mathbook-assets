@@ -40,6 +40,13 @@
 }
 
 .proof {
+
+    // use rgba so it looks nice inside knowls too
+    $border-color: rgba(black, .2);
+    $border-width: .1em;
+    $padding-right: rhythm(1);
+    $tombstone-color: $border-color;
+
     // @davidfarmer has asked that we keep proofs separate in CSS output
     // so we use the mixin rather than extending %environment-base
     @include environment-base();
@@ -52,22 +59,62 @@
             margin-right:.25em;
         }
 
-        /* Dotted border to denote proof */
-        padding-right: 6px;
-        border-right: 1px dotted #aaa;
-        padding-bottom: -5px;
+        position:relative;
+
+        /* dotted borders are just really ugly... */
+        /*border-right: 1px dotted #aaa;*/
+
+        /* Less use a light solid one */
+        border-right: $border-width solid $border-color;
+
+        /* Cut the border up into the top margin */
+        margin-top: -rhythm(.5);
+        padding-top: rhythm(.5);
+
+        /* Cut the border into the right margin */
+        padding-right: $padding-right;
+        margin-right:-($padding-right + $border-width);
+
+        /* Cut the tombstone into the standard margin-bottom */
+        @include padding-trailer(.5);
+        @include margin-trailer(.5);
+
+        @media screen and (max-width: $screen-sm-min) {
+            /* Bring border out of the right margin */
+            margin-right:0;
+        }
+
+        @media screen and (max-width: $screen-xs-min) {
+            /* Remove the border */
+            padding:0;
+            margin-right:0;
+            border-right:0;
+            padding-top:0;
+
+            /* Make more space for tombstone */
+            @include padding-trailer;
+            @include margin-trailer;
+        }
     }
 
     &:after {
         content:"\220E";
-        display:block;
+        position:absolute;
+        width: 1em;
+        right:0;
+        bottom:0;
+        margin:0; /* Override addon.css */
+        margin-right: rhythm(.5);
+
+        color: $tombstone-color;
         text-align:right;
 
-        // TODO convert to em
-        // From addon
-        margin-top: -15px;
-        margin-bottom: 5px;
-        margin-right: -7px;
+        @media screen and (max-width: $screen-xs-min) {
+            /* Center the tombstone */
+            right:50%;
+            margin-right:-.5em;
+            text-align:center;
+        }
     }
 }
 
