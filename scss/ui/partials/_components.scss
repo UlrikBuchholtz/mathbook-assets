@@ -42,15 +42,15 @@
             }
         }
 
-        $codenumber-gutter: $ui-line-height-computed;
-        @include navtree-codenumber-support(
-            $indent: $codenumber-gutter,
-            $codenumber-width: 1.5*$font-size,
-            $codenumber-gutter-right: $codenumber-gutter 
-        );
+       // @include navtree-codenumber-support(
+       //     $indent: $ui-line-height-computed ,
+       //     $codenumber-width: 2*$font-size,
+       //     $codenumber-gutter-right: $ui-line-height-computed/2 
+       // );
 
         .codenumber {
             color: darken($bg, 50%);
+            margin-right: rhythm(.5, $font-size);
         }
 
         &:hover .codenumber {
