@@ -13,30 +13,8 @@ $environment-heading-after: ". " !default;
     }
 
     // Default inline heading
-    @include environment-heading-inline();
+    @include heading-force-inline();
 
     // One line-height bottom margin
     @include margin-trailer;
-}
-
-// Force environment heading to be inline
-@mixin environment-heading-inline {
-    @include heading-selector {
-        display:inline;
-
-        & + p {
-            display:inline;
-        }
-    }
-}
-
-// Force environment heading to be block
-@mixin environment-heading-block {
-    @include heading-selector {
-        display:block;
-
-        & + p {
-            display:block;
-        }
-    }
 }

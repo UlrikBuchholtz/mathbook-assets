@@ -111,3 +111,34 @@ $heading-after:" " !default;
         @include heading-hide-title();
     }
 }
+
+@mixin heading-force-inline() {
+    @include heading-selector {
+        display:inline;
+
+        & + p {
+            display:inline;
+
+            &:after {
+                /* Restore the inline paragraph's margin */
+                content: "";
+                display:block;
+                @include margin-trailer;
+            }
+        }
+    }
+}
+
+@mixin heading-force-block() {
+    @include heading-selector {
+        display:block;
+
+        & + p {
+            display:block;
+
+            &:after {
+                content: normal;
+            }
+        }
+    }
+}
