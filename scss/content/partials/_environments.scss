@@ -42,10 +42,10 @@
 .proof {
 
     // use rgba so it looks nice inside knowls too
-    $border-color: rgba(black, .2);
+    $border-color: rgba(black, .1);
     $border-width: .1em;
     $padding-right: rhythm(1);
-    $tombstone-color: $border-color;
+    $tombstone-color: rgba(black, .2);
 
     // @davidfarmer has asked that we keep proofs separate in CSS output
     // so we use the mixin rather than extending %environment-base
