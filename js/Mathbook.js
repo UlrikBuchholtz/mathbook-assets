@@ -1,676 +1,986 @@
-var $ = jQuery;
-var Mathbook = function(options) {
+// Pass dependencies into this closure from the bottom of the file
+// Leading semicolon safeguards against errors in script concatenation
+;(function($, w, Espy, undefined) {
+    'use strict'; // Use EMCAScript 5 strict mode within this closure
 
-    var settings = $.extend({
-    }, options);
-
-    var DEBUG = false;
-    // debug performs VERY slowly on mobile devices,
-    // so it's very important that we don't log things in production code
-    var debug = function() {
-        if(options.debug || DEBUG) {
-            console.log.apply(console, arguments);
-        }
-    }
-
-
-    // Private vars
-    // -------------------------------------------------------------------------
-    // "el" is a common shortening of element
-    // ...but the spanish reference here is amusing too.
-    var EL_PRIMARY_NAVBAR = ".navbar";
-    var EL_TOC = ".navbar";
-    var EL_GOTO_TOP_LINK = ".goto-top-link"; // Doesn't exist, but whatever
-
-    var PREFIX = "mathbook";
-    var LOADING_CLASS = PREFIX + "-loading";
-    var LOADED_CLASS = PREFIX + "-loaded";
-
-    // SIDEBAR SETTINGS
-    var SIDEBAR_TOGGLE_DURATION = .4; // seconds
-    var TOGGLE_BUTTON_ACTIVE_CLASS = "active";
-    var TOGGLE_BUTTON_INACTIVE_CLASS = "";
-    var HAS_SIDEBAR_LEFT_CLASS = "has-sidebar-left";
-    var HAS_SIDEBAR_RIGHT_CLASS = "has-sidebar-right";
-    var SIDEBAR_LEFT_OPEN_CLASS = "sidebar-left-open";
-    var SIDEBAR_LEFT_CLOSED_CLASS = "sidebar-left-closed";
-    var SIDEBAR_RIGHT_OPEN_CLASS = "sidebar-right-open";
-    var SIDEBAR_RIGHT_CLOSED_CLASS = "sidebar-right-closed";
-
-    var that = this;
-    var hashOnLoad;
-    var isLayoutInitialized = false;
-    var _shouldSidebarsPush = false;
-    var scrollingNav = null;
-    var hasSidebarLeft, 
-        hasSidebarRight, 
-        isSidebarLeftClosed, 
-        isSidebarRightClosed;
-
-    this.$w = $(window);
-
-    /** 
-     * Constructor for ToggleView objects
-     * These can be used for both toggle buttons and sidebars
-     */
-    var ToggleView = function(options) {
-
-        var defaults = {
-            isActive: false
-        };
-
-        var settings;
-
-        this.initialize = function(options) {
-            settings = defaults;
-            this.reset(options);
-        }
-
-        // Private vars
-
-        this.toggle = function(shouldActivate) {
-            // If not explicitly set, toggle to opposite state
-            if(typeof shouldActivate == "undefined"){
-                shouldActivate = !this.isActive();
-            }
-
-            if(shouldActivate) {
-                if(typeof this.onActivate == "function") {
-                    this.onActivate.call(this.$el.get());
-                }
-                this.$el.addClass(settings.activeClass);
-                this.$el.removeClass(settings.inactiveClass);
-            } else {
-                if(typeof this.onDeactivate == "function") {
-                    this.onDeactivate.call(this.$el.get());
-                }
-                this.$el.addClass(settings.inactiveClass);
-                this.$el.removeClass(settings.activeClass);
-            }
-
-            settings.isActive = shouldActivate;
-        };
-
-        this.reset = function(options) {
-            settings = $.extend(settings,options);
-            this.$el = $(settings.el);
-            this.onActivate = settings.onActivate;
-            this.onDeactivate = settings.onDeactivate;
-            //this.toggle(this.isActive());
-        }
-
-        this.isActive = function () {
-            return settings.isActive;
-        }
-
-
-        // Call init
-        this.initialize(options);
-    }
-
-    /**
-     * Constructor for Layout objects that hold configurations for different
-     * widths.
-     * @param {String} debugName
-     * @param {Number} minWidth
-     * @param {Function} onEnter
-     * @param {Function} onExit
-     */
-    var Layout = function(options) {
-        this.minWidth = options.minWidth;
-        this.debugName = options.debugName;
-        this.onEnter = options.onEnter;
-        this.onExit = options.onExit;
-
-        /**
-         * Called when a Layout is applied.
-         */
-        this.enter = function() {
-            debug("Entered Layout: " + this.debugName);
-            if(typeof this.onEnter === "function") {
-                this.onEnter.apply(this, arguments);
-            }
-        };
-
-        /**
-         * Called when a Layout is removed
-         */
-        this.exit = function() {
-            debug("Exited Layout: " + this.debugName);
-            if(typeof this.onExit === "function") {
-                this.onExit.apply(this, arguments);
-            }
-        };
-    }
-
-    // LAYOUT DEFINITIONS
-    // IMPORTANT: MUST MATCH MEDIA QUERIES IN CSS!!! 
-    // Try to keep layout onEnter functions declarative in nature
-    var layouts = {
-        // Since layouts rely on the minWidth, add one pixel
-        SMALL : new Layout({
-            debugName: "small", 
-            minWidth: 0,
-            onEnter: function(){
-                // This must come before adjusting sidebars
-                that.shouldSidebarsPush(true);
-
-                maxOpenSidebars = 1;
-                that.toggleSidebarLeft(false);
-                that.toggleSidebarRight(false);
-                
-                // with primary nav on bottom
-                that.initializeStickies(true);
-            }
-        }),
-        MEDIUM : new Layout({
-            debugName: "medium", 
-            minWidth: 769, 
-            onEnter: function() {
-                // This must come before adjusting sidebars
-                that.shouldSidebarsPush(false);
-
-                maxOpenSidebars = 1;
-                that.toggleSidebarLeft(true);
-                that.toggleSidebarRight(false);
-
-                that.initializeStickies(false);
-            }
-        }),
-        LARGE : new Layout({
-            debugName: "large", 
-            minWidth: 1200, 
-            onEnter: function() {
-                // This must come before adjusting sidebars
-                that.shouldSidebarsPush(false);
-
-                maxOpenSidebars = 2;
-                that.toggleSidebarLeft(true);
-                that.toggleSidebarRight(true);
-
-                that.initializeStickies(false);
-            }
-        })
-    };
-    var currentLayout = layouts.LARGE;
-
-    // Methods
-    // -----------------------------------------------------------------
-
-    /**
-     * Initialize this object.
-     */
-    this.initialize = function() {
-        hashOnLoad = location.hash;
-        this.cacheDOMObjects();
-        this.$body.addClass(LOADING_CLASS);
-        this.initializeSidebars();
-        this.$w.resize(function() { that.resize(); });
-
-        // Set up sticky navigation and section tracking.
-        this.initializeStickies();
-        // this.intializeSectionTracking();
-
-        this.setMathJaxOverrides();
-
-        this.resize();
-        this.$body.addClass(LOADED_CLASS);
-        this.$body.removeClass(LOADING_CLASS);
-    };
-
-    /**
-     * Caches all the DOM Objects we need, with JQuery
-     */
-    this.cacheDOMObjects = function() {
-        this.$body = $("body");
-        this.$w = $(window);
-
-        this.$main = $(".main").first();
-        this.$content = $("#content");
-
-        this.$primaryNavbar = $("#primary-navbar").first();
-        this.$secondaryNavbar = $("#secondary-navbar").first();
-        this.$secondaryNavbarNext = 
-            this.$secondaryNavbar.find(".next-button").first();
-        this.$secondaryNavbarPrevious = 
-            this.$secondaryNavbar.find(".previous-button").first();
-
-        this.$sidebarRight = $("#sidebar-right");
-        this.$sidebarLeft = $("#sidebar-left");
-        this.$toc = $("#toc");
-        this.$sidebarLeftExtras = 
-            this.$sidebarLeft.find(".extras").first();
-
-        this.$sidebarLeftToggleButton = $(".sidebar-left-toggle-button");
-        this.$sidebarRightToggleButton = $(".sidebar-right-toggle-button");
-
-        // Cache values
-        hasSidebarLeft = this.hasSidebarLeft();
-        hasSidebarRight = this.hasSidebarRight();
-    };
-
-
-
-    /** 
-    * By default, MathJax scrolls the window to the hash location
-    * after "End Typeset" event. We need to override this functionality
-    * so things work nicely with our sticky header
-    */
-    this.setMathJaxOverrides = function() {
-        // Before MathJax applies the page's configuration
-        MathJax.Hub.Register.StartupHook("Begin Config", function() {
-            // Modify that configuration to apply overrides
-            MathJax.Hub.Config({
-                positionToHash: false
-            });
-        });
+    // Define our class on the window object under the Mathbook namespace
+    var Mathbook = function(options) {
         
-        // when Mathjax is finished rendering, 
-        MathJax.Hub.Register.StartupHook("End Typeset", function () {
-            // we handle the hash positioning so that it lines up
-            // nicely with our fixed header 
-            //scrollingNav.scrollToSection(hashOnLoad.substr(1));
-            // TODO expand knowl from hash if there's a match?        
-        });
-    };
+        var defaults = {
+
+            loadingClass: "mathbook-loading",
+            loadedClass: "mathbook-loaded",
+            
+            // SELECTORS
+            //----------
+            selectors: {
+                body: "body",
+                primaryNavbar: "#primary-navbar",
+                main: ".main",
+                content: "#content",
+                toc: "#toc",
+                previousButton: ".previous-button",
+                nextButton: ".next-button",
+                sidebarLeftToggleButton: ".sidebar-left-toggle-button",
+                sidebarRightToggleButton: ".sidebar-right-toggle-button",
+                sidebarLeft: "#sidebar-left",
+                sidebarRight: "#sidebar-right",
+                sidebarLeftExtras: "#sidebar-left .extras",
+                sections: "section",
+                sectionLinks: "#toc a"
+            },
 
 
-    /**
-     * Initializes the sticky navigation
-     */
-    this.initializeStickies = function(isPrimaryNavbarBottom) {
+            // SECTION TRACKING
+            //----------------- 
+            /** 
+            * Interval upon which scrollSpy recomputes section offsets
+            * Should be often enough to catch DOM changes but infrequent enough
+            * to be reasonably performant 
+            */
+            scrollspyRecomputeInterval: 600, // ms
+            /**
+            * When scrolling down...
+            * Sections will be exited once their bottom edge rises above this
+            * It is defined relative to the top of the screen OR the bottom 
+            * edge of any fixed UI elements.
+            */
+            enterSectionTriggerTop: 100,
+            /** 
+            * When scrolling down...
+            * Sections will be entered once their top edge rises above this
+            * It is defined relative to the top of the screen OR the bottom
+            * edge of any fixed UI elements.
+            * This will be automatically rounded to the bottom of the screen
+            * if the viewport is smaller than the defined trigger size
+            */
+            enterSectionTriggerBottom: 300,
+            sectionHashAttribute: "id",
+            sectionLinkHashAttribute: "data-scroll",
+            sectionActiveClass: "active",
+            sectionLinkActiveClass: "active",
+            // Called when the viewport enters any tracked section
+            onEnterSection: null,
+            // Called when the viewport exits any tracked section
+            onExitSection: null,
+            // Called when a section link is activated
+            // This is probably the best place to log analytics
+            onActivateSectionLink: null,
+            // Whether or not to call onEnterSection and onExitSection for
+            // sections without links.
+            shouldTrackOnlyLinkedSections: true,
+            autoScrollDuration: 400, // ms
+            // linear feels mechanical, but we don't want to load jquery.ui.easing
+            autoScrollEasing: "linear", 
+            
+            // SIDEBAR SETTINGS
+            //-----------------
+            sidebarToggleDuration: 0.4,
+            toggleButtonActiveClass: "active",
+            toggleButtonInactiveClass: "",
+            hasSidebarLeftClass: "has-sidebar-left",
+            hasSidebarRightClass: "has-sidebar-right",
+            sidebarLeftOpenClass: "sidebar-left-open",
+            sidebarRightOpenClass: "sidebar-right-open",
+            sidebarLeftClosedClass: "sidebar-left-closed",
+            sidebarRightClosedClass: "sidebar-right-closed"
+            
+        };
 
-        var primaryNavbarHeight = this.$primaryNavbar.outerHeight();
+        // Overwrite defaults with any options passed in.
+        var settings = $.extend(defaults, options);
 
-        this.$primaryNavbar.unstick();
-        this.$secondaryNavbarNext.unstick();
-        this.$secondaryNavbarPrevious.unstick();
+        var DEBUG = false;
+        // console performs VERY slowly on mobile devices,
+        // so it's very important that we don't log things in production code
+        var debug = function() {
+            if(options.debug || DEBUG) {
+                console.log.apply(console, arguments);
+            }
+        };
 
-        // Stick navbar stuff
-        if(!isPrimaryNavbarBottom){
-            this.$primaryNavbar.sticky({
-                className: "stuck",
-                wrapperClassName:"navbar",
-                topSpacing: 0,    
-            });
+        var self = this;
+        var hashOnLoad;
+        var isLayoutInitialized = false;
+        var _shouldSidebarsPush = false;
+        var maxOpenSidebars = 2,
+            hasSidebarLeft, 
+            hasSidebarRight, 
+            isSidebarLeftClosed, 
+            isSidebarRightClosed,
+            sidebarLeftTransitionTimeoutId,
+            sidebarRightTransitionTimeoutId;
+        var sectionMap = {},
+            isAutoScrolling = false,
+            espy;
 
-            this.$secondaryNavbarNext.sticky({
-                topSpacing:primaryNavbarHeight,
-                wrapperClassName: "next-button-sticky-wrapper"
-            });
+        self.$w = $(window);
 
-            this.$secondaryNavbarPrevious.sticky({
-                topSpacing:primaryNavbarHeight,
-                wrapperClassName: "previous-button-sticky-wrapper"
+        /** 
+         * Constructor for ToggleView objects
+         * These can be used for both toggle buttons and sidebars
+         */
+        var ToggleView = function(options) {
+
+            var defaults = {
+                isActive: false
+            };
+
+            var settings;
+
+            this.initialize = function(options) {
+                settings = defaults;
+                this.reset(options);
+            };
+
+            // Private vars
+
+            this.toggle = function(shouldActivate) {
+                // If not explicitly set, toggle to opposite state
+                if(typeof shouldActivate == "undefined"){
+                    shouldActivate = !this.isActive();
+                }
+
+                if(shouldActivate) {
+                    if(typeof this.onActivate == "function") {
+                        this.onActivate.call(this.$el.get());
+                    }
+                    this.$el.addClass(settings.activeClass);
+                    this.$el.removeClass(settings.inactiveClass);
+                } else {
+                    if(typeof this.onDeactivate == "function") {
+                        this.onDeactivate.call(this.$el.get());
+                    }
+                    this.$el.addClass(settings.inactiveClass);
+                    this.$el.removeClass(settings.activeClass);
+                }
+
+                settings.isActive = shouldActivate;
+            };
+
+            this.reset = function(options) {
+                settings = $.extend(settings,options);
+                this.$el = $(settings.el);
+                this.onActivate = settings.onActivate;
+                this.onDeactivate = settings.onDeactivate;
+                //this.toggle(this.isActive());
+            };
+
+            this.isActive = function () {
+                return settings.isActive;
+            };
+
+
+            // Call init
+            this.initialize(options);
+        };
+
+        /**
+         * Constructor for Layout objects that hold configurations for different
+         * widths.
+         * @param {String} debugName
+         * @param {Number} minWidth
+         * @param {Function} onEnter
+         * @param {Function} onExit
+         */
+        var Layout = function(options) {
+            this.minWidth = options.minWidth;
+            this.debugName = options.debugName;
+            this.onEnter = options.onEnter;
+            this.onExit = options.onExit;
+
+            /**
+             * Called when a Layout is applied.
+             */
+            this.enter = function() {
+                debug("Entered Layout: " + this.debugName);
+                if(typeof this.onEnter === "function") {
+                    this.onEnter.apply(this, arguments);
+                }
+            };
+
+            /**
+             * Called when a Layout is removed
+             */
+            this.exit = function() {
+                debug("Exited Layout: " + this.debugName);
+                if(typeof this.onExit === "function") {
+                    this.onExit.apply(this, arguments);
+                }
+            };
+        };
+
+        // LAYOUT DEFINITIONS
+        // IMPORTANT: MUST MATCH MEDIA QUERIES IN CSS!!! 
+        // Try to keep layout onEnter functions declarative in nature
+        var layouts = {
+            // Since layouts rely on the minWidth, add one pixel
+            SMALL : new Layout({
+                debugName: "small", 
+                minWidth: 0,
+                onEnter: function(){
+                    // This must come before adjusting sidebars
+                    self.shouldSidebarsPush(true);
+
+                    maxOpenSidebars = 1;
+                    self.toggleSidebarLeft(false);
+                    self.toggleSidebarRight(false);
+                    
+                    // with primary nav on bottom
+                    self.initializeStickies(true);
+                }
+            }),
+            MEDIUM : new Layout({
+                debugName: "medium", 
+                minWidth: 769, 
+                onEnter: function() {
+                    // This must come before adjusting sidebars
+                    self.shouldSidebarsPush(false);
+
+                    maxOpenSidebars = 1;
+                    self.toggleSidebarLeft(true);
+                    self.toggleSidebarRight(false);
+
+                    self.initializeStickies(false);
+                }
+            }),
+            LARGE : new Layout({
+                debugName: "large", 
+                minWidth: 1200, 
+                onEnter: function() {
+                    // This must come before adjusting sidebars
+                    self.shouldSidebarsPush(false);
+
+                    maxOpenSidebars = 2;
+                    self.toggleSidebarLeft(true);
+                    self.toggleSidebarRight(true);
+
+                    self.initializeStickies(false);
+                }
+            })
+        };
+        var currentLayout = layouts.LARGE;
+
+        // Methods
+        // -----------------------------------------------------------------
+
+        /**
+         * Initialize this object.
+         */
+        self.initialize = function() {
+            hashOnLoad = w.location.hash;
+            self.cacheDOMObjects();
+            self.$body.addClass(settings.loadingClass);
+            self.initializeSidebars();
+            self.$w.resize(function() { self.resize(); });
+
+            // Set up sticky navigation and section tracking.
+            self.initializeStickies();
+
+            self.setMathJaxOverrides();
+
+            self.resize();
+            self.$body.addClass(settings.loadedClass);
+            self.$body.removeClass(settings.loadingClass);
+        };
+
+        /**
+         * Caches all the DOM Objects we need, with JQuery
+         */
+        self.cacheDOMObjects = function() {
+            self.$w = $(w);
+
+            var property;
+            for(property in settings.selectors) {
+                var prefixed = "$" + property;
+                self[prefixed] = $(settings.selectors[property]);
+            }
+
+            // Cache values
+            hasSidebarLeft = self.hasSidebarLeft();
+            hasSidebarRight = self.hasSidebarRight();
+        };
+
+
+
+        /** 
+        * By default, MathJax scrolls the window to the hash location
+        * after "End Typeset" event. We need to override this functionality
+        * so things work nicely with our sticky header
+        */
+        self.setMathJaxOverrides = function() {
+            // Before MathJax applies the page's configuration
+            MathJax.Hub.Register.StartupHook("Begin Config", function() {
+                // Modify that configuration to apply overrides
+                MathJax.Hub.Config({
+                    positionToHash: false
+                });
             });
             
-            // Update the position in case scroll is already below
-            // the stickyifying point
-            this.$primaryNavbar.sticky("update");
-            this.$secondaryNavbarNext.sticky("update");
-            this.$secondaryNavbarPrevious.sticky("update");
-        }
-
-        // Stick left sidebar
-        if(hasSidebarLeft) {
-            this.$sidebarLeft.unstick();
-
-            // If primaryNavbar is top, offset sidebar by it's height,
-            // else offset zero 
-            var sidebarLeftTopSpacing = 
-                isPrimaryNavbarBottom ? 0 : primaryNavbarHeight;
-
-            this.$sidebarLeft.sticky({
-                className: "stuck",
-                wrapperClassName:"sidebar",
-                topSpacing : sidebarLeftTopSpacing
+            // when Mathjax is finished rendering, 
+            MathJax.Hub.Register.StartupHook("End Typeset", function () {
+                // we handle the hash positioning so that it lines up
+                // nicely with our fixed header 
+                self.initializeSectionTracking();
+                self.scrollToSection(hashOnLoad.substr(1));
+                // TODO expand knowl from hash if there's a match?        
             });
+        };
 
-            // Update the position in case scroll is already below
-            // the stickyifying point
-            this.$sidebarLeft.sticky("update");
-        }
-    };
 
-    /**
-     * Initializes section tracking in the nav based on scrollTop
-     */
-    this.initializeSectionTracking = function() {
-        // TODO rework into a sensible jquery plugin
-        //scrollingNav = new ScrollingNav({
-            //header:EL_PRIMARY_NAVBAR,
-            //nav:EL_TOC,
-            //topLink:EL_GOTO_TOP_LINK,
-            //viewOffset: 100,
-            //anchorAttr: 'id',
-            //speed: 300,
-            //trackSections: false, // we'll enable this when ready
-            //positionToHash: false, // we'll handle this
-            //initWithPlaceholder: false,
-            //onLoad: function() { that.onStickyNavLoaded() }
-        //});
-    };
+        /**
+         * Initializes the sticky navigation
+         */
+        self.initializeStickies = function(isPrimaryNavbarBottom) {
 
-    ////////////////////////////////////////////////////////////////////////////
-    // SIDEBAR METHODS
-    ////////////////////////////////////////////////////////////////////////////
+            var primaryNavbarHeight = self.$primaryNavbar.outerHeight();
 
-    /**
-     * Initializes SidebarViews and registers listeners
-     */
-    this.initializeSidebars = function() {
-        var that = this;
+            self.$primaryNavbar.unstick();
 
-        if(hasSidebarLeft) {
-            this.sidebarLeftToggleButtonView = new ToggleView({
-                el: this.$sidebarLeftToggleButton,
-                activeClass: TOGGLE_BUTTON_ACTIVE_CLASS,
-                inactiveClass: TOGGLE_BUTTON_INACTIVE_CLASS,
-            });
-            this.sidebarLeftView = new ToggleView({
-                el: this.$body, // We want classes to be applied here
-                activeClass : SIDEBAR_LEFT_OPEN_CLASS,
-                inactiveClass :SIDEBAR_LEFT_CLOSED_CLASS,
-                onActivate: function() {
-                    that.onSidebarOpen();
-                },
-                onDeactivate: function() {
-                    that.onSidebarClose()
-                }
-            });
-            // Toggle button click handler
-            this.$sidebarLeftToggleButton.on('click', function() { 
-                that.toggleSidebarLeft();
-            });
-        }
+            // Stick navbar stuff
+            if(!isPrimaryNavbarBottom){
+                self.$primaryNavbar.sticky({
+                    className: "stuck",
+                    wrapperClassName:"navbar",
+                    topSpacing: 0,    
+                });
+                
+                // Update the position in case scroll is already below
+                // the stickyifying point
+                self.$primaryNavbar.sticky("update");
+            }
 
-        if(hasSidebarRight) {
-            this.sidebarRightToggleButtonView = new ToggleView({
-                el: this.$sidebarRightToggleButton,
-                activeClass: TOGGLE_BUTTON_ACTIVE_CLASS,
-                inactiveClass: TOGGLE_BUTTON_INACTIVE_CLASS,
-            });
-            this.sidebarRightView = new ToggleView({
-                el: this.$body, // We want classes to be applied here
-                activeClass : SIDEBAR_RIGHT_OPEN_CLASS,
-                inactiveClass :SIDEBAR_RIGHT_CLOSED_CLASS,
-                onActivate: function() {
-                    that.onSidebarOpen();
-                },
-                onDeactivate: function() {
-                    that.onSidebarClose()
+            // Stick left sidebar
+            if(hasSidebarLeft) {
+                self.$sidebarLeft.unstick();
+
+                // If primaryNavbar is top, offset sidebar by it's height,
+                // else offset zero 
+                var sidebarLeftTopSpacing = 
+                    isPrimaryNavbarBottom ? 0 : primaryNavbarHeight;
+
+                self.$sidebarLeft.sticky({
+                    className: "stuck",
+                    wrapperClassName:"sidebar",
+                    topSpacing : sidebarLeftTopSpacing
+                });
+
+                // Update the position in case scroll is already below
+                // the stickyifying point
+                self.$sidebarLeft.sticky("update");
+            }
+        };
+
+        ////////////////////////////////////////////////////////////////////////////
+        // SECTIONS / NAV 
+        ////////////////////////////////////////////////////////////////////////////
+        
+        self.initializeSectionTracking = function() {
+            espy = new Espy(w, self.onSectionStateChange);
+            self.reconfigureEspy();
+
+            // Generate a map for all linked sections
+            self.$sections.each(function() {
+                var $section = $(this);
+                var hash = $section.attr(settings.sectionHashAttribute);
+
+                
+                // Find the corresponding link
+                var linkSelector = 
+                        "["+settings.sectionLinkHashAttribute+"='"+hash+"']";
+                var $link = self.$sectionLinks.filter(linkSelector);
+                
+                // If this section has a link
+                if($link.size() > 0) {
+                    // Create an entry in our section map
+                    sectionMap[hash] = {
+                        $section: $section,
+                        $link: $link,
+                        isActive: false
+                    };
+
+                    $link.on("click", self.onSectionLinkClick);
+
+                    if(settings.shouldTrackOnlyLinkedSections) {
+                        // Add them one at a time
+                        espy.add($section);
+                    }
                 }
             });
 
-            // Toggle button click handler
-            this.$sidebarRightToggleButton.on('click', function() {
-                that.toggleSidebarRight();
+            if(!settings.shouldTrackOnlyLinkedSections) {
+                // Add all sections to tracking all at once
+                epsy.add(self.$sections);
+            }
+
+            // When the dom changes, espy needs to recompute the positions
+            // of all the sections. It seems unreasonable, in this case,
+            // to expect people to call the refresh method everytime the DOM
+            // changes, so we will resort to an interval.
+            setInterval(function(){
+                // Only worth updating if ToC is visible
+                if(!self.isSidebarLeftClosed()) {
+                   self.refreshEspy();
+                }
+            }, settings.spyscrollRecomputeInterval);
+
+        };
+
+        self.reconfigureEspy = function() {
+            // Espy's offset is the offset to the top edge of the trigger
+            // We want to configure the offset from the top edge of the screen
+            // to the bottom edge of the trigger
+            var options = {};
+            var navbarHeight = self.$primaryNavbar.outerHeight();
+            var activeArea = self.$w.innerHeight() - navbarHeight;
+
+            // Compute offset from top of screen
+            options.offset = navbarHeight + settings.enterSectionTriggerTop;
+
+            // Compute size of trigger
+            options.size = settings.enterSectionTriggerBottom - 
+                           settings.enterSectionTriggerTop;
+            // Limit size to the size of the activeArea
+            options.size = Math.min(activeArea, options.size);
+            // To be safe, don't allow negative
+            options.size = Math.max(options.size, 0);
+
+            espy.configure(options);
+        };
+
+        self.refreshEspy = function() {
+            espy.reload();
+        };
+
+        self.onSectionLinkClick = function(e) {
+            // Called in the context of the link node
+            var hash = $(this).attr(settings.sectionLinkHashAttribute);
+            var success = 
+                self.scrollToSection(hash, self.updateLinks, self, [hash]);
+            if(success) {
+                e.preventDefault();
+            }
+        };
+
+        // Animated scroll to a section
+        // Returns false if no section to scroll to on this page
+        self.scrollToSection = function(hash, callback, scope, params) {
+            var sectionExists = false;
+            var selector = "#" + hash;
+            var $matchedSection = $(selector).first();
+
+            if($matchedSection.length > 0) {
+                isAutoScrolling = true;
+                
+                var targetOffsetTop = $matchedSection.offset().top;
+
+                // Subtract screen offset for entering sections
+                // but add fudge, so we do, in fact, enter the section
+                targetOffsetTop += -(settings.enterSectionTriggerTop) + 1;
+
+                // Limit to positive numbers
+                var targetScrollTop = Math.max(targetOffsetTop, 0);
+
+                // Define some things we need to do after scrolling
+                var wrappedCallback = function() {
+                    isAutoScrolling = false;
+                    if(callback && typeof callback === "function") {
+                        callback.call(scope, params);
+                    }
+                };
+
+                // Perform the scroll
+                $('body,html').animate({
+                        scrollTop: targetScrollTop
+                    },  
+                    settings.autoScrollDuration, 
+                    settings.autoScrollEasing, 
+                    wrappedCallback);
+
+                sectionExists = true;
+            }
+
+            // Return false if no section to scroll to on this page
+            return sectionExists;
+        };
+
+        self.onSectionStateChange = function(isEntered, state) {
+            // Called with the element Node's context
+            var element = this;
+            var $section = $(element);
+
+            var hash = $section.attr(settings.sectionHashAttribute);
+            if(sectionMap.hasOwnProperty(hash)) {
+                sectionMap[hash].isActive = isEntered;
+            }
+            
+            // Don't update links during auto scrolls
+            // It just slows things down
+            if(!isAutoScrolling) {
+                self.updateLinks();
+            }
+
+            if(isEntered) {
+                $section.addClass(settings.sectionActiveClass);
+                if(typeof options.onEnterSection == "function"){
+                    options.onEnterSection.apply(element, arguments);
+                }
+            } else {
+                $section.removeClass(settings.sectionRemoveClass);
+                if(typeof options.onExitSection == "function"){
+                    options.onEnterSection.apply(element, arguments);
+                }
+            }
+
+        };
+
+        self.updateLinks = function() {
+            var deepestHash = null;
+            // for all sections in document order
+            self.$sections.each(function() {
+                var $section = $(this);
+                var hash = $section.attr(settings.sectionHashAttribute);
+                if(sectionMap.hasOwnProperty(hash)) {
+                    if(sectionMap[hash].isActive) {
+                        deepestHash = hash;
+                    }
+                }
             });
-        }
+            if(deepestHash !== null) {
+                var $link = sectionMap[deepestHash].$link;
+                if(!$link.hasClass(settings.sectionLinkActiveClass)) {
+                    self.$sectionLinks.removeClass(settings.sectionLinkActiveClass);
+                    $link.addClass(settings.sectionLinkActiveClass);
+                    if(settings.onActivateSectionLink === "function") {
+                        settings.onActivateSectionLink.call($link.get());
+                    }
+                    self.setHash(deepestHash);
+                }
+            }
+        };
+
+
+        //self.findDeepestActiveSection = function() {
+            //var length = self.activeSections.length,
+                //$deepestSection = null,
+                //deepestScrollTop = 0,
+                //$section,
+                //scrollTop,
+                //i;
+
+            //for(i=0; i < length; i++) {
+                //$section = $(self.activeSections[i]);
+                //scrollTop = $section.scrollTop();
+                //if(scrollTop > deepestScrollTop) {
+                    //$deepestSection = $section;
+                    //deepestScrollTop = scrollTop;
+                //}
+            //}
+
+            //return $deepestSection;
+        //};
+
+        // Set the hash to reflect the current position in the page
+        // This function temporarily removes the anchor matching this
+        // hash so that the page doesn't jump as we change the hash
+        // It's sort of expensive, so don't call it needlessly
+        self.setHash = function(hash) {
+            if(hash === w.location.hash.substr(1)) {
+                return;
+            }
+
+            if(settings.pushHistory && history.pushState) {
+                history.pushState({}, hash, "#" + hash);
+            } else if(history.replaceState) {
+                history.replaceState({}, hash, "#" + hash);
+            } else if(settings.provideHistoryFallback) {
+                // we do it the hacky way
+                var $fx;
+                var $nodes = $( '#' + hash + ',[name=\"' + hash + '\"]' );
+                var ids = [];
+                var names = [];
+
+                var i = 0;
+                // Remove id and name from all matched nodes
+                $nodes.each(function() {
+                    var node = $(this);
+                    ids[i] = node.attr('id');
+                    names[i] = node.attr('name');    
+                    node.attr( 'id', '' );
+                    node.attr( 'name', '' );
+                    i++;
+                });
+
+                if($nodes.length) {
+                    // Some browsers will try to scroll to where the element
+                    // was last seen, so we create a dummy
+                    $fx = $( '<div></div>' )
+                            .css({
+                                    position:'absolute',
+                                    visibility:'hidden',
+                                    top: $w.scrollTop() + 'px'
+                                })
+                            .attr( 'id', hash )
+                            .appendTo( document.body );
+                }
+
+                // finally, set the hash
+                document.location.hash = hash;
+
+                i = 0;
+                // Return ids and names to matched nodes
+                $nodes.each(function() {
+                    var node = $(this);
+                    node.attr( 'id', ids[i] );
+                    node.attr( 'name', names[i] );
+                    i++;
+                });
+
+                // Remove our dummy
+                if($nodes.length) {
+                    $fx.remove();
+                }
+            }
+        };
+
+        /**
+         * Removes instance(s) of the given item from the given array.  
+         *
+         * Adapted from http://stackoverflow.com/a/18165553/1599617
+         * Works in all browsers.
+         *
+         * @param {Mixed} item - the item to remove
+         * @param {Array} array - the array to remove from
+         * @param {shouldRemoveAll} - whether or not to remove all instances
+         */
+        //function removeFrom(array, item, shouldRemoveAll) {
+            //for(var i = array.length - 1; i > 0; i--) {
+                //if(array[i] === item) {
+                    //array.splice(i, 1);
+                    //shouldRemoveAll || break;
+                //}
+            //}
+        //}
         
-    };
+        ////////////////////////////////////////////////////////////////////////////
+        // SIDEBARS
+        ////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Toggles the left sidebar to the shouldOpen state 
-     * or the reverse of the current state if shouldOpen is undefined.
-     * @param shouldOpen {Boolean}
-     */
-    this.toggleSidebarLeft = function(shouldOpen) {
-        if(hasSidebarLeft) {
-            if(typeof shouldOpen == "undefined") {
-                shouldOpen = this.isSidebarLeftClosed();
+        /**
+         * Initializes SidebarViews and registers listeners
+         */
+        self.initializeSidebars = function() {
+            if(hasSidebarLeft) {
+                self.sidebarLeftToggleButtonView = new ToggleView({
+                    el: self.$sidebarLeftToggleButton,
+                    activeClass: settings.toggleButtonActiveClass,
+                    inactiveClass: settings.toggleButtonInactiveClass,
+                });
+                self.sidebarLeftView = new ToggleView({
+                    el: self.$body, // We want classes to be applied here
+                    activeClass : settings.sidebarLeftOpenClass,
+                    inactiveClass :settings.sidebarLeftClosedClass,
+                    onActivate: function() {
+                        self.onSidebarOpen();
+                    },
+                    onDeactivate: function() {
+                        self.onSidebarClose();
+                    }
+                });
+                // Toggle button click handler
+                self.$sidebarLeftToggleButton.on('click', function() { 
+                    self.toggleSidebarLeft();
+                });
             }
-            console.log("maxOpenSidebars: " + maxOpenSidebars);
-            console.log("shouldOpen: " + maxOpenSidebars);
-            console.log("is other open?: " + !this.isSidebarRightClosed());
-            if(shouldOpen 
-               && maxOpenSidebars == 1
-               && !this.isSidebarRightClosed()  
-            ){
-                console.log("Should close other");
-                this.toggleSidebarRight(false);
+
+            if(hasSidebarRight) {
+                self.sidebarRightToggleButtonView = new ToggleView({
+                    el: self.$sidebarRightToggleButton,
+                    activeClass: settings.toggleButtonActiveClass,
+                    inactiveClass: settings.toggleButtonInactiveClass,
+                });
+                self.sidebarRightView = new ToggleView({
+                    el: self.$body, // We want classes to be applied here
+                    activeClass : settings.sidebarRightOpenClass,
+                    inactiveClass :settings.sidebarRightClosedClass,
+                    onActivate: function() {
+                        self.onSidebarOpen();
+                    },
+                    onDeactivate: function() {
+                        self.onSidebarClose();
+                    }
+                });
+
+                // Toggle button click handler
+                self.$sidebarRightToggleButton.on('click', function() {
+                    self.toggleSidebarRight();
+                });
             }
-            this.sidebarLeftToggleButtonView.toggle(shouldOpen);
-            this.sidebarLeftView.toggle(shouldOpen);
-        }
-    };
+            
+        };
 
-    /**
-     * Toggles the right sidebar to the shouldOpen state
-     * or the reverse of the current state if shouldOpen is undefined.
-     * @param shouldOpen {Boolean}
-     */
-    this.toggleSidebarRight = function(shouldOpen) {
-        if(hasSidebarRight) {
-            if(typeof shouldOpen == "undefined") {
-                shouldOpen = this.isSidebarRightClosed();
+        // TODO combine left and right toggle functions?
+
+        /**
+         * Toggles the left sidebar to the shouldOpen state 
+         * or the reverse of the current state if shouldOpen is undefined.
+         * @param shouldOpen {Boolean}
+         */
+        self.toggleSidebarLeft = function(shouldOpen) {
+            if(hasSidebarLeft) {
+                if(typeof shouldOpen == "undefined") {
+                    shouldOpen = self.isSidebarLeftClosed();
+                }
+                if(shouldOpen && 
+                   maxOpenSidebars == 1 &&
+                   !self.isSidebarRightClosed()  
+                ){
+                    self.toggleSidebarRight(false);
+                }
+                self.sidebarLeftToggleButtonView.toggle(shouldOpen);
+                self.sidebarLeftView.toggle(shouldOpen);
+
+                // We might need to do some things at transition end
+                // Cancel the current timeout, if there is one
+                clearTimeout(sidebarLeftTransitionTimeoutId);
+                // Set a new one
+                sidebarLeftTransitionTimeoutId = setTimeout(function() {
+                    self.refreshEspy();
+                }, settings.sidebarTransitionDuration);
             }
-            if(shouldOpen 
-               && maxOpenSidebars == 1
-               && !this.isSidebarLeftClosed()  
-            ){
-                console.log("Should close other");
-                this.toggleSidebarLeft(false);
+        };
+
+        /**
+         * Toggles the right sidebar to the shouldOpen state
+         * or the reverse of the current state if shouldOpen is undefined.
+         * @param shouldOpen {Boolean}
+         */
+        self.toggleSidebarRight = function(shouldOpen) {
+            if(hasSidebarRight) {
+                if(typeof shouldOpen == "undefined") {
+                    shouldOpen = self.isSidebarRightClosed();
+                }
+                if(shouldOpen && 
+                   maxOpenSidebars == 1 && 
+                   !self.isSidebarLeftClosed()  
+                ){
+                    self.toggleSidebarLeft(false);
+                }
+                self.sidebarRightToggleButtonView.toggle(shouldOpen);
+                self.sidebarRightView.toggle(shouldOpen);
+                
+                // We might need to do some things at transition end
+                // Cancel the current timeout, if there is one
+                clearTimeout(sidebarRightTransitionTimeoutId);
+                // Set a new one
+                sidebarRightTransitionTimeoutId = setTimeout(function() {
+                    self.refreshEspy();
+                }, settings.sidebarTransitionDuration);
             }
-            this.sidebarRightToggleButtonView.toggle(shouldOpen);
-            this.sidebarRightView.toggle(shouldOpen);
-        }
-    };
+        };
 
-    /**
-     * Returns true if the left sidebar is present in HTML 
-     * Use the cached variable instead of this function.
-     */
-    this.hasSidebarLeft = function() {
-        // To be safe, we'll require everything
-        return this.$sidebarLeft.size() > 0
-            && this.$sidebarLeftToggleButton.size() > 0
-            && this.$main.size() > 0;
-    };
+        /**
+         * Returns true if the left sidebar is present in HTML 
+         * Use the cached variable instead of this function.
+         */
+        self.hasSidebarLeft = function() {
+            // To be safe, we'll require everything
+            return self.$sidebarLeft.size() > 0 && 
+                   self.$sidebarLeftToggleButton.size() > 0 &&
+                   self.$main.size() > 0;
+        };
 
-    /**
-     * Returns true if the right sidebar is present in HTML
-     * Use the cached variable instead of this function.
-     */
-    this.hasSidebarRight = function() {
-        // To be safe, we'll require everything
-        return this.$sidebarRight.size() > 0
-            && this.$sidebarRightToggleButton.size() > 0
-            && this.$main.size() > 0;
-    };
+        /**
+         * Returns true if the right sidebar is present in HTML
+         * Use the cached variable instead of this function.
+         */
+        self.hasSidebarRight = function() {
+            // To be safe, we'll require everything
+            return self.$sidebarRight.size() > 0 &&
+                   self.$sidebarRightToggleButton.size() > 0 && 
+                   self.$main.size() > 0;
+        };
 
-    /**
-     * Sets whether sidebars should push or slide when opening.
-     * Push fixes the width of the main content and moves it aside.
-     * Slide subtracts the sidebar's width from the main width.
-     *
-     * @param shouldPush {Boolean} true to push, false to slide
-     */
-    this.shouldSidebarsPush = function(shouldSidebarsPush) {
-        if(typeof shouldSidebarsPush == "undefined") {
-            return _shouldSidebarsPush;
-        }
-        _shouldSidebarsPush = shouldSidebarsPush;
-        
-        if(!_shouldSidebarsPush) {
-            this.unlockMainWidth();
-        }
-    };
+        /**
+         * Sets whether sidebars should push or slide when opening.
+         * Push fixes the width of the main content and moves it aside.
+         * Slide subtracts the sidebar's width from the main width.
+         *
+         * @param shouldPush {Boolean} true to push, false to slide
+         */
+        self.shouldSidebarsPush = function(shouldSidebarsPush) {
+            if(typeof shouldSidebarsPush == "undefined") {
+                return _shouldSidebarsPush;
+            }
+            _shouldSidebarsPush = shouldSidebarsPush;
+            
+            if(!_shouldSidebarsPush) {
+                self.unlockMainWidth();
+            }
+        };
 
-    /**
-     * Called when a sidebar begins pushing
-     */
-    this.onSidebarOpen = function () {
-        if(this.shouldSidebarsPush()) {
-            this.lockMainWidth();
-        }
-    };
+        /**
+         * Called when a sidebar begins pushing
+         */
+        self.onSidebarOpen = function () {
+            if(self.shouldSidebarsPush()) {
+                self.lockMainWidth();
+            }
+        };
 
-    /**
-     * Called when a sidebar closes
-     */
-    this.onSidebarClose = function() {
-        if(this.shouldSidebarsPush()) {
-            // Unlock the main element width only if both sidebars are closed.
-            if(this.isSidebarRightClosed() 
-                && this.isSidebarLeftClosed()) 
-            {
-                this.unlockMainWidth();
-            } 
-        }
-    };
-
-    /** 
-     * Returns true if right sidebar is closed or non-existant
-     */
-    this.isSidebarRightClosed = function() {
-        return (!hasSidebarRight || !this.sidebarRightView.isActive());
-    }
-
-    /** 
-     * Returns true if left sidebar is closed or non-existant
-     */
-    this.isSidebarLeftClosed = function() {
-        return (!hasSidebarLeft || !this.sidebarLeftView.isActive());
-    }
-
-    /**
-     * Locks the main element at it's current width
-     */
-    this.lockMainWidth = function() {
-        debug("locking width");
-        that.$main.width(that.$main.width());
-    };
-
-    /**
-     * Unlocks the main element width
-     */
-    this.unlockMainWidth = function() {
-        debug("unlocking width");
-        that.$main.width("");
-    };
-    
-    ////////////////////////////////////////////////////////////////////////////
-    // RESIZING METHODS
-    ////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Called when the browser resizes
-     */
-    this.resize = function() {
-        var navbarHeight, 
-            viewportHeight, 
-            newLayout;
-
-        var windowWidth = this.$w.width();
-        var windowHeight = this.$w.height();
-
-        // Update the layout if necessary
-        newLayout = that.findLayout(windowWidth);
-        if(!isLayoutInitialized || newLayout !== currentLayout) {
-            isLayoutInitialized = true;
-            that.setLayout(newLayout);
-        }
-
-        // set toc height to fill window
-        navbarHeight = this.$primaryNavbar.outerHeight();
-        viewportHeight = windowHeight - navbarHeight;
-
-        if(this.shouldSidebarsPush()) {
-            this.$main.width(windowWidth);
-        }
-
-        this.resizeContent(viewportHeight);
-        this.resizeToc(viewportHeight);
-        this.resizeSecondaryNav(viewportHeight);
-    };
-
-    /**
-     * Fixes the minHeight of the content
-     */
-    this.resizeContent = function(viewportHeight) {
-        // Force the content to be at least as tall as the viewport.
-        this.$content.css({'minHeight': viewportHeight });
-    };
-
-    /**
-     * Fixes the height of the ToC
-     */
-    this.resizeToc = function(viewportHeight) {
-        // The height of the left sidebar extras box if it exists
-        var extrasHeight = 0;
-        if(this.$sidebarLeftExtras.size() != 0) {
-            extrasHeight = this.$sidebarLeftExtras.outerHeight();
-        }
-
-        // Force the toc to fill whatever space remains in sidebar 
-        // ...but leave room for an "extras" box if it exists
-        var tocHeight = viewportHeight - extrasHeight;
-        this.$toc.height(tocHeight);
-    };
-
-    /**
-     * Ensure that bottom navbar matches main element's width
-     */
-    this.resizeSecondaryNav = function(viewportHeight) {
-        //this.$secondaryNavbar.width(this.$main.outerWidth());
-        this.$secondaryNavbarNext.height(viewportHeight);
-        this.$secondaryNavbarPrevious.height(viewportHeight);
-    };
-
-    /**
-     * Returns the correct layout for given browser width
-     * @param width {Number} browser width
-     * @return {Layout} the layout to apply
-     */
-    this.findLayout= function(width) {
-        var newLayout = null;
-        for (var property in layouts) {
-            if (layouts.hasOwnProperty(property)) {
-                var layout = layouts[property]
-                // If current width is in layout range
-                // and layout.minwidth is bigger than any other match
-                if(width >= layout.minWidth 
-                        && (newLayout == null 
-                            || layout.minWidth > newLayout.minWidth)) 
-                {
-                    // then this is our best match yet.
-                    newLayout = layout;
+        /**
+         * Called when a sidebar closes
+         */
+        self.onSidebarClose = function() {
+            if(self.shouldSidebarsPush()) {
+                // Unlock the main element width only if both sidebars are closed.
+                if(self.isSidebarRightClosed() && self.isSidebarLeftClosed()){
+                    self.unlockMainWidth();
                 } 
             }
-        }
-        return newLayout;
-    }
+        };
 
-    /**
-     * Sets the current layout
-     * @param newLayout {Layout} the layout to apply
-     */
-    this.setLayout = function(newLayout) {
-        if(newLayout.constructor !== Layout) {
-            throw new Error(
-                    "setLayout::newLayout must be of type Layout");
-        }
-        debug("Changing layout to " + newLayout.debugName);
+        /** 
+         * Returns true if right sidebar is closed or non-existant
+         */
+        self.isSidebarRightClosed = function() {
+            return (!hasSidebarRight || !self.sidebarRightView.isActive());
+        };
 
-        currentLayout.exit();
-        newLayout.enter();
+        /** 
+         * Returns true if left sidebar is closed or non-existant
+         */
+        self.isSidebarLeftClosed = function() {
+            return (!hasSidebarLeft || !self.sidebarLeftView.isActive());
+        };
 
-        currentLayout = newLayout;
+        /**
+         * Locks the main element at it's current width
+         */
+        self.lockMainWidth = function() {
+            self.$main.width(self.$main.width());
+        };
+
+        /**
+         * Unlocks the main element width
+         */
+        self.unlockMainWidth = function() {
+            self.$main.width("");
+        };
+        
+        ////////////////////////////////////////////////////////////////////////////
+        // RESIZING METHODS
+        ////////////////////////////////////////////////////////////////////////////
+
+        /**
+         * Called when the browser resizes
+         */
+        self.resize = function() {
+            var navbarHeight, 
+                viewportHeight, 
+                newLayout;
+
+            var windowWidth = self.$w.width();
+            var windowHeight = self.$w.height();
+
+            // Update the layout if necessary
+            newLayout = self.findLayout(windowWidth);
+            if(!isLayoutInitialized || newLayout !== currentLayout) {
+                isLayoutInitialized = true;
+                self.setLayout(newLayout);
+            }
+
+            // set toc height to fill window
+            navbarHeight = self.$primaryNavbar.outerHeight();
+            viewportHeight = windowHeight - navbarHeight;
+
+            if(self.shouldSidebarsPush()) {
+                self.$main.width(windowWidth);
+            }
+
+            self.resizeContent(viewportHeight);
+            self.resizeToc(viewportHeight);
+            self.reconfigureEspy();
+        };
+
+        /**
+         * Fixes the minHeight of the content
+         */
+        self.resizeContent = function(viewportHeight) {
+            // Force the content to be at least as tall as the viewport.
+            self.$content.css({'minHeight': viewportHeight });
+        };
+
+        /**
+         * Fixes the height of the ToC
+         */
+        self.resizeToc = function(viewportHeight) {
+            // The height of the left sidebar extras box if it exists
+            var extrasHeight = 0;
+            if(self.$sidebarLeftExtras.size() !== 0) {
+                extrasHeight = self.$sidebarLeftExtras.outerHeight();
+            }
+
+            // Force the toc to fill whatever space remains in sidebar 
+            // ...but leave room for an "extras" box if it exists
+            var tocHeight = viewportHeight - extrasHeight;
+            self.$toc.height(tocHeight);
+        };
+
+        /**
+         * Returns the correct layout for given browser width
+         * @param width {Number} browser width
+         * @return {Layout} the layout to apply
+         */
+        self.findLayout= function(width) {
+            var newLayout = null;
+            for (var property in layouts) {
+                if (layouts.hasOwnProperty(property)) {
+                    var layout = layouts[property];
+                    // If current width is in layout range
+                    // and layout.minwidth is bigger than any other match
+                    if(width >= layout.minWidth &&
+                       (newLayout === null || layout.minWidth > newLayout.minWidth)) 
+                    {
+                        // then this is our best match yet.
+                        newLayout = layout;
+                    } 
+                }
+            }
+            return newLayout;
+        };
+
+        /**
+         * Sets the current layout
+         * @param newLayout {Layout} the layout to apply
+         */
+        self.setLayout = function(newLayout) {
+            if(newLayout.constructor !== Layout) {
+                throw new Error(
+                        "setLayout::newLayout must be of type Layout");
+            }
+            debug("Changing layout to " + newLayout.debugName);
+
+            currentLayout.exit();
+            newLayout.enter();
+
+            currentLayout = newLayout;
+        };
+
+        // Run init when we are constructed
+        self.initialize();
     };
 
-    // Run init when we are constructed
-    this.initialize();
-};
+    // If script is run after page is loaded, initialize immediately
+    if(document.readyState === "complete") {
+        w.mathbook = new Mathbook({});
+    } else {
+        // wait and init when the DOM is fully loaded
+        $(window).load( function() {
+            w.mathbook = new Mathbook({});
+        });
+    }
 
-// If script is run after page is loaded, initialize immediately
-if(document.readyState === "complete") {
-    mathbook = new Mathbook({});
-} else {
-    // wait and init when the DOM is fully loaded
-    $(window).load( function() {
-        mathbook = new Mathbook({});
-    });
-}
+    return Mathbook;
 
-
+})(jQuery, window, jQuery.Espy);
