@@ -1,0 +1,29 @@
+{
+    "predef" : [
+        "jQuery"
+    ],
+
+    "indent": 4,
+    "eqeqeq": true,
+    "immed": true,
+    "noempty": true,
+    "quotmark": false,
+    "undef": true,
+    "unused": true,
+    "trailing": true,
+	"latedef": "nofunc", // Allow func declaration hoisting
+	"forin": true,
+	"eqeqeq": true,
+	"strict": true,
+	"nonew": true,
+	"newcap": true,
+	"noarg": true,
+
+    "eqnull": true,
+    "laxbreak": true,
+    "laxcomma": true,
+    "scripturl": true,
+    "smarttabs": true,
+
+    "browser": true
+}

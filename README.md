@@ -1,48 +1,38 @@
-FCLA Styles
-===========
-Styling for Rob Beezer's First Course In Linear Algebra.
+mathbook-assets
+===============
+Styles and scripts for the Mathbook platform.
+
 
 Getting Started
 ---------------
-You've just cloned the repo and you're at a loss for what to do... 
+You've just cloned the repo. What now?
 
-Start by installing Compass: http://compass-style.org/install/
+1. [Install Ruby](https://www.ruby-lang.org/en/installation/), if it is not
+   already installed. You may want to use [RVM](http://rvm.io/) or
+   [rbenv](https://github.com/sstephenson/rbenv) so that you can use multiple
+   versions of Ruby on the same machine.
 
-Then run the boostrap script from the repo root directory:
-    $ ./scripts/bootstrap.sh
+2. [Install Compass](http://compass-style.org/install/).
 
-SASS / Compass
---------------
-This project uses the [SASS](http://sass-lang.com/) css precompiler and [Compass](http://compass-style.org/) CSS Authoring Framework. If you are a designer and you are not familiar with SASS, don't worry, it is absolutely worth learning to use it.
+3. Run the boostrap script from the repo's root directory. This performs local
+   repository setup like initializing githooks.
 
-To compile SASS scss files to css:
+        $ ./scripts/bootstrap.sh
 
-    $ compass compile [path/to/project]
 
-To watch the scss directory for changes and automatically compile:
+Deploying Assets
+----------------
+To deploy the current state of the repository from an arbitrary directory:
 
-    $ compass watch [path/to/project]
-You might want to use a [tmux](http://tmux.sourceforge.net/) tab for this so you can keep using your terminal 
-for other things.
+    $ ./path/to/repo/scripts/generate.sh ./path/to/output
 
-You can find the full list of Compass commands [here](http://compass-style.org/help/tutorials/command-line/).
+To deploy all branches from a directory **outside** the repository:
 
-Generating the FCLA HTML
-------------------------
-Okay. You're all set up and you want to start working, but how do you get the
-FCLA html? Well, there's a script for that. Before you run the script, though,
-you'll need a copy of the FCLA xml source and the `flca2html.xsl` transform 
-file.
+    $ ./path/to/repo/scripts/generate-branches.sh ./path/to/output
 
-Then, from the repo root, run:
+Contributing
+------------
+Please see the [Contributors Guidelines](CONTRIBUTING.md) before contributing
+to this project.
 
-    $ ./scripts/flca-gen.sh
 
-The script will walk you through generating a `.flca-gen-config` file, which is
-ignored by git. When you're all done, it will generate the fcla html files in 
-`gen/fcla` (note that `gen` is listed in our `.gitignore`).
-
-Need Help?
-----------
-Contact
-* [Michael DuBois](mailto:michael@michaeldubois.com)
