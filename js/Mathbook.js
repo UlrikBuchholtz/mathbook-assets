@@ -1,16 +1,17 @@
-// Pass dependencies into this closure from the bottom of the file
+/* global MathJax, jQuery */
 // Leading semicolon safeguards against errors in script concatenation
-;(function($, w, Espy, undefined) {
+// Pass dependencies into this closure from the bottom of the file
+;(function($, w, Espy, MathJax, undefined) {
     'use strict'; // Use EMCAScript 5 strict mode within this closure
 
     // Define our class on the window object under the Mathbook namespace
     var Mathbook = function(options) {
-        
+
         var defaults = {
 
             loadingClass: "mathbook-loading",
             loadedClass: "mathbook-loaded",
-            
+
             // SELECTORS
             //----------
             selectors: {
@@ -32,21 +33,21 @@
 
 
             // SECTION TRACKING
-            //----------------- 
-            /** 
+            //-----------------
+            /**
             * Interval upon which scrollSpy recomputes section offsets
             * Should be often enough to catch DOM changes but infrequent enough
-            * to be reasonably performant 
+            * to be reasonably performant
             */
             scrollspyRecomputeInterval: 600, // ms
             /**
             * When scrolling down...
             * Sections will be exited once their bottom edge rises above this
-            * It is defined relative to the top of the screen OR the bottom 
+            * It is defined relative to the top of the screen OR the bottom
             * edge of any fixed UI elements.
             */
             enterSectionTriggerTop: 100,
-            /** 
+            /**
             * When scrolling down...
             * Sections will be entered once their top edge rises above this
             * It is defined relative to the top of the screen OR the bottom
@@ -71,8 +72,8 @@
             shouldTrackOnlyLinkedSections: true,
             autoScrollDuration: 400, // ms
             // linear feels mechanical, but we don't want to load jquery.ui.easing
-            autoScrollEasing: "linear", 
-            
+            autoScrollEasing: "linear",
+
             // SIDEBAR SETTINGS
             //-----------------
             sidebarToggleDuration: 0.4,
@@ -84,29 +85,20 @@
             sidebarRightOpenClass: "sidebar-right-open",
             sidebarLeftClosedClass: "sidebar-left-closed",
             sidebarRightClosedClass: "sidebar-right-closed"
-            
+
         };
 
         // Overwrite defaults with any options passed in.
         var settings = $.extend(defaults, options);
-
-        var DEBUG = false;
-        // console performs VERY slowly on mobile devices,
-        // so it's very important that we don't log things in production code
-        var debug = function() {
-            if(options.debug || DEBUG) {
-                console.log.apply(console, arguments);
-            }
-        };
 
         var self = this;
         var hashOnLoad;
         var isLayoutInitialized = false;
         var _shouldSidebarsPush = false;
         var maxOpenSidebars = 2,
-            hasSidebarLeft, 
-            hasSidebarRight, 
-            isSidebarLeftClosed, 
+            hasSidebarLeft,
+            hasSidebarRight,
+            isSidebarLeftClosed,
             isSidebarRightClosed,
             sidebarLeftTransitionTimeoutId,
             sidebarRightTransitionTimeoutId;
@@ -116,7 +108,7 @@
 
         self.$w = $(window);
 
-        /** 
+        /**
          * Constructor for ToggleView objects
          * These can be used for both toggle buttons and sidebars
          */
@@ -137,18 +129,18 @@
 
             this.toggle = function(shouldActivate) {
                 // If not explicitly set, toggle to opposite state
-                if(typeof shouldActivate == "undefined"){
+                if(typeof shouldActivate === "undefined"){
                     shouldActivate = !this.isActive();
                 }
 
                 if(shouldActivate) {
-                    if(typeof this.onActivate == "function") {
+                    if(typeof this.onActivate === "function") {
                         this.onActivate.call(this.$el.get());
                     }
                     this.$el.addClass(settings.activeClass);
                     this.$el.removeClass(settings.inactiveClass);
                 } else {
-                    if(typeof this.onDeactivate == "function") {
+                    if(typeof this.onDeactivate === "function") {
                         this.onDeactivate.call(this.$el.get());
                     }
                     this.$el.addClass(settings.inactiveClass);
@@ -193,7 +185,6 @@
              * Called when a Layout is applied.
              */
             this.enter = function() {
-                debug("Entered Layout: " + this.debugName);
                 if(typeof this.onEnter === "function") {
                     this.onEnter.apply(this, arguments);
                 }
@@ -203,7 +194,6 @@
              * Called when a Layout is removed
              */
             this.exit = function() {
-                debug("Exited Layout: " + this.debugName);
                 if(typeof this.onExit === "function") {
                     this.onExit.apply(this, arguments);
                 }
@@ -211,12 +201,12 @@
         };
 
         // LAYOUT DEFINITIONS
-        // IMPORTANT: MUST MATCH MEDIA QUERIES IN CSS!!! 
+        // IMPORTANT: MUST MATCH MEDIA QUERIES IN CSS!!!
         // Try to keep layout onEnter functions declarative in nature
         var layouts = {
             // Since layouts rely on the minWidth, add one pixel
             SMALL : new Layout({
-                debugName: "small", 
+                debugName: "small",
                 minWidth: 0,
                 onEnter: function(){
                     // This must come before adjusting sidebars
@@ -225,14 +215,14 @@
                     maxOpenSidebars = 1;
                     self.toggleSidebarLeft(false);
                     self.toggleSidebarRight(false);
-                    
+
                     // with primary nav on bottom
                     self.initializeStickies(true);
                 }
             }),
             MEDIUM : new Layout({
-                debugName: "medium", 
-                minWidth: 769, 
+                debugName: "medium",
+                minWidth: 769,
                 onEnter: function() {
                     // This must come before adjusting sidebars
                     self.shouldSidebarsPush(false);
@@ -245,8 +235,8 @@
                 }
             }),
             LARGE : new Layout({
-                debugName: "large", 
-                minWidth: 1200, 
+                debugName: "large",
+                minWidth: 1200,
                 onEnter: function() {
                     // This must come before adjusting sidebars
                     self.shouldSidebarsPush(false);
@@ -292,8 +282,10 @@
 
             var property;
             for(property in settings.selectors) {
-                var prefixed = "$" + property;
-                self[prefixed] = $(settings.selectors[property]);
+                if(settings.selectors.hasOwnProperty(property)) {
+                    var prefixed = "$" + property;
+                    self[prefixed] = $(settings.selectors[property]);
+                }
             }
 
             // Cache values
@@ -303,28 +295,36 @@
 
 
 
-        /** 
+        /**
         * By default, MathJax scrolls the window to the hash location
         * after "End Typeset" event. We need to override this functionality
         * so things work nicely with our sticky header
         */
         self.setMathJaxOverrides = function() {
-            // Before MathJax applies the page's configuration
-            MathJax.Hub.Register.StartupHook("Begin Config", function() {
-                // Modify that configuration to apply overrides
-                MathJax.Hub.Config({
-                    positionToHash: false
+            if(typeof Mathjax !== "undefined" ) {
+                // Before MathJax applies the page's configuration
+                MathJax.Hub.Register.StartupHook("Begin Config", function() {
+                    // Modify that configuration to apply overrides
+                    MathJax.Hub.Config({
+                        positionToHash: false
+                    });
                 });
-            });
-            
-            // when Mathjax is finished rendering, 
-            MathJax.Hub.Register.StartupHook("End Typeset", function () {
-                // we handle the hash positioning so that it lines up
-                // nicely with our fixed header 
-                self.initializeSectionTracking();
-                self.scrollToSection(hashOnLoad.substr(1));
-                // TODO expand knowl from hash if there's a match?        
-            });
+
+                // when Mathjax is finished rendering,
+                MathJax.Hub.Register.StartupHook("End Typeset", function () {
+                    self.postMathJax();
+                });
+            } else {
+                self.postMathJax();
+            }
+        };
+
+        self.postMathJax = function() {
+            // we handle the hash positioning so that it lines up
+            // nicely with our fixed header
+            self.initializeSectionTracking();
+            self.scrollToSection(hashOnLoad.substr(1));
+            // TODO expand knowl from hash if there's a match?
         };
 
 
@@ -342,9 +342,9 @@
                 self.$primaryNavbar.sticky({
                     className: "stuck",
                     wrapperClassName:"navbar",
-                    topSpacing: 0,    
+                    topSpacing: 0,
                 });
-                
+
                 // Update the position in case scroll is already below
                 // the stickyifying point
                 self.$primaryNavbar.sticky("update");
@@ -355,8 +355,8 @@
                 self.$sidebarLeft.unstick();
 
                 // If primaryNavbar is top, offset sidebar by it's height,
-                // else offset zero 
-                var sidebarLeftTopSpacing = 
+                // else offset zero
+                var sidebarLeftTopSpacing =
                     isPrimaryNavbarBottom ? 0 : primaryNavbarHeight;
 
                 self.$sidebarLeft.sticky({
@@ -372,9 +372,9 @@
         };
 
         ////////////////////////////////////////////////////////////////////////////
-        // SECTIONS / NAV 
+        // SECTIONS / NAV
         ////////////////////////////////////////////////////////////////////////////
-        
+
         self.initializeSectionTracking = function() {
             espy = new Espy(w, self.onSectionStateChange);
             self.reconfigureEspy();
@@ -384,12 +384,12 @@
                 var $section = $(this);
                 var hash = $section.attr(settings.sectionHashAttribute);
 
-                
+
                 // Find the corresponding link
-                var linkSelector = 
+                var linkSelector =
                         "["+settings.sectionLinkHashAttribute+"='"+hash+"']";
                 var $link = self.$sectionLinks.filter(linkSelector);
-                
+
                 // If this section has a link
                 if($link.size() > 0) {
                     // Create an entry in our section map
@@ -410,7 +410,7 @@
 
             if(!settings.shouldTrackOnlyLinkedSections) {
                 // Add all sections to tracking all at once
-                epsy.add(self.$sections);
+                espy.add(self.$sections);
             }
 
             // When the dom changes, espy needs to recompute the positions
@@ -419,7 +419,7 @@
             // changes, so we will resort to an interval.
             setInterval(function(){
                 // Only worth updating if ToC is visible
-                if(!self.isSidebarLeftClosed()) {
+                if(!isSidebarLeftClosed) {
                    self.refreshEspy();
                 }
             }, settings.spyscrollRecomputeInterval);
@@ -438,7 +438,7 @@
             options.offset = navbarHeight + settings.enterSectionTriggerTop;
 
             // Compute size of trigger
-            options.size = settings.enterSectionTriggerBottom - 
+            options.size = settings.enterSectionTriggerBottom -
                            settings.enterSectionTriggerTop;
             // Limit size to the size of the activeArea
             options.size = Math.min(activeArea, options.size);
@@ -455,7 +455,7 @@
         self.onSectionLinkClick = function(e) {
             // Called in the context of the link node
             var hash = $(this).attr(settings.sectionLinkHashAttribute);
-            var success = 
+            var success =
                 self.scrollToSection(hash, self.updateLinks, self, [hash]);
             if(success) {
                 e.preventDefault();
@@ -471,7 +471,7 @@
 
             if($matchedSection.length > 0) {
                 isAutoScrolling = true;
-                
+
                 var targetOffsetTop = $matchedSection.offset().top;
 
                 // Subtract screen offset for entering sections
@@ -492,9 +492,9 @@
                 // Perform the scroll
                 $('body,html').animate({
                         scrollTop: targetScrollTop
-                    },  
-                    settings.autoScrollDuration, 
-                    settings.autoScrollEasing, 
+                    },
+                    settings.autoScrollDuration,
+                    settings.autoScrollEasing,
                     wrappedCallback);
 
                 sectionExists = true;
@@ -505,6 +505,8 @@
         };
 
         self.onSectionStateChange = function(isEntered, state) {
+            /*jshint unused:false */
+
             // Called with the element Node's context
             var element = this;
             var $section = $(element);
@@ -513,7 +515,7 @@
             if(sectionMap.hasOwnProperty(hash)) {
                 sectionMap[hash].isActive = isEntered;
             }
-            
+
             // Don't update links during auto scrolls
             // It just slows things down
             if(!isAutoScrolling) {
@@ -522,12 +524,12 @@
 
             if(isEntered) {
                 $section.addClass(settings.sectionActiveClass);
-                if(typeof options.onEnterSection == "function"){
+                if(typeof options.onEnterSection === "function"){
                     options.onEnterSection.apply(element, arguments);
                 }
             } else {
                 $section.removeClass(settings.sectionRemoveClass);
-                if(typeof options.onExitSection == "function"){
+                if(typeof options.onExitSection === "function"){
                     options.onEnterSection.apply(element, arguments);
                 }
             }
@@ -605,7 +607,7 @@
                 $nodes.each(function() {
                     var node = $(this);
                     ids[i] = node.attr('id');
-                    names[i] = node.attr('name');    
+                    names[i] = node.attr('name');
                     node.attr( 'id', '' );
                     node.attr( 'name', '' );
                     i++;
@@ -618,7 +620,7 @@
                             .css({
                                     position:'absolute',
                                     visibility:'hidden',
-                                    top: $w.scrollTop() + 'px'
+                                    top: self.$w.scrollTop() + 'px'
                                 })
                             .attr( 'id', hash )
                             .appendTo( document.body );
@@ -644,7 +646,7 @@
         };
 
         /**
-         * Removes instance(s) of the given item from the given array.  
+         * Removes instance(s) of the given item from the given array.
          *
          * Adapted from http://stackoverflow.com/a/18165553/1599617
          * Works in all browsers.
@@ -661,7 +663,7 @@
                 //}
             //}
         //}
-        
+
         ////////////////////////////////////////////////////////////////////////////
         // SIDEBARS
         ////////////////////////////////////////////////////////////////////////////
@@ -688,7 +690,7 @@
                     }
                 });
                 // Toggle button click handler
-                self.$sidebarLeftToggleButton.on('click', function() { 
+                self.$sidebarLeftToggleButton.on('click', function() {
                     self.toggleSidebarLeft();
                 });
             }
@@ -716,24 +718,24 @@
                     self.toggleSidebarRight();
                 });
             }
-            
+
         };
 
         // TODO combine left and right toggle functions?
 
         /**
-         * Toggles the left sidebar to the shouldOpen state 
+         * Toggles the left sidebar to the shouldOpen state
          * or the reverse of the current state if shouldOpen is undefined.
          * @param shouldOpen {Boolean}
          */
         self.toggleSidebarLeft = function(shouldOpen) {
             if(hasSidebarLeft) {
-                if(typeof shouldOpen == "undefined") {
-                    shouldOpen = self.isSidebarLeftClosed();
+                if(typeof shouldOpen === "undefined") {
+                    shouldOpen = isSidebarLeftClosed;
                 }
-                if(shouldOpen && 
-                   maxOpenSidebars == 1 &&
-                   !self.isSidebarRightClosed()  
+                if(shouldOpen &&
+                   maxOpenSidebars === 1 &&
+                   !isSidebarRightClosed
                 ){
                     self.toggleSidebarRight(false);
                 }
@@ -757,18 +759,18 @@
          */
         self.toggleSidebarRight = function(shouldOpen) {
             if(hasSidebarRight) {
-                if(typeof shouldOpen == "undefined") {
-                    shouldOpen = self.isSidebarRightClosed();
+                if(typeof shouldOpen === "undefined") {
+                    shouldOpen = isSidebarRightClosed;
                 }
-                if(shouldOpen && 
-                   maxOpenSidebars == 1 && 
-                   !self.isSidebarLeftClosed()  
+                if(shouldOpen &&
+                   maxOpenSidebars === 1 &&
+                   !isSidebarLeftClosed
                 ){
                     self.toggleSidebarLeft(false);
                 }
                 self.sidebarRightToggleButtonView.toggle(shouldOpen);
                 self.sidebarRightView.toggle(shouldOpen);
-                
+
                 // We might need to do some things at transition end
                 // Cancel the current timeout, if there is one
                 clearTimeout(sidebarRightTransitionTimeoutId);
@@ -780,12 +782,12 @@
         };
 
         /**
-         * Returns true if the left sidebar is present in HTML 
+         * Returns true if the left sidebar is present in HTML
          * Use the cached variable instead of this function.
          */
         self.hasSidebarLeft = function() {
             // To be safe, we'll require everything
-            return self.$sidebarLeft.size() > 0 && 
+            return self.$sidebarLeft.size() > 0 &&
                    self.$sidebarLeftToggleButton.size() > 0 &&
                    self.$main.size() > 0;
         };
@@ -797,7 +799,7 @@
         self.hasSidebarRight = function() {
             // To be safe, we'll require everything
             return self.$sidebarRight.size() > 0 &&
-                   self.$sidebarRightToggleButton.size() > 0 && 
+                   self.$sidebarRightToggleButton.size() > 0 &&
                    self.$main.size() > 0;
         };
 
@@ -809,11 +811,11 @@
          * @param shouldPush {Boolean} true to push, false to slide
          */
         self.shouldSidebarsPush = function(shouldSidebarsPush) {
-            if(typeof shouldSidebarsPush == "undefined") {
+            if(typeof shouldSidebarsPush === "undefined") {
                 return _shouldSidebarsPush;
             }
             _shouldSidebarsPush = shouldSidebarsPush;
-            
+
             if(!_shouldSidebarsPush) {
                 self.unlockMainWidth();
             }
@@ -834,20 +836,20 @@
         self.onSidebarClose = function() {
             if(self.shouldSidebarsPush()) {
                 // Unlock the main element width only if both sidebars are closed.
-                if(self.isSidebarRightClosed() && self.isSidebarLeftClosed()){
+                if(isSidebarRightClosed && isSidebarLeftClosed){
                     self.unlockMainWidth();
-                } 
+                }
             }
         };
 
-        /** 
+        /**
          * Returns true if right sidebar is closed or non-existant
          */
         self.isSidebarRightClosed = function() {
             return (!hasSidebarRight || !self.sidebarRightView.isActive());
         };
 
-        /** 
+        /**
          * Returns true if left sidebar is closed or non-existant
          */
         self.isSidebarLeftClosed = function() {
@@ -867,7 +869,7 @@
         self.unlockMainWidth = function() {
             self.$main.width("");
         };
-        
+
         ////////////////////////////////////////////////////////////////////////////
         // RESIZING METHODS
         ////////////////////////////////////////////////////////////////////////////
@@ -876,8 +878,8 @@
          * Called when the browser resizes
          */
         self.resize = function() {
-            var navbarHeight, 
-                viewportHeight, 
+            var navbarHeight,
+                viewportHeight,
                 newLayout;
 
             var windowWidth = self.$w.width();
@@ -921,7 +923,7 @@
                 extrasHeight = self.$sidebarLeftExtras.outerHeight();
             }
 
-            // Force the toc to fill whatever space remains in sidebar 
+            // Force the toc to fill whatever space remains in sidebar
             // ...but leave room for an "extras" box if it exists
             var tocHeight = viewportHeight - extrasHeight;
             self.$toc.height(tocHeight);
@@ -940,11 +942,11 @@
                     // If current width is in layout range
                     // and layout.minwidth is bigger than any other match
                     if(width >= layout.minWidth &&
-                       (newLayout === null || layout.minWidth > newLayout.minWidth)) 
+                       (newLayout === null || layout.minWidth > newLayout.minWidth))
                     {
                         // then this is our best match yet.
                         newLayout = layout;
-                    } 
+                    }
                 }
             }
             return newLayout;
@@ -959,7 +961,6 @@
                 throw new Error(
                         "setLayout::newLayout must be of type Layout");
             }
-            debug("Changing layout to " + newLayout.debugName);
 
             currentLayout.exit();
             newLayout.enter();
@@ -983,4 +984,4 @@
 
     return Mathbook;
 
-})(jQuery, window, jQuery.Espy);
+})(jQuery, window, jQuery.Espy, MathJax);
