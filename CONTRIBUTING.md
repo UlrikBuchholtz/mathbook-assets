@@ -184,7 +184,7 @@ SASS Guidelines
              @include my-mixin(c,d);
           }
           
-      That said, don't worry too much about this.
+      That said, don't worry too much about placeholders vs mixins.
 
 
 Compass
