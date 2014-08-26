@@ -27,9 +27,9 @@ githooks in the `scripts/githooks` directory when they are modified later.
 
 Editor Config
 -------------
-Use the `.editorconfig` file included in the repository. See
-[editorconfig.org](http://editorconfig.org/) to find more information and a
-plugin for your editor.
+Use the `.editorconfig` file included in the repository to configure 
+your editor. See [editorconfig.org](http://editorconfig.org/) 
+to find more information and a plugin for your editor.
 
 
 JSHint
@@ -129,9 +129,52 @@ SASS Guidelines
 
    * should be defined in only one place
    * should occur only in partials
-   * should be used to `@extend` the output of a mixin `@include`'d with a
-     given set of parameters instead of `@include`ing that mixin with the same
-     parameters in multiple places. This decreases the total CSS output.
+   * can be used to reduce the total CSS output of mixins. 
+     If a mixin is used with the same parameters in more than one place, 
+     consider `@include`ing the mixin in a placeholder and `@extend`ing the 
+     placeholder instead. Here's an example:
+
+     Bad:
+         
+          // Both of these call the mixin with the same parameters.
+          // This results in double the CSS.
+          .my-selector-1 {
+            @include my-mixin(a,b);
+          }
+          
+          .my-selector-2 {
+             @include my-mixin(a,b);
+          }
+
+     Good:
+     
+          // With the placeholder selector, 
+          // they will be added to a comma-seperated list in the CSS output
+          %my-thingy-a-b {
+           @include my-mixin(a, b); 
+          }
+          
+          .my-selector-1 {
+            @extend %my-thingy-a-b;
+          }
+          
+          .my-selector-2 {
+             @extend %my-thingy-a-b;
+          }
+         
+      Also good:
+        
+          // These use different parameters, so it's okay to create more CSS output.
+          // They generate only as much CSS as is necessary.
+          .my-selector-1 {
+            @include my-mixin(a,b);
+          }
+          
+          .my-selector-2 {
+             @include my-mixin(c,d);
+          }
+          
+      That said, don't worry too much about this.
 
 
 Compass
