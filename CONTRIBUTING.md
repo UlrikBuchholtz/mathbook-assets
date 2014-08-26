@@ -24,8 +24,9 @@ To achieve this, it is **highly recommended** that you use the
 model. The best way to do so is to use the [git-flow git
 plugin](https://github.com/nvie/gitflow).
 
-If you are contributing via pull requests, you do not need to mess with the
-version number. The core team will handle that when preparing a release.
+If you are contributing via pull requests you do not need to mess 
+with the version number. The core team will handle that when preparing 
+a release or hotfix branch that includes your commits.
 
 
 Githooks
