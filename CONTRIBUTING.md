@@ -44,7 +44,7 @@ to find more information and a plugin for your editor.
 
 JSHint
 ------
-It's recommended that you set up JSHint. Javascript is finicky language and
+It's recommended that you set up JSHint. Javascript is a finicky language and
 it's easy to make mistakes without realizing it. Sometimes seemingly innoucous
 mistakes (like placing a comma after the last property in an object) can break
 your code in less forgiving browsers (*cough* IE). JSHint lints your javascript
