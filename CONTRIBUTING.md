@@ -5,6 +5,13 @@ Welcome to the project!
 Below are a few guidelines that help us maintain consistency throughout the
 codebase.
 
+General
+-------
+
+* Be sure to run the `boostrap.sh` script after cloning the 
+   repository for the first time.
+* Keep commits focused, especially when preparing pull requests.
+* Use `git merge --no-ff` to merge branches (or use git-flow)
 
 Semver and git-flow
 -------------------
@@ -17,12 +24,15 @@ To achieve this, it is **highly recommended** that you use the
 model. The best way to do so is to use the [git-flow git
 plugin](https://github.com/nvie/gitflow).
 
+If you are contributing via pull requests, you do not need to mess with the
+version number. The core team will handle that when preparing a release.
+
 
 Githooks
 --------
 Be sure to run the `boostrap.sh` script after cloning the repository for the
-first time. This will set up githooks that, in turn, handle installing/updating
-githooks in the `scripts/githooks` directory when they are modified later.
+first time. This will set up githooks that, in turn, manage installing/updating
+githooks from the `scripts/githooks` directory on pull.
 
 
 Editor Config
