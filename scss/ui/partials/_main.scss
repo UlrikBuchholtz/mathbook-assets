@@ -34,7 +34,7 @@
 
     /**************************************************************************/
 
-    @media screen and (max-width: $screen-sm-min) {
+    @media screen and (max-width: $screen-sm-max) {
         /* Make space for navbar fixed to bottom of screen */
         padding-bottom: $ui-navbar-height;
     }
@@ -55,7 +55,7 @@
          * Switch to centered at medium layout
          * Only matters when sidebar is closed
          */
-        @media screen and (max-width: $screen-md-min) {
+        @media screen and (max-width: $screen-md-max) {
             margin: $ui-content-margin auto;
         }
 
@@ -83,13 +83,13 @@
         /* Since sidebars push open in the small layout,
          * we want consistent  margins regardless of the sidebar states
          */
-        @media screen and (max-width: $screen-sm-min) {
+        @media screen and (max-width: $screen-sm-max) {
             &,
             .sidebar-left-open &,
             .sidebar-right-open &,
             .sidebar-left-open.sidebar-right-open & {
                 /* Decrease the margins */
-                margin:$ui-content-margin;
+                margin:$ui-content-margin auto;
             }
         }
 
@@ -107,7 +107,7 @@
         }
 
         /* And even smaller margins at extra small layouts */
-        @media screen and (max-width: $screen-xs-min) {
+        @media screen and (max-width: $screen-xs-max) {
             &,
             .sidebar-left-open &,
             .sidebar-right-open &,

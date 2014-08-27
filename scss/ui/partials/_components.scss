@@ -4,8 +4,8 @@
 @import "../mixins/flex-container";
 @import "../../shared/knowl";
 
-/* 
- * Table-of-contents for chapter/section/etc summary pages 
+/*
+ * Table-of-contents for chapter/section/etc summary pages
  */
 .summary-links {
 
@@ -37,7 +37,7 @@
         & {
             font-family: $ui-font-family-heading;
 
-            @media screen and (max-width: $screen-xs-min) {
+            @media screen and (max-width: $screen-sm-min) {
                 font-size:.8em;
             }
         }
@@ -45,7 +45,7 @@
        // @include navtree-codenumber-support(
        //     $indent: $ui-line-height-computed ,
        //     $codenumber-width: 2*$font-size,
-       //     $codenumber-gutter-right: $ui-line-height-computed/2 
+       //     $codenumber-gutter-right: $ui-line-height-computed/2
        // );
 
         .codenumber {
@@ -70,7 +70,7 @@
         /*float:none;*/
         /*text-align:left;*/
     /*}*/
-    
+
     .ui-button {
         /*float:right;*/
         &.ui-state-default, &.ui-state-hover, &.ui-state-active, &.ui-state-focus, &.ui-corner-all {

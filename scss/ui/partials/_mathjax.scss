@@ -1,8 +1,8 @@
 @import "../ui_config";
 @import "../mixins/_sliding-sidebars.scss";
-/* 
+/*
  * Reposition MathJax loading message so it overlays content instead of navbar
- * when there is a toc. 
+ * when there is a toc.
  * To override, we must add body specificity.
  */
 body.has-sidebar-left.sidebar-left-open #MathJax_Message {
@@ -20,7 +20,7 @@ body #MathJax_Message {
     z-index:1000;
     bottom: .5*$ui-font-size-base;
 
-    @media screen and (max-width: $screen-sm-min) {
+    @media screen and (max-width: $screen-sm-max) {
         /* Display above bottom navbar */
         left:$ui-line-height-computed;
         right:$ui-line-height-computed;
@@ -35,7 +35,7 @@ body #MathJax_Message {
     padding-top:2px;
     padding-bottom:2px;
 
-    /* 
+    /*
      * Force margins MathJax_Display's to obey our vertical rhythm.
      * It won't be perfect, because their interior sizing will not match our
      * vertical rhythm, but we can at least make the margins match.
@@ -43,9 +43,9 @@ body #MathJax_Message {
     @include margin-leader;
     @include margin-trailer;
 
-    @media screen and (max-width: $screen-sm-min) {
-        /* Allow users on smaller screens to scroll equations 
-         * horizontally when they don't fit on the screen 
+    @media screen and (max-width: $screen-sm-max) {
+        /* Allow users on smaller screens to scroll equations
+         * horizontally when they don't fit on the screen
          */
         overflow-x:auto;
         overflow-y:hidden;
@@ -56,10 +56,10 @@ body #MathJax_Message {
         $sidebar-right-width: $ui-sidebar-right-width,
         $content-max-width: $ui-content-max-width,
         $content-margin: $ui-content-margin + $ui-equation-fudge/2
-    
+
     ) {
-        /* Allow users on smaller screens to scroll equations 
-         * horizontally when they don't fit on the screen 
+        /* Allow users on smaller screens to scroll equations
+         * horizontally when they don't fit on the screen
          */
         overflow-x:auto;
         overflow-y:hidden;

@@ -33,6 +33,12 @@
                 sectionLinks: "#toc a"
             },
 
+            // BREAKPOINTS
+            //--------------
+            screenXsMin: 481,
+            screenSmMin: 641,
+            screenMdMin: 801,
+            screenLgMin: 1200,
 
             // SECTION TRACKING
             //-----------------
@@ -241,7 +247,7 @@
             }),
             MEDIUM : new Layout({
                 debugName: "medium",
-                minWidth: 769,
+                minWidth: settings.screenMdMin,
                 onEnter: function() {
                     // This must come before adjusting sidebars
                     self.shouldSidebarsPush(false);
@@ -256,7 +262,7 @@
             }),
             LARGE : new Layout({
                 debugName: "large",
-                minWidth: 1200,
+                minWidth: settings.screenLgMin,
                 onEnter: function() {
                     // This must come before adjusting sidebars
                     self.shouldSidebarsPush(false);
@@ -981,7 +987,7 @@
                 viewportHeight,
                 newLayout;
 
-            var windowWidth = self.$w.width();
+            var windowWidth = viewport().width;
             var windowHeight = self.$w.height();
 
             // Update the layout if necessary
@@ -995,7 +1001,9 @@
             navbarHeight = self.$primaryNavbar.outerHeight();
             viewportHeight = windowHeight - navbarHeight;
 
-            if(self.shouldSidebarsPush()) {
+            var isSidebarOpen =
+                !self.isSidebarLeftClosed() || !self.isSidebarRightClosed();
+            if(self.shouldSidebarsPush() && isSidebarOpen) {
                 self.$main.width(windowWidth);
             }
 
@@ -1009,6 +1017,21 @@
                 setTimeout(self.debouncedResize, debouncedResizeDuration);
 
         };
+
+        /**
+         * Gets the viewport dimensions that are used to evaluate
+         * media queries.
+         * This is different than jQuery's width/height functions.
+         * Adapted from: http://stackoverflow.com/a/11310353/1599617
+         */
+        function viewport() {
+            var e = window, a = 'inner';
+            if (!('innerWidth' in window )) {
+                a = 'client';
+                e = document.documentElement || document.body;
+            }
+            return { width : e[ a+'Width' ] , height : e[ a+'Height' ] };
+        }
 
         /**
          * Actions that only need to occur at the end of a resize.

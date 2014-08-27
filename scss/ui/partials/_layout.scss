@@ -103,7 +103,7 @@ body {
          * At small screens, the navbar is fixed to bottom,
          * so the sticky wrapper should collapse.
          */
-        @media screen and (max-width: $screen-sm-min) {
+        @media screen and (max-width: $screen-md-max) {
             height:0;
         }
     }
@@ -124,7 +124,7 @@ body {
 .page {
     position:relative;
 
-    @media screen and (max-width: $screen-xs-max) {
+    @media screen and (max-width: $screen-sm-max) {
         /* Clip hidden sidebars */
         overflow:hidden;
     }
