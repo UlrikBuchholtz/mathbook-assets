@@ -51,18 +51,21 @@ body #MathJax_Message {
         overflow-y:hidden;
     }
 
-    @include sliding-sidebars-media-cramped-content(
-        $sidebar-left-width: $ui-sidebar-left-width,
-        $sidebar-right-width: $ui-sidebar-right-width,
-        $content-max-width: $ui-content-max-width,
-        $content-margin: $ui-content-margin + $ui-equation-fudge/2
+    /**
+     * Limit equations in medium layout if sidebar is open
+     */
+    /*@include sliding-sidebars-media-cramped-content(*/
+        /*$sidebar-left-width: $ui-sidebar-left-width,*/
+        /*$sidebar-right-width: $ui-sidebar-right-width,*/
+        /*$content-max-width: $ui-content-max-width,*/
+        /*$content-margin: $ui-content-margin + $ui-equation-fudge/2*/
 
-    ) {
+    /*) {*/
         /* Allow users on smaller screens to scroll equations
          * horizontally when they don't fit on the screen
          */
-        overflow-x:auto;
-        overflow-y:hidden;
-    }
+        /*overflow-x:auto;*/
+        /*overflow-y:hidden;*/
+    /*}*/
 }
 
