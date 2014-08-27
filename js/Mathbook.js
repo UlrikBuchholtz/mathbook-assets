@@ -33,6 +33,12 @@
                 sectionLinks: "#toc a"
             },
 
+            // BREAKPOINTS
+            //--------------
+            screenXsMin: 481,
+            screenSmMin: 641,
+            screenMdMin: 801,
+            screenLgMin: 1200,
 
             // SECTION TRACKING
             //-----------------
@@ -87,7 +93,7 @@
 
             // SIDEBAR SETTINGS
             //-----------------
-            sidebarToggleDuration: 0.4,
+            sidebarToggleDuration: 400,
             toggleButtonActiveClass: "active",
             toggleButtonInactiveClass: "",
             hasSidebarLeftClass: "has-sidebar-left",
@@ -95,7 +101,9 @@
             sidebarLeftOpenClass: "sidebar-left-open",
             sidebarRightOpenClass: "sidebar-right-open",
             sidebarLeftClosedClass: "sidebar-left-closed",
-            sidebarRightClosedClass: "sidebar-right-closed"
+            sidebarRightClosedClass: "sidebar-right-closed",
+            shouldDisableSidebarTogglesAtMedium: true,
+            shouldDisableSidebarTogglesAtLarge: true
 
         };
 
@@ -114,6 +122,7 @@
 
         // Sidebar stuff
         var maxOpenSidebars = 2,
+            isSidebarTogglesDisabled = true,
             hasSidebarLeft,
             hasSidebarRight,
             sidebarLeftTransitionTimeoutId,
@@ -237,11 +246,13 @@
                     // with primary nav on bottom
                     isPrimaryNavbarBottom = true;
                     self.initializeStickies();
+
+                    self.sidebarTogglesDisabled(false);
                 }
             }),
             MEDIUM : new Layout({
                 debugName: "medium",
-                minWidth: 769,
+                minWidth: settings.screenMdMin,
                 onEnter: function() {
                     // This must come before adjusting sidebars
                     self.shouldSidebarsPush(false);
@@ -252,11 +263,15 @@
 
                     isPrimaryNavbarBottom = false;
                     self.initializeStickies();
+
+                    if(settings.shouldDisableSidebarTogglesAtMedium) {
+                        self.sidebarTogglesDisabled(true);
+                    }
                 }
             }),
             LARGE : new Layout({
                 debugName: "large",
-                minWidth: 1200,
+                minWidth: settings.screenLgMin,
                 onEnter: function() {
                     // This must come before adjusting sidebars
                     self.shouldSidebarsPush(false);
@@ -267,6 +282,10 @@
 
                     isPrimaryNavbarBottom = false;
                     self.initializeStickies();
+
+                    if(settings.shouldDisableSidebarTogglesAtLarge) {
+                        self.sidebarTogglesDisabled(true);
+                    }
                 }
             })
         };
@@ -495,6 +514,55 @@
             }
         };
 
+        self.scrollTocToActiveItem = function(duration) {
+            var $activeItems =
+                self.$toc.find("." + settings.sectionLinkActiveClass);
+
+            if($activeItems.size() > 0) {
+                // Scroll to the last of the active links
+                self.scrollTocToItem($activeItems.last(), duration);
+            }
+        };
+
+        /**
+         * This function assumes the toc has relative or absolute positioning.
+         */
+        self.scrollTocToItem = function(element, duration) {
+            if(typeof duration === "undefined") {
+                duration = settings.autoScrollDuration;
+            }
+
+            var $item = $(element);
+            // IF the given item is in the toc
+            if($item.parents().filter(self.$toc).size() > 0) {
+                // The offset from the top of the toc is the difference
+                // between the offsets from the top of the document
+                var tocDocumentTopOffset = self.$toc.position().top;
+                var itemDocumentTopOffset = $item.position().top;
+                var itemTocTopOffset =
+                    itemDocumentTopOffset - tocDocumentTopOffset;
+
+                // targeted offset between top of frame and active item
+                var scrollOffset = settings.tocScrollToActiveOffsetTop;
+
+                var targetScrollTop =
+                    self.$toc.scrollTop() + itemTocTopOffset - scrollOffset;
+
+                var maxScrollTop =
+                    self.$toc.prop('scrollHeight') - self.$toc.innerHeight();
+
+                // Apply limits
+                targetScrollTop = Math.max(targetScrollTop,0);
+                targetScrollTop = Math.min(targetScrollTop, maxScrollTop);
+
+                self.$toc.animate({
+                        scrollTop: targetScrollTop
+                    },
+                    duration,
+                    settings.autoScrollEasing);
+            }
+        };
+
         // Animated scroll to a section
         // Returns false if no section to scroll to on this page
         self.scrollToSection = function(hash, callback, scope, params) {
@@ -601,27 +669,6 @@
             }
         };
 
-
-        //self.findDeepestActiveSection = function() {
-            //var length = self.activeSections.length,
-                //$deepestSection = null,
-                //deepestScrollTop = 0,
-                //$section,
-                //scrollTop,
-                //i;
-
-            //for(i=0; i < length; i++) {
-                //$section = $(self.activeSections[i]);
-                //scrollTop = $section.scrollTop();
-                //if(scrollTop > deepestScrollTop) {
-                    //$deepestSection = $section;
-                    //deepestScrollTop = scrollTop;
-                //}
-            //}
-
-            //return $deepestSection;
-        //};
-
         // Set the hash to reflect the current position in the page
         // This function temporarily removes the anchor matching this
         // hash so that the page doesn't jump as we change the hash
@@ -685,25 +732,6 @@
             }
         };
 
-        /**
-         * Removes instance(s) of the given item from the given array.
-         *
-         * Adapted from http://stackoverflow.com/a/18165553/1599617
-         * Works in all browsers.
-         *
-         * @param {Mixed} item - the item to remove
-         * @param {Array} array - the array to remove from
-         * @param {shouldRemoveAll} - whether or not to remove all instances
-         */
-        //function removeFrom(array, item, shouldRemoveAll) {
-            //for(var i = array.length - 1; i > 0; i--) {
-                //if(array[i] === item) {
-                    //array.splice(i, 1);
-                    //shouldRemoveAll || break;
-                //}
-            //}
-        //}
-
         ////////////////////////////////////////////////////////////////////////////
         // SIDEBARS
         ////////////////////////////////////////////////////////////////////////////
@@ -729,10 +757,6 @@
                         self.onSidebarClose();
                     }
                 });
-                // Toggle button click handler
-                self.$sidebarLeftToggleButton.on('click', function() {
-                    self.toggleSidebarLeft();
-                });
             }
 
             if(hasSidebarRight) {
@@ -752,11 +776,44 @@
                         self.onSidebarClose();
                     }
                 });
+            }
 
-                // Toggle button click handler
-                self.$sidebarRightToggleButton.on('click', function() {
-                    self.toggleSidebarRight();
-                });
+            self.sidebarTogglesDisabled(false);
+        };
+
+        self.sidebarTogglesDisabled = function(isDisabled) {
+            if(typeof isDisabled === "undefined") {
+                return isSidebarTogglesDisabled;
+            }
+
+            console.log("currently, isSidebarTogglesDisabled: " + isSidebarTogglesDisabled);
+            if(isDisabled !== isSidebarTogglesDisabled) {
+                console.log("setting isSidebarTogglesDisabled to " + isDisabled);
+                if(!isDisabled) {
+                    if(hasSidebarLeft) {
+                        self.$sidebarLeftToggleButton
+                            .on("click", function(e) {
+                                self.toggleSidebarLeft();
+                            });
+                    }
+
+                    if(hasSidebarRight) {
+                        self.$sidebarRightToggleButton
+                            .on("click", function(e) {
+                                self.toggleSidebarRight();
+                            });
+                    }
+                } else {
+                    if(hasSidebarLeft) {
+                        self.$sidebarLeftToggleButton.off("click");
+                    }
+
+                    if(hasSidebarRight) {
+                        self.$sidebarRightToggleButton.off("click");
+                    }
+                }
+
+                isSidebarTogglesDisabled = true && isDisabled;
             }
 
         };
@@ -799,55 +856,6 @@
                     self.refreshEspy();
 
                 }, settings.sidebarTransitionDuration);
-            }
-        };
-
-        self.scrollTocToActiveItem = function(duration) {
-            var $activeItems =
-                self.$toc.find("." + settings.sectionLinkActiveClass);
-
-            if($activeItems.size() > 0) {
-                // Scroll to the last of the active links
-                self.scrollTocToItem($activeItems.last(), duration);
-            }
-        };
-
-        /**
-         * This function assumes the toc has relative or absolute positioning.
-         */
-        self.scrollTocToItem = function(element, duration) {
-            if(typeof duration === "undefined") {
-                duration = settings.autoScrollDuration;
-            }
-
-            var $item = $(element);
-            // IF the given item is in the toc
-            if($item.parents().filter(self.$toc).size() > 0) {
-                // The offset from the top of the toc is the difference
-                // between the offsets from the top of the document
-                var tocDocumentTopOffset = self.$toc.position().top;
-                var itemDocumentTopOffset = $item.position().top;
-                var itemTocTopOffset =
-                    itemDocumentTopOffset - tocDocumentTopOffset;
-
-                // targeted offset between top of frame and active item
-                var scrollOffset = settings.tocScrollToActiveOffsetTop;
-
-                var targetScrollTop =
-                    self.$toc.scrollTop() + itemTocTopOffset - scrollOffset;
-
-                var maxScrollTop =
-                    self.$toc.prop('scrollHeight') - self.$toc.innerHeight();
-
-                // Apply limits
-                targetScrollTop = Math.max(targetScrollTop,0);
-                targetScrollTop = Math.min(targetScrollTop, maxScrollTop);
-
-                self.$toc.animate({
-                        scrollTop: targetScrollTop
-                    },
-                    duration,
-                    settings.autoScrollEasing);
             }
         };
 
@@ -981,7 +989,7 @@
                 viewportHeight,
                 newLayout;
 
-            var windowWidth = self.$w.width();
+            var windowWidth = viewport().width;
             var windowHeight = self.$w.height();
 
             // Update the layout if necessary
@@ -995,7 +1003,9 @@
             navbarHeight = self.$primaryNavbar.outerHeight();
             viewportHeight = windowHeight - navbarHeight;
 
-            if(self.shouldSidebarsPush()) {
+            var isSidebarOpen =
+                !self.isSidebarLeftClosed() || !self.isSidebarRightClosed();
+            if(self.shouldSidebarsPush() && isSidebarOpen) {
                 self.$main.width(windowWidth);
             }
 
@@ -1009,6 +1019,21 @@
                 setTimeout(self.debouncedResize, debouncedResizeDuration);
 
         };
+
+        /**
+         * Gets the viewport dimensions that are used to evaluate
+         * media queries.
+         * This is different than jQuery's width/height functions.
+         * Adapted from: http://stackoverflow.com/a/11310353/1599617
+         */
+        function viewport() {
+            var e = window, a = 'inner';
+            if (!('innerWidth' in window )) {
+                a = 'client';
+                e = document.documentElement || document.body;
+            }
+            return { width : e[ a+'Width' ] , height : e[ a+'Height' ] };
+        }
 
         /**
          * Actions that only need to occur at the end of a resize.

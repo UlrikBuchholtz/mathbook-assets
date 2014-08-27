@@ -27,11 +27,13 @@ $sliding-sidebars-transition-duration: 400ms !default;
     $sidebar-width,
     $transition-duration: $sliding-sidebars-transition-duration
 ) {
+    $default-closed-max: $default-open-min - 1;
+
     .has-sidebar-#{$side} & {
         position:absolute;
         /* Default styles on load, before javascript loads */
         margin-#{$side}:0;
-        @media screen and (max-width: $default-open-min) {
+        @media screen and (max-width: $default-closed-max) {
             /* Small */
             margin-#{$side}:-$sidebar-width;
         }
@@ -87,11 +89,13 @@ $sliding-sidebars-transition-duration: 400ms !default;
     $sidebar-width,
     $transition-duration: $sliding-sidebars-transition-duration
 ) {
+    $default-closed-max: $default-open-min - 1;
+    $push-max: $slide-min - 1;
 
     /* Main with sidebar left without javascript*/
     .has-sidebar-#{$side} & {
         @include sliding-sidebars-main-side-state($side, open-slide, $sidebar-width);
-        @media screen and (max-width: $default-open-min) {
+        @media screen and (max-width: $default-closed-max) {
             @include sliding-sidebars-main-side-state($side, closed, $sidebar-width);
         }
     }
@@ -100,7 +104,7 @@ $sliding-sidebars-transition-duration: 400ms !default;
     .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-open &,
     .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-open & {
         @include sliding-sidebars-main-side-state($side, open-slide, $sidebar-width);
-        @media screen and (max-width: $slide-min) {
+        @media screen and (max-width: $push-max) {
             @include sliding-sidebars-main-side-state($side, open-push, $sidebar-width);
         }
     }
@@ -109,7 +113,7 @@ $sliding-sidebars-transition-duration: 400ms !default;
     .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-closed &,
     .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-closed & {
         @include sliding-sidebars-main-side-state($side, closed, $sidebar-width);
-        @media screen and (max-width: $slide-min) {
+        @media screen and (max-width: $push-max) {
             @include sliding-sidebars-main-side-state($side, closed-push, $sidebar-width);
         }
     }
@@ -153,15 +157,16 @@ $sliding-sidebars-transition-duration: 400ms !default;
     $content-margin
 ) {
 
-    $breakpoint: $content-max-width + 2*$content-margin;
+    $breakpoint: $content-max-width + 2*$content-margin - 1;
     @media screen and (max-width: $breakpoint ) {
+        @content;
     }
 
 
     .sidebar-left-open & {
         $breakpoint: $content-max-width
                      + $sidebar-left-width
-                     + 2*$content-margin;
+                     + 2*$content-margin - 1;
         @media screen and (max-width: $breakpoint) {
             @content;
         }
@@ -170,7 +175,7 @@ $sliding-sidebars-transition-duration: 400ms !default;
     .sidebar-right-open & {
         $breakpoint: $content-max-width
                      + $sidebar-right-width
-                     + 2*$content-margin;
+                     + 2*$content-margin - 1;
         @media screen and (max-width:$breakpoint) {
             @content;
         }
@@ -180,7 +185,7 @@ $sliding-sidebars-transition-duration: 400ms !default;
         $breakpoint: $content-max-width
                      + $sidebar-left-width
                      + $sidebar-right-width
-                     + 2*$content-margin;
+                     + 2*$content-margin - 1;
         @media screen and (max-width: $breakpoint ) {
             @content;
         }

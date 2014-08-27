@@ -73,7 +73,7 @@ h2 {
             $bg-active: $ui-toc-heading-bg-active
         );
 
-        @media screen and (max-width: $screen-sm-min) {
+        @media screen and (max-width: $screen-sm-max) {
             @include navtree-segment(
                 $font-size:$font-size,
                 $height: $ui-touch-scale*$segment-height,
@@ -103,7 +103,7 @@ h2 {
 .codenumber {
     @include navtree-codenumber($base-indent, $codenumber-width);
 
-    @media screen and (max-width: $screen-sm-min) {
+    @media screen and (max-width: $screen-sm-max) {
         @include navtree-codenumber($base-indent-touch, $codenumber-width);
     }
 }
@@ -142,7 +142,7 @@ ul {
                 $bg-active: $ui-link-block-bg-active
             );
 
-            @media screen and (max-width:$screen-sm-min) {
+            @media screen and (max-width:$screen-sm-max) {
 
                 @include navtree-segment(
                     $font-size:$font-size,

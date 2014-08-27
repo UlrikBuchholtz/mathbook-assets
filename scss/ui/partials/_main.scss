@@ -10,15 +10,15 @@
 
     background:white;
 
+    /* side borders */
     border:1px solid #ccc;
     border-top:none;
     border-bottom:none;
 
-    overflow-x:auto;
-    overflow-y:hidden;
+    @include box-shadow(rgba(black,.5) 0 5px 5px);
 
     /***************************************************************************
-     * There are a few ways to fix the #content's top/botom margin collapsing 
+     * There are a few ways to fix the #content's top/botom margin collapsing
      * inside this element.
      **************************************************************************/
     /* Method 1 */
@@ -34,33 +34,14 @@
 
     /**************************************************************************/
 
-    @include box-shadow(rgba(black,.5) 0 5px 5px);
-
-    @media screen and (max-width: $screen-sm-min) {
+    @media screen and (max-width: $screen-sm-max) {
         /* Make space for navbar fixed to bottom of screen */
         padding-bottom: $ui-navbar-height;
     }
-
-    // Styles required to make sliding sidebars work.
-    @include sliding-sidebars-main();
-
-    @include sliding-sidebars-main-side(
-        $side: left,
-        $slide-min: $screen-sm-min,
-        $default-open-min: $screen-sm-min,
-        $sidebar-width: $ui-sidebar-left-width
-    );
-
-    @include sliding-sidebars-main-side(
-        $side: right,
-        $slide-min: $screen-sm-min,
-        $default-open-min: $screen-lg-min,
-        $sidebar-width: $ui-sidebar-right-width
-    );
 }
 
 /**
- * Container for main content. 
+ * Container for main content.
  * This is bound to a comfortable max-width for reading.
  */
 #content {
@@ -70,11 +51,11 @@
     &, .layout-left & {
         margin: $ui-content-margin;
 
-        /* 
+        /*
          * Switch to centered at medium layout
          * Only matters when sidebar is closed
          */
-        @media screen and (max-width: $screen-md-min) {
+        @media screen and (max-width: $screen-md-max) {
             margin: $ui-content-margin auto;
         }
 
@@ -99,37 +80,37 @@
             margin:$ui-content-margin-sm;
         }
 
-        /* Since sidebars push open in the small layout, 
+        /* Since sidebars push open in the small layout,
          * we want consistent  margins regardless of the sidebar states
          */
-        @media screen and (max-width: $screen-sm-min) {
+        @media screen and (max-width: $screen-sm-max) {
             &,
             .sidebar-left-open &,
-            .sidebar-right-open &, 
+            .sidebar-right-open &,
             .sidebar-left-open.sidebar-right-open & {
                 /* Decrease the margins */
-                margin:$ui-content-margin;
+                margin:$ui-content-margin auto;
             }
         }
 
-        /* And we want consistently small margins below the content max width 
+        /* And we want consistently small margins below the content max width
          */
         $breakpoint: $ui-content-max-width + 2*$ui-content-margin;
         @media screen and (max-width: $breakpoint) {
             &,
             .sidebar-left-open &,
-            .sidebar-right-open &, 
+            .sidebar-right-open &,
             .sidebar-left-open.sidebar-right-open & {
                 /* Decrease the margins */
                 margin:$ui-content-margin-sm;
             }
         }
 
-        /* And even smaller margins at extra small layouts */ 
-        @media screen and (max-width: $screen-xs-min) {
+        /* And even smaller margins at extra small layouts */
+        @media screen and (max-width: $screen-xs-max) {
             &,
             .sidebar-left-open &,
-            .sidebar-right-open &, 
+            .sidebar-right-open &,
             .sidebar-left-open.sidebar-right-open & {
                 /* Decrease the margins */
                 margin:$ui-content-margin-xs;

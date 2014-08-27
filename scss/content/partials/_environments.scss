@@ -7,7 +7,7 @@
  * Environments
  ******************************************************************************/
 
-// A placeholder class for @extending. 
+// A placeholder class for @extending.
 // This will not output CSS unless it is @extended.
 // See SASS docs for more details.
 %environment-base {
@@ -79,12 +79,12 @@
         @include padding-trailer(.5);
         @include margin-trailer(.5);
 
-        @media screen and (max-width: $screen-sm-min) {
+        @media screen and (max-width: $screen-md-max) {
             /* Bring border out of the right margin */
             margin-right:0;
         }
 
-        @media screen and (max-width: $screen-xs-min) {
+        @media screen and (max-width: $screen-xs-max) {
             /* Remove the border */
             padding:0;
             margin-right:0;
@@ -109,7 +109,7 @@
         color: $tombstone-color;
         text-align:right;
 
-        @media screen and (max-width: $screen-xs-min) {
+        @media screen and (max-width: $screen-xs-max) {
             /* Center the tombstone */
             right:50%;
             margin-right:-.5em;

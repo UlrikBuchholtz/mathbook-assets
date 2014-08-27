@@ -41,7 +41,7 @@ $navbar-bottom-box-shadow:
 // Styles
 ////////////////////////////////////////////////////////////////////////////////
 
-& { 
+& {
     background:$navbar-bg-color;
     border-bottom:$navbar-border;
     z-index:200;
@@ -53,8 +53,8 @@ $navbar-bottom-box-shadow:
 
     @include clearfix();
 
-    /* 
-     * Styles applied to make the navbar persistently visible 
+    /*
+     * Styles applied to make the navbar persistently visible
      * when it's sticky-wrapper is stuck
      */
     .stuck & {
@@ -65,9 +65,9 @@ $navbar-bottom-box-shadow:
         @include box-shadow( $navbar-top-box-shadow);
     }
 
-    @media screen and (max-width: $screen-sm-min) {
-        /* 
-         * At small screen sizes, turn the navbar into a full bar along bottom 
+    @media screen and (max-width: $screen-sm-max) {
+        /*
+         * At small screen sizes, turn the navbar into a full bar along bottom
          * When stuck and when not stuck. We don't care about stuck at this size
          */
         &, .stuck & {
@@ -98,7 +98,7 @@ $navbar-bottom-box-shadow:
     position:relative;
     display:block;
 
-    /* subtract border and padding from width 
+    /* subtract border and padding from width
      * so we can set width precisely as percent */
     @include box-sizing(border-box);
 
@@ -138,7 +138,7 @@ $navbar-bottom-box-shadow:
     //----------------------------------------------------
 
     /* Icon only at small screen sizes */
-    @media screen and (max-width:$screen-sm-min) {
+    @media screen and (max-width:$screen-sm-max) {
         /*@include button-hide-text($navbar-icon-box-size);*/
         float:left;
         text-align:center;
@@ -159,17 +159,17 @@ $navbar-bottom-box-shadow:
 // Some curry for navbar-buttons
 @mixin navbar-button($icon, $pseudo: before, $placement: inline) {
     @include button-with-icon(
-        $icon, 
-        $ui-icon-size, 
-        $ui-icon-box-size, 
+        $icon,
+        $ui-icon-size,
+        $ui-icon-box-size,
         $pseudo,
         $placement);
 
-    @media screen and (max-width:$screen-sm-min) {
+    @media screen and (max-width:$screen-sm-max) {
         @include button-with-icon(
-            $icon, 
-            $ui-icon-size-touch, 
-            $ui-icon-box-size-touch, 
+            $icon,
+            $ui-icon-size-touch,
+            $ui-icon-box-size-touch,
             $pseudo,
             $placement);
         @include button-hide-text($ui-icon-box-size-touch, $pseudo, $placement);
@@ -189,8 +189,8 @@ $navbar-bottom-box-shadow:
         width:$ui-sidebar-left-width;
     }
 
-    /*On big screens, */
-    @media screen and (min-width: $screen-sm-min + 1) {
+    /*On desktop screens, */
+    @media screen and (min-width: $screen-md-min) {
         &.active {
             /* Show text if hidden and match sidebar width */
             text-indent:0;
@@ -214,8 +214,8 @@ $navbar-bottom-box-shadow:
     @include navbar-button($ionicon-var-chatbox);
     padding:0;
 
-    /*On big screens, */
-    @media screen and (min-width: $screen-sm-min + 1) {
+    /*On desktop screens, */
+    @media screen and (min-width: $screen-md-min) {
         float:right;
 
         &.active {
@@ -245,12 +245,12 @@ $navbar-bottom-box-shadow:
 }
 
 /*******************************************************************************
- * TOOLBAR 
+ * TOOLBAR
  ******************************************************************************/
 
 
 /**
- * Establish borders on toolbar-items, 
+ * Establish borders on toolbar-items,
  */
 .toolbar, .toolbar > .toolbar-item, .button {
     /* Use a left border */
@@ -259,7 +259,7 @@ $navbar-bottom-box-shadow:
     border-bottom:none;
     border-right:none;
 
-    /* subtract border and padding from width 
+    /* subtract border and padding from width
      * so we can set width precisely as percent */
     @include box-sizing(border-box);
 }
@@ -277,15 +277,15 @@ $navbar-bottom-box-shadow:
     @include flex-container($prefix, $child-selector);
     @include flex-children-widths($prefix, $child-selector, $level-start, $level-end);
 
-    /** 
-     * Ensure adjacent borders do not double up 
-     * BEWARE: THERE BE DRAGONS HERE. 
+    /**
+     * Ensure adjacent borders do not double up
+     * BEWARE: THERE BE DRAGONS HERE.
      */
     &, &.toolbar-align-left {
         // Apply some styles to flex-children
         @include flex-children($prefix, $child-selector, $level-start, $level-end) {
 
-            /* First child defers to left border of parent 
+            /* First child defers to left border of parent
              * If toolbar itself is a first-child, we assume it is adjacent with
              * the screen or the edge of a parent toolbar
              */
@@ -293,7 +293,7 @@ $navbar-bottom-box-shadow:
                 border-left:none;
             }
 
-            /* Last child defers to right border of parent 
+            /* Last child defers to right border of parent
              * If toolbar itself is a last-child, we assume it is adjacent with
              * the screen or the edge of a parent toolbar
              */
@@ -310,8 +310,8 @@ $navbar-bottom-box-shadow:
 
     /*
      * Order is reversed when we float right
-     * So we need to swap first and last on toolbar-item-children 
-     * BEWARE: THERE BE DRAGONS HERE. 
+     * So we need to swap first and last on toolbar-item-children
+     * BEWARE: THERE BE DRAGONS HERE.
      */
     &.toolbar-align-right {
         // Apply some styles to flex-children
@@ -336,8 +336,8 @@ $navbar-bottom-box-shadow:
     }
 
     /**
-     * Make this item's bottom edge clear floated toolbar-items 
-     * so that our borders display correctly 
+     * Make this item's bottom edge clear floated toolbar-items
+     * so that our borders display correctly
      */
     @include clearfix();
 }
@@ -354,13 +354,13 @@ $navbar-bottom-box-shadow:
 }
 
 /*******************************************************************************
- * TOP VS BOTTOM 
+ * TOP VS BOTTOM
  ******************************************************************************/
 
 .navbar-bottom-buttons {
     display:none;
 
-    @media screen and (max-width:$screen-sm-min) {
+    @media screen and (max-width:$screen-sm-max) {
         display:block;
     }
 }
@@ -388,7 +388,7 @@ $navbar-bottom-box-shadow:
         }
     }
 
-    @media screen and (max-width:$screen-sm-min) {
+    @media screen and (max-width:$screen-sm-max) {
         display:none;
     }
 }
