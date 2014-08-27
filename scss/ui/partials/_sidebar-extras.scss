@@ -56,7 +56,8 @@ $seperator-width: rhythm(.25);
 
 
 a {
-    &, &:link, &:visited {
+    & {
+        font-family:$typography-font-family-serif;
 
         @include navtree-segment(
             $font-size: .91*$typography-font-size-base,
