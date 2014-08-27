@@ -123,8 +123,11 @@ body {
  */
 .page {
     position:relative;
-    /* Clip hidden sidebars */
-    overflow:hidden;
+
+    @media screen and (max-width: $screen-xs-max) {
+        /* Clip hidden sidebars */
+        overflow:hidden;
+    }
 }
 
 /* The table-of-contents itself */
@@ -132,7 +135,11 @@ body {
     @import "../partials/toc";
 }
 
-/* Note: The #sidebar-left-sticky-wrapper is added by javascript on page load */
+/**
+ * Note: The #sidebar-left-sticky-wrapper is added by javascript on page load
+ * These styles apply to the sidebar-left root,
+ * whether it be the wrapper or the sidebar-left itself.
+ */
 .page > #sidebar-left, #sidebar-left-sticky-wrapper {
 
     & {
@@ -152,25 +159,23 @@ body {
 #sidebar-left {
     // This is for performance, if you see bugs with the fixed positioning
     // or "sticky" behavior of the sidebar, try removing it.
-    /*@include sliding-sidebars-compositing-layer();*/
-
-    /*.sidebar-left-closed & {*/
-        /*position:absolute !important;*/
-    /*}*/
-
+    @include sliding-sidebars-compositing-layer();
 }
 
 #sidebar-right {
 
     & {
         display:none;
+
         @include sliding-sidebars-sidebar(
             $side: right,
             $default-open-min: $screen-lg-min,
             $sidebar-width: $ui-sidebar-right-width
         );
+
         // This is for performance
         @include sliding-sidebars-compositing-layer();
+
         top:0;
         /* The right sidebar is not sticky, so we can use right:0;*/
         right:0;
@@ -183,6 +188,7 @@ body {
 }
 
 .sidebar-content {
+    /* Extra links */
     .extras {
         @import "sidebar-extras";
     }
@@ -192,10 +198,12 @@ body {
  * Container for the main focus/purpose of the page.
  */
 #main, .main {
+
+    // Main styling should go here.
     @import "./main";
 
+    // Styles required to make sliding sidebars work.
     & {
-        // Styles required to make sliding sidebars work.
         @include sliding-sidebars-main();
         @include sliding-sidebars-main-side(
             $side: left,
