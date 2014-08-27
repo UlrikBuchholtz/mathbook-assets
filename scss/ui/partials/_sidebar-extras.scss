@@ -20,6 +20,7 @@ $seperator-width: rhythm(.25);
     border: $seperator-width solid $border-color;
     border-left:none;
     border-right:none;
+    border-bottom:none;
 }
 
 /**
@@ -59,7 +60,7 @@ a {
 
         @include navtree-segment(
             $font-size: .91*$typography-font-size-base,
-            $height: $typography-line-height-computed,
+            $height: 1.25*$typography-line-height-computed,
             $line-height: .7*$typography-line-height-computed,
             $indent: $base-leader,
 
