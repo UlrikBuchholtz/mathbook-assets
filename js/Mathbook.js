@@ -11,6 +11,8 @@
 
             loadingClass: "mathbook-loading",
             loadedClass: "mathbook-loaded",
+            sectionTrackingLoadedClass: "mathbook-section-tracking-loaded",
+            stickyWrapperStuckClass: "stuck",
 
             // SELECTORS
             //----------
@@ -34,19 +36,20 @@
 
             // SECTION TRACKING
             //-----------------
-            /**
-            * Interval upon which scrollSpy recomputes section offsets
-            * Should be often enough to catch DOM changes but infrequent enough
-            * to be reasonably performant
-            */
-            scrollspyRecomputeInterval: 600, // ms
+
+            sectionHashAttribute: "id",
+            sectionLinkHashAttribute: "data-scroll",
+
+            sectionActiveClass: "active",
+            sectionLinkActiveClass: "active",
+
             /**
             * When scrolling down...
             * Sections will be exited once their bottom edge rises above this
             * It is defined relative to the top of the screen OR the bottom
             * edge of any fixed UI elements.
             */
-            enterSectionTriggerTop: 100,
+            enterSectionTriggerTop: 50,
             /**
             * When scrolling down...
             * Sections will be entered once their top edge rises above this
@@ -56,10 +59,10 @@
             * if the viewport is smaller than the defined trigger size
             */
             enterSectionTriggerBottom: 300,
-            sectionHashAttribute: "id",
-            sectionLinkHashAttribute: "data-scroll",
-            sectionActiveClass: "active",
-            sectionLinkActiveClass: "active",
+
+            // The desired top offset of the active link in the ToC
+            tocScrollToActiveOffsetTop: 100,
+
             // Called when the viewport enters any tracked section
             onEnterSection: null,
             // Called when the viewport exits any tracked section
@@ -70,6 +73,14 @@
             // Whether or not to call onEnterSection and onExitSection for
             // sections without links.
             shouldTrackOnlyLinkedSections: true,
+
+            /**
+            * Interval upon which scrollSpy recomputes section positions
+            * Should be often enough to catch DOM changes
+            * but infrequent enough to be reasonably performant
+            */
+            scrollspyRecomputeInterval: 600, // ms
+
             autoScrollDuration: 400, // ms
             // linear feels mechanical, but we don't want to load jquery.ui.easing
             autoScrollEasing: "linear",
@@ -92,16 +103,23 @@
         var settings = $.extend(defaults, options);
 
         var self = this;
-        var hashOnLoad;
-        var isLayoutInitialized = false;
-        var _shouldSidebarsPush = false;
+        var hashOnLoad,
+            debouncedResizeDuration = 50, // ms
+            debouncedResizeTimeoutId;
+
+        // Layout stuff
+        var isLayoutInitialized = false,
+            _shouldSidebarsPush = false,
+            isPrimaryNavbarBottom = false;
+
+        // Sidebar stuff
         var maxOpenSidebars = 2,
             hasSidebarLeft,
             hasSidebarRight,
-            isSidebarLeftClosed,
-            isSidebarRightClosed,
             sidebarLeftTransitionTimeoutId,
             sidebarRightTransitionTimeoutId;
+
+        // Section stuff
         var sectionMap = {},
             isAutoScrolling = false,
             espy;
@@ -217,7 +235,8 @@
                     self.toggleSidebarRight(false);
 
                     // with primary nav on bottom
-                    self.initializeStickies(true);
+                    isPrimaryNavbarBottom = true;
+                    self.initializeStickies();
                 }
             }),
             MEDIUM : new Layout({
@@ -231,7 +250,8 @@
                     self.toggleSidebarLeft(true);
                     self.toggleSidebarRight(false);
 
-                    self.initializeStickies(false);
+                    isPrimaryNavbarBottom = false;
+                    self.initializeStickies();
                 }
             }),
             LARGE : new Layout({
@@ -245,7 +265,8 @@
                     self.toggleSidebarLeft(true);
                     self.toggleSidebarRight(true);
 
-                    self.initializeStickies(false);
+                    isPrimaryNavbarBottom = false;
+                    self.initializeStickies();
                 }
             })
         };
@@ -270,6 +291,7 @@
             self.setMathJaxOverrides();
 
             self.resize();
+            self.scrollTocToActiveItem();
             self.$body.addClass(settings.loadedClass);
             self.$body.removeClass(settings.loadingClass);
         };
@@ -324,6 +346,8 @@
             // nicely with our fixed header
             self.initializeSectionTracking();
             self.scrollToSection(hashOnLoad.substr(1));
+            self.$body.addClass(settings.sectionTrackingLoadedClass);
+
             // TODO expand knowl from hash if there's a match?
         };
 
@@ -331,7 +355,7 @@
         /**
          * Initializes the sticky navigation
          */
-        self.initializeStickies = function(isPrimaryNavbarBottom) {
+        self.initializeStickies = function() {
 
             var primaryNavbarHeight = self.$primaryNavbar.outerHeight();
 
@@ -340,7 +364,7 @@
             // Stick navbar stuff
             if(!isPrimaryNavbarBottom){
                 self.$primaryNavbar.sticky({
-                    className: "stuck",
+                    className: settings.stickyWrapperStuckClass,
                     wrapperClassName:"navbar",
                     topSpacing: 0,
                 });
@@ -360,10 +384,12 @@
                     isPrimaryNavbarBottom ? 0 : primaryNavbarHeight;
 
                 self.$sidebarLeft.sticky({
-                    className: "stuck",
+                    className: settings.stickyWrapperStuckClass,
                     wrapperClassName:"sidebar",
                     topSpacing : sidebarLeftTopSpacing
                 });
+
+                self.$sidebarLeftStickyWrapper = self.$sidebarLeft.parent();
 
                 // Update the position in case scroll is already below
                 // the stickyifying point
@@ -419,7 +445,7 @@
             // changes, so we will resort to an interval.
             setInterval(function(){
                 // Only worth updating if ToC is visible
-                if(!isSidebarLeftClosed) {
+                if(!self.isSidebarLeftClosed()) {
                    self.refreshEspy();
                 }
             }, settings.spyscrollRecomputeInterval);
@@ -457,6 +483,13 @@
             var hash = $(this).attr(settings.sectionLinkHashAttribute);
             var success =
                 self.scrollToSection(hash, self.updateLinks, self, [hash]);
+
+            // If sidebars are set to push
+            if(self.shouldSidebarsPush()) {
+                // then we should automatically close the sidebar
+                self.toggleSidebarLeft(false);
+            }
+
             if(success) {
                 e.preventDefault();
             }
@@ -474,9 +507,15 @@
 
                 var targetOffsetTop = $matchedSection.offset().top;
 
+                var uiHeight =
+                    isPrimaryNavbarBottom ? 0 : self.$primaryNavbar.outerHeight();
+
                 // Subtract screen offset for entering sections
-                // but add fudge, so we do, in fact, enter the section
                 targetOffsetTop += -(settings.enterSectionTriggerTop) + 1;
+                // Subtract UI element heights
+                targetOffsetTop += -(uiHeight);
+                // Add fudge so we do, in fact, enter the section
+                targetOffsetTop += 1;
 
                 // Limit to positive numbers
                 var targetScrollTop = Math.max(targetOffsetTop, 0);
@@ -557,6 +596,7 @@
                         settings.onActivateSectionLink.call($link.get());
                     }
                     self.setHash(deepestHash);
+                    self.scrollTocToActiveItem();
                 }
             }
         };
@@ -731,14 +771,23 @@
         self.toggleSidebarLeft = function(shouldOpen) {
             if(hasSidebarLeft) {
                 if(typeof shouldOpen === "undefined") {
-                    shouldOpen = isSidebarLeftClosed;
+                    shouldOpen = self.isSidebarLeftClosed();
                 }
+
+                // Impose max sidebars limit
                 if(shouldOpen &&
                    maxOpenSidebars === 1 &&
-                   !isSidebarRightClosed
+                   !self.isSidebarRightClosed()
                 ){
                     self.toggleSidebarRight(false);
                 }
+
+                // If we are opening
+                if(shouldOpen) {
+                    // Scroll toc to active link without animation
+                    self.scrollTocToActiveItem(0);
+                }
+
                 self.sidebarLeftToggleButtonView.toggle(shouldOpen);
                 self.sidebarLeftView.toggle(shouldOpen);
 
@@ -748,7 +797,57 @@
                 // Set a new one
                 sidebarLeftTransitionTimeoutId = setTimeout(function() {
                     self.refreshEspy();
+
                 }, settings.sidebarTransitionDuration);
+            }
+        };
+
+        self.scrollTocToActiveItem = function(duration) {
+            var $activeItems =
+                self.$toc.find("." + settings.sectionLinkActiveClass);
+
+            if($activeItems.size() > 0) {
+                // Scroll to the last of the active links
+                self.scrollTocToItem($activeItems.last(), duration);
+            }
+        };
+
+        /**
+         * This function assumes the toc has relative or absolute positioning.
+         */
+        self.scrollTocToItem = function(element, duration) {
+            if(typeof duration === "undefined") {
+                duration = settings.autoScrollDuration;
+            }
+
+            var $item = $(element);
+            // IF the given item is in the toc
+            if($item.parents().filter(self.$toc).size() > 0) {
+                // The offset from the top of the toc is the difference
+                // between the offsets from the top of the document
+                var tocDocumentTopOffset = self.$toc.position().top;
+                var itemDocumentTopOffset = $item.position().top;
+                var itemTocTopOffset =
+                    itemDocumentTopOffset - tocDocumentTopOffset;
+
+                // targeted offset between top of frame and active item
+                var scrollOffset = settings.tocScrollToActiveOffsetTop;
+
+                var targetScrollTop =
+                    self.$toc.scrollTop() + itemTocTopOffset - scrollOffset;
+
+                var maxScrollTop =
+                    self.$toc.prop('scrollHeight') - self.$toc.innerHeight();
+
+                // Apply limits
+                targetScrollTop = Math.max(targetScrollTop,0);
+                targetScrollTop = Math.min(targetScrollTop, maxScrollTop);
+
+                self.$toc.animate({
+                        scrollTop: targetScrollTop
+                    },
+                    duration,
+                    settings.autoScrollEasing);
             }
         };
 
@@ -760,11 +859,11 @@
         self.toggleSidebarRight = function(shouldOpen) {
             if(hasSidebarRight) {
                 if(typeof shouldOpen === "undefined") {
-                    shouldOpen = isSidebarRightClosed;
+                    shouldOpen = self.isSidebarRightClosed();
                 }
                 if(shouldOpen &&
                    maxOpenSidebars === 1 &&
-                   !isSidebarLeftClosed
+                   !self.isSidebarLeftClosed()
                 ){
                     self.toggleSidebarLeft(false);
                 }
@@ -836,7 +935,7 @@
         self.onSidebarClose = function() {
             if(self.shouldSidebarsPush()) {
                 // Unlock the main element width only if both sidebars are closed.
-                if(isSidebarRightClosed && isSidebarLeftClosed){
+                if(self.isSidebarRightClosed() && self.isSidebarLeftClosed()){
                     self.unlockMainWidth();
                 }
             }
@@ -902,7 +1001,23 @@
 
             self.resizeContent(viewportHeight);
             self.resizeToc(viewportHeight);
+
+            // Debounce things that only have to happen at the end of the resize
+            // This improves the resize performance
+            clearTimeout(debouncedResizeTimeoutId);
+            debouncedResizeTimeoutId =
+                setTimeout(self.debouncedResize, debouncedResizeDuration);
+
+        };
+
+        /**
+         * Actions that only need to occur at the end of a resize.
+         * We debounce this actions since many browsers fire lots of resize
+         * events and we don't want to slow down the resize by doing this stuff
+         */
+        self.debouncedResize = function() {
             self.reconfigureEspy();
+            self.scrollTocToActiveItem();
         };
 
         /**

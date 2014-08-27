@@ -21,9 +21,9 @@ body {
     }
 }
 
-/** 
- * Containers restrict the max-width of content within elements 
- * whose backgrounds must stretch to the width of the viewport. 
+/**
+ * Containers restrict the max-width of content within elements
+ * whose backgrounds must stretch to the width of the viewport.
  */
 .container {
     $content-outer-width:$ui-content-max-width + 2*$ui-content-margin;
@@ -72,15 +72,15 @@ body {
 
     &.has-sidebar-left.has-sidebar-right,
     .has-sidebar-left.has-sidebar-right & {
-        max-width: $content-outer-width 
-                   + $ui-sidebar-left-width 
+        max-width: $content-outer-width
+                   + $ui-sidebar-left-width
                    + $ui-sidebar-right-width;
     }
 
 }
 
 /**
- * The master header of the page. 
+ * The master header of the page.
  * Contains the book title and navigation.
  */
 #masthead {
@@ -152,11 +152,11 @@ body {
 #sidebar-left {
     // This is for performance, if you see bugs with the fixed positioning
     // or "sticky" behavior of the sidebar, try removing it.
-    @include sliding-sidebars-compositing-layer();
+    /*@include sliding-sidebars-compositing-layer();*/
 
-    .sidebar-left-closed & {
-        position:absolute !important;
-    }
+    /*.sidebar-left-closed & {*/
+        /*position:absolute !important;*/
+    /*}*/
 
 }
 

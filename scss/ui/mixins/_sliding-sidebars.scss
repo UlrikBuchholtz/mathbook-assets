@@ -97,7 +97,7 @@ $sliding-sidebars-transition-duration: 400ms !default;
     }
 
     /* Main with sidebar left open */
-    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-open &, 
+    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-open &,
     .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-open & {
         @include sliding-sidebars-main-side-state($side, open-slide, $sidebar-width);
         @media screen and (max-width: $slide-min) {
@@ -152,14 +152,14 @@ $sliding-sidebars-transition-duration: 400ms !default;
     $content-max-width,
     $content-margin
 ) {
-    
+
     $breakpoint: $content-max-width + 2*$content-margin;
     @media screen and (max-width: $breakpoint ) {
     }
 
 
     .sidebar-left-open & {
-        $breakpoint: $content-max-width 
+        $breakpoint: $content-max-width
                      + $sidebar-left-width
                      + 2*$content-margin;
         @media screen and (max-width: $breakpoint) {
@@ -168,7 +168,7 @@ $sliding-sidebars-transition-duration: 400ms !default;
     }
 
     .sidebar-right-open & {
-        $breakpoint: $content-max-width 
+        $breakpoint: $content-max-width
                      + $sidebar-right-width
                      + 2*$content-margin;
         @media screen and (max-width:$breakpoint) {
@@ -177,8 +177,8 @@ $sliding-sidebars-transition-duration: 400ms !default;
     }
 
     .sidebar-right-open.sidebar-left-open & {
-        $breakpoint: $content-max-width 
-                     + $sidebar-left-width 
+        $breakpoint: $content-max-width
+                     + $sidebar-left-width
                      + $sidebar-right-width
                      + 2*$content-margin;
         @media screen and (max-width: $breakpoint ) {
