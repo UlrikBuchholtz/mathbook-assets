@@ -98,7 +98,7 @@ h2 {
 
 .codenumber + .title {
     @include navtree-codenumber-title($codenumber-width, $codenumber-gutter-right);
-} 
+}
 
 .codenumber {
     @include navtree-codenumber($base-indent, $codenumber-width);

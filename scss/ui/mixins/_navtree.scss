@@ -1,26 +1,33 @@
 /*@import "../ui-config";*/
 @import "../../shared/_typography.scss";
 @import "../mixins/buttons";
+@import "../../shared/_utilities.scss";
 // TODO should we encapsulate defaults and just expose primary/secondary/base?
 // TODO support more than two levels
 
-$navtree-link-color: $ui-link-block-color !default;
-$navtree-link-color-hover: $ui-link-block-color-hover !default;
-$navtree-link-color-active: $ui-link-block-color-active !default;
+$navtree-segment-color: $ui-link-block-color !default;
+$navtree-segment-color-hover: $ui-link-block-color-hover !default;
+$navtree-segment-color-active: $ui-link-block-color-active !default;
 
-$navtree-link-bg: $ui-link-block-bg !default;
-$navtree-link-bg-hover: $ui-link-block-bg-hover !default;
-$navtree-link-bg-active: $ui-link-block-bg-active !default;
+$navtree-segment-bg: $ui-link-block-bg !default;
+$navtree-segment-bg-hover: $ui-link-block-bg-hover !default;
+$navtree-segment-bg-active: $ui-link-block-bg-active !default;
 
 $navtree-heading-color: white !default;
-$navtree-heading-color-hover: $navtree-link-color-hover !default;
-$navtree-heading-color-active: $navtree-link-color-active !default;
+$navtree-heading-color-hover: $navtree-segment-color-hover !default;
+$navtree-heading-color-active: $navtree-segment-color-active !default;
 
 $navtree-heading-bg: $brand-secondary !default;
-$navtree-heading-bg-hover: $navtree-link-bg-hover !default;
-$navtree-heading-bg-active: $navtree-link-bg-active !default;
+$navtree-heading-bg-hover: $navtree-segment-bg-hover !default;
+$navtree-heading-bg-active: $navtree-segment-bg-active !default;
 
-$navtree-segment-font-size: 16 !default;
+$navtree-segment-border-width: 1px !default;
+$navtree-segment-border-color: darken($navtree-segment-bg, 15%);
+$navtree-segment-border-color-hover: darken($navtree-segment-bg-hover, 15%);
+$navtree-segment-border-color-active: darken($navtree-segment-bg-active, 15%);
+
+$navtree-segment-font-size: $typography-font-size-base !default;
+$navtree-segment-height: $typography-font-size-base;
 
 @mixin navtree-codenumber($indent, $width) {
     position:absolute;
@@ -35,7 +42,7 @@ $navtree-segment-font-size: 16 !default;
 
 ) {
     @include inline-block(baseline);
-    margin-left: $codenumber-width + $codenumber-gutter-right; 
+    margin-left: $codenumber-width + $codenumber-gutter-right;
 }
 
 @mixin navtree-codenumber-container($indent) {
@@ -56,7 +63,7 @@ $navtree-segment-font-size: 16 !default;
 
     #{$codenumber-selector} + #{$title-selector} {
         @include navtree-codenumber-title(
-                   $codenumber-width, 
+                   $codenumber-width,
                    $codenumber-gutter-right);
 
     }
@@ -76,6 +83,7 @@ $navtree-segment-font-size: 16 !default;
     $border-width: $navtree-segment-border-width,
     $border-color: $navtree-segment-border-color,
     $border-color-hover: $navtree-segment-border-color-hover,
+    $border-color-active: $navtree-segment-border-color-active,
 
     $color: $navtree-segment-color,
     $color-hover: $navtree-segment-color-hover,
@@ -85,13 +93,15 @@ $navtree-segment-font-size: 16 !default;
     $bg-hover: $navtree-segment-bg-hover,
     $bg-active: $navtree-segment-bg-active
 ) {
-    $font-size:.92*$ui-font-size-base;
     $lead:$height - $line-height;
     $padding: ($lead - 2*$border-width)/2;
 
     & {
         position:relative;
-        display:block; 
+        display:block;
+
+        // force the given font-size since all our calculations depend on it
+        font-size:$font-size;
 
         padding:$padding;
         padding-left:$indent;
@@ -102,9 +112,12 @@ $navtree-segment-font-size: 16 !default;
     }
 
     &, &:link, &:visited, &:hover, &:active {
+        text-decoration:none;
+    }
+
+    &, &:link, &:visited {
         color: $color;
         background: $bg;
-        text-decoration:none;
     }
 
     &:hover {
@@ -124,8 +137,9 @@ $navtree-segment-font-size: 16 !default;
     }
 }
 
+// Collapses adjacent borders
 @mixin navtree-segment-border-collapse(
-    $border-width: $navtree-segement-border-width,
+    $border-width: $navtree-segment-border-width,
     $border-color-hover: $navtree-segment-border-color-hover
 ) {
 
@@ -140,12 +154,26 @@ $navtree-segment-font-size: 16 !default;
     }
 }
 
+// Apply to the first child if using border-collapse mixin
+@mixin navtree-segment-border-collapse-first-child(
+    $border-width: $navtree-segment-border-width,
+    $border-color: $navtree-segment-bg-hover
+) {
+    & {
+        border-top:$border-width solid $border-color;
+    }
+
+    &:hover {
+        margin-top:0;
+    }
+}
+
 // Apply to the last child if using border-collapse mixin
 @mixin navtree-segment-border-collapse-last-child(
     $border-color-hover: $navtree-segment-bg-hover
 ) {
     & {
-        border-bottom-color: transparent; 
+        border-bottom-color: transparent;
     }
 
     &:hover {

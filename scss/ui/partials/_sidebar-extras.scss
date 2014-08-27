@@ -5,26 +5,47 @@
 @import "compass/css3/transform";
 @import "compass/css3/text-shadow";
 
+$bg: change-color($ui-color-bg, $lightness:27%);
+$bg-hover: change-color($ui-color-bg, $lightness:30%);
+$bg-active: change-color($ui-color-bg, $lightness:24%);
+
+$border-color: darken($bg, 10%);
+$border-color-hover: darken($bg-hover, 10%);
+$border-color-active: darken($bg-hover, 10%);
+
+$seperator-width: rhythm(.25);
+
 & {
     position:relative;
+    border: $seperator-width solid $border-color;
+    border-left:none;
+    border-right:none;
 }
 
-/* Add a "shadow" to the element above extras */
+/**
+ * Add a "shadow" to the element above extras
+ *
+ * We can't use inset box-shadow because it would show up behind the content,
+ * so we use a linear gradient.
+ *
+ * We can't apply the shadow to the toc's :after, because it would appear
+ * at the end of the scrolling list, so we apply it here.
+ */
 &:before {
     content: "";
     position:absolute;
     right:0;
-    top:0;
     left:0;
 
     // Spread of "shadow"
     height:5px;
-    margin-top:-5px;
+    top:-5px;
+    margin-top:-$seperator-width;
 
     @include background(linear-gradient(bottom, rgba(black,.5), rgba(black,0)));
     z-index:200;
 
-    /* 
+    /*
      * Allow click/hover events to pass through on browsers that support it
      * We don't care too much about browsers that don't support since this
      * object is so small.
@@ -32,56 +53,50 @@
     pointer-events:none;
 }
 
+
 a {
     &, &:link, &:visited {
-        display:block;
 
-       // @include navtree-segment(
-       //     $font-size: .91*$typography-font-size-base,
-       //     $height: $base-rhythm-unit,
-       //     $line-height: .7*$base-rhythm-unit,
-       //     $indent: $base-leader,
+        @include navtree-segment(
+            $font-size: .91*$typography-font-size-base,
+            $height: $typography-line-height-computed,
+            $line-height: .7*$typography-line-height-computed,
+            $indent: $base-leader,
 
-       //     $color: darken(white, 5%),
-       //     $color-hover: white,
-       //     $color-active:white,
+            $border-color: $border-color,
+            $border-color-hover: $border-color,
+            $border-color-active: $border-color,
 
-       //     $bg:change-color($ui-color-bg, $lightness:27%),
-       //     $bg-hover:change-color($ui-color-bg, $lightness:30%),
-       //     $bg-active:change-color($ui-color-bg, $lightness:33%)
-       // 
-       // );
+            $color: darken(white, 15%),
+            $color-hover: white,
+            $color-active:white,
 
-        color: darken(white,15%);
-        background:change-color($ui-color-bg, $lightness:27%);
-        /*border-top:2px solid rgba(white,.2);*/
-        /*border-bottom:1px solid rgba(black,.2);*/
-
-        @include adjust-font-size-to($typography-font-size-base);
-        @include leading-border(2px,.25, $typography-font-size-base, solid);
-        @include padding-trailer(.25,$typography-font-size-base);
-        padding-left: $base-leader;
-        padding-right: $base-leader;
-        border-color: rgba(black,.3);
-
-        text-decoration:none;
+            $bg: $bg,
+            $bg-hover: $bg-hover,
+            $bg-active: $bg-active
+        );
+        @include navtree-segment-border-collapse();
     }
 
     &:hover {
-        color: white;
-        background:change-color($ui-color-bg, $lightness:30%);
         text-decoration:none;
         text-shadow:0 -2px 2px rgba(black,.5);
     }
 
     &:active, &.active {
-        color: white;
         text-decoration:none;
-        background:change-color($ui-color-bg, $lightness:24%);
-        /*border-top-color:rgba(black,.2);*/
-        /*border-bottom-color:rgba(white,.2);*/
     }
 
-    @include button-depressable();
+    &:first-child {
+        @include navtree-segment-border-collapse-first-child(
+            $border-color: $border-color
+        );
+    }
+
+    &:last-child {
+        @include navtree-segment-border-collapse-last-child(
+            $border-color-hover: $border-color-hover
+        );
+    }
 }
 
