@@ -984,7 +984,7 @@
          */
         self.resize = function() {
             var navbarHeight,
-                viewportHeight,
+                activeAreaHeight,
                 newLayout;
 
             var windowWidth = viewport().width;
@@ -999,7 +999,7 @@
 
             // set toc height to fill window
             navbarHeight = self.$primaryNavbar.outerHeight();
-            viewportHeight = windowHeight - navbarHeight;
+            activeAreaHeight = windowHeight - navbarHeight;
 
             var isSidebarOpen =
                 !self.isSidebarLeftClosed() || !self.isSidebarRightClosed();
@@ -1007,8 +1007,8 @@
                 self.$main.width(windowWidth);
             }
 
-            self.resizeContent(viewportHeight);
-            self.resizeToc(viewportHeight);
+            self.resizeContent(activeAreaHeight);
+            self.resizeToc(activeAreaHeight);
 
             // Debounce things that only have to happen at the end of the resize
             // This improves the resize performance
@@ -1046,15 +1046,15 @@
         /**
          * Fixes the minHeight of the content
          */
-        self.resizeContent = function(viewportHeight) {
+        self.resizeContent = function(activeAreaHeight) {
             // Force the content to be at least as tall as the viewport.
-            self.$content.css({'minHeight': viewportHeight });
+            self.$content.css({'minHeight': activeAreaHeight });
         };
 
         /**
          * Fixes the height of the ToC
          */
-        self.resizeToc = function(viewportHeight) {
+        self.resizeToc = function(activeAreaHeight) {
             // The height of the left sidebar extras box if it exists
             var extrasHeight = 0;
             if(self.$sidebarLeftExtras.size() !== 0) {
@@ -1063,7 +1063,7 @@
 
             // Force the toc to fill whatever space remains in sidebar
             // ...but leave room for an "extras" box if it exists
-            var tocHeight = viewportHeight - extrasHeight;
+            var tocHeight = activeAreaHeight - extrasHeight;
             self.$toc.height(tocHeight);
         };
 
@@ -1072,14 +1072,14 @@
          * @param width {Number} browser width
          * @return {Layout} the layout to apply
          */
-        self.findLayout= function(width) {
+        self.findLayout= function(viewportWidth) {
             var newLayout = null;
             for (var property in layouts) {
                 if (layouts.hasOwnProperty(property)) {
                     var layout = layouts[property];
-                    // If current width is in layout range
+                    // If current viewportWidth is in layout range
                     // and layout.minwidth is bigger than any other match
-                    if(width >= layout.minWidth &&
+                    if(viewportWidth >= layout.minWidth &&
                        (newLayout === null || layout.minWidth > newLayout.minWidth))
                     {
                         // then this is our best match yet.
