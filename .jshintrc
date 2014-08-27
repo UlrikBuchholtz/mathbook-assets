@@ -9,9 +9,9 @@
     "noempty": true,
     "quotmark": false,
     "undef": true,
-    "unused": true,
+    "unused": "vars",
     "trailing": true,
-	"latedef": "nofunc", // Allow func declaration hoisting
+	"latedef": "nofunc",
 	"forin": true,
 	"eqeqeq": true,
 	"strict": true,

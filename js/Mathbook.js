@@ -786,9 +786,7 @@
                 return isSidebarTogglesDisabled;
             }
 
-            console.log("currently, isSidebarTogglesDisabled: " + isSidebarTogglesDisabled);
             if(isDisabled !== isSidebarTogglesDisabled) {
-                console.log("setting isSidebarTogglesDisabled to " + isDisabled);
                 if(!isDisabled) {
                     if(hasSidebarLeft) {
                         self.$sidebarLeftToggleButton
