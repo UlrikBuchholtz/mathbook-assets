@@ -10,7 +10,7 @@
 .summary-links {
 
     a {
-        $font-size: $ui-font-size-h3;
+        $font-size: $typography-font-size-h3;
 
         $color: $ui-link-block-color;
         $color-hover: $ui-link-block-color-hover;
@@ -35,7 +35,7 @@
         );
 
         & {
-            font-family: $ui-font-family-heading;
+            font-family: $typography-heading-font-family;
 
             @media screen and (max-width: $screen-sm-min) {
                 font-size:.8em;
@@ -43,9 +43,9 @@
         }
 
        // @include navtree-codenumber-support(
-       //     $indent: $ui-line-height-computed ,
+       //     $indent: $typography-line-height-computed ,
        //     $codenumber-width: 2*$font-size,
-       //     $codenumber-gutter-right: $ui-line-height-computed/2
+       //     $codenumber-gutter-right: $typography-line-height-computed/2
        // );
 
         .codenumber {
@@ -75,21 +75,21 @@
         /*float:right;*/
         &.ui-state-default, &.ui-state-hover, &.ui-state-active, &.ui-state-focus, &.ui-corner-all {
             @include button-standard;
-            font-family: $ui-font-family-base;
-            font-size: $ui-font-size-base;
-            padding: 0 #{$ui-line-height-base/2}em;
+            font-family: $typography-font-family-base;
+            font-size: $typography-font-size-base;
+            padding: 0 #{$typography-line-height-base/2}em;
 
             @include button-depressable();
         }
 
         &.ui-button-text-only .ui-button-text {
             padding:0;
-            line-height:1.3*$ui-line-height-base;
+            line-height:1.3*$typography-line-height-base;
         }
     }
 
     .sagecell_editor {
-        margin-bottom: #{$ui-line-height-computed*.4};
+        margin-bottom: #{$typography-line-height-computed*.4};
     }
 }
 

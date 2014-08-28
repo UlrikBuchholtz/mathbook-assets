@@ -8,7 +8,7 @@ codebase.
 General
 -------
 
-* Be sure to run the `boostrap.sh` script after cloning the 
+* Be sure to run the `boostrap.sh` script after cloning the
    repository for the first time.
 * Keep commits focused, especially when preparing pull requests.
 * Use `git merge --no-ff` to merge branches (or use git-flow)
@@ -24,8 +24,8 @@ To achieve this, it is **highly recommended** that you use the
 model. The best way to do so is to use the [git-flow git
 plugin](https://github.com/nvie/gitflow).
 
-If you are contributing via pull requests you do not need to mess 
-with the version number. The core team will handle that when preparing 
+If you are contributing via pull requests you do not need to mess
+with the version number. The core team will handle that when preparing
 a release or hotfix branch that includes your commits.
 
 
@@ -38,8 +38,8 @@ githooks from the `scripts/githooks` directory on pull.
 
 Editor Config
 -------------
-Use the `.editorconfig` file included in the repository to configure 
-your editor. See [editorconfig.org](http://editorconfig.org/) 
+Use the `.editorconfig` file included in the repository to configure
+your editor. See [editorconfig.org](http://editorconfig.org/)
 to find more information and a plugin for your editor.
 
 
@@ -140,51 +140,51 @@ SASS Guidelines
 
    * should be defined in only one place
    * should occur only in partials
-   * can be used to reduce the total CSS output of mixins. 
-     If a mixin is used with the same parameters in more than one place, 
-     consider `@include`ing the mixin in a placeholder and `@extend`ing the 
+   * can be used to reduce the total CSS output of mixins.
+     If a mixin is used with the same parameters in more than one place,
+     consider `@include`ing the mixin in a placeholder and `@extend`ing the
      placeholder instead. Here's an example:
 
      Bad:
-         
+
           // Both of these call the mixin with the same parameters.
           // This results in double the CSS.
           .my-selector-1 {
             @include my-mixin(a,b);
           }
-          
+
           .my-selector-2 {
              @include my-mixin(a,b);
           }
 
      Good:
-     
-          // With the placeholder selector, 
+
+          // With the placeholder selector,
           // they will be added to a comma-seperated list in the CSS output
           %my-thingy-a-b {
-           @include my-mixin(a, b); 
+           @include my-mixin(a, b);
           }
-          
+
           .my-selector-1 {
             @extend %my-thingy-a-b;
           }
-          
+
           .my-selector-2 {
              @extend %my-thingy-a-b;
           }
-         
+
       Also good:
-        
+
           // These use different parameters, so it's okay to create more CSS output.
           // They generate only as much CSS as is necessary.
           .my-selector-1 {
             @include my-mixin(a,b);
           }
-          
+
           .my-selector-2 {
              @include my-mixin(c,d);
           }
-          
+
       That said, don't worry too much about placeholders vs mixins.
 
 
@@ -225,7 +225,7 @@ module](http://compass-style.org/reference/compass/typography/vertical_rhythm/)
 to manage the vertical rhythm. You can access it simply by importing our own
 `_typography.scss` module:
 
-    @import "[path/to/]shared/typography";
+    @import "[path/to/]typography";
 
 
 ### Follow these very important rules:

@@ -13,7 +13,7 @@
 $masthead-bg-color: change-color($ui-color-bg, $lightness:98%) !default;
 $masthead-title-color: $brand-primary;
 $masthead-subtitle-color: change-color($masthead-bg-color, $lightness:47%) !default;
-$masthead-font-family: $ui-font-family-heading;
+$masthead-font-family: $typography-heading-font-family;
 
 & {
     position: relative;
@@ -125,7 +125,7 @@ $masthead-font-family: $ui-font-family-heading;
 }
 /* IMPORTANT: #title is deprecated!*/
 #title, .title {
-    $font-size: $ui-font-size-h1;
+    $font-size: $typography-font-size-h1;
     color: $masthead-title-color;
     min-height:inherit;
 
@@ -144,7 +144,7 @@ $masthead-font-family: $ui-font-family-heading;
 
     /* On mobile phones */
     @media screen and (max-width:$screen-xxs-max) {
-        $font-size: $ui-font-size-h3;
+        $font-size: $typography-font-size-h3;
         @include adjust-font-size-to($font-size);
         @include margin-leader(.5, $font-size);;
     }
@@ -152,7 +152,7 @@ $masthead-font-family: $ui-font-family-heading;
 
 /* IMPORTANT: #byline is deprecated! */
 #byline, .byline {
-    $font-size: $ui-font-size-h4;
+    $font-size: $typography-font-size-h4;
     color: $masthead-subtitle-color;
     font-weight:normal;
     margin:0;
@@ -164,7 +164,7 @@ $masthead-font-family: $ui-font-family-heading;
     font-family:$masthead-font-family;
 
     @media screen and (max-width:$screen-xxs-max) {
-        $font-size: $ui-font-size-h6;
+        $font-size: $typography-font-size-h6;
         margin-top:0;
         @include adjust-font-size-to($font-size);
         @include margin-trailer(.5, $font-size);;

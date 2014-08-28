@@ -1,21 +1,36 @@
-/**!
-* The default styles for Mathbook-based textbooks.
-*
-* @author Michael DuBois (michael@michaeldubois.me)
-*/
+/*******************************************************************************
+ * MATHBOOK STYLESHEET
+ *******************************************************************************
+ * These styles accompany the Mathbook online textbook platform.
+ *
+ * Homepage: http://mathbook.pugetsound.edu
+ * Issue Tracker: https://github.com/BooksHTML/mathbook-assets/issues
+ * Repository: https://github.com/BooksHTML/mathbook-assets
+ *
+ * Authors: Michael DuBois, David Farmer, Rob Beezer
+ *
+ *******************************************************************************
+ */
+
+// Imports without CSS output
 @import "config";
+@import "shared/typography";
+@import "compass/reset/utilities";
 
 // Load google fonts via standard CSS import
-// This is a little slower than a <link> in HTML, but maintains
-// separation of concerns.
-@import "shared/typography";
-@include typography-google-fonts-import();
+// This is a little slower than a <link> in HTML,
+// but it maintains separation of concerns.
+@include typography-google-fonts-import-once();
 
 /**
  * Reset HTML to iron out browser inconsistencies
  */
-@import "compass/reset/utilities";
 @include reset-html5();
 
+body {
+    @include typography-base();
+}
+
+// Import modules
 @import "ui/ui";
-@import "mathbook-content-prefixed";
+@import "mathbook-content-prefixed.scss";

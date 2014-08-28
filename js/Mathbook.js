@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Mathbook.js
+ *******************************************************************************
+ * The main front-end controller for Mathbook documents.
+ *
+ * Homepage: http://mathbook.pugetsound.edu
+ * Issue Tracker: https://github.com/BooksHTML/mathbook-assets/issues
+ * Repository: https://github.com/BooksHTML/mathbook-assets
+ *
+ * Authors: Michael DuBois, David Farmer, Rob Beezer
+ *
+ *******************************************************************************
+ */
 /* global MathJax, jQuery */
 // Leading semicolon safeguards against errors in script concatenation
 // Pass dependencies into this closure from the bottom of the file

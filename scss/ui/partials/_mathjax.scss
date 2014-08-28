@@ -6,7 +6,7 @@
  * To override, we must add body specificity.
  */
 body.has-sidebar-left.sidebar-left-open #MathJax_Message {
-    left: $ui-sidebar-left-width + .5*$ui-font-size-base;
+    left: $ui-sidebar-left-width + .5*$typography-font-size-base;
 }
 
 /* Restyle MathJax loading message.
@@ -18,12 +18,12 @@ body #MathJax_Message {
     border-color: $brand-primary-light;
     @include border-radius(.3em);
     z-index:1000;
-    bottom: .5*$ui-font-size-base;
+    bottom: .5*$typography-font-size-base;
 
     @media screen and (max-width: $screen-sm-max) {
         /* Display above bottom navbar */
-        left:$ui-line-height-computed;
-        right:$ui-line-height-computed;
+        left:$typography-line-height-computed;
+        right:$typography-line-height-computed;
         bottom: 1.2*$ui-navbar-height;
     }
 }

@@ -18,8 +18,8 @@
     outline:none; /* Don't display outline on click */
     @include button-truncate-with-ellipsis();
 
-    /** 
-     * Remove stupid firefox dotted border on button click 
+    /**
+     * Remove stupid firefox dotted border on button click
      * See http://stackoverflow.com/a/199319/1599617
      */
     &::-moz-focus-inner {
@@ -43,11 +43,11 @@
         overflow:visible;
         $text-overflow: clip;
     }
-    // Use compass' experimental mixin 
+    // Use compass' experimental mixin
     // to provide browser prefixes where necessary
     @include experimental(
-                text-overflow, 
-                $text-overflow, 
+                text-overflow,
+                $text-overflow,
                 not -moz, not -webkit, -o, -ms, not -khtml, official);
 }
 
@@ -108,8 +108,8 @@
         color:$color;
         border-color:$bg-color-dark;
         @include background-image(linear-gradient($bg-color-light, $bg-color-dark));
-    } 
-    
+    }
+
     @if($state == hover or $state == focus) {
         color: $color;
         @include background-image(linear-gradient($bg-color-lighter, $bg-color-darker));
@@ -134,7 +134,7 @@
         @include button-standard-base();
         @include button-standard-state(default, $base-color-default);
     }
-    
+
     &:hover, &:focus, &.hover, &.focus {
         @include button-standard-state(hover, $base-color-hover);
     }
@@ -164,11 +164,11 @@
     }
 }
 
-// Note that $icon-placement:inline will not work well with button-hide-text() 
+// Note that $icon-placement:inline will not work well with button-hide-text()
 @mixin button-with-icon(
     $icon, // The content of the icon (match to icon font values)
-    $icon-size, // The size of the icon itself 
-    $icon-box-size, // The size of the icon and it's surrounding padding 
+    $icon-size, // The size of the icon itself
+    $icon-box-size, // The size of the icon and it's surrounding padding
     $icon-pseudo: before, // The pseduo-selector of the icon: before|after
     $icon-placement: left // left | center | right | inline
 ) {
@@ -176,19 +176,19 @@
     @if($icon-placement != inline) {
         @include button-icon-padding($icon-box-size, $icon-placement);
         @include button-icon-absolute(
-                    $icon-box-size, 
-                    $icon-pseudo, 
+                    $icon-box-size,
+                    $icon-pseudo,
                     $icon-placement);
     }
 }
 
-// Note that $icon-placement:inline will not work well with button-hide-text() 
+// Note that $icon-placement:inline will not work well with button-hide-text()
 @mixin button-with-icon-responsive(
     $icon, // The content of the icon (match to icon font values)
-    $icon-size, // The size of the icon itself 
-    $icon-box-size, // The size of the icon and it's surrounding padding 
+    $icon-size, // The size of the icon itself
+    $icon-box-size, // The size of the icon and it's surrounding padding
     $icon-pseudo: before,
-    $icon-placement:left, // left | center | right 
+    $icon-placement:left, // left | center | right
     $icon-only-breakpoint:infinity  // Point below which button is icon only
 ) {
 
@@ -208,10 +208,10 @@
     }
 
     @include button-with-icon(
-                $icon, 
-                $icon-size, 
-                $icon-box-size, 
-                $icon-pseudo, 
+                $icon,
+                $icon-size,
+                $icon-box-size,
+                $icon-pseudo,
                 $icon-placement);
 
     @if($icon-only-breakpoint == infinity) {
@@ -226,7 +226,7 @@
                 $icon-box-size,
                 $icon-pseudo,
                 $hide-direction);
-        } 
+        }
     }
 }
 
@@ -235,8 +235,8 @@
 //         color: red; /* icon will be red, element text remains normal */
 //     }
 @mixin button-icon(
-    $icon-content, 
-    $icon-size, 
+    $icon-content,
+    $icon-size,
     $icon-box-size,
     $icon-pseudo: before
 ){
@@ -244,7 +244,7 @@
         content: $icon-content; // TODO change to menu icon
         text-align:center; // We want the icon to be centered within icon-box
         font-size:$icon-size;
-        font-family: $ui-font-family-icon;
+        font-family: $typography-font-family-icon;
         line-height:$icon-box-size;
         width:$icon-box-size;
         text-indent:0; /* So text isn't removed from this too */
@@ -257,7 +257,7 @@
 
 @mixin button-icon-padding(
     $icon-box-size,
-    $icon-placement:left    
+    $icon-placement:left
 ) {
     @if $icon-placement == left {
         padding-left:$icon-box-size;
@@ -297,7 +297,7 @@
 }
 
 @mixin button-hide-text(
-    $icon-box-size, 
+    $icon-box-size,
     $icon-pseudo: before,
     $hide-direction: auto,
     $icon-placement: center
@@ -348,7 +348,7 @@
 
 // Standard link
 @mixin ui-link(
-    $color: $link-color, 
+    $color: $link-color,
     $color-hover:$link-hover-color
 ){
     &, &:link, &:visited {
@@ -382,9 +382,9 @@
     $bg-hover: $ui-link-block-bg-hover,
     $bg-active: $ui-link-block-bg-active,
 
-    $arrow-color: default, 
-    $arrow-color-hover: default, 
-    $arrow-color-active: default 
+    $arrow-color: default,
+    $arrow-color-hover: default,
+    $arrow-color-active: default
 ) {
 
     @if($arrow-color == default) {
@@ -431,7 +431,7 @@
             top:50%;
             margin-top:-.5*$triangle-width;
 
-            @include triangle($direction: $direction, 
+            @include triangle($direction: $direction,
                               $width:$triangle-width,
                               $height:$triangle-height,
                               $color:$arrow-color);
@@ -443,14 +443,14 @@
         text-decoration:none;
         cursor:pointer;
     }
-    
+
     &:hover {
         color: $color-hover;
         background: $bg-hover;
         text-decoration:none;
 
         &:after {
-            @include triangle($direction:$direction, 
+            @include triangle($direction:$direction,
                               $width:$triangle-width,
                               $height:$triangle-height,
                               $color:$arrow-color-hover);
@@ -465,7 +465,7 @@
         @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
 
         &:after {
-            @include triangle($direction:$direction, 
+            @include triangle($direction:$direction,
                               $width:$triangle-width,
                               $height:$triangle-height,
                               $color:$arrow-color-active);
@@ -519,7 +519,7 @@
         position: absolute;
         top:0;
 
-        @include triangle($direction: $direction, 
+        @include triangle($direction: $direction,
                           $width:$triangle-width,
                           $height:$triangle-height,
                           $color:$bg);
@@ -531,7 +531,7 @@
         text-decoration:none;
         cursor:pointer;
         &:after {
-            @include triangle($direction: $direction, 
+            @include triangle($direction: $direction,
                               $width:$triangle-width,
                               $height:$triangle-height,
                               $color:$bg-hover);
@@ -546,7 +546,7 @@
 
         &:after {
             @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
-            @include triangle($direction: $direction, 
+            @include triangle($direction: $direction,
                               $width:$triangle-width,
                               $height:$triangle-height,
                               $color:$bg-active);

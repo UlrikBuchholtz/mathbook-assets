@@ -4,10 +4,6 @@
 @import "content_config";
 @import "../shared/typography";
 
-body {
-    @include typography-base();
-}
-
 @import "partials/typographic-elements";
 @import "partials/sections";
 @import "partials/environments";

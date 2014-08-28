@@ -3,7 +3,7 @@
 @import "compass/css3/inline-block";
 
 $font-multiplier: .92;
-$font-size:$font-multiplier * $ui-font-size-base;
+$font-size:$font-multiplier * $typography-font-size-base;
 
 $codenumber-width:.5*$font-size;
 $codenumber-gutter-right:.5*$font-size;
@@ -11,13 +11,13 @@ $codenumber-gutter-right:.5*$font-size;
 $title-offset:$codenumber-width + $codenumber-gutter-right;
 
 // Used for headings and, on mobile, for both headings and children
-$segment-height:(1.25/$font-multiplier)*$ui-line-height-computed;
-$segment-line-height:.7*$ui-line-height-computed;
+$segment-height:(1.25/$font-multiplier)*$typography-line-height-computed;
+$segment-line-height:.7*$typography-line-height-computed;
 $segment-border-width: 1px;
 
 // Child segments on desktop
-$child-segment-height:(1/$font-multiplier)*$ui-line-height-computed;
-$child-segment-line-height:.7*$ui-line-height-computed;
+$child-segment-height:(1/$font-multiplier)*$typography-line-height-computed;
+$child-segment-line-height:.7*$typography-line-height-computed;
 $child-segment-border-width: 1px;
 
 $base-indent:$ui-left-margin;
@@ -43,7 +43,7 @@ $child-indent-touch: $base-indent-touch + $title-offset;
 h2 {
     & {
         display:block;
-        font-family: $ui-font-family-heading;
+        font-family: $typography-heading-font-family;
         font-weight:700;
         font-size: 1em; /* Set font size on ToC */
         margin: 0;

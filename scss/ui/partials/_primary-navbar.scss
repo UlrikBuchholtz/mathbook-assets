@@ -46,7 +46,7 @@ $navbar-bottom-box-shadow:
     border-bottom:$navbar-border;
     z-index:200;
     height: $ui-navbar-height;
-    font-family: $ui-font-family-serif;
+    font-family: $typography-font-family-serif;
 
     /* Smoothly transition box-shadow when navbar sticks/unsticks */
     @include single-transition(box-shadow, 400ms);
