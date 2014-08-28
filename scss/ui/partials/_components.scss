@@ -92,14 +92,3 @@
         margin-bottom: #{$typography-line-height-computed*.4};
     }
 }
-
-// TODO bring knowl selectors up out of mixin file
-/*@include knowl();*/
-
-/* restyle knowls at first and third depth */
-/*.knowl-output, .knowl-output  .knowl-output  .knowl-output {*/
-    /*@include knowl-output();*/
-    /*@import "exercises"; // TODO what's going on here ?*/
-    /*@include exercise($knowl-border-color);*/
-    /*@include exercisegroup($knowl-border-color, darken($knowl-border-color, 0%));*/
-/*}*/

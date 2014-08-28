@@ -10,7 +10,7 @@ $heading-before:none !default;
 $heading-after:" " !default;
 
 ////////////////////////////////////////////////////////////////////////////////
-// MIXINS 
+// MIXINS
 ////////////////////////////////////////////////////////////////////////////////
 
 // Mixin for quickly and consistently outputting the heading selector
@@ -44,7 +44,7 @@ $heading-after:" " !default;
 }
 
 @mixin heading-hide-codenumber() {
-    .codenumber { 
+    .codenumber {
         display:none;
     }
 }
@@ -81,7 +81,7 @@ $heading-after:" " !default;
 
     .codenumber {
         @include heading-set-before-after(
-                    $codenumber-before, 
+                    $codenumber-before,
                     $codenumber-after);
     }
 
@@ -91,8 +91,8 @@ $heading-after:" " !default;
 
     .type, .codenumber, .title {
         /**
-         *  Hide the space after the last element, 
-         * defer to .heading:after instead 
+         *  Hide the space after the last element,
+         * defer to .heading:after instead
          */
         &:last-child:after {
             display:none;
