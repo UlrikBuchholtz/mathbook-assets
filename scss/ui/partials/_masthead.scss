@@ -140,6 +140,29 @@ $masthead-font-family: $typography-heading-font-family;
         &:before {
             content: ": ";
         }
+
+        @media screen and (max-width: $screen-sm-max) {
+            $subtitle-font-size:$typography-font-size-h2;
+            /* Force the subtitle onto a seperate line */
+            display:block;
+            @include adjust-font-size-to(
+                $to-size: $subtitle-font-size,
+                $from-size:$font-size);
+
+            /* De-emphasize relative to main title */
+            color: change-color($ui-color-base, $lightness:35%);
+
+            /* Remove colon */
+            &:before {
+                content: normal;
+            }
+
+            @media screen and (max-width: $screen-xs-max) {
+                /* Give the byline a little bit more seperation */
+                @include margin-trailer(.5, $subtitle-font-size);;
+            }
+        }
+
     }
 
     /* On mobile phones */
