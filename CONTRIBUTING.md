@@ -5,13 +5,17 @@ Welcome to the project!
 Below are a few guidelines that help us maintain consistency throughout the
 codebase.
 
-General
--------
+(_The core team should feel free to edit these as necessary_)
+
+General Guidelines
+------------------
 
 * Be sure to run the `boostrap.sh` script after cloning the
    repository for the first time.
 * Keep commits focused, especially when preparing pull requests.
-* Use `git merge --no-ff` to merge branches (or use git-flow)
+* Use `git merge --no-ff` to merge branches (or use git-flow). 
+  This helps us maintain complete branch history. 
+  Without `--no-ff` the branch history is all squashed into one timeline.
 
 Semver and git-flow
 -------------------
@@ -24,9 +28,36 @@ To achieve this, it is **highly recommended** that you use the
 model. The best way to do so is to use the [git-flow git
 plugin](https://github.com/nvie/gitflow).
 
-If you are contributing via pull requests you do not need to mess
-with the version number. The core team will handle that when preparing
-a release or hotfix branch that includes your commits.
+Pull Requests and git-flow
+--------------------------
+If you are contributing via pull requests...
+
+* **Do not create release branches**. The core team will handle that.
+* **Do not merge into develop.** Instead, submit your feature/hotfix branch.
+* **Do not use `git-flow hotfix` to create hotfix branches** 
+  Instead, manually create _named_ hotfix branches, like so
+
+   ```bash
+   # Where `from-tag` refers to the version at which 
+   # the hotfix needs to be applied
+   # If you are applying the hotfix to the latest version,
+   # use `master` as the `from-tag`.
+   $ git checkout -b hotfix/my-hotfix <from-tag>
+   ```
+   When you submit your pull request, please specify the `from-tag` used.
+
+   The core team will handle converting named hotfix branches 
+   to versioned hotfix branches, like so
+   
+   ```bash    
+   # the `from-tag` must match
+   $ git-flow hotfix start <version-number> <from-tag>
+   $ git merge --no-ff hotfix/named-hotfix
+   $ git flow hotfix finish version-number
+   ```
+   
+   The core team will then merge hotfix branches with any upcoming 
+   release branches OR develop if there are no release branches.
 
 
 Githooks
@@ -83,7 +114,13 @@ You should also familiarize yourself with
 
 SASS Guidelines
 ---------------
+ 
+ * General
 
+   * Use variables defined in the config files or in `_typography.scss` whenever possible!
+   * Maintain seperation between the ui module and the content module
+   * Read and follow the guidelines in the vertical rhythm section below.
+   
  * Comments
 
     * Use `/* comment */` for comments that should be output in the CSS
@@ -91,8 +128,7 @@ SASS Guidelines
 
  * Variables
 
-   * should take the dash-seperated form `$my-variable` (unfortunately, the
-     standard in the SASS community)
+   * should take the dash-seperated form `$my-variable` (unfortunately standard)
    * should be semantic
      * i.e. `$color-primary` instead of  `$color-red`
    * should go from general to specific
@@ -145,7 +181,7 @@ SASS Guidelines
      consider `@include`ing the mixin in a placeholder and `@extend`ing the
      placeholder instead. Here's an example:
 
-     Bad:
+     (Sort of) bad:
 
           // Both of these call the mixin with the same parameters.
           // This results in double the CSS.
@@ -200,9 +236,9 @@ Compass configuration lives in `config.rb`. See the [Compass Config
 Reference](http://compass-style.org/help/documentation/configuration-reference/)
 for more info.
 
-You can use `compass compile` or `compass watch` to compile the scss to the
-output directory specified in the config.rb. `compass watch` simply watches for
-changes and re-compiles automatically.
+You _can_ use `compass compile` or `compass watch` to compile the scss to the
+output directory specified in the config.rb. It's recommended that you use
+our scripts instead. See the [README](README.md).
 
 You can find the full list of Compass commands
 [here](http://compass-style.org/help/tutorials/command-line/).
