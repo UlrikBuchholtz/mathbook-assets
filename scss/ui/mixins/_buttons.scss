@@ -10,20 +10,46 @@
 @import "compass/utilities/color/contrast";
 @import "./triangle";
 
-@mixin button-base() {
-    @include inline-block();
+$button-base-color: $ui-color-base !default;
+$button-base-color-hover: $ui-color-base !default;
+$button-base-color-active: $brand-primary-light !default;
 
-    cursor:pointer;
-    @include user-select(none);
-    outline:none; /* Don't display outline on click */
-    @include button-truncate-with-ellipsis();
+// TODO not sure about these defaults
+$button-minimalist-color: darken($ui-color-base, 12%) !default;
+$button-minimalist-color-hover: darken($ui-color-base, 20%) !default;
+$button-minimalist-color-active: $ui-link-color-active !default;
+
+// WebKit-style focus
+// Taken from sass-blueprint
+// https://github.com/thomas-mcdonald/bootstrap-sass/blob/34d538dc33b302a02e86ccec3e0a93fbf41f0bfa/vendor/assets/stylesheets/bootstrap/_mixins.scss
+@mixin button-tab-focus() {
+    // Default
+    outline: thin dotted #333;
+    // WebKit
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
 
     /**
-     * Remove stupid firefox dotted border on button click
+     * Remove stupid inner dotted border applied by Firefox on focus
      * See http://stackoverflow.com/a/199319/1599617
      */
     &::-moz-focus-inner {
         border: 0;
+    }
+}
+
+@mixin button-base() {
+    cursor:pointer;
+    @include inline-block();
+
+    /* Disable accidental text-selection */
+    @include user-select(none);
+
+    /* Truncate overflowing text with ellipsis */
+    @include button-truncate-with-ellipsis();
+
+    &:focus {
+        @include button-tab-focus();
     }
 }
 
@@ -51,38 +77,7 @@
                 not -moz, not -webkit, -o, -ms, not -khtml, official);
 }
 
-@mixin button-minimalist(
-    $color: $ui-link-color,
-    $color-hover: $ui-link-color-hover,
-    $color-active: $ui-link-color-active
-) {
-    @include button-base();
-    background: transparent;
-    color: $color;
-    border: 2px solid;
-    font-weight:bold;
-    @include border-radius(2px);
-    @include transition-property(color, border-color);
-
-    &:hover, &:focus, &.hover, &.focus {
-        color: $color-hover;
-        border-color: $color-hover;
-    }
-
-    &:active, &.active {
-        color: $color-active;
-        border-color: $color-active;
-    }
-
-    &.disabled, &[disabled] {
-        &, &:hover, &:focus, &:active, &.active {
-            cursor:default;
-            color:$color;
-            opacity:.5;
-        }
-    }
-}
-
+// The standard button base
 @mixin button-standard-base() {
     @include button-base();
     border-width:1px;
@@ -91,15 +86,21 @@
     @include border-radius(3px);
 }
 
+// Standard button states for the given base color
+// You can use this to set different colors for different states
 @mixin button-standard-state(
     $state: default,
     $base-color :$ui-color-base
 ) {
+    // The light part of gradient
     $bg-color-light: lighten($base-color, 5%);
     $bg-color-lighter: lighten($base-color, 10%);
+
+    // The dark part of gradient
     $bg-color-dark: darken($base-color, 10%);
     $bg-color-darker: darken($base-color, 20%);
 
+    // Find the text color that contrasts better with bg
     $color-dark:desaturate(darken($base-color, 65%), 20%);
     $color-light:lighten($base-color, 100%);
     $color: contrast-color($bg-color-darker, $color-dark, $color-light );
@@ -121,18 +122,20 @@
         border-color:$bg-color-darker;
     } @else if($state == disabled) {
         opacity: .5;
+        cursor:default;
     }
 }
 
+// A standard button
 @mixin button-standard(
-    $base-color-default: $ui-color-base,
-    $base-color-hover: $ui-color-base,
-    $base-color-active: $brand-primary-light
+    $base-color: $button-base-color,
+    $base-color-hover: $button-base-color-hover,
+    $base-color-active: $button-base-color-active
 ) {
 
     & {
         @include button-standard-base();
-        @include button-standard-state(default, $base-color-default);
+        @include button-standard-state(default, $base-color);
     }
 
     &:hover, &:focus, &.hover, &.focus {
@@ -145,26 +148,75 @@
 
     &.disabled, &[disabled] {
         &, &:hover, &.hover, &:focus, &.focus, &:active, &.active {
-            @include button-standard-state(disabled, $base-color-default);
+            @include button-standard-state(disabled, $base-color);
         }
     }
 }
 
-@mixin button-remove-link-properties($color: inherit) {
+// Minimalist style button base
+@mixin button-minimalist-base() {
+    @include button-base();
+    background: transparent;
+    border: 2px solid;
+    font-weight:bold;
+    @include border-radius(2px);
+    @include transition-property(color, border-color);
+}
+
+// A minimalist style button
+// It's so simple, it's not worth breaking the states into seperate mixins
+@mixin button-minimalist(
+    $color: $button-minimalist-color,
+    $color-hover: $button-minimalist-color-hover,
+    $color-active: $button-minimalist-color-active
+) {
+    & {
+        @include button-minimalist-base();
+        color:$color;
+        border-color:$color;
+    }
+
+    &:hover, &:focus, &.hover, &.focus {
+        color: $color-hover;
+        border-color:$color-hover;
+    }
+
+    &:active, &.active {
+        color: $color-active;
+        border-color:$color-active;
+        @include button-depressable();
+    }
+
+    &.disabled, &[disabled] {
+        &, &:hover, &:focus, &:active, &.active {
+            color:$color;
+            border-color:$color;
+            opacity: .5;
+            cursor:default;
+        }
+    }
+}
+
+// Quickly override link properties in all link states
+@mixin button-override-link-properties() {
     /* Remove link appearance */
     &:link, &:visited, &:hover, &:focus, &:active {
-        color:$color;
-        text-decoration:none;
+        @content;
     }
 }
 
+// A depressed state for any element
+@mixin button-depressed() {
+    @include box-shadow(rgba(black,.5) 0 2px 5px inset);
+}
+
+// Quickly make a button depressable
 @mixin button-depressable() {
     &:active, &.active {
-        @include box-shadow(rgba(black,.5) 0 2px 5px inset);
+        @include button-depressed();
     }
 }
 
-// Note that $icon-placement:inline will not work well with button-hide-text()
 @mixin button-with-icon(
     $icon, // The content of the icon (match to icon font values)
     $icon-size, // The size of the icon itself
@@ -182,7 +234,6 @@
     }
 }
 
-// Note that $icon-placement:inline will not work well with button-hide-text()
 @mixin button-with-icon-responsive(
     $icon, // The content of the icon (match to icon font values)
     $icon-size, // The size of the icon itself
@@ -191,16 +242,6 @@
     $icon-placement:left, // left | center | right
     $icon-only-breakpoint:infinity  // Point below which button is icon only
 ) {
-
-    // The inline option doesn't work with hide-text, so it is not supported.
-    // If the user uses it, we'll try to intelligently determine the placement.
-    /*@if($icon-placement == inline) {*/
-        /*@if($icon-pseudo == before) {*/
-            /*$icon-placement: left;*/
-        /*} @else {*/
-            /*$icon-placement: right;*/
-        /*}*/
-    /*}*/
 
     $hide-direction: $icon-placement;
     @if($icon-placement == center or $icon-placement == inline) {
@@ -255,6 +296,7 @@
     }
 }
 
+// Apply or override button icone padding applied for absolutely pos icons
 @mixin button-icon-padding(
     $icon-box-size,
     $icon-placement:left
@@ -266,6 +308,7 @@
     }
 }
 
+// Absolutely position the icon
 @mixin button-icon-absolute(
     $icon-box-size,
     $icon-pseudo:before,
@@ -296,6 +339,7 @@
     }
 }
 
+// Hide the text on a button but leave the icon
 @mixin button-hide-text(
     $icon-box-size,
     $icon-pseudo: before,
@@ -309,68 +353,19 @@
         }
     }
 
-    // Disable ellipsis
+    /* Disable ellipsis */
     @include button-truncate-with-ellipsis(false);
 
+    /* center the icon */
     text-align:center;
-    @include hide-text($hide-direction);
     @include button-icon-absolute($icon-box-size, $icon-pseudo, $icon-placement);
-}
 
-@mixin ui() {
-    .ui-link {
-        @include ui-link();
-    }
-    .ui-link-directional-right {
-        @include ui-link-directional($direction:right);
-    }
-    .ui-link-directional-left {
-        @include ui-link-directional($direction:left);
-    }
-    .ui-button-directional-right {
-        @include ui-button-directional($direction:right);
-    }
-    .ui-button-directional-left {
-        @include ui-button-directional($direction:left);
-    }
-}
-
-// WebKit-style focus
-// Taken from sass-blueprint
-// https://github.com/thomas-mcdonald/bootstrap-sass/blob/34d538dc33b302a02e86ccec3e0a93fbf41f0bfa/vendor/assets/stylesheets/bootstrap/_mixins.scss
-@mixin ui-tab-focus() {
-  // Default
-  outline: thin dotted #333;
-  // WebKit
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px;
-}
-
-// Standard link
-@mixin ui-link(
-    $color: $link-color,
-    $color-hover:$link-hover-color
-){
-    &, &:link, &:visited {
-        color: $color;
-        text-decoration: none;
-        font-family:inherit; // Overide beezer.css
-    }
-
-    &:hover,
-    &:focus {
-        color: $color-hover;
-        text-decoration: underline;
-        cursor:pointer;
-    }
-
-    &:focus {
-      @include ui-tab-focus();
-    }
+    /* hide the text */
+    @include hide-text($hide-direction);
 }
 
 // Large, button-like links with arrows for linking to other pages
-@mixin ui-link-directional (
+@mixin button-link-directional (
     $font-size,
     $direction: right,
 
@@ -409,7 +404,9 @@
     & {
         position:relative;
         display:block;
+
         @include adjust-font-size-to($font-size);
+
         padding: $padding-vertical $padding-horizontal;
         margin-bottom: $margin-vertical;
         @include border-radius(3px);
@@ -437,6 +434,7 @@
                               $color:$arrow-color);
         }
     }
+
     &, &:link, &:visited {
         color: $color;
         background: $bg;
@@ -473,12 +471,12 @@
     }
 
     &:focus {
-        @include ui-tab-focus();
+        @include button-tab-focus();
     }
 }
 
-// Button with an arrow on one side
-@mixin ui-button-directional(
+// Button with an arrow appendage on one side
+@mixin button-directional(
     $direction: right,
 
     $color: $ui-link-block-color,
@@ -494,7 +492,8 @@
     $triangle-width: $line-height-base*1em;
     $triangle-height: $triangle-width / 2;
 
-    // TODO linear gradient?
+    // TODO linear gradient? with triangle?
+    // TODO triangle border using a second triangle on :before?
     position:relative;
     color: $color;
     background: $bg;
@@ -555,6 +554,6 @@
 
     &:focus {
         // TODO improve focus interaction with arrow
-        @include ui-tab-focus();
+        @include button-tab-focus();
     }
 }

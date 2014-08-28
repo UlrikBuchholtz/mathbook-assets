@@ -22,7 +22,7 @@
 
         $codenumber-opacity: .8;
 
-        @include ui-link-directional(
+        @include button-link-directional(
             $font-size: $font-size,
 
             $color: $color,
