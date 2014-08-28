@@ -50,15 +50,6 @@
     /* Default left */
     &, .layout-left & {
         margin: $ui-content-margin;
-
-        /*
-         * Switch to centered at medium layout
-         * Only matters when sidebar is closed
-         */
-        @media screen and (max-width: $screen-md-max) {
-            margin: $ui-content-margin auto;
-        }
-
     }
 
     .layout-centered & {
@@ -67,7 +58,6 @@
 
 
     &, .layout-left &, .layout-centered & {
-
 
         /* When the content is cramped */
         @include sliding-sidebars-media-cramped-content(
