@@ -183,6 +183,7 @@
                     if(typeof this.onDeactivate === "function") {
                         this.onDeactivate.call(this.$el.get());
                     }
+
                     this.$el.addClass(settings.inactiveClass);
                     this.$el.removeClass(settings.activeClass);
                 }
@@ -422,6 +423,7 @@
                 });
 
                 self.$sidebarLeftStickyWrapper = self.$sidebarLeft.parent();
+                self.resizeSidebarLeftStickyWrapper();
 
                 // Update the position in case scroll is already below
                 // the stickyifying point
@@ -1022,6 +1024,7 @@
 
             self.resizeContent(activeAreaHeight);
             self.resizeToc(activeAreaHeight);
+            self.resizeSidebarLeftStickyWrapper();
 
             // Debounce things that only have to happen at the end of the resize
             // This improves the resize performance
@@ -1078,6 +1081,19 @@
             // ...but leave room for an "extras" box if it exists
             var tocHeight = activeAreaHeight - extrasHeight;
             self.$toc.height(tocHeight);
+        };
+
+        /**
+         * Fixes the sidebarLeftStickyWrapper if it exists
+         */
+        self.resizeSidebarLeftStickyWrapper = function() {
+            var newHeight;
+            if(self.hasOwnProperty("$sidebarLeftStickyWrapper")) {
+                // The height should be no greater than the content
+                newHeight = self.$sidebarLeft.outerHeight();
+                newHeight = Math.min(newHeight, self.$content.outerHeight());
+                self.$sidebarLeftStickyWrapper.height(newHeight);
+            }
         };
 
         /**
