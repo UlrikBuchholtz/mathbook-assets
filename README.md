@@ -30,6 +30,63 @@ To deploy all branches from a directory **outside** the repository:
 
     $ ./path/to/repo/scripts/generate-branches.sh ./path/to/output
 
+
+Using Mathbook.js
+-----------------
+
+_Note: `Mathbook.js` currently instantiates `Mathbook` automatically. 
+Until that is changed, this section should be disregarded._
+
+You can instantiate a default `Mathbook` instance as follows:
+```javascript
+// Mathbook must be initialized after the DOM has loaded
+$(window).load( function() {
+   w.mathbook = new Mathbook();
+});
+```
+
+You can also pass an `options` object to the constructor. 
+This overrides the `defaults` defined in [Mathbook.js](js/Mathbook.js).
+For the full list of available options, see that file. 
+They are (hopefully) well commented.
+
+Here's an example of a customized `Mathbook` instance:
+
+```javascript
+$(window).load( function() {
+   // Attach our instance to the window object 
+   // so we can find it again
+   window.mathbook = new Mathbook({
+   
+      selectors: {
+          // Change the selector used to find section links
+          sectionLinks: ".argle-bargle-link"
+      },
+   
+      // Change the attribute used to store the hash 
+      // for in-page section links
+      sectionLinkHashAttribute: "data-hash",
+   
+      onEnterSection: function() {
+          if(typeof _trackEvent === "function") {
+             // push an event to google analytics
+             _trackEvent("ENTER_SECTION", this.id);
+          }
+      },
+      onExitSection: function() {
+          if(typeof _trackEvent === "function") {
+             // push an event to google analytics
+             _trackEvent("EXIT_SECTION", this.id);
+          }
+      },
+      
+      // Tell it whether or not to only track sections that 
+      // are linked from the ToC
+      shouldTrackOnlyLinkedSections: false
+   });
+});
+```
+
 Contributing
 ------------
 Please see the [Contributors Guidelines](CONTRIBUTING.md) before contributing
