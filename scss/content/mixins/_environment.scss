@@ -1,6 +1,7 @@
 @import "../_content_config.scss";
 @import "../../shared/_typography.scss";
 @import "../../shared/_heading.scss";
+@import "../../shared/_knowl.scss";
 
 $environment-heading-font-size: $typography-font-size-h5 !default;
 $environment-heading-after: ". " !default;
@@ -10,6 +11,15 @@ $environment-heading-after: ". " !default;
     @include heading-selector {
         @include heading-base($heading-after:$environment-heading-after);
         @include typography-heading-size($environment-heading-font-size);
+
+        a {
+            @include heading-link();
+        }
+
+        *[knowl] {
+            @include knowl-link($font-type:serif);
+            margin-left:-3px;
+        }
     }
 
     // Default inline heading

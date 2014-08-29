@@ -1,6 +1,7 @@
 @import "../_content_config.scss";
 @import "../../shared/typography";
 @import "../../shared/heading";
+@import "../../shared/_knowl.scss";
 
 // I've opted for zero-indexed since, unlike hX, sections wrap content
 // the first section level is more of a root than h1
@@ -17,6 +18,14 @@ $section-heading-size-level-3: h5 !default;
 @mixin section-base() {
     @include heading-selector {
         @include heading-base;
+        a {
+            @include heading-link();
+        }
+
+        *[knowl] {
+            @include knowl-link($font-type: serif);
+            margin-left:-3px;
+        }
     }
     @include margin-trailer($section-margin-lines);
 }

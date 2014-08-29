@@ -20,6 +20,28 @@ $heading-after:" " !default;
     }
 }
 
+@mixin heading-link() {
+    &:link, &:visited {
+        @include typography-link-state(
+                    $state:default,
+                    $font-type:serif);
+    }
+
+    &:hover, &:focus {
+        @include typography-link-state(
+                    $state:hover,
+                    $font-type: serif,
+                    $underline-size: .05);
+    }
+
+    &:active {
+        @include typography-link-state(
+                    $state:active,
+                    $font-type: serif,
+                    $underline-size: .05);
+    }
+}
+
 @mixin heading-set-before-after($before: none, $after: none) {
     &:before {
         @if($before == none) {

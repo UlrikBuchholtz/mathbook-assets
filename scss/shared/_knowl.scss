@@ -1,21 +1,25 @@
+@import "typography";
 @import "compass/css3/inline-block";
 @import "compass/css3/border-radius";
+@import "compass/css3/box-shadow";
+@import "compass/css3/transition";
+@import "compass/css3/user-interface";
 
 // Knowl
 $knowl-color-base: gray !default;
 
 // Link colors
 $knowl-link-color: saturate($knowl-color-base, 10%) !default;
-$knowl-link-color-hover: saturate(darken($knowl-color-base, 10%), 10%) !default; 
+$knowl-link-color-hover: saturate(darken($knowl-color-base, 10%), 10%) !default;
 $knowl-link-border-radius: 3px !default;
 
 // Border colors
-$knowl-border-color: change-color($knowl-color-base, 
+$knowl-border-color: change-color($knowl-color-base,
                                   $saturation: 100%,
                                   $lightness: 92%) !default;
 
 // Background colors
-$knowl-bg-color: change-color($knowl-border-color, 
+$knowl-bg-color: change-color($knowl-border-color,
                               $saturation: 90% ,
                               $lightness: 99%) !default;
 $knowl-nested-bg-color: white !default;
@@ -34,38 +38,104 @@ $knowl-margin-bottom: 12px !default;
 @mixin knowl-link(
     $color: $knowl-link-color,
     $border-color: $knowl-border-color,
-    $border-radius: $knowl-link-border-radius
+    $border-radius: $knowl-link-border-radius,
+    $font-type: sans-serif
 ) {
+
+    $border-width-base: 1px;
+    $border-width-hover: 2px;
+    $underline-offset: $typography-underline-offset-sans-serif;
+    @if($font-type == serif) {
+        $underline-offset: $typography-underline-offset-serif;
+    }
+
+    $transition-duration: 0ms;
+    $padding-horizontal: 3px;
+
     &, &:hover, &.active {
+        position:relative;
         color: $color;
         background: transparent;
-        padding:0px 3px;
+        padding:0px $padding-horizontal;
         margin:0;
         text-decoration:none;
 
-        /* David likes 1px border in default state, but 2px is definitely
-         * better in hover state, so we add a bottom margin so the line
+        /* add a bottom margin so the line
          * doesn't jump onHover.
          */
-        margin-bottom: 1px;
-        border-bottom: 1px dotted $color;
-        
+        /*margin-bottom: 1px;*/
+        /*border-bottom: 1px dotted $color;*/
+
+        margin-bottom:0;
+        border-bottom: none;
+
         font-weight:500;
         //line-height:1.3;
         white-space: nowrap;
         @include inline-block(baseline);
         @include border-top-left-radius($border-radius);
-        @include border-top-right-radius($border-radius)
+        @include border-top-right-radius($border-radius);
+        /* Prevent accidental text selection on click */
+        @include user-select(none);
+        @include transition-property(background-color);
+        @include transition-duration($transition-duration);
+
+        /**
+         * This gets us an underline that's a bit tighter with the baseline
+         * instead of awkwardly floating below like a border on the parent
+         */
+        &:after {
+            content: "";
+            position:absolute;
+            top:0;
+            bottom: $border-width-hover - $border-width-base;
+            right:$padding-horizontal;
+            left:$padding-horizontal;
+
+            /* Smooth out the transition from underline to border */
+            @include transition-property(left,right);
+            @include transition-duration($transition-duration);
+
+            border-bottom: $border-width-base dotted $color;
+            /*@include typography-underline(*/
+                        /*$color,*/
+                        /*$underline-style: dotted,*/
+                        /*$underline-size: .1,*/
+                        /*$underline-offset: $underline-offset);*/
+            /* Display under parent content, but above parent background */
+            z-index:0;
+        }
     }
 
-    &:hover, &.active {
+    &:hover, &:active, &.active {
         color: darken($border-color, 65%);
         background: lighten($border-color, 4%);
         text-decoration:none;
 
         /* See comment on default style's border/margin */
         margin-bottom:0;
-        border-bottom:2px solid darken($border-color, 15%);
+        /*border-bottom:2px solid darken($border-color, 15%);*/
+        /*border-bottom: none;*/
+
+        &:after {
+            border-bottom:$border-width-hover solid darken($border-color, 15%);
+            left:0;
+            right:0;
+            bottom:0;
+            /*@include typography-underline(*/
+                        /*darken($border-color, 32.5%),*/
+                        /*$underline-size: .1,*/
+                        /*$underline-offset: $underline-offset);*/
+        }
+    }
+
+    &:active {
+        color: $brand-secondary;
+        background: $brand-secondary-light;
+
+        &:after {
+            border-color: $brand-secondary;
+        }
     }
 
     &.active {

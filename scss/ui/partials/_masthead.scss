@@ -12,7 +12,8 @@
 // Note: These variables should only depend on ui module variables
 $masthead-bg-color: change-color($ui-color-bg, $lightness:98%) !default;
 $masthead-title-color: $brand-primary;
-$masthead-subtitle-color: change-color($masthead-bg-color, $lightness:47%) !default;
+$masthead-subtitle-color:change-color($ui-color-base, $lightness:35%);
+$masthead-byline-color: change-color($masthead-bg-color, $lightness:47%) !default;
 $masthead-font-family: $typography-heading-font-family;
 
 & {
@@ -123,18 +124,45 @@ $masthead-font-family: $typography-heading-font-family;
         @include margin-leader(.5, $font-size);
     }
 }
-/* IMPORTANT: #title is deprecated!*/
-#title, .title {
-    $font-size: $typography-font-size-h1;
-    color: $masthead-title-color;
-    min-height:inherit;
 
+// TODO would be nice to reuse .heading markup again
+.title {
+
+    $font-size: $typography-font-size-h1;
     margin:0;
     @include adjust-font-size-to($font-size);
     @include margin-leader(.5, $font-size);;
 
     // Override addon
     font-family:$masthead-font-family;
+    color: $masthead-title-color;
+
+    /* Support links inside title */
+    a {
+        &:link, &:visited {
+            @include typography-link-state(
+                        $state:default,
+                        $color:$masthead-title-color,
+                        $font-type: serif,
+                        $underlined: false);
+        }
+
+        &:hover, &:focus {
+            @include typography-link-state(
+                        $state:hover,
+                        $font-type: serif,
+                        $underlined: true,
+                        $underline-size: .05);
+        }
+
+        &:active {
+            @include typography-link-state(
+                        $state:active,
+                        $font-type: serif,
+                        $underlined: true,
+                        $underline-size: .05);
+        }
+    }
 
     .subtitle {
         &:before {
@@ -150,7 +178,7 @@ $masthead-font-family: $typography-heading-font-family;
                 $from-size:$font-size);
 
             /* De-emphasize relative to main title */
-            color: change-color($ui-color-base, $lightness:35%);
+            color: $masthead-subtitle-color;
 
             /* Remove colon */
             &:before {
@@ -176,7 +204,7 @@ $masthead-font-family: $typography-heading-font-family;
 /* IMPORTANT: #byline is deprecated! */
 #byline, .byline {
     $font-size: $typography-font-size-h4;
-    color: $masthead-subtitle-color;
+    color: $masthead-byline-color;
     font-weight:normal;
     margin:0;
     @include adjust-font-size-to($font-size);
@@ -191,5 +219,29 @@ $masthead-font-family: $typography-heading-font-family;
         margin-top:0;
         @include adjust-font-size-to($font-size);
         @include margin-trailer(.5, $font-size);;
+    }
+
+    a {
+        &:link, &:visited {
+            @include typography-link-state(
+                        $state:default,
+                        $color: $masthead-byline-color,
+                        $font-type: serif,
+                        $underlined:true);
+        }
+
+        &:hover, &:focus {
+            @include typography-link-state(
+                        $state:hover,
+                        $font-type: serif,
+                        $underlined: true);
+        }
+
+        &:active {
+            @include typography-link-state(
+                        $state:active,
+                        $font-type: serif,
+                        $underlined: true);
+        }
     }
 }

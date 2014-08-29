@@ -36,9 +36,14 @@ $typography-heading-line-height:    1.1 !default;
 $typography-heading-margin-bottom-ratio: .3333333;
 
 // LINKS
-$typography-link-color: lighten(blue,10%) !default;
-$typography-link-color-hover: blue !default;
-$typography-link-color-active: red !default;
+$typography-link-color: lighten($brand-primary,10%) !default;
+$typography-link-color-hover: $brand-primary !default;
+$typography-link-color-active: $brand-secondary !default;
+
+// UNDERLINES
+$typography-underline-offset-sans-serif:1.2 !default;
+$typography-underline-offset-serif:1.2 !default;
+$typography-underline-size:0.1 !default;
 
 // CODE
 $typography-code-color: inherit !default;
@@ -73,40 +78,100 @@ $relative-font-sizing: true; // uses ems instead of pixels
     @include establish-baseline($typography-font-size-base);
 }
 
-// TODO does this belong here?
-@mixin typography-link(
-    $color: $typography-link-color,
-    $color-hover: $typography-link-color-hover,
-    $color-active: $typography-link-color-active
+@mixin typography-link-base() {
+}
+
+@mixin typography-link-state(
+    $state: default,
+    $color: auto,
+    $underlined: auto,
+    $font-type: sans-serif,
+    $underline-size: $typography-underline-size
 ) {
-    a {
-        &, &:link, &:visited {
-            color: $color;
-            text-decoration: none;
-            font-family:inherit; // Overide beezer.css
-        }
-
-        &:hover,
-        &:focus {
-            color: $color-hover;
-            text-decoration: underline;
-            cursor:pointer;
-        }
-
-        &:active,
-        &.active {
-            color: $color-active;
-            text-decoration:underline;
-        }
-
-        &:focus {
-          // Default
-          outline: thin dotted $color-hover;
-          // WebKit
-          outline: 5px auto -webkit-focus-ring-color;
-          outline-offset: -2px;
-        }
+    $underline-color: $color;
+    $underline-offset: $typography-underline-offset-sans-serif;
+    @if($font-type == serif) {
+        $underline-offset: $typography-underline-offset-serif;
     }
+
+    @if($state == default or $state == visited) {
+        @if($color == auto) {
+            $color: $typography-link-color;
+        }
+
+        color: $color;
+        $underline-color: rgba($color, .5);
+    } @else if($state == hover or $state == focus) {
+        @if($color == auto) {
+            $color: $typography-link-color-hover;
+        }
+        $underline-color: $color;
+    } @else if($state == active) {
+        @if($color == auto) {
+            $color: $typography-link-color-active;
+        }
+        $underline-color: $color;
+    }
+
+    color: $color;
+    @if($underlined == auto or $underlined == true) {
+        @include typography-underline(
+                    $underline-color,
+                    $underline-offset,
+                    $underline-size);
+    } @else {
+        @include typography-underline-remove();
+    }
+
+    // If focus, add focus overrides
+    @if($state == focus) {
+      // Default
+      outline: thin dotted $color-hover;
+      // WebKit
+      outline: 5px auto -webkit-focus-ring-color;
+      outline-offset: -2px;
+    }
+}
+
+// Better underlines using background gradients
+// Mixin adapted from http://www.sumnoise.com/2014/03/30/underlining-links/
+// If you use for dotted, you may need a slightly larger underline-size
+@mixin typography-underline(
+    $color:rgba(black,.5),
+    $underline-offset: $typography-underline-offset-sans-serif,
+    $underline-size: $typography-underline-size,
+    $underline-style: solid
+) {
+    /**
+     * Better underlines using background gradients
+     * See http://bit.ly/1vTg7hr
+     */
+    @if($underline-style == dotted) {
+        $bg1:radial-gradient(center, $color, $color 1px, transparent 1px);
+        @include background-image($bg1...);
+        $underline-offset: $underline-offset - $underline-size/2;
+        $underline-size: 2*$underline-size;
+    } @else {
+        @include background-image(
+                    linear-gradient(top, transparent 50%, $color 50%));
+    }
+
+    background-repeat: repeat-x;
+    background-size: #{$underline-size}em #{$underline-size}em;
+    background-position: 0 #{$underline-offset}em;
+    text-decoration: none;
+
+    .lt-ie10 & { // because old IE can't handle it
+        background: none;
+        text-decoration: underline;
+    }
+}
+
+@mixin typography-underline-remove() {
+    &, .lt-ie10 & { // because old IE can't handle it
+        text-decoration:none;
+    }
+    background:none;
 }
 
 // Base styles for all headings
