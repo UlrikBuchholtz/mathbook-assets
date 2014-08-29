@@ -67,7 +67,7 @@
             $content-margin: $ui-content-margin
         ) {
             /* Decrease the margins */
-            margin:$ui-content-margin-sm;
+            margin:$ui-content-margin-sm $ui-content-margin-sm;
         }
 
         /* Since sidebars push open in the small layout,
@@ -79,7 +79,7 @@
             .sidebar-right-open &,
             .sidebar-left-open.sidebar-right-open & {
                 /* Decrease the margins */
-                margin:$ui-content-margin auto;
+                margin:$ui-content-margin-sm auto;
             }
         }
 
@@ -92,7 +92,7 @@
             .sidebar-right-open &,
             .sidebar-left-open.sidebar-right-open & {
                 /* Decrease the margins */
-                margin:$ui-content-margin-sm;
+                margin:$ui-content-margin-sm $ui-content-margin-sm;
             }
         }
 
@@ -102,8 +102,8 @@
             .sidebar-left-open &,
             .sidebar-right-open &,
             .sidebar-left-open.sidebar-right-open & {
-                /* Decrease the margins */
-                margin:$ui-content-margin-xs;
+                /* Decrease the horizontal margins */
+                margin:$ui-content-margin-sm $ui-content-margin-xs;
             }
         }
     }

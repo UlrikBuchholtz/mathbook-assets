@@ -165,6 +165,8 @@ $masthead-font-family: $typography-heading-font-family;
     }
 
     .subtitle {
+        font-weight: normal; /* Much classier */
+
         &:before {
             content: ": ";
         }
@@ -184,20 +186,15 @@ $masthead-font-family: $typography-heading-font-family;
             &:before {
                 content: normal;
             }
-
-            @media screen and (max-width: $screen-xs-max) {
-                /* Give the byline a little bit more seperation */
-                @include margin-trailer(.5, $subtitle-font-size);;
-            }
         }
-
     }
 
     /* On mobile phones */
     @media screen and (max-width:$screen-xxs-max) {
         $font-size: $typography-font-size-h3;
         @include adjust-font-size-to($font-size);
-        @include margin-leader(.5, $font-size);;
+        @include margin-leader(.5, $font-size);
+        @include margin-trailer(.5, $font-size);
     }
 }
 

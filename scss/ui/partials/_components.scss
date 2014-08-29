@@ -38,8 +38,8 @@
         & {
             font-family: $typography-heading-font-family;
 
-            @media screen and (max-width: $screen-sm-min) {
-                font-size:.8em;
+            @media screen and (max-width: $screen-xxs-max) {
+                @include adjust-font-size-to(.9*$typography-font-size-base);
             }
         }
 

@@ -30,7 +30,7 @@ section, .section-like {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// TYPE-SPECIFIC STYLES 
+// TYPE-SPECIFIC STYLES
 ////////////////////////////////////////////////////////////////////////////////
 
 // TODO these could go in seperate partials. Up to you.
@@ -44,9 +44,9 @@ section, .section-like {
      * In LaTeX, Chapter headings are broken onto two lines... so here we go...
      */
     @include heading-selector {
-        /* 
+        /*
          * We use font-size-base so that ems are relative to base font size
-         * within this context 
+         * within this context
          */
         font-size: $context-font-size;
         @include margin-trailer(1, $context-font-size);
@@ -65,9 +65,9 @@ section, .section-like {
         }
     }
 
-    /** 
+    /**
      * Chapter heading in the <header> format
-     * This format supports a byline for anthology textbooks 
+     * This format supports a byline for anthology textbooks
      * and journals with different chapter authors.
      *
      * The main difference is that the margin is applied to the header
@@ -100,7 +100,23 @@ section, .section-like {
 
 .frontmatter {
     @include heading-selector {
+        $title-font-size: $typography-font-size-h1;
+        $subtitle-font-size: $typography-font-size-h2;
+
         text-align:center;
+        @include typography-heading-size($title-font-size);
+        // Needs a bit of extra space
+        @include margin-trailer(1, $title-font-size);
+
+        .subtitle {
+            display:block;
+            font-weight: normal; /* Much classier */
+            color: $content-gray;
+            @include adjust-font-size-to(
+                        $to-size: $subtitle-font-size,
+                        $from-size: $title-font-size);
+            @include margin-leader(.5, $subtitle-font-size);
+        }
     }
 
     .contributors {
