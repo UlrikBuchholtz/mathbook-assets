@@ -195,3 +195,73 @@ body {
         @include sliding-sidebars-compositing-layer();
     }
 }
+
+/**
+ * Container for main content.
+ * This is bound to a comfortable max-width for reading.
+ */
+#content {
+    max-width: $ui-content-max-width;
+
+    /* Default left */
+    &, .layout-left & {
+        margin: $ui-content-margin;
+    }
+
+    .layout-centered & {
+        margin: $ui-content-margin auto;
+    }
+
+
+    &, .layout-left &, .layout-centered & {
+
+        /* When the content is cramped */
+        @include sliding-sidebars-media-cramped-content(
+            $sidebar-left-width: $ui-sidebar-left-width,
+            $sidebar-right-width: $ui-sidebar-right-width,
+            $content-max-width: $ui-content-max-width,
+            $content-margin: $ui-content-margin
+        ) {
+            /* Decrease the margins */
+            margin:$ui-content-margin-sm $ui-content-margin-sm;
+        }
+
+        /* Since sidebars push open in the small layout,
+         * we want consistent  margins regardless of the sidebar states
+         */
+        @media screen and (max-width: $screen-sm-max) {
+            &,
+            .sidebar-left-open &,
+            .sidebar-right-open &,
+            .sidebar-left-open.sidebar-right-open & {
+                /* Decrease the margins */
+                margin:$ui-content-margin-sm auto;
+            }
+        }
+
+        /* And we want consistently small margins below the content max width
+         */
+        $breakpoint: $ui-content-max-width + 2*$ui-content-margin;
+        @media screen and (max-width: $breakpoint) {
+            &,
+            .sidebar-left-open &,
+            .sidebar-right-open &,
+            .sidebar-left-open.sidebar-right-open & {
+                /* Decrease the margins */
+                margin:$ui-content-margin-sm $ui-content-margin-sm;
+            }
+        }
+
+        /* And even smaller margins at extra small layouts */
+        @media screen and (max-width: $screen-xs-max) {
+            &,
+            .sidebar-left-open &,
+            .sidebar-right-open &,
+            .sidebar-left-open.sidebar-right-open & {
+                /* Decrease the horizontal margins */
+                margin:$ui-content-margin-sm $ui-content-margin-xs;
+            }
+        }
+    }
+}
+
