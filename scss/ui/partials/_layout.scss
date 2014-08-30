@@ -116,9 +116,11 @@ body {
 .page > #sidebar-left, #sidebar-left-sticky-wrapper {
 
     & {
+        /* Hide sidebar by default */
         display:none;
     }
 
+    /* Display it only if it is enabled */
     .has-sidebar-left & {
         display:block;
     }
@@ -131,14 +133,18 @@ body {
 }
 
 #sidebar-left {
-    // This is for performance, if you see bugs with the fixed positioning
-    // or "sticky" behavior of the sidebar, try removing it.
+    // This is for performance.
+    // It has a significant impact on iPads.
+    // Do not apply it to the sticky wrapper, though!
+    // It creates a seperate block formatting context,
+    // which screws up fixed positioned children.
     @include sliding-sidebars-compositing-layer();
 }
 
 #sidebar-right {
 
     & {
+        /* Hide sidebar by default */
         display:none;
 
         @include sliding-sidebars-sidebar(
@@ -155,6 +161,7 @@ body {
         right:0;
     }
 
+    /* Display it only if it is enabled */
     .has-sidebar-right & {
         display:block;
     }

@@ -7,6 +7,11 @@ $sliding-sidebars-transition-duration: 400ms !default;
 $sliding-sidebars-loading-class: "mathbook-loading" !default;
 $sliding-sidebars-loaded-class: "mathbook-loaded" !default;
 
+// This is for performance.
+// It has a significant impact on iPads.
+// Apply it to elements that are animated
+// Note: It creates a seperate block formatting context,
+//       which screws up fixed positioned children.
 @mixin sliding-sidebars-compositing-layer() {
     /**
      * Trick webkit browers into generating a compositing layer for this
