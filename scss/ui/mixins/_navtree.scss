@@ -2,8 +2,6 @@
 @import "../../shared/_typography.scss";
 @import "../mixins/buttons";
 @import "../../shared/_utilities.scss";
-// TODO should we encapsulate defaults and just expose primary/secondary/base?
-// TODO support more than two levels
 
 $navtree-segment-color: $ui-link-block-color !default;
 $navtree-segment-color-hover: $ui-link-block-color-hover !default;
@@ -13,22 +11,14 @@ $navtree-segment-bg: $ui-link-block-bg !default;
 $navtree-segment-bg-hover: $ui-link-block-bg-hover !default;
 $navtree-segment-bg-active: $ui-link-block-bg-active !default;
 
-$navtree-heading-color: white !default;
-$navtree-heading-color-hover: $navtree-segment-color-hover !default;
-$navtree-heading-color-active: $navtree-segment-color-active !default;
-
-$navtree-heading-bg: $brand-secondary !default;
-$navtree-heading-bg-hover: $navtree-segment-bg-hover !default;
-$navtree-heading-bg-active: $navtree-segment-bg-active !default;
-
 $navtree-segment-border-width: 1px !default;
 $navtree-segment-border-color: darken($navtree-segment-bg, 15%);
 $navtree-segment-border-color-hover: darken($navtree-segment-bg-hover, 15%);
 $navtree-segment-border-color-active: darken($navtree-segment-bg-active, 15%);
 
-$navtree-segment-font-size: $typography-font-size-base !default;
-$navtree-segment-height: $typography-font-size-base;
+$navtree-segment-height: $typography-line-height-computed;
 
+// Apply to a codenumber if it should be positioned absolutely
 @mixin navtree-codenumber($indent, $width) {
     position:absolute;
     right:100%;
@@ -36,6 +26,7 @@ $navtree-segment-height: $typography-font-size-base;
     text-align:right;
 }
 
+// Apply to titles adjacent to absolutely positioned codenumbers
 @mixin navtree-codenumber-title(
     $codenumber-width,
     $codenumber-gutter-right
@@ -45,10 +36,12 @@ $navtree-segment-height: $typography-font-size-base;
     margin-left: $codenumber-width + $codenumber-gutter-right;
 }
 
+// Apply to containers that contain codenumbers using absolute positioning
 @mixin navtree-codenumber-container($indent) {
     padding-left: $indent;
 }
 
+// Add support for absolutely positioned codenumbers to a container
 @mixin navtree-codenumber-support(
     $indent,
     $codenumber-width,
@@ -74,8 +67,14 @@ $navtree-segment-height: $typography-font-size-base;
 }
 
 
+// One segment in a navtree
+// Use this with varying indents to create a heiarchy
+// You will probably want to use it with the navtree-border-collapse mixin
 @mixin navtree-segment(
-    $font-size: $navtree-font-size-base,
+    // The font-size must be specified
+    $font-size,
+    // TODO add $from-font-size to allow usage in contexts other than 1em?
+
     $height: $navtree-segment-height,
     $line-height: $navtree-segement-line-height,
     $indent: $navtree-segement-indent,
