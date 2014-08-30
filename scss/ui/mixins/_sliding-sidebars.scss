@@ -4,6 +4,8 @@
 
 // Defaults
 $sliding-sidebars-transition-duration: 400ms !default;
+$sliding-sidebars-loading-class: "mathbook-loading" !default;
+$sliding-sidebars-loaded-class: "mathbook-loaded" !default;
 
 @mixin sliding-sidebars-compositing-layer() {
     /**
@@ -25,7 +27,9 @@ $sliding-sidebars-transition-duration: 400ms !default;
     $side, // left|right
     $default-open-min,
     $sidebar-width,
-    $transition-duration: $sliding-sidebars-transition-duration
+    $transition-duration: $sliding-sidebars-transition-duration,
+    $loading-class: $sliding-sidebars-loading-class,
+    $loaded-class: $sliding-sidebars-loaded-class
 ) {
     $default-closed-max: $default-open-min - 1;
 
@@ -42,14 +46,14 @@ $sliding-sidebars-transition-duration: 400ms !default;
         @include transition-duration($transition-duration);
     }
 
-    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-open &,
-    .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-open & {
+    .has-sidebar-#{$side}.#{$loading-class}.sidebar-#{$side}-open &,
+    .has-sidebar-#{$side}.#{$loaded-class}.sidebar-#{$side}-open & {
         margin-#{$side}:0;
 
     }
 
-    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-closed &,
-    .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-closed & {
+    .has-sidebar-#{$side}.#{$loading-class}.sidebar-#{$side}-closed &,
+    .has-sidebar-#{$side}.#{$loaded-class}.sidebar-#{$side}-closed & {
         margin-#{$side}: -$sidebar-width;
     }
 
@@ -66,12 +70,15 @@ $sliding-sidebars-transition-duration: 400ms !default;
     width: auto;
     /*z-index:10;*/
     @include transition-duration($transition-duration);
+
     .has-sidebar-left {
         @include transition-property(margin-left, left);
     }
+
     .has-sidebar-right {
         @include transition-property(margin-right, right);
     }
+
     .has-sidebar-left.has-sidebar-right {
         @include transition-property(margin-left, margin-right,left,right);
     }
@@ -87,22 +94,29 @@ $sliding-sidebars-transition-duration: 400ms !default;
     $slide-min,
     $default-open-min,
     $sidebar-width,
-    $transition-duration: $sliding-sidebars-transition-duration
+    $transition-duration: $sliding-sidebars-transition-duration,
+    $loading-class: $sliding-sidebars-loading-class,
+    $loaded-class: $sliding-sidebars-loaded-class
 ) {
     $default-closed-max: $default-open-min - 1;
     $push-max: $slide-min - 1;
 
+    // We have to define a default state, an open state, and a closed state.
+    // The default states show before the script is loaded.
+    // They prevent the layout from jumbling around on load.
+
     /* Main with sidebar left without javascript*/
     .has-sidebar-#{$side} & {
         @include sliding-sidebars-main-side-state($side, open-slide, $sidebar-width);
+
         @media screen and (max-width: $default-closed-max) {
             @include sliding-sidebars-main-side-state($side, closed, $sidebar-width);
         }
     }
 
     /* Main with sidebar left open */
-    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-open &,
-    .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-open & {
+    .has-sidebar-#{$side}.#{$loading-class}.sidebar-#{$side}-open &,
+    .has-sidebar-#{$side}.#{$loaded-class}.sidebar-#{$side}-open & {
         @include sliding-sidebars-main-side-state($side, open-slide, $sidebar-width);
         @media screen and (max-width: $push-max) {
             @include sliding-sidebars-main-side-state($side, open-push, $sidebar-width);
@@ -110,8 +124,8 @@ $sliding-sidebars-transition-duration: 400ms !default;
     }
 
     /* Main with sidebar left closed */
-    .has-sidebar-#{$side}.mathbook-loading.sidebar-#{$side}-closed &,
-    .has-sidebar-#{$side}.mathbook-loaded.sidebar-#{$side}-closed & {
+    .has-sidebar-#{$side}.#{$loading-class}.sidebar-#{$side}-closed &,
+    .has-sidebar-#{$side}.#{$loaded-class}.sidebar-#{$side}-closed & {
         @include sliding-sidebars-main-side-state($side, closed, $sidebar-width);
         @media screen and (max-width: $push-max) {
             @include sliding-sidebars-main-side-state($side, closed-push, $sidebar-width);
@@ -150,6 +164,8 @@ $sliding-sidebars-transition-duration: 400ms !default;
     }
 }
 
+// A mixin for setting properties in all the different cases where
+// the content might be cramped by sidebars or a small viewport
 @mixin sliding-sidebars-media-cramped-content(
     $sidebar-left-width,
     $sidebar-right-width,
