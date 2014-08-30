@@ -121,7 +121,22 @@
         };
 
         // Overwrite defaults with any options passed in.
-        var settings = $.extend(defaults, options);
+        var settings = $.extend({}, defaults, options);
+
+        // But don't allow namespaced options to be overwritten
+        // Extend them instead
+        var property;
+        for(property in options) {
+            if( typeof options !== "undefined" &&
+                options.hasOwnProperty(property) &&
+                defaults.hasOwnProperty(property) &&
+                $.isPlainObject(options[property]) &&
+                $.isPlainObject(defaults[property]) )
+            {
+                settings[property] =
+                    $.extend({}, defaults[property], options[property]);
+            }
+        }
 
         var self = this;
         var hashOnLoad,
@@ -1145,7 +1160,7 @@
     } else {
         // wait and init when the DOM is fully loaded
         $(window).load( function() {
-            w.mathbook = new Mathbook({});
+            w.mathbook = new Mathbook();
         });
     }
 
