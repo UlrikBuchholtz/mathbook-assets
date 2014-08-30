@@ -17,11 +17,17 @@ $section-heading-size-level-3: h5 !default;
 
 @mixin section-base() {
     @include heading-selector {
+
+        // Include base styles for headings
+        // See the mixin for available parameters
         @include heading-base;
+
+        /* Support links in headings */
         a {
             @include heading-link();
         }
 
+        /* Support knowl links in headings */
         *[knowl] {
             @include knowl-link($font-type: serif);
             margin-left:-3px;

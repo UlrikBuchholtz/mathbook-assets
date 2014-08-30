@@ -40,6 +40,8 @@ $child-indent-touch: $base-indent-touch + $title-offset;
     -webkit-overflow-scrolling: touch;
 }
 
+// TODO we should not be styling the elements directly here.
+
 h2 {
     & {
         display:block;

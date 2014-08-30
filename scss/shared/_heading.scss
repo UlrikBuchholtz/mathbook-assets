@@ -20,11 +20,14 @@ $heading-after:" " !default;
     }
 }
 
+// Link styling in headings
+// Important mostly for the underline styling for large serif fonts
 @mixin heading-link() {
     &:link, &:visited {
         @include typography-link-state(
                     $state:default,
-                    $font-type:serif);
+                    $font-type:serif,
+                    $underline-size:.05);
     }
 
     &:hover, &:focus {
@@ -42,6 +45,8 @@ $heading-after:" " !default;
     }
 }
 
+// TODO move to utilities file?
+// Quickly set the before and after content on ANY element
 @mixin heading-set-before-after($before: none, $after: none) {
     &:before {
         @if($before == none) {
@@ -59,18 +64,21 @@ $heading-after:" " !default;
     }
 }
 
+// Hide the type
 @mixin heading-hide-type() {
     .type {
         display:none;
     }
 }
 
+// Hide the codenumber
 @mixin heading-hide-codenumber() {
     .codenumber {
         display:none;
     }
 }
 
+// Hide the title
 @mixin heading-hide-title() {
     .title {
         display:none;
@@ -78,6 +86,8 @@ $heading-after:" " !default;
 }
 
 // The base styles for Mathbook headings
+// Allows you to set the before and after content on all the subtokens
+// in one go.
 @mixin heading-base(
     $type-before: $heading-type-before,
     $type-after: $heading-type-after,
@@ -134,6 +144,7 @@ $heading-after:" " !default;
     }
 }
 
+// Force the heading to appear inline with the following paragraph
 @mixin heading-force-inline() {
     @include heading-selector {
         display:inline;
@@ -151,6 +162,7 @@ $heading-after:" " !default;
     }
 }
 
+// Force the heading back to block
 @mixin heading-force-block() {
     @include heading-selector {
         display:block;

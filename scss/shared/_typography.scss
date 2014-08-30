@@ -78,9 +78,13 @@ $relative-font-sizing: true; // uses ems instead of pixels
     @include establish-baseline($typography-font-size-base);
 }
 
+// The link base
 @mixin typography-link-base() {
+    // It may be empty now... but you should include it anyway
 }
 
+// A single state of a link
+// Useful if you want to tweak one style (often the default style)
 @mixin typography-link-state(
     $state: default,
     $color: auto,
@@ -167,6 +171,7 @@ $relative-font-sizing: true; // uses ems instead of pixels
     }
 }
 
+// Remove the better underline styling
 @mixin typography-underline-remove() {
     &, .lt-ie10 & { // because old IE can't handle it
         text-decoration:none;
@@ -185,6 +190,8 @@ $relative-font-sizing: true; // uses ems instead of pixels
     color: $color;
 }
 
+// Use this mixin to adjust heading sizes
+// It adjusts the font-size, line-height, and margins all at once
 @mixin typography-heading-size($font-size) {
     @if($font-size == h1) {
         $font-size: $typography-font-size-h1;
@@ -205,6 +212,7 @@ $relative-font-sizing: true; // uses ems instead of pixels
     @include margin-trailer(.5,$font-size);
 }
 
+// Paragraph styling
 @mixin typography-paragraph() {
     & {
         /* Reset margins */
@@ -217,6 +225,7 @@ $relative-font-sizing: true; // uses ems instead of pixels
     }
 }
 
+// Special styling for a lead-in paragraph
 @mixin typography-paragraph-lead() {
     & {
         margin:0;
@@ -234,6 +243,7 @@ $relative-font-sizing: true; // uses ems instead of pixels
     }
 }
 
+// Blockquote
 @mixin typography-blockquote() {
     & {
         padding-left:2*$base-rhythm-unit;
@@ -274,6 +284,9 @@ $relative-font-sizing: true; // uses ems instead of pixels
     }
 }
 
+// Add scrolling to a code block
+// Good for blocks interspersed in text
+// TODO add options for vertical vs horizontal vs both?
 @mixin typography-code-scrollable(
     $max-height: $typography-code-scrollable-max-height
 ) {
@@ -307,6 +320,7 @@ $relative-font-sizing: true; // uses ems instead of pixels
     }
 }
 
+// Address styling, mostly a reset currently
 @mixin typography-address() {
     & {
         padding:0;
@@ -316,6 +330,7 @@ $relative-font-sizing: true; // uses ems instead of pixels
     }
 }
 
+// Adds the google fonts import only the first time it is used
 @mixin typography-google-fonts-import-once() {
     @if ($typography-should-import-google-fonts) {
         $typography-should-import-google-fonts: false;
@@ -324,6 +339,7 @@ $relative-font-sizing: true; // uses ems instead of pixels
 }
 
 // Converts px to em in a given font-size context
+// Generally unecessary if you are using the compass vertical rhythm
 @function typography-em(
     $target-px,
     $context-px: $typography-font-size-base
