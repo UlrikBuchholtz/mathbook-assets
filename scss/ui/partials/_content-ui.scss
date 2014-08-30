@@ -1,3 +1,7 @@
+////////////////////////////////////////////////////////////////////////////////
+// UI components that appear inside the content area
+////////////////////////////////////////////////////////////////////////////////
+
 @import "../ui_config";
 @import "../../shared/typography";
 @import "../mixins/_navtree.scss";
@@ -39,7 +43,7 @@
             font-family: $typography-heading-font-family;
 
             @media screen and (max-width: $screen-xxs-max) {
-                @include adjust-font-size-to(.9*$typography-font-size-base);
+                @include adjust-font-size-to($typography-font-size-base);
             }
         }
 
@@ -54,12 +58,16 @@
             margin-right: rhythm(.5, $font-size);
         }
 
-        &:hover .codenumber {
-            color: rgba($color-hover, $codenumber-opacity);
+        &:hover, &:focus {
+            .codenumber {
+                color: rgba($color-hover, $codenumber-opacity);
+            }
         }
 
-        &:active .codenumber {
-            color: rgba($color-active, $codenumber-opacity);
+        &:active {
+            .codenumber {
+                color: rgba($color-active, $codenumber-opacity);
+            }
         }
     }
 }
