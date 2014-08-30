@@ -2,6 +2,8 @@
 @import "../../shared/_typography.scss";
 @import "../../shared/heading";
 
+$figure-heading-after: ". " !default;
+
 figure {
 
     & {
@@ -28,7 +30,7 @@ figure {
             margin:0;
         }
     }
-    
+
     table {
         margin-left: auto;
         margin-right: auto;
@@ -36,15 +38,19 @@ figure {
 
     figcaption {
         /* We treat figcaptions just like headings */
-        @include heading-base;
-
-        & { 
-            @include adjust-font-size-to($typography-font-size-base);
-            margin: 0 auto;
-            @include margin-leader;
-            text-align: center;
+        @include heading-selector {
+            @include heading-base($heading-after:$figure-heading-after);
+            @include heading-force-inline();
         }
 
+        & {
+            @include adjust-font-size-to($typography-font-size-base);
+            margin: 0 auto;
+            text-align: center;
+            @include margin-leader;
+        }
+
+        // From addon
         &.wrap {
             margin-left: $base-half-leader;
             margin-right: $base-half-leader;
