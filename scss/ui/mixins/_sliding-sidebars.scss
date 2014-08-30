@@ -67,6 +67,9 @@ $sliding-sidebars-loaded-class: "mathbook-loaded" !default;
     }
 }
 
+// The main base mixin. Include this on the main element,
+// then include each desired side (left and/or right) using the
+// sliding-sidebars-side mixin.
 @mixin sliding-sidebars-main(
     $transition-duration: $sliding-sidebars-transition-duration
 ) {
@@ -89,7 +92,7 @@ $sliding-sidebars-loaded-class: "mathbook-loaded" !default;
     }
 }
 
-// Main left styles
+// Main side styles
 // @param $side - left|right
 // @param $slide-min - the min width at which sidebars slide instead of push
 // @param $default-open-min - min width at which this is open by default
@@ -139,11 +142,13 @@ $sliding-sidebars-loaded-class: "mathbook-loaded" !default;
 
 }
 
-// Set main-left state
+// Set side state
 // @param $side - left|right
 // @param $state
 //     * open-slide subtracts sidebar width from main width
-//     * open-push pushes main to the side, only supports one sidebar open
+//     * open-push pushes main to the side.
+//       it only supports one open sidebar.
+//       to work properly, the main element's width must be fixed by js
 //     * closed covers/hides the sidebar
 // @param $sidebar-width - the width of the sidebar
 @mixin sliding-sidebars-main-side-state($side, $state, $sidebar-width) {
