@@ -98,7 +98,7 @@ section, .section-like {
     }
 }
 
-.frontmatter {
+.frontmatter, .book {
     @include heading-selector {
         $title-font-size: $typography-font-size-h1;
         $subtitle-font-size: $typography-font-size-h2;
@@ -117,6 +117,10 @@ section, .section-like {
                         $from-size: $title-font-size);
             @include margin-leader(.5, $subtitle-font-size);
         }
+    }
+
+    .header {
+        @include margin-trailer(2);
     }
 
     .contributors {
