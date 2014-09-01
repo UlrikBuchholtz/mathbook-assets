@@ -178,6 +178,7 @@
             this.initialize = function(options) {
                 settings = defaults;
                 this.reset(options);
+                this.toggle(settings.isActive);
             };
 
             // Private vars
@@ -505,22 +506,22 @@
             // Espy's offset is the offset to the top edge of the trigger
             // We want to configure the offset from the top edge of the screen
             // to the bottom edge of the trigger
-            var options = {};
+            var espyOptions = {};
             var navbarHeight = self.$primaryNavbar.outerHeight();
             var activeArea = self.$w.innerHeight() - navbarHeight;
 
             // Compute offset from top of screen
-            options.offset = navbarHeight + settings.enterSectionTriggerTop;
+            espyOptions.offset = navbarHeight + settings.enterSectionTriggerTop;
 
             // Compute size of trigger
-            options.size = settings.enterSectionTriggerBottom -
+            espyOptions.size = settings.enterSectionTriggerBottom -
                            settings.enterSectionTriggerTop;
             // Limit size to the size of the activeArea
-            options.size = Math.min(activeArea, options.size);
+            espyOptions.size = Math.min(activeArea, espyOptions.size);
             // To be safe, don't allow negative
-            options.size = Math.max(options.size, 0);
+            espyOptions.size = Math.max(espyOptions.size, 0);
 
-            espy.configure(options);
+            espy.configure(espyOptions);
         };
 
         self.refreshEspy = function() {
@@ -661,13 +662,13 @@
 
             if(isEntered) {
                 $section.addClass(settings.sectionActiveClass);
-                if(typeof options.onEnterSection === "function"){
-                    options.onEnterSection.apply(element, arguments);
+                if(typeof settings.onEnterSection === "function"){
+                    settings.onEnterSection.apply(element, arguments);
                 }
             } else {
                 $section.removeClass(settings.sectionRemoveClass);
-                if(typeof options.onExitSection === "function"){
-                    options.onEnterSection.apply(element, arguments);
+                if(typeof settings.onExitSection === "function"){
+                    settings.onEnterSection.apply(element, arguments);
                 }
             }
 
