@@ -32,9 +32,12 @@ $masthead-font-family: $typography-heading-font-family;
     border-top:1px solid transparent;
 
     @include clearfix();
+    @include padding-leader(.5);
+    @include padding-trailer(.5);
 
     @media screen and (max-width:$screen-xxs-max) {
-        padding: 0 $ui-content-margin-xs;
+        padding-left:$ui-content-margin-xs;
+        padding-right:$ui-content-margin-xs;
     }
 }
 
@@ -47,6 +50,7 @@ $masthead-font-family: $typography-heading-font-family;
     @media screen and (max-width:$screen-xxs-max) {
         padding:0;
         text-align:center;
+        @include margin-leader(.5);;
     }
 
     @include heading-selector {
@@ -62,11 +66,18 @@ $masthead-font-family: $typography-heading-font-family;
             // This heading is a little different than normal headings
             margin:0;
             @include adjust-font-size-to($font-size);
-            @include margin-leader(.5, $font-size);;
 
             // Override addon
             font-family:$masthead-font-family;
             color: $masthead-title-color;
+        }
+
+        /* On mobile phones */
+        @media screen and (max-width:$screen-xxs-max) {
+            $font-size: $typography-font-size-h3;
+            @include adjust-font-size-to($font-size);
+            margin:0;
+            @include margin-trailer(.5, $font-size);
         }
 
         /* Support links inside title */
@@ -122,14 +133,6 @@ $masthead-font-family: $typography-heading-font-family;
             }
         }
 
-        /* On mobile phones */
-        @media screen and (max-width:$screen-xxs-max) {
-            $font-size: $typography-font-size-h3;
-            @include adjust-font-size-to($font-size);
-            @include margin-leader(.5, $font-size);
-            @include margin-trailer(.5, $font-size);
-        }
-
     }
 }
 
@@ -140,7 +143,7 @@ $masthead-font-family: $typography-heading-font-family;
 
     $font-size:2.5*$base-line-height; // must be px
     font-size:$font-size;
-    @include margin-leader(.5, $font-size);
+    margin-top: rhythm(.25, $font-size);
 
     margin-left: $ui-left-margin;
     text-align:center;
@@ -206,7 +209,6 @@ $masthead-font-family: $typography-heading-font-family;
 
         $font-size:2.5*$base-line-height; // must be px
         font-size:$font-size;
-        @include margin-leader(.5, $font-size);
     }
 }
 
@@ -217,7 +219,6 @@ $masthead-font-family: $typography-heading-font-family;
     font-weight:normal;
     margin:0;
     @include adjust-font-size-to($font-size);
-    @include margin-trailer(.5, $font-size);
     min-height:inherit;
 
     // Override addon
@@ -227,7 +228,6 @@ $masthead-font-family: $typography-heading-font-family;
         $font-size: $typography-font-size-h6;
         margin-top:0;
         @include adjust-font-size-to($font-size);
-        @include margin-trailer(.5, $font-size);;
     }
 
     a {
