@@ -179,7 +179,7 @@ $masthead-font-family: $typography-heading-font-family;
             /* Center the icon in a square the size of the parent's font-size */
             line-height:1/$icon-scale-factor;
             width: (1/$icon-scale-factor)*1em;
-            @include inline-block();
+            @include inline-block(top);
             text-align:center;
 
             color: #ccc;
