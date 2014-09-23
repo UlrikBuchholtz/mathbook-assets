@@ -1,0 +1,131 @@
+@import "../_content_config.scss";
+@import "../../shared/typography";
+@import "../../shared/heading";
+@import "../mixins/section";
+
+section, .section-like {
+    @include section-base;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NESTING
+////////////////////////////////////////////////////////////////////////////////
+
+// TODO it would be better not to style the `section` tag directly
+
+section, .section-like {
+    @include section-level(0);
+
+    section, .section-like {
+        @include section-level(1);
+
+        section, .section-like {
+            @include section-level(2);
+
+            section, .section-like {
+                @include section-level(3);
+            }
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// TYPE-SPECIFIC STYLES
+////////////////////////////////////////////////////////////////////////////////
+
+// TODO these could go in seperate partials. Up to you.
+
+.chapter {
+    $context-font-size:$typography-font-size-base;
+    $heading-title-font-size: $typography-font-size-h2;
+    $heading-type-font-size: $typography-font-size-h3;
+
+    /**
+     * In LaTeX, Chapter headings are broken onto two lines... so here we go...
+     */
+    @include heading-selector {
+        /*
+         * We use font-size-base so that ems are relative to base font size
+         * within this context
+         */
+        font-size: $context-font-size;
+        @include margin-trailer(1, $context-font-size);
+
+        .type, .codenumber {
+            /* Chapter type prefix is smaller (as in LaTeX) */
+            @include typography-heading-size($heading-type-font-size);
+        }
+
+        .title {
+            display:block;
+            @include typography-heading-size($heading-title-font-size);
+
+            /* Force a half-line leader */
+            @include margin-leader(.5, $heading-title-font-size);
+        }
+    }
+
+    /**
+     * Chapter heading in the <header> format
+     * This format supports a byline for anthology textbooks
+     * and journals with different chapter authors.
+     *
+     * The main difference is that the margin is applied to the header
+     * element instead of the heading element.
+     */
+    & > header {
+
+        & {
+            font-size: $context-font-size;
+            @include margin-trailer(1, $context-font-size);
+        }
+
+        @include heading-selector {
+            .title {
+                display:block;
+                /* The margin goes on the header element instead */
+                margin-bottom:0;
+            }
+        }
+
+        .byline {
+            font-size:inherit;
+            margin:0;
+            @include margin-leader(.5, $context-font-size);
+            color: $content-gray-light;
+            &:before { content: "By "; }
+        }
+    }
+}
+
+.frontmatter, .book {
+    @include heading-selector {
+        $title-font-size: $typography-font-size-h1;
+        $subtitle-font-size: $typography-font-size-h2;
+
+        text-align:center;
+        @include typography-heading-size($title-font-size);
+        // Needs a bit of extra space
+        @include margin-trailer(1, $title-font-size);
+
+        .subtitle {
+            display:block;
+            font-weight: normal; /* Much classier */
+            color: $content-gray;
+            @include adjust-font-size-to(
+                        $to-size: $subtitle-font-size,
+                        $from-size: $title-font-size);
+            @include margin-leader(.5, $subtitle-font-size);
+        }
+    }
+
+    .header {
+        @include margin-trailer(2);
+    }
+
+    .contributors {
+        text-align:center;
+        font-style:normal;
+        color: $content-gray-dark;
+    }
+}

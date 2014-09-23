@@ -1,0 +1,182 @@
+/*@import "../ui-config";*/
+@import "../../shared/_typography.scss";
+@import "../mixins/buttons";
+@import "../../shared/_utilities.scss";
+
+$navtree-segment-color: $ui-link-block-color !default;
+$navtree-segment-color-hover: $ui-link-block-color-hover !default;
+$navtree-segment-color-active: $ui-link-block-color-active !default;
+
+$navtree-segment-bg: $ui-link-block-bg !default;
+$navtree-segment-bg-hover: $ui-link-block-bg-hover !default;
+$navtree-segment-bg-active: $ui-link-block-bg-active !default;
+
+$navtree-segment-border-width: 1px !default;
+$navtree-segment-border-color: darken($navtree-segment-bg, 15%);
+$navtree-segment-border-color-hover: darken($navtree-segment-bg-hover, 15%);
+$navtree-segment-border-color-active: darken($navtree-segment-bg-active, 15%);
+
+$navtree-segment-height: $typography-line-height-computed;
+
+// Apply to a codenumber if it should be positioned absolutely
+@mixin navtree-codenumber($indent, $width) {
+    position:absolute;
+    right:100%;
+    margin-right:-($indent+$width);
+    text-align:right;
+}
+
+// Apply to titles adjacent to absolutely positioned codenumbers
+@mixin navtree-codenumber-title(
+    $codenumber-width,
+    $codenumber-gutter-right
+
+) {
+    @include inline-block(baseline);
+    margin-left: $codenumber-width + $codenumber-gutter-right;
+}
+
+// Apply to containers that contain codenumbers using absolute positioning
+@mixin navtree-codenumber-container($indent) {
+    padding-left: $indent;
+}
+
+// Add support for absolutely positioned codenumbers to a container
+@mixin navtree-codenumber-support(
+    $indent,
+    $codenumber-width,
+    $codenumber-gutter-right,
+    $codenumber-selector: ".codenumber",
+    $title-selector: ".title"
+) {
+
+    & {
+        @include navtree-codenumber-container($indent);
+    }
+
+    #{$codenumber-selector} + #{$title-selector} {
+        @include navtree-codenumber-title(
+                   $codenumber-width,
+                   $codenumber-gutter-right);
+
+    }
+
+    #{$codenumber-selector} {
+        @include navtree-codenumber($indent, $codenumber-width);
+    }
+}
+
+
+// One segment in a navtree
+// Use this with varying indents to create a heiarchy
+// You will probably want to use it with the navtree-border-collapse mixin
+@mixin navtree-segment(
+    // The font-size must be specified
+    $font-size,
+    // TODO add $from-font-size to allow usage in contexts other than 1em?
+
+    $height: $navtree-segment-height,
+    $line-height: $navtree-segement-line-height,
+    $indent: $navtree-segement-indent,
+
+    $border-width: $navtree-segment-border-width,
+    $border-color: $navtree-segment-border-color,
+    $border-color-hover: $navtree-segment-border-color-hover,
+    $border-color-active: $navtree-segment-border-color-active,
+
+    $color: $navtree-segment-color,
+    $color-hover: $navtree-segment-color-hover,
+    $color-active: $navtree-segment-color-active,
+
+    $bg: $navtree-segment-bg,
+    $bg-hover: $navtree-segment-bg-hover,
+    $bg-active: $navtree-segment-bg-active
+) {
+    $lead:$height - $line-height;
+    $padding: ($lead - 2*$border-width)/2;
+
+    & {
+        position:relative;
+        display:block;
+
+        // force the given font-size since all our calculations depend on it
+        font-size:$font-size;
+
+        padding:$padding;
+        padding-left:$indent;
+
+        border:$border-width solid $border-color;
+        border-right:none;
+        border-left:none;
+    }
+
+    &, &:link, &:visited, &:hover, &:active {
+        text-decoration:none;
+    }
+
+    &, &:link, &:visited {
+        color: $color;
+        background: $bg;
+    }
+
+    &:hover {
+        color: $color-hover;
+        background: $bg-hover;
+        border-color:$border-color-hover;
+    }
+
+    &.active, &:active {
+        color:$color-active;
+        background: $bg-active;
+    }
+
+    &:active {
+        /* Depressed state on click but not when marked active */
+        @include button-depressable();
+    }
+}
+
+// Collapses adjacent borders
+@mixin navtree-segment-border-collapse(
+    $border-width: $navtree-segment-border-width,
+    $border-color-hover: $navtree-segment-border-color-hover
+) {
+
+    & {
+        border-top:none;
+    }
+
+    &:hover {
+        /* Cover the previous items border-bottom with our top */
+        margin-top: -$border-width;
+        border-top:$border-width solid $border-color-hover;
+    }
+}
+
+// Apply to the first child if using border-collapse mixin
+@mixin navtree-segment-border-collapse-first-child(
+    $border-width: $navtree-segment-border-width,
+    $border-color: $navtree-segment-bg-hover
+) {
+    & {
+        border-top:$border-width solid $border-color;
+    }
+
+    &:hover {
+        margin-top:0;
+    }
+}
+
+// Apply to the last child if using border-collapse mixin
+@mixin navtree-segment-border-collapse-last-child(
+    $border-color-hover: $navtree-segment-bg-hover
+) {
+    & {
+        border-bottom-color: transparent;
+    }
+
+    &:hover {
+        /* When we hover we want to show the last border */
+        border-color:$border-color-hover;
+    }
+}

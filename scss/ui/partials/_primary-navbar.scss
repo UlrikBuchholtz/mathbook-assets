@@ -1,0 +1,395 @@
+@import "../ui_config";
+
+@import "compass/css3/transition";
+@import "compass/css3/box-sizing";
+@import "compass/utilities/general/clearfix";
+
+// For icon variables
+@import "lib/ionicons/ionicons-variables";
+
+@import "../mixins/buttons";
+@import "../mixins/flex-container";
+@import "../../shared/_css_message.scss";
+
+////////////////////////////////////////////////////////////////////////////////
+// Config
+////////////////////////////////////////////////////////////////////////////////
+// Note: These variables should only depend on ui module variables
+
+$navbar-color:change-color($ui-color-base, $lightness: 20%) !default;
+$navbar-bg-color: change-color($ui-color-base, $lightness: 93%) !default;
+
+$navbar-border-width: 1px !default;
+$navbar-border-color: darken($navbar-bg-color, 20%);
+$navbar-border:$navbar-border-width solid $navbar-border-color;
+
+$toolbar-border-width: $navbar-border-width;
+$toolbar-border-color: $navbar-border-color;
+$toolbar-border:$toolbar-border-width solid $toolbar-border-color;
+
+$navbar-shadow-color:rgba(black,.3) !default;
+$navbar-shadow-spread: 5px !default;
+$navbar-shadow-offset: 2px !default;
+$navbar-bottom-shadow-offset: -$navbar-shadow-offset;
+
+$navbar-top-box-shadow:
+    $navbar-shadow-color 0px $navbar-shadow-offset $navbar-shadow-spread;
+$navbar-bottom-box-shadow:
+    $navbar-shadow-color 0px $navbar-bottom-shadow-offset $navbar-shadow-spread;
+
+////////////////////////////////////////////////////////////////////////////////
+// Styles
+////////////////////////////////////////////////////////////////////////////////
+
+& {
+    background:$navbar-bg-color;
+    border-bottom:$navbar-border;
+    z-index:200;
+    height: $ui-navbar-height;
+    font-family: $typography-font-family-serif;
+
+    /* Smoothly transition box-shadow when navbar sticks/unsticks */
+    @include single-transition(box-shadow, 400ms);
+
+    @include clearfix();
+
+    /*
+     * Styles applied to make the navbar persistently visible
+     * when it's sticky-wrapper is stuck
+     */
+    .stuck & {
+        position:fixed;
+        top:0;
+        right:0;
+        left:0;
+        @include box-shadow( $navbar-top-box-shadow);
+    }
+
+    @media screen and (max-width: $screen-sm-max) {
+        /*
+         * At small screen sizes, turn the navbar into a full bar along bottom
+         * When stuck and when not stuck. We don't care about stuck at this size
+         */
+        &, .stuck & {
+            position:fixed;
+            top: auto;
+            bottom:0;
+            left:0;
+            right:0;
+            background:$navbar-bg-color;
+            @include box-shadow( $navbar-bottom-box-shadow);
+            height:$ui-navbar-height-touch;
+        }
+    }
+
+}
+
+/*******************************************************************************
+ * BUTTONS
+ ******************************************************************************/
+.button {
+    @include button-base();
+    @include button-depressable();
+    @include transition-property(text-indent,background-color);
+    @include transition-duration(200ms);
+
+    float:left;
+    text-align:left;
+    position:relative;
+    display:block;
+
+    /* subtract border and padding from width
+     * so we can set width precisely as percent */
+    @include box-sizing(border-box);
+
+    font-size:1em;
+    padding:0;
+    margin:0;
+    line-height:$ui-icon-box-size;
+
+    /* Override link properties */
+    &, &:hover, &:focus, &:visited, &:link, &:active {
+        text-decoration:none;
+    }
+
+    &, &:link, &:visited {
+        color: $navbar-color;
+        background-color:$navbar-bg-color;
+    }
+    /* hover state */
+    &:hover {
+        background-color:lighten($navbar-bg-color, 5%);
+    }
+
+    /* active/pressed state */
+    &.active, &:active {
+        background-color:darken($navbar-bg-color, 5%);
+    }
+
+    &.disabled {
+        &, &:link, &:visited, &:hover, &:focus, &:active {
+            opacity:.4;
+            color: $navbar-color;
+            background:$navbar-bg-color;
+            cursor:default;
+            @include box-shadow(none);
+        }
+    }
+    //----------------------------------------------------
+
+    /* Icon only at small screen sizes */
+    @media screen and (max-width:$screen-sm-max) {
+        /*@include button-hide-text($navbar-icon-box-size);*/
+        float:left;
+        text-align:center;
+        margin:0;
+        line-height: $ui-icon-box-size-touch;
+
+        &.active, &:active {
+            /* Vertically flip shadow for lower navbar */
+            @include box-shadow(rgba(black,.5) 0 -2px 5px inset);
+        }
+    }
+}
+
+/*******************************************************************************
+ * SPECIFIC BUTTONS
+ ******************************************************************************/
+
+// Some curry for navbar-buttons
+@mixin navbar-button($icon, $pseudo: before, $placement: inline) {
+    @include button-with-icon(
+        $icon,
+        $ui-icon-size,
+        $ui-icon-box-size,
+        $pseudo,
+        $placement);
+
+    @media screen and (max-width:$screen-sm-max) {
+        @include button-with-icon(
+            $icon,
+            $ui-icon-size-touch,
+            $ui-icon-box-size-touch,
+            $pseudo,
+            $placement);
+        @include button-hide-text($ui-icon-box-size-touch, $pseudo, $placement);
+    }
+}
+
+.sidebar-left-toggle-button, .sidebar-right-toggle-button {
+    position:relative;
+}
+
+.sidebar-left-toggle-button {
+    /* Do not display if has-sidebar-left is missing */
+    display:none;
+
+    .has-sidebar-left & {
+        display:block;
+        width:$ui-sidebar-left-width;
+    }
+
+    /*On desktop screens, */
+    @media screen and (min-width: $screen-md-min) {
+        &.active {
+            /* Show text if hidden and match sidebar width */
+            text-indent:0;
+            width:$ui-sidebar-left-width;
+        }
+    }
+
+    @include navbar-button($ionicon-var-navicon-round);
+    padding:0;
+}
+
+.sidebar-right-toggle-button {
+    /* Do not display if has-sidebar-right is missing */
+    display:none;
+
+    .has-sidebar-right & {
+        display:block;
+        width: $ui-sidebar-right-width;
+    }
+
+    @include navbar-button($ionicon-var-chatbox);
+    padding:0;
+
+    /*On desktop screens, */
+    @media screen and (min-width: $screen-md-min) {
+        float:right;
+
+        &.active {
+            /* Show text if hidden and match sidebar width */
+            text-indent:0;
+            width:$ui-sidebar-right-width;
+        }
+    }
+}
+
+.up-button {
+    @include navbar-button($ionicon-var-chevron-up);
+    text-align:center;
+}
+
+.previous-button {
+    @include navbar-button($ionicon-var-chevron-left);
+}
+
+.next-button {
+    @include navbar-button($ionicon-var-chevron-right, after);
+    text-align:right;
+}
+
+.settings-button {
+    @include navbar-button($ionicon-var-android-settings);
+}
+
+/*******************************************************************************
+ * TOOLBAR
+ ******************************************************************************/
+
+
+/**
+ * Establish borders on toolbar-items,
+ */
+.toolbar, .toolbar > .toolbar-item, .button {
+    /* Use a left border */
+    border:$toolbar-border;
+    border-top:none;
+    border-bottom:none;
+    border-right:none;
+
+    /* subtract border and padding from width
+     * so we can set width precisely as percent */
+    @include box-sizing(border-box);
+}
+
+/**
+ * Toolbar of buttons and miscellany
+ */
+.toolbar {
+    // flex container with support for 1 to 6 children
+    // the sizing of the children is determined by .toolbar-divisor-X
+    $prefix: "toolbar";
+    $child-selector: ".toolbar-item";
+    $level-start: 1;
+    $level-end: 6;
+    @include flex-container($prefix, $child-selector);
+    @include flex-children-widths($prefix, $child-selector, $level-start, $level-end);
+
+    /**
+     * Ensure adjacent borders do not double up
+     * BEWARE: THERE BE DRAGONS HERE.
+     */
+    &, &.toolbar-align-left {
+        // Apply some styles to flex-children
+        @include flex-children($prefix, $child-selector, $level-start, $level-end) {
+
+            /* First child defers to left border of parent
+             * If toolbar itself is a first-child, we assume it is adjacent with
+             * the screen or the edge of a parent toolbar
+             */
+            &:first-child {
+                border-left:none;
+            }
+
+            /* Last child defers to right border of parent
+             * If toolbar itself is a last-child, we assume it is adjacent with
+             * the screen or the edge of a parent toolbar
+             */
+            &:last-child {
+                border-right:none;
+            }
+
+            &:first-child:last-child  {
+                border-left:none;
+                border-right: $toolbar-border;
+            }
+        }
+    }
+
+    /*
+     * Order is reversed when we float right
+     * So we need to swap first and last on toolbar-item-children
+     * BEWARE: THERE BE DRAGONS HERE.
+     */
+    &.toolbar-align-right {
+        // Apply some styles to flex-children
+        @include flex-children($prefix, $child-selector, $level-start, $level-end) {
+            &:first-child, &:first-child:last-child {
+                border-right:none;
+                border-left:$toolbar-border;
+            }
+
+            &:last-child {
+                border-left:none;
+            }
+        }
+    }
+
+    &:first-child {
+        border-left:none;
+    }
+
+    &:last-child {
+        border-right:none;
+    }
+
+    /**
+     * Make this item's bottom edge clear floated toolbar-items
+     * so that our borders display correctly
+     */
+    @include clearfix();
+}
+
+.toolbar.toolbar-borderless {
+    &, &.toolbar-align-right, &.toolbar-align-left {
+        &, & > .toolbar-item {
+            border-left:none;
+            border-right:none;
+            border-top:none;
+            border-bottom:none;
+        }
+    }
+}
+
+/*******************************************************************************
+ * TOP VS BOTTOM
+ ******************************************************************************/
+
+.navbar-bottom-buttons {
+    display:none;
+
+    @media screen and (max-width:$screen-sm-max) {
+        display:block;
+    }
+}
+
+.navbar-top-buttons {
+    display:block;
+
+    .toolbar {
+        .has-sidebar-left & {
+            margin-left:240px;
+            border-right:$toolbar-border;
+
+            .sidebar-left-toggle-button {
+                width: $ui-sidebar-left-width;
+            }
+        }
+
+        .has-sidebar-right & {
+            margin-right:240px;
+            border-right:none;
+
+            .sidebar-right-toggle-button {
+                width: $ui-sidebar-right-width;
+            }
+        }
+    }
+
+    @media screen and (max-width:$screen-sm-max) {
+        display:none;
+    }
+}
+

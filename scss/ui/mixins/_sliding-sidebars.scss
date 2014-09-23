@@ -1,0 +1,219 @@
+@import "compass/css3/transform";
+@import "compass/css3/transition";
+// Mixins for the sliding sidebar functionality
+
+// Defaults
+$sliding-sidebars-transition-duration: 400ms !default;
+$sliding-sidebars-loading-class: "mathbook-loading" !default;
+$sliding-sidebars-loaded-class: "mathbook-loaded" !default;
+
+// This is for performance.
+// It has a significant impact on iPads.
+// Apply it to elements that are animated
+// Note: It creates a seperate block formatting context,
+//       which screws up fixed positioned children.
+@mixin sliding-sidebars-compositing-layer() {
+    /**
+     * Trick webkit browers into generating a compositing layer for this
+     * element so that we benefit from GPU acceleration.
+     *
+     * We config backface-visibility and perspective to improve performance
+     * See: http://stackoverflow.com/a/10133679/1599617
+     *
+     * IMPORTANT: this will reset the coordinate context for child elements
+     *            with fixed positioning.
+     */
+    @include translateZ(0);
+    @include backface-visibility(hidden);
+    @include perspective(1000);
+}
+
+@mixin sliding-sidebars-sidebar(
+    $side, // left|right
+    $default-open-min,
+    $sidebar-width,
+    $transition-duration: $sliding-sidebars-transition-duration,
+    $loading-class: $sliding-sidebars-loading-class,
+    $loaded-class: $sliding-sidebars-loaded-class
+) {
+    $default-closed-max: $default-open-min - 1;
+
+    .has-sidebar-#{$side} & {
+        position:absolute;
+        /* Default styles on load, before javascript loads */
+        margin-#{$side}:0;
+        @media screen and (max-width: $default-closed-max) {
+            /* Small */
+            margin-#{$side}:-$sidebar-width;
+        }
+
+        @include transition-property(margin-#{$side});
+        @include transition-duration($transition-duration);
+    }
+
+    .has-sidebar-#{$side}.#{$loading-class}.sidebar-#{$side}-open &,
+    .has-sidebar-#{$side}.#{$loaded-class}.sidebar-#{$side}-open & {
+        margin-#{$side}:0;
+
+    }
+
+    .has-sidebar-#{$side}.#{$loading-class}.sidebar-#{$side}-closed &,
+    .has-sidebar-#{$side}.#{$loaded-class}.sidebar-#{$side}-closed & {
+        margin-#{$side}: -$sidebar-width;
+    }
+
+    .sidebar-content {
+        width: $sidebar-width;
+    }
+}
+
+// The main base mixin. Include this on the main element,
+// then include each desired side (left and/or right) using the
+// sliding-sidebars-side mixin.
+@mixin sliding-sidebars-main(
+    $transition-duration: $sliding-sidebars-transition-duration
+) {
+    /* Must be relative to support sidebar offsets */
+    position: relative;
+    width: auto;
+    /*z-index:10;*/
+    @include transition-duration($transition-duration);
+
+    .has-sidebar-left {
+        @include transition-property(margin-left, left);
+    }
+
+    .has-sidebar-right {
+        @include transition-property(margin-right, right);
+    }
+
+    .has-sidebar-left.has-sidebar-right {
+        @include transition-property(margin-left, margin-right,left,right);
+    }
+}
+
+// Main side styles
+// @param $side - left|right
+// @param $slide-min - the min width at which sidebars slide instead of push
+// @param $default-open-min - min width at which this is open by default
+// @param $sidebar-width - the width of the sidebar
+@mixin sliding-sidebars-main-side(
+    $side,
+    $slide-min,
+    $default-open-min,
+    $sidebar-width,
+    $transition-duration: $sliding-sidebars-transition-duration,
+    $loading-class: $sliding-sidebars-loading-class,
+    $loaded-class: $sliding-sidebars-loaded-class
+) {
+    $default-closed-max: $default-open-min - 1;
+    $push-max: $slide-min - 1;
+
+    // We have to define a default state, an open state, and a closed state.
+    // The default states show before the script is loaded.
+    // They prevent the layout from jumbling around on load.
+
+    /* Main with sidebar left without javascript*/
+    .has-sidebar-#{$side} & {
+        @include sliding-sidebars-main-side-state($side, open-slide, $sidebar-width);
+
+        @media screen and (max-width: $default-closed-max) {
+            @include sliding-sidebars-main-side-state($side, closed, $sidebar-width);
+        }
+    }
+
+    /* Main with sidebar left open */
+    .has-sidebar-#{$side}.#{$loading-class}.sidebar-#{$side}-open &,
+    .has-sidebar-#{$side}.#{$loaded-class}.sidebar-#{$side}-open & {
+        @include sliding-sidebars-main-side-state($side, open-slide, $sidebar-width);
+        @media screen and (max-width: $push-max) {
+            @include sliding-sidebars-main-side-state($side, open-push, $sidebar-width);
+        }
+    }
+
+    /* Main with sidebar left closed */
+    .has-sidebar-#{$side}.#{$loading-class}.sidebar-#{$side}-closed &,
+    .has-sidebar-#{$side}.#{$loaded-class}.sidebar-#{$side}-closed & {
+        @include sliding-sidebars-main-side-state($side, closed, $sidebar-width);
+        @media screen and (max-width: $push-max) {
+            @include sliding-sidebars-main-side-state($side, closed-push, $sidebar-width);
+        }
+    }
+
+}
+
+// Set side state
+// @param $side - left|right
+// @param $state
+//     * open-slide subtracts sidebar width from main width
+//     * open-push pushes main to the side.
+//       it only supports one open sidebar.
+//       to work properly, the main element's width must be fixed by js
+//     * closed covers/hides the sidebar
+// @param $sidebar-width - the width of the sidebar
+@mixin sliding-sidebars-main-side-state($side, $state, $sidebar-width) {
+    $other-side: left;
+    @if($side == left) {
+        $other-side: right;
+    }
+
+    @if($state == open-slide) {
+        margin-#{$side}:$sidebar-width;
+        #{$side}:auto;
+    } @else if($state == open-push){
+        /* Must force other-side to auto so we can push from the right */
+        #{$other-side}:-$sidebar-width !important;
+        #{$side}: $sidebar-width;
+        margin-#{$side}:0;
+    } @else if($state == closed-push) {
+        margin-#{$side}:0;
+        #{$side}:0;
+    } @else if($state == closed) {
+        margin-#{$side}:0;
+        #{$side}:auto;
+    }
+}
+
+// A mixin for setting properties in all the different cases where
+// the content might be cramped by sidebars or a small viewport
+@mixin sliding-sidebars-media-cramped-content(
+    $sidebar-left-width,
+    $sidebar-right-width,
+    $content-max-width,
+    $content-margin
+) {
+
+    $breakpoint: $content-max-width + 2*$content-margin - 1;
+    @media screen and (max-width: $breakpoint ) {
+        @content;
+    }
+
+
+    .sidebar-left-open & {
+        $breakpoint: $content-max-width
+                     + $sidebar-left-width
+                     + 2*$content-margin - 1;
+        @media screen and (max-width: $breakpoint) {
+            @content;
+        }
+    }
+
+    .sidebar-right-open & {
+        $breakpoint: $content-max-width
+                     + $sidebar-right-width
+                     + 2*$content-margin - 1;
+        @media screen and (max-width:$breakpoint) {
+            @content;
+        }
+    }
+
+    .sidebar-right-open.sidebar-left-open & {
+        $breakpoint: $content-max-width
+                     + $sidebar-left-width
+                     + $sidebar-right-width
+                     + 2*$content-margin - 1;
+        @media screen and (max-width: $breakpoint ) {
+            @content;
+        }
+    }
+}

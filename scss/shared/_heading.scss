@@ -1,0 +1,178 @@
+@import "typography";
+
+$heading-type-before:none !default;
+$heading-type-after:" " !default;
+$heading-codenumber-before:none !default;
+$heading-codenumber-after:" " !default;
+$heading-title-before:none !default;
+$heading-title-after:" " !default;
+$heading-before:none !default;
+$heading-after:" " !default;
+
+////////////////////////////////////////////////////////////////////////////////
+// MIXINS
+////////////////////////////////////////////////////////////////////////////////
+
+// Mixin for quickly and consistently outputting the heading selector
+@mixin heading-selector {
+    & > .heading, & > header > .heading {
+        @content;
+    }
+}
+
+// Link styling in headings
+// Important mostly for the underline styling for large serif fonts
+@mixin heading-link() {
+    &:link, &:visited {
+        @include typography-link-state(
+                    $state:default,
+                    $font-type:serif,
+                    $underline-size:.05);
+    }
+
+    &:hover, &:focus {
+        @include typography-link-state(
+                    $state:hover,
+                    $font-type: serif,
+                    $underline-size: .05);
+    }
+
+    &:active {
+        @include typography-link-state(
+                    $state:active,
+                    $font-type: serif,
+                    $underline-size: .05);
+    }
+}
+
+// TODO move to utilities file?
+// Quickly set the before and after content on ANY element
+@mixin heading-set-before-after($before: none, $after: none) {
+    &:before {
+        @if($before == none) {
+            display:none;
+        } @else {
+            content: $before;
+        }
+    }
+    &:after {
+        @if($after == none) {
+            display:none;
+        } @else {
+            content: $after;
+        }
+    }
+}
+
+// Hide the type
+@mixin heading-hide-type() {
+    .type {
+        display:none;
+    }
+}
+
+// Hide the codenumber
+@mixin heading-hide-codenumber() {
+    .codenumber {
+        display:none;
+    }
+}
+
+// Hide the title
+@mixin heading-hide-title() {
+    .title {
+        display:none;
+    }
+}
+
+// The base styles for Mathbook headings
+// Allows you to set the before and after content on all the subtokens
+// in one go.
+@mixin heading-base(
+    $type-before: $heading-type-before,
+    $type-after: $heading-type-after,
+
+    $codenumber-before: $heading-codenumber-before,
+    $codenumber-after: $heading-codenumber-after,
+
+    $title-before:$heading-title-before,
+    $title-after:$heading-title-after,
+
+    $heading-before:$heading-before,
+    $heading-after:$heading-after
+) {
+    & {
+        @include typography-heading-base;
+    }
+
+    @include heading-set-before-after($heading-before, $heading-after);
+
+    .type {
+        @include heading-set-before-after($type-before, $type-after);
+    }
+
+    .codenumber {
+        @include heading-set-before-after(
+                    $codenumber-before,
+                    $codenumber-after);
+    }
+
+    .title {
+        @include heading-set-before-after($title-before, $title-after);
+    }
+
+    .type, .codenumber, .title {
+        /**
+         *  Hide the space after the last element,
+         * defer to .heading:after instead
+         */
+        &:last-child:after {
+            display:none;
+        }
+    }
+
+    &.hide-type {
+        @include heading-hide-type();
+    }
+
+    &.hide-codenumber {
+        @include heading-hide-codenumber();
+    }
+
+    &.hide-title {
+        @include heading-hide-title();
+    }
+}
+
+// Force the heading to appear inline with the following paragraph
+@mixin heading-force-inline() {
+    @include heading-selector {
+        display:inline;
+
+        & + p {
+            display:inline;
+
+            &:after {
+                /* Restore the inline paragraph's margin */
+                content: "";
+                display:block;
+                @include margin-trailer;
+            }
+        }
+    }
+}
+
+// Force the heading back to block
+@mixin heading-force-block() {
+    @include heading-selector {
+        display:block;
+
+        & + p {
+            display:block;
+
+            &:after {
+                content: normal;
+            }
+        }
+    }
+}

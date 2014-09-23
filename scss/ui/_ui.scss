@@ -1,0 +1,35 @@
+/*******************************************************************************
+ * BEGIN MATHBOOK UI MODULE
+ *
+ * Here we define the layout and style for the user interface that houses the
+ * mathbook content.
+ ******************************************************************************/
+
+// NOTE:
+// This file is a general overview of the module.
+// It should only include imports and comments
+
+@import "ui_config";
+
+////////////////////////////////////////////////////////////////////////////////
+// PARTIALS
+////////////////////////////////////////////////////////////////////////////////
+
+// The main layout
+@import "partials/layout";
+
+// Components that appear inside the content
+// These sometimes need to override content module styles
+// so they need equal or higher specificity
+.mathbook-content {
+    @import "partials/content-ui";
+}
+
+// Mathjax overrides specific to the mathbook layout
+@import "partials/mathjax";
+
+@import "partials/icons";
+
+/*******************************************************************************
+ * END MATHBOOK UI MODULE
+ ******************************************************************************/

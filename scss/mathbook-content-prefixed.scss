@@ -1,0 +1,28 @@
+/*******************************************************************************
+ * MATHBOOK CONTENT PREFIXED
+ *******************************************************************************
+ * Standalone content styling for Mathbook documents.
+ * Prefixed with .mathbook-content
+ *
+ * Homepage: http://mathbook.pugetsound.edu
+ * Issue Tracker: https://github.com/BooksHTML/mathbook-assets/issues
+ * Repository: https://github.com/BooksHTML/mathbook-assets
+ *
+ * Authors: Michael DuBois, David Farmer, Rob Beezer
+ *
+ *******************************************************************************
+ */
+
+@import "config";
+@import "shared/typography";
+
+@include typography-google-fonts-import-once();
+
+.mathbook-content {
+    @include typography-base();
+    @import "content/content";
+}
+
+/*******************************************************************************
+ * END MATHBOOK CONTENT PREFIXED
+ ******************************************************************************/

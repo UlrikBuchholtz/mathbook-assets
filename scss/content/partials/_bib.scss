@@ -1,0 +1,16 @@
+@import "../../shared/_typography.scss";
+@import "../_content_config.scss";
+
+.bib {
+    /*margin-bottom:10px;*/
+    @include margin-trailer;
+}
+
+.bibitem {
+    display: inline;
+    font-weight: bold;
+}
+
+.bibitem + .bibentry {
+    display: inline;
+}

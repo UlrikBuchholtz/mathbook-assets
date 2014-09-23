@@ -1,0 +1,38 @@
+@import "../_content_config.scss";
+@import "../../shared/_typography.scss";
+@import "../../shared/_heading.scss";
+@import "../../shared/_knowl.scss";
+
+$environment-heading-font-size: $typography-font-size-h5 !default;
+$environment-heading-after: ". " !default;
+
+// Defaults for environments
+@mixin environment-base {
+
+    // Select the heading
+    @include heading-selector {
+        // Include base heading styles
+        @include heading-base($heading-after:$environment-heading-after);
+
+        // Adjust the heading size/line-height/margins
+        @include typography-heading-size($environment-heading-font-size);
+
+        // TODO should we move links into heading-base?
+        /* Support links in headings */
+        a {
+            @include heading-link();
+        }
+
+        /* Support knowl links in headings */
+        *[knowl] {
+            @include knowl-link($font-type:serif);
+            margin-left:-3px;
+        }
+    }
+
+    // Default to inline heading
+    @include heading-force-inline();
+
+    // One line-height bottom margin
+    @include margin-trailer(1);
+}

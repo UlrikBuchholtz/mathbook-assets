@@ -1,0 +1,37 @@
+/*
+* We use Base64 encoded ttf to get around firefox's cross-domain restriction 
+* It's a little less efficient since it bloats the css for browsers that wont
+* use ttf, but it's the only solution that doesn't require that we modify
+* the htaccess file. If Mathbook uses it's own  cdn to serve mathbook files for 
+* everyone someday, then we could use the htaccess fix instead.
+* See http://geoff.evason.name/2010/05/03/cross-domain-workaround-for-font-face-and-firefox/
+*/
+@import "compass/css3/font-face";
+@include font-face(
+    $ionicons-font-family, 
+    font-files("#{$ionicons-font-path}/ionicons.svg#Ionicons", svg), "#{$ionicons-font-path}/ionicons.eot#iefix", 
+    normal, 
+    normal);
+@include font-face(
+    $ionicons-font-family, 
+    inline-font-files(
+        "#{$ionicons-font-path}/ionicons.woff", 
+        woff, 
+        "#{$ionicons-font-path}/ionicons.eot",
+        truetype), 
+    $weight: normal, 
+    $style: normal);
+
+.ion {
+  display: inline-block;
+  font-family: $ionicons-font-family;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

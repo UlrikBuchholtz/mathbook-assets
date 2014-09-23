@@ -1,0 +1,559 @@
+// TODO make more portable with default module variables pattern
+@import "compass/css3/user-interface";
+@import "compass/css3/box-shadow";
+@import "compass/css3/images";
+@import "compass/css3/border-radius";
+@import "compass/css3/inline-block";
+@import "compass/css3/transition";
+@import "compass/typography/text/replacement";
+@import "compass/typography/text/ellipsis";
+@import "compass/utilities/color/contrast";
+@import "./triangle";
+
+$button-base-color: $ui-color-base !default;
+$button-base-color-hover: $ui-color-base !default;
+$button-base-color-active: $brand-primary-light !default;
+
+// TODO not sure about these defaults
+$button-minimalist-color: darken($ui-color-base, 12%) !default;
+$button-minimalist-color-hover: darken($ui-color-base, 20%) !default;
+$button-minimalist-color-active: $ui-link-color-active !default;
+
+// WebKit-style focus
+// Taken from sass-blueprint
+// https://github.com/thomas-mcdonald/bootstrap-sass/blob/34d538dc33b302a02e86ccec3e0a93fbf41f0bfa/vendor/assets/stylesheets/bootstrap/_mixins.scss
+@mixin button-tab-focus() {
+    // Default
+    outline: thin dotted #333;
+    // WebKit
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+
+    /**
+     * Remove stupid inner dotted border applied by Firefox on focus
+     * See http://stackoverflow.com/a/199319/1599617
+     */
+    &::-moz-focus-inner {
+        border: 0;
+    }
+}
+
+@mixin button-base() {
+    cursor:pointer;
+    @include inline-block();
+
+    /* Disable accidental text-selection */
+    @include user-select(none);
+
+    /* Truncate overflowing text with ellipsis */
+    @include button-truncate-with-ellipsis();
+
+    &:focus {
+        @include button-tab-focus();
+    }
+}
+
+// Adapted from compass/typography/text/ellipsis
+// This version provides a means to disable the effect.
+@mixin button-truncate-with-ellipsis($enabled:true, $no-wrap: true) {
+    $text-overflow:ellipsis;
+    @if($enabled==true) {
+        @if $no-wrap {
+            white-space: nowrap;
+        }
+        overflow: hidden;
+    } @else {
+        @if $no-wrap {
+            white-space: normal;
+        }
+        overflow:visible;
+        $text-overflow: clip;
+    }
+    // Use compass' experimental mixin
+    // to provide browser prefixes where necessary
+    @include experimental(
+                text-overflow,
+                $text-overflow,
+                not -moz, not -webkit, -o, -ms, not -khtml, official);
+}
+
+// The standard button base
+@mixin button-standard-base() {
+    @include button-base();
+    border-width:1px;
+    border-style:solid;
+    font-weight:bold;
+    @include border-radius(3px);
+}
+
+// Standard button states for the given base color
+// You can use this to set different colors for different states
+@mixin button-standard-state(
+    $state: default,
+    $base-color :$ui-color-base
+) {
+    // The light part of gradient
+    $bg-color-light: lighten($base-color, 5%);
+    $bg-color-lighter: lighten($base-color, 10%);
+
+    // The dark part of gradient
+    $bg-color-dark: darken($base-color, 10%);
+    $bg-color-darker: darken($base-color, 20%);
+
+    // Find the text color that contrasts better with bg
+    $color-dark:desaturate(darken($base-color, 65%), 20%);
+    $color-light:lighten($base-color, 100%);
+    $color: contrast-color($bg-color-darker, $color-dark, $color-light );
+
+    @if($state == default or $state == disabled) {
+        color:$color;
+        border-color:$bg-color-dark;
+        @include background-image(linear-gradient($bg-color-light, $bg-color-dark));
+    }
+
+    @if($state == hover or $state == focus) {
+        color: $color;
+        @include background-image(linear-gradient($bg-color-lighter, $bg-color-darker));
+        border-color:$bg-color-dark;
+    } @else if($state == active) {
+        color: $color;
+        @include button-depressable();
+        @include background-image(linear-gradient($bg-color-darker,$bg-color-light));
+        border-color:$bg-color-darker;
+    } @else if($state == disabled) {
+        opacity: .5;
+        cursor:default;
+    }
+}
+
+// A standard button
+@mixin button-standard(
+    $base-color: $button-base-color,
+    $base-color-hover: $button-base-color-hover,
+    $base-color-active: $button-base-color-active
+) {
+
+    & {
+        @include button-standard-base();
+        @include button-standard-state(default, $base-color);
+    }
+
+    &:hover, &:focus, &.hover, &.focus {
+        @include button-standard-state(hover, $base-color-hover);
+    }
+
+    &:active, &.active {
+        @include button-standard-state(active, $base-color-active);
+    }
+
+    &.disabled, &[disabled] {
+        &, &:hover, &.hover, &:focus, &.focus, &:active, &.active {
+            @include button-standard-state(disabled, $base-color);
+        }
+    }
+}
+
+// Minimalist style button base
+@mixin button-minimalist-base() {
+    @include button-base();
+    background: transparent;
+    border: 2px solid;
+    font-weight:bold;
+    @include border-radius(2px);
+    @include transition-property(color, border-color);
+}
+
+// A minimalist style button
+// It's so simple, it's not worth breaking the states into seperate mixins
+@mixin button-minimalist(
+    $color: $button-minimalist-color,
+    $color-hover: $button-minimalist-color-hover,
+    $color-active: $button-minimalist-color-active
+) {
+    & {
+        @include button-minimalist-base();
+        color:$color;
+        border-color:$color;
+    }
+
+    &:hover, &:focus, &.hover, &.focus {
+        color: $color-hover;
+        border-color:$color-hover;
+    }
+
+    &:active, &.active {
+        color: $color-active;
+        border-color:$color-active;
+        @include button-depressable();
+    }
+
+    &.disabled, &[disabled] {
+        &, &:hover, &:focus, &:active, &.active {
+            color:$color;
+            border-color:$color;
+            opacity: .5;
+            cursor:default;
+        }
+    }
+}
+
+// Quickly override link properties in all link states
+@mixin button-override-link-properties() {
+    /* Remove link appearance */
+    &:link, &:visited, &:hover, &:focus, &:active {
+        @content;
+    }
+}
+
+// A depressed state for any element
+@mixin button-depressed() {
+    @include box-shadow(rgba(black,.5) 0 2px 5px inset);
+}
+
+// Quickly make a button depressable
+@mixin button-depressable() {
+    &:active, &.active {
+        @include button-depressed();
+    }
+}
+
+@mixin button-with-icon(
+    $icon, // The content of the icon (match to icon font values)
+    $icon-size, // The size of the icon itself
+    $icon-box-size, // The size of the icon and it's surrounding padding
+    $icon-pseudo: before, // The pseduo-selector of the icon: before|after
+    $icon-placement: left // left | center | right | inline
+) {
+    @include button-icon($icon, $icon-size, $icon-box-size, $icon-pseudo);
+    @if($icon-placement != inline) {
+        @include button-icon-padding($icon-box-size, $icon-placement);
+        @include button-icon-absolute(
+                    $icon-box-size,
+                    $icon-pseudo,
+                    $icon-placement);
+    }
+}
+
+@mixin button-with-icon-responsive(
+    $icon, // The content of the icon (match to icon font values)
+    $icon-size, // The size of the icon itself
+    $icon-box-size, // The size of the icon and it's surrounding padding
+    $icon-pseudo: before,
+    $icon-placement:left, // left | center | right
+    $icon-only-breakpoint:infinity  // Point below which button is icon only
+) {
+
+    $hide-direction: $icon-placement;
+    @if($icon-placement == center or $icon-placement == inline) {
+        $hide-direction: left;
+    }
+
+    @include button-with-icon(
+                $icon,
+                $icon-size,
+                $icon-box-size,
+                $icon-pseudo,
+                $icon-placement);
+
+    @if($icon-only-breakpoint == infinity) {
+        @include button-hide-text(
+            $icon-box-size,
+            $icon-pseudo,
+            $hide-direction);
+    } @else {
+        @media screen and (max-width: $icon-only-breakpoint) {
+            /* icon only */
+            @include button-hide-text(
+                $icon-box-size,
+                $icon-pseudo,
+                $hide-direction);
+        }
+    }
+}
+
+// You can customize the icon element like so:
+//     @include with-icon() {
+//         color: red; /* icon will be red, element text remains normal */
+//     }
+@mixin button-icon(
+    $icon-content,
+    $icon-size,
+    $icon-box-size,
+    $icon-pseudo: before
+){
+    &:#{$icon-pseudo} {
+        content: $icon-content; // TODO change to menu icon
+        text-align:center; // We want the icon to be centered within icon-box
+        font-size:$icon-size;
+        font-family: $typography-font-family-icon;
+        line-height:$icon-box-size;
+        width:$icon-box-size;
+        text-indent:0; /* So text isn't removed from this too */
+        @include inline-block(baseline);
+
+        // Allow caller to easily customize the icon
+        @content;
+    }
+}
+
+// Apply or override button icone padding applied for absolutely pos icons
+@mixin button-icon-padding(
+    $icon-box-size,
+    $icon-placement:left
+) {
+    @if $icon-placement == left {
+        padding-left:$icon-box-size;
+    } @else if $icon-placement == right {
+        padding-right:$icon-box-size;
+    }
+}
+
+// Absolutely position the icon
+@mixin button-icon-absolute(
+    $icon-box-size,
+    $icon-pseudo:before,
+    $icon-placement: center // left|center|right
+) {
+
+    position:relative;
+
+    &:#{$icon-pseudo} {
+        position:absolute;
+
+        @if($icon-placement == center) {
+            left: 50%;
+            right:auto;
+            margin-left: -$icon-box-size/2;
+        } @else if($icon-placement == left) {
+            left: 0;
+            right:auto;
+        } @else {
+            right:0;
+            left:auto;
+        }
+
+        top:50%;
+        bottom: auto;
+        margin-top: -$icon-box-size/2;
+        @content;
+    }
+}
+
+// Hide the text on a button but leave the icon
+@mixin button-hide-text(
+    $icon-box-size,
+    $icon-pseudo: before,
+    $hide-direction: auto,
+    $icon-placement: center
+) {
+    @if($hide-direction == auto) {
+        $hide-direction: left;
+        @if($pseudo == after) {
+            $hide-direction: right;
+        }
+    }
+
+    /* Disable ellipsis */
+    @include button-truncate-with-ellipsis(false);
+
+    /* center the icon */
+    text-align:center;
+    @include button-icon-absolute($icon-box-size, $icon-pseudo, $icon-placement);
+
+    /* hide the text */
+    @include hide-text($hide-direction);
+}
+
+// Large, button-like links with arrows for linking to other pages
+@mixin button-link-directional (
+    $font-size,
+    $direction: right,
+
+    $color: $ui-link-block-color,
+    $color-hover: $ui-link-block-color-hover,
+    $color-active: $ui-link-block-color-active,
+
+    $bg: $ui-link-block-bg,
+    $bg-hover: $ui-link-block-bg-hover,
+    $bg-active: $ui-link-block-bg-active,
+
+    $arrow-color: default,
+    $arrow-color-hover: default,
+    $arrow-color-active: default
+) {
+
+    @if($arrow-color == default) {
+        $arrow-color: darken($bg, 15%);
+    }
+    @if($arrow-color-hover == default) {
+        $arrow-color-hover: $color-hover;
+    }
+    @if($arrow-color-active == default) {
+        $arrow-color-active: $color-active;
+    }
+
+    // Due to the rotation, these are opposite (width is height)
+    $triangle-width: .8em;
+    $triangle-height: $triangle-width/2;
+    $padding-horizontal: rhythm(1, $font-size);
+    $padding-vertical:rhythm(.5, $font-size);
+
+    // In this particular case, .25 seems reasonable
+    $margin-vertical: rhythm(.25, $font-size);
+
+    & {
+        position:relative;
+        display:block;
+
+        @include adjust-font-size-to($font-size);
+
+        padding: $padding-vertical $padding-horizontal;
+        margin-bottom: $margin-vertical;
+        @include border-radius(3px);
+
+        // Place arrow on correct side
+        @if $direction == right {
+            padding-right:2*$padding-horizontal + $triangle-height;
+            &:after { right: $padding-horizontal; }
+        } @else {
+            padding-left: 2*$padding-horizontal + $triangle-height;
+            &:after { left: $padding-horizontal; }
+        }
+
+        &:after {
+            content: "";
+            position:absolute;
+
+            /* center vertically */
+            top:50%;
+            margin-top:-.5*$triangle-width;
+
+            @include triangle($direction: $direction,
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$arrow-color);
+        }
+    }
+
+    &, &:link, &:visited {
+        color: $color;
+        background: $bg;
+        text-decoration:none;
+        cursor:pointer;
+    }
+
+    &:hover, &:focus {
+        color: $color-hover;
+        background: $bg-hover;
+        text-decoration:none;
+
+        &:after {
+            @include triangle($direction:$direction,
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$arrow-color-hover);
+        }
+    }
+
+    &:active {
+        position:relative;
+        color:$color-active;
+        background: $bg-active;
+        text-decoration:none;
+        @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
+
+        &:after {
+            @include triangle($direction:$direction,
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$arrow-color-active);
+        }
+    }
+
+    &:focus {
+        @include button-tab-focus();
+    }
+}
+
+// Button with an arrow appendage on one side
+@mixin button-directional(
+    $direction: right,
+
+    $color: $ui-link-block-color,
+    $color-hover: $ui-link-block-color-hover,
+    $color-active: $ui-link-block-color-active,
+
+    $bg: $ui-link-block-bg,
+    $bg-hover: $ui-link-block-bg-hover,
+    $bg-active: $ui-link-block-bg-active
+) {
+
+    // Due to the rotation, these are opposite (width is height)
+    $triangle-width: $line-height-base*1em;
+    $triangle-height: $triangle-width / 2;
+
+    // TODO linear gradient? with triangle?
+    // TODO triangle border using a second triangle on :before?
+    position:relative;
+    color: $color;
+    background: $bg;
+    text-decoration:none;
+    padding-right:rhythm(.5);
+    padding-left:rhythm(.5);
+    @include user-select(none);
+
+    // Place arrow on correct side
+    @if $direction == right {
+        /* round corners opposite arrow */
+        @include border-left-radius($border-radius-base);
+        &:after {right: 0; margin-right:-$triangle-height;}
+    } @else {
+        /* round corners opposite arrow */
+        @include border-right-radius($border-radius-base);
+        &:after {left: 0; margin-left:-$triangle-height;}
+    }
+
+    &:after {
+        content: "";
+        position: absolute;
+        top:0;
+
+        @include triangle($direction: $direction,
+                          $width:$triangle-width,
+                          $height:$triangle-height,
+                          $color:$bg);
+    }
+
+    &:hover {
+        color: $color-hover;
+        background: $bg-hover;
+        text-decoration:none;
+        cursor:pointer;
+        &:after {
+            @include triangle($direction: $direction,
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$bg-hover);
+        }
+    }
+
+    &:active {
+        color: $color-active;
+        background: $bg-active;
+        text-decoration:none;
+        @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
+
+        &:after {
+            @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
+            @include triangle($direction: $direction,
+                              $width:$triangle-width,
+                              $height:$triangle-height,
+                              $color:$bg-active);
+        }
+    }
+
+    &:focus {
+        // TODO improve focus interaction with arrow
+        @include button-tab-focus();
+    }
+}

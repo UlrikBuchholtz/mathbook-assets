@@ -1,0 +1,62 @@
+// Knowls live in the content module because...
+//  * knowl links are in the content
+//  * we alter the way content is displayed inside knowls
+@import "../../shared/knowl";
+@import "../../shared/zig-zag";
+
+/* Links that open knowls */
+*[knowl] {
+    @include knowl-link();
+}
+
+// Border colors at different levels of knowl-within-knowl nesting
+// They get darker the further they are nested so as to draw attention
+// to ones the user cared about most recently
+//
+// Code border colors use the same progression
+// Other embedded objects should do likewise
+$level-1-border-color: darken($knowl-border-color, 5%);
+$level-2-border-color: darken($knowl-border-color, 10%);
+$level-3-border-color: darken($knowl-border-color, 15%);
+
+.knowl-output {
+    @include knowl-output();
+
+    // Alter code border color to match knowl bg
+    $code-border-color: $level-1-border-color;
+    $code-bg-color: $knowl-nested-bg-color;
+    @import "code";
+
+    // TODO Add other embedded object overrides here
+}
+
+.knowl-output .knowl-output {
+
+    @include knowl-output(
+        $bg-color: $knowl-nested-bg-color,
+        $border-width: $knowl-nested-border-width,
+        $border-color: $level-1-border-color
+    );
+
+    // Alter code border color to match knowl bg
+    $code-border-color: $level-2-border-color;
+    $code-bg-color:$knowl-bg-color;
+    @import "code";
+
+    // TODO Add other embedded object overrides here
+}
+
+.knowl-output .knowl-output .knowl-output {
+
+    @include knowl-output(
+        $border-width: $knowl-nested-border-width,
+        $border-color: $level-2-border-color
+    );
+
+    // Alter code border color to match knowl bg
+    $code-border-color: $level-3-border-color;
+    $code-bg-color:$knowl-nested-bg-color;
+    @import "code";
+
+    // TODO Add other embedded object overrides here
+}

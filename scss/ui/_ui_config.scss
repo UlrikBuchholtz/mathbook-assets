@@ -1,0 +1,98 @@
+@import "../shared/typography";
+////////////////////////////////////////////////////////////////////////////////
+// DEFAULT CONFIG
+////////////////////////////////////////////////////////////////////////////////
+
+// IMPORTANT:
+// Variables in this file should be dependant only on variables from this file.
+// Any configurations that depend on global variables should be overriden
+// in the global configuration.
+//
+// You should then try to arrange the variable dependencies so as to override
+// as few as possible.
+
+// Note:
+// These "!default" variables can be overriden from above by normal variables.
+// Later "!default" declarations, however, take precendence over earlier
+// "!default" declarations.
+// Here's an example:
+//
+//    $variable: red; // winner overall
+//    $variable: yellow !default;
+//    $variable: blue !default; // winning default
+
+// Color defaults
+$ui-color-base: #ddd !default;
+
+// Background color of ui
+$ui-color-bg: change-color($ui-color-base, $lightness:87%);
+
+// Applied to inline ui links
+//---------------------------
+$ui-link-color: $brand-primary !default;
+$ui-link-color-hover: lighten($ui-link-color, 10%) !default;
+$ui-link-color-active: darken($ui-link-color, 10%) !default;
+$ui-link-bg: transparent !default;
+$ui-link-bg-hover: transparent !default;
+$ui-link-bg-active: transparent !default;
+
+// Applied only to block links
+//----------------------------
+$ui-link-block-color: $brand-primary !default;
+$ui-link-block-color-hover: white !default;
+$ui-link-block-color-active: white !default;
+$ui-link-block-bg: change-color($ui-color-bg, $lightness:94%) !default;
+$ui-link-block-bg-hover: $brand-primary !default;
+$ui-link-block-bg-active: $brand-primary !default;
+
+// Applied to navtree headers
+$ui-toc-heading-color: white;
+$ui-toc-heading-color-hover: $ui-link-block-color-hover;
+$ui-toc-heading-color-active: $ui-link-block-color-active;
+$ui-toc-heading-bg: $brand-secondary;
+$ui-toc-heading-bg-hover: $ui-link-block-bg-hover;
+$ui-toc-heading-bg-active: $ui-link-block-bg-active;
+
+// Space between screen edge and text in UI
+$ui-screen-edge-margin:$typography-font-size-base;
+
+// Border radius
+$ui-border-radius-small:3px;
+$ui-boder-radius-medium:4px;
+$ui-border-radius-large:5px;
+
+// Icons
+$typography-font-family-icon: "Ionicons" !default;
+
+// Icon Sizing
+$ui-icon-size: $typography-font-size-base !default;
+$ui-icon-box-size:2*$typography-line-height-base*$ui-icon-size !default;
+
+// Icon sizing touch
+$ui-touch-scale: 1.25; // be careful, some intervals will cause blurry icons
+$ui-icon-size-touch: $ui-touch-scale*$ui-icon-size !default;
+$ui-icon-box-size-touch: $ui-touch-scale*$ui-icon-box-size !default;
+
+// Navbar
+$ui-navbar-height:$ui-icon-box-size;
+$ui-navbar-height-touch:$ui-icon-box-size-touch;
+
+// Sidebars
+$ui-sidebar-left-width: 240px !default;
+$ui-sidebar-right-width: $ui-sidebar-left-width !default;
+$sliding-sidebar-transition-duration: 400ms;
+
+$ui-left-margin:($ui-icon-box-size - $ui-icon-size)/2;
+$ui-left-margin-touch:($ui-icon-box-size-touch - $ui-icon-size-touch)/2;
+$ui-right-margin: $ui-left-margin;
+$ui-right-margin-touch: $ui-left-margin-touch;
+
+// Content container
+$ui-content-max-width: 600px !default;
+$ui-content-margin: 2.5*$typography-line-height-computed;
+// Margin when width is less than content size
+$ui-content-margin-sm:1.5*$typography-line-height-computed ;
+$ui-content-margin-xs:$typography-line-height-computed/2 ;
+
+// An estimation of how much extra space long equations require.
+$ui-equation-fudge: 40px;

@@ -1,0 +1,82 @@
+@import "compass/utilities/general/clearfix";
+@import "compass/css3/box-sizing";
+
+// Mixins for containers with flexible (or inflexible) floated children
+
+$flex-container-prefix: "flex" !default;
+$flex-container-child-selector:
+    "." + $flex-container-prefix + "-child" !default;
+$flex-container-level-start: 1 !default;
+$flex-container-level-end: 6 !default;
+
+// Set the width for element containing $num-children children
+@mixin flex-container-child-width($num-children) {
+    width:100/$num-children * 1%;
+}
+
+
+// A container with floated children
+// combine with flex-children-widths to arrange percentage-width children
+@mixin flex-container(
+    // The prefix to use in the class api for this component
+    // Note: The prefix is not applied to the child-selector
+    $prefix: $flex-container-prefix,
+    $child-selector: $flex-container-child-selector
+) {
+
+    &, &.#{$prefix}-align-left {
+        #{$child-selector} {
+            float:left;
+        }
+    }
+
+    &.#{$prefix}-align-right {
+        #{$child-selector} {
+            float:right;
+        }
+
+    }
+}
+
+// percentage-width children
+@mixin flex-children-widths(
+    // The prefix to use in the class api for this component
+    // Note: The prefix is not applied to the child-selector
+    $prefix: $flex-container-prefix,
+    // The selector for children
+    $child-selector: $flex-container-child-selector,
+    // The minimum number of children to support
+    $level-start: $flex-container-level-start,
+    // The maximum number of children to support
+    $level-end: $flex-container-level-end
+) {
+    // Output a child-divisor-X class for each supported level
+    @for $i from $level-start to $level-end {
+        &.#{$prefix}-divisor-#{$i} > #{$child-selector} {
+            @include flex-container-child-width($i);
+        }
+    }
+}
+
+
+// A mixin for applying styles to the children.
+// Use sparingly.
+// If many levels of children are supported, the CSS can get bloated.
+// The advantage of this mixin is that it does not require you to add
+// another class in addition to .prefix-divisor-x to apply specific styles
+// only to percentage-width children
+@mixin flex-children(
+    // The prefix to use in the class api for this component
+    // Note: The prefix is not applied to the child-selector
+    $prefix: $flex-container-prefix,
+    $child-selector: $flex-container-child-selector,
+    $level-start: $flex-container-level-start,
+    $level-end: $flex-container-level-end
+) {
+    // Output a child-divisor-X class for each supported level
+    @for $i from $level-start to $level-end {
+        &.#{$prefix}-divisor-#{$i} > #{$child-selector} {
+            @content;
+        }
+    }
+}

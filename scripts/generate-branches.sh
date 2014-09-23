@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# Generates an output directory for each branch in the outputdir directory.
+################################################################################
+# IMPORTANT: This script must be calld from a CWD OUTSIDE the repository.
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [[ $# != 1 ]]; then
@@ -6,18 +11,21 @@ if [[ $# != 1 ]]; then
     exit 0
 fi
 
+# the git repo root
 gitdir=$(cd $DIR; git rev-parse --show-toplevel)
 cd $gitdir 
 
+# the output directory
 output=$(readlink -m "$1")
 
+# If there are no uncommited changes
 if git diff-index --quiet HEAD --; then
     # no changes
 
+    # cache the generate.sh file in a temp directory, 
+    # since we'll be changing branches
     timestamp=$(date +%s)
     tempdir=$DIR/.temp-$timestamp
-
-    # cache the generate.sh file since we'll be changing branches
     mkdir -p $tempdir 
     cp $DIR/generate.sh $tempdir/generate.sh
 
@@ -35,6 +43,7 @@ if git diff-index --quiet HEAD --; then
 
     # remove the temp directory
     rm -r $tempdir 
+
 else
     echo There are unstaged changes. Stash or commit them first.
 fi

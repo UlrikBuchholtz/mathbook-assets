@@ -1,0 +1,103 @@
+////////////////////////////////////////////////////////////////////////////////
+// UI components that appear inside the content area
+////////////////////////////////////////////////////////////////////////////////
+
+@import "../ui_config";
+@import "../../shared/typography";
+@import "../mixins/_navtree.scss";
+@import "../mixins/buttons";
+@import "../mixins/flex-container";
+@import "../../shared/knowl";
+
+/*
+ * Table-of-contents for chapter/section/etc summary pages
+ */
+.summary-links {
+
+    a {
+        $font-size: $typography-font-size-h3;
+
+        $color: $ui-link-block-color;
+        $color-hover: $ui-link-block-color-hover;
+        $color-active: $ui-link-block-color-active;
+
+        $bg: $ui-link-block-bg;
+        $bg-hover: $ui-link-block-bg-hover;
+        $bg-active: $ui-link-block-bg-active;
+
+        $codenumber-opacity: .8;
+
+        @include button-link-directional(
+            $font-size: $font-size,
+
+            $color: $color,
+            $color-hover: $color-hover,
+            $color-active: $color-active,
+
+            $bg: $bg,
+            $bg-hover: $bg-hover,
+            $bg-active: $bg-active
+        );
+
+        & {
+            font-family: $typography-heading-font-family;
+
+            @media screen and (max-width: $screen-xxs-max) {
+                @include adjust-font-size-to($typography-font-size-base);
+            }
+        }
+
+       // @include navtree-codenumber-support(
+       //     $indent: $typography-line-height-computed ,
+       //     $codenumber-width: 2*$font-size,
+       //     $codenumber-gutter-right: $typography-line-height-computed/2
+       // );
+
+        .codenumber {
+            color: darken($bg, 50%);
+            margin-right: rhythm(.5, $font-size);
+        }
+
+        &:hover, &:focus {
+            .codenumber {
+                color: rgba($color-hover, $codenumber-opacity);
+            }
+        }
+
+        &:active {
+            .codenumber {
+                color: rgba($color-active, $codenumber-opacity);
+            }
+        }
+    }
+}
+
+// TODO does this belong in ui or content?
+.sagecell {
+
+    /*.sagecell_options {*/
+        /*float:none;*/
+        /*text-align:left;*/
+    /*}*/
+
+    .ui-button {
+        /*float:right;*/
+        &.ui-state-default, &.ui-state-hover, &.ui-state-active, &.ui-state-focus, &.ui-corner-all {
+            @include button-standard;
+            font-family: $typography-font-family-base;
+            font-size: $typography-font-size-base;
+            padding: 0 #{$typography-line-height-base/2}em;
+
+            @include button-depressable();
+        }
+
+        &.ui-button-text-only .ui-button-text {
+            padding:0;
+            line-height:1.3*$typography-line-height-base;
+        }
+    }
+
+    .sagecell_editor {
+        margin-bottom: #{$typography-line-height-computed*.4};
+    }
+}

@@ -1,0 +1,28 @@
+@import "compass/css3/images";
+
+@mixin zig-zag-edge($color, $height) {
+    display:block;
+    height:$height;
+
+    $bg1: linear-gradient(
+            45deg, transparent 33.333%,
+            $color 33.333%, $color 66.667%,
+            transparent 66.667%);
+    $bg2: linear-gradient(
+              -45deg, transparent 33.333%,
+              $color 33.333%, $color 66.667%,
+              transparent 66.667%);
+
+
+    @include background-image($bg1, $bg2);
+    background-size: $height 2*$height;
+
+    /**
+     * We can't ensure the triangles will align perfectly with the edges,
+     * but we can at least be sure both sides match.
+     */
+    background-position:center 0;
+
+
+    background-repeat: repeat-x;
+}

@@ -1,0 +1,84 @@
+
+////////////////////////////////////////////////////////////////////////////////
+// COLORS
+////////////////////////////////////////////////////////////////////////////////
+// Here we define the default color scheme.
+// These can be overriden from above. See Sass Docs on !default.
+$mathbook-primary: #2655a4 !default;
+$mathbook-secondary: #45A861 !default;
+$mathbook-base: #ddd !default;
+
+// Here we remap the parameters we get from above so we can
+// preserve the hue but explicitly set the saturation and lightness to
+// values that we know work well with our theme
+$brand-primary:         change-color($mathbook-primary,
+                                     $saturation:62%,
+                                     $lightness:40%);
+$brand-primary-light:   change-color($brand-primary,
+                                     $saturation: 100%,
+                                     $lightness: 86%);
+$brand-primary-lighter: change-color($brand-primary,
+                                     $saturation: 90% ,
+                                     $lightness: 99%);
+// TODO brand-primary-dark?
+
+$brand-secondary:        change-color($mathbook-secondary,
+                                      $saturation:62%,
+                                      $lightness:40%);
+$brand-secondary-light:   change-color($brand-secondary,
+                                     $saturation: 100%,
+                                     $lightness: 92%);
+$brand-secondary-lighter: change-color($brand-secondary,
+                                     $saturation: 90% ,
+                                     $lightness: 99%);
+// TODO brand-secondary-dark?
+
+// The base color of the interface
+// We allow the base color to take on the user's saturation level
+// TODO maybe add support for a light/dark scheme option
+$brand-base: change-color($mathbook-base, $lightness: 87%);
+
+// Colors for message dialogs and such.
+// We don't let the user specify these. We could someday though.
+$brand-success:         #719900 !default;
+$brand-warning:         #b58900 !default;
+$brand-danger:          #d9534f !default;
+$brand-info:            #2aa198 !default;
+
+////////////////////////////////////////////////////////////////////////////////
+// TYPOGRAPHY
+////////////////////////////////////////////////////////////////////////////////
+// We want to use some of the defaults from typography
+@import "shared/typography";
+
+////////////////////////////////////////////////////////////////////////////////
+// KNOWL
+////////////////////////////////////////////////////////////////////////////////
+$knowl-color-base: $brand-primary;
+$knowl-margin-bottom: rhythm(1);
+$knowl-padding: rhythm(1);
+$knowl-has-ragged-top: true;
+$knowl-ragged-top-height: rhythm(.5);
+
+////////////////////////////////////////////////////////////////////////////////
+// CONTENT
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// UI
+////////////////////////////////////////////////////////////////////////////////
+$ui-color-base: $brand-base;
+
+////////////////////////////////////////////////////////////////////////////////
+// BREAKPOINTS
+////////////////////////////////////////////////////////////////////////////////
+$screen-xs-min: 481px !default; // portrait large phones, landscape small phones
+$screen-sm-min: 641px !default; // portrait tablets
+$screen-md-min: 801px !default; // landscape tablets, small desktops
+$screen-lg-min: 1200px !default; // large desktops, TVs
+
+// So media queries don't overlap when required, provide a maximum
+$screen-xxs-max: ($screen-xs-min - 1) !default;
+$screen-xs-max: ($screen-sm-min - 1) !default;
+$screen-sm-max: ($screen-md-min - 1) !default;
+$screen-md-max: ($screen-lg-min - 1) !default;
