@@ -148,10 +148,10 @@ $knowl-margin-bottom: 12px !default;
     $border-width: $knowl-border-width,
     $border-color: $knowl-border-color,
     $border-radius: $knowl-border-radius,
-    $margin-bottom: $knowl-margin-bottom,
+    $margin-bottom: $knowl-margin-bottom 
+) {
 //     $has-ragged-top: $knowl-has-ragged-top,
 //     $ragged-top-height: $knowl-ragged-top-height
-) {
     & {
         border: $border-width solid $border-color;
         background: $bg-color;
