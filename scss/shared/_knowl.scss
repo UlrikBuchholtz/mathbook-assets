@@ -30,8 +30,8 @@ $knowl-border-radius: 4px !default;
 
 $knowl-nested-border-width: $knowl-border-width / 2 !default;
 
-$knowl-has-ragged-top: true !default;
-$knowl-ragged-top-height: 12px !default;
+// $knowl-has-ragged-top: true !default;
+// $knowl-ragged-top-height: 12px !default;
 $knowl-padding:12px !default;
 $knowl-margin-bottom: 12px !default;
 
@@ -149,8 +149,8 @@ $knowl-margin-bottom: 12px !default;
     $border-color: $knowl-border-color,
     $border-radius: $knowl-border-radius,
     $margin-bottom: $knowl-margin-bottom,
-    $has-ragged-top: $knowl-has-ragged-top,
-    $ragged-top-height: $knowl-ragged-top-height
+//     $has-ragged-top: $knowl-has-ragged-top,
+//     $ragged-top-height: $knowl-ragged-top-height
 ) {
     & {
         border: $border-width solid $border-color;
@@ -161,29 +161,29 @@ $knowl-margin-bottom: 12px !default;
 
     // TODO could be refactored into seperate mixin so that option could
     //      be exposed with a class on body
-    @if($has-ragged-top) {
-        & {
-            position:relative;
-            /* Keep a small border to maintain margin-collapse */
-            border-top-width:1px;
-            margin-top:$ragged-top-height;
-
-            @include border-top-radius(0);
-        }
-
-        &:before {
-            content:"";
-            position:absolute;
-            position:absolute;
-            top:0;
-            left:0;
-            right:0;
-            margin-top: -$ragged-top-height;
-            margin-left:-$border-width;
-            margin-right:-$border-width;
-            @include zig-zag-edge($border-color,  $ragged-top-height);
-        }
-    }
+//    @if($has-ragged-top) {
+//        & {
+//            position:relative;
+//            /* Keep a small border to maintain margin-collapse */
+//            border-top-width:1px;
+//            margin-top:$ragged-top-height;
+//
+//            @include border-top-radius(0);
+//        }
+//
+//        &:before {
+//            content:"";
+//            position:absolute;
+//            position:absolute;
+//            top:0;
+//            left:0;
+//            right:0;
+//            margin-top: -$ragged-top-height;
+//            margin-left:-$border-width;
+//            margin-right:-$border-width;
+//            @include zig-zag-edge($border-color,  $ragged-top-height);
+//        }
+//     }
 
     .knowl-footer {
         font-size:x-small;
