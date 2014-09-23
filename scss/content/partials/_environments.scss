@@ -78,8 +78,8 @@
 
         /* Cut the tombstone into the standard margin-bottom */
   //      @include padding-trailer(.5);
-        @include padding-trailer(0.1);
-        @include margin-trailer(1.9);
+  //      @include padding-trailer(0.1);
+        @include margin-trailer(2.0);
 
         @media screen and (max-width: $screen-md-max) {
             /* Bring border out of the right margin */
