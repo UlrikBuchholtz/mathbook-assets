@@ -89,7 +89,8 @@ $ui-right-margin-touch: $ui-left-margin-touch;
 
 // Content container
 $ui-content-max-width: 600px !default;
-$ui-content-margin: 2.5*$typography-line-height-computed;
+// $ui-content-margin: 2.5*$typography-line-height-computed;
+$ui-content-margin: 1.6*$typography-line-height-computed;
 // Margin when width is less than content size
 $ui-content-margin-sm:1.5*$typography-line-height-computed ;
 $ui-content-margin-xs:$typography-line-height-computed/2 ;
