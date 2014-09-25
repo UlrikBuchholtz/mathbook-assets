@@ -119,6 +119,55 @@
     }
 }
 
+.hiddenproof {
+
+    // use rgba so it looks nice inside knowls too
+
+    // @davidfarmer has asked that we keep proofs separate in CSS output
+    // so we use the mixin rather than extending %environment-base
+    @include environment-base();
+
+    & {
+        @include heading-selector {
+            font-style: italic;
+            font-weight:normal;
+            /* It helps to have a little bit of extra space after proof */
+            margin-right:.25em;
+        }
+
+        position:relative;
+
+        /* Cut the border up into the top margin */
+        margin-top: -rhythm(.5);
+        padding-top: 0;
+
+        @include margin-trailer(1.0);
+
+        @media screen and (max-width: $screen-md-max) {
+            /* Bring border out of the right margin */
+            margin-right:0;
+        }
+
+        @media screen and (max-width: $screen-xs-max) {
+            /* Remove the border */
+            padding:0;
+            margin-right:0;
+            border-right:0;
+            padding-top:0;
+
+//            /* Make more space for tombstone */
+//            @include padding-trailer;
+//            @include margin-trailer;
+        }
+    }
+
+}
+
+.hiddenproof a>.heading {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
 .remark-like {
     @extend %environment-base;
 }
