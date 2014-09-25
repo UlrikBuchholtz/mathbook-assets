@@ -33,7 +33,7 @@ $masthead-font-family: $typography-heading-font-family;
 
     @include clearfix();
     @include padding-leader(.5);
-    @include padding-trailer(.5);
+    @include padding-trailer(.9);
 
     @media screen and (max-width:$screen-xxs-max) {
         padding-left:$ui-content-margin-xs;

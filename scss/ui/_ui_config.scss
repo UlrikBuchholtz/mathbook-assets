@@ -66,7 +66,8 @@ $typography-font-family-icon: "Ionicons" !default;
 
 // Icon Sizing
 $ui-icon-size: $typography-font-size-base !default;
-$ui-icon-box-size:2*$typography-line-height-base*$ui-icon-size !default;
+// $ui-icon-box-size:2*$typography-line-height-base*$ui-icon-size !default;
+$ui-icon-box-size:1.7*$typography-line-height-base*$ui-icon-size !default;
 
 // Icon sizing touch
 $ui-touch-scale: 1.25; // be careful, some intervals will cause blurry icons
