@@ -22,7 +22,8 @@ $typography-font-size-h5: ceil($typography-font-size-base * 1.125) !default;
 $typography-font-size-h6: $typography-font-size-base !default;
 
 // LINE HEIGHT
-$typography-line-height-base: 1.5 !default;
+// $typography-line-height-base: 1.5 !default;
+$typography-line-height-base: 1.3 !default;
 $typography-line-height-computed:
     floor($typography-font-size-base * $typography-line-height-base) !default; // ~20px
 $typography-line-height-em: #{$typography-line-height-base}em !default;

@@ -46,9 +46,11 @@ figure {
         & {
             @include adjust-font-size-to($typography-font-size-base);
             margin: 0 auto;
-            text-align: center;
+            padding-left: 2em;
             @include margin-leader;
         }
+     //       text-indent: -2em;
+     //       text-align: center;
 
         // From addon
         &.wrap {
