@@ -694,7 +694,10 @@
                     if(settings.onActivateSectionLink === "function") {
                         settings.onActivateSectionLink.call($link.get());
                     }
-                    self.setHash(deepestHash);
+           // We have temporarily disabled setHash because the scrolling
+           // to the target section does not work properly.
+           // The scrolling of the TOC still works okay.
+               //     self.setHash(deepestHash);
                     self.scrollTocToActiveItem();
                 }
             }
