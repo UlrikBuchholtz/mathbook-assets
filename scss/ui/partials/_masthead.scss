@@ -15,7 +15,7 @@
 $masthead-bg-color: change-color($ui-color-bg, $lightness:98%) !default;
 $masthead-title-color: $brand-primary;
 $masthead-subtitle-color:change-color($ui-color-base, $lightness:35%);
-$masthead-byline-color: change-color($masthead-bg-color, $lightness:47%) !default;
+$masthead-byline-color: change-color($masthead-bg-color, $lightness:20%) !default;
 $masthead-font-family: $typography-heading-font-family;
 
 & {

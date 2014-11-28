@@ -4,16 +4,17 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Here we define the default color scheme.
 // These can be overriden from above. See Sass Docs on !default.
-$mathbook-primary: #2655a4 !default;
-$mathbook-secondary: #45A861 !default;
+$mathbook-primary: #2a5ea4 !default;
+$mathbook-secondary: #28803f !default;
 $mathbook-base: #ddd !default;
 
 // Here we remap the parameters we get from above so we can
 // preserve the hue but explicitly set the saturation and lightness to
 // values that we know work well with our theme
-$brand-primary:         change-color($mathbook-primary,
-                                     $saturation:62%,
-                                     $lightness:40%);
+$brand-primary:$mathbook-primary;
+//$brand-primary:         change-color($mathbook-primary,
+//                                     $saturation:62%,
+//                                     $lightness:40%);
 $brand-primary-light:   change-color($brand-primary,
                                      $saturation: 100%,
                                      $lightness: 86%);
@@ -22,9 +23,10 @@ $brand-primary-lighter: change-color($brand-primary,
                                      $lightness: 99%);
 // TODO brand-primary-dark?
 
-$brand-secondary:        change-color($mathbook-secondary,
-                                      $saturation:62%,
-                                      $lightness:40%);
+$brand-secondary:$mathbook-secondary;
+//$brand-secondary:        change-color($mathbook-secondary,
+//                                      $saturation:62%,
+//                                      $lightness:40%);
 $brand-secondary-light:   change-color($brand-secondary,
                                      $saturation: 100%,
                                      $lightness: 92%);
