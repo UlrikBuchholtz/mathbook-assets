@@ -38,11 +38,12 @@ $ui-link-bg-active: transparent !default;
 
 // Applied only to block links
 //----------------------------
-$ui-link-block-color: $brand-primary !default;
+$ui-link-block-color: $brand-primary-darker !default;
 $ui-link-block-color-hover: white !default;
 $ui-link-block-color-active: white !default;
 $ui-link-block-bg: change-color($ui-color-bg, $lightness:94%) !default;
-$ui-link-block-bg-hover: $brand-primary !default;
+// $ui-link-block-bg-hover: $brand-primary-medium !default;
+$ui-link-block-bg-hover: $brand-primary-darker !default;
 $ui-link-block-bg-active: $brand-primary !default;
 
 // Applied to navtree headers

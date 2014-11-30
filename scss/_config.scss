@@ -15,6 +15,9 @@ $brand-primary:$mathbook-primary;
 //$brand-primary:         change-color($mathbook-primary,
 //                                     $saturation:62%,
 //                                     $lightness:40%);
+$brand-primary-darker:     darken($brand-primary, 10%);
+$brand-primary-medium:   lighten($brand-primary, 10%);
+
 $brand-primary-light:   change-color($brand-primary,
                                      $saturation: 100%,
                                      $lightness: 86%);
