@@ -297,4 +297,4 @@ to manage the vertical rhythm. You can access it simply by importing our own
 
 Need Help?
 ----------
-Contact [Michael DuBois](mailto:michael@michaeldubois.com)
+Contact David Farmer
