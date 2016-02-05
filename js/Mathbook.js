@@ -372,7 +372,7 @@
         * so things work nicely with our sticky header
         */
         self.setMathJaxOverrides = function() {
-            if(typeof Mathjax !== "undefined" ) {
+            if(typeof MathJax !== "undefined" ) {
                 // Before MathJax applies the page's configuration
                 MathJax.Hub.Register.StartupHook("Begin Config", function() {
                     // Modify that configuration to apply overrides
