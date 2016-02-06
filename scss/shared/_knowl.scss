@@ -51,12 +51,14 @@ $knowl-margin-bottom: 12px !default;
 
     $transition-duration: 0ms;
     $padding-horizontal: 3px;
+    $padding-horizontal-right: 4px;
+    $padding-horizontal-left: 5px;
 
     &, &:hover, &.active {
         position:relative;
         color: $color;
         background: transparent;
-        padding:0px $padding-horizontal;
+        padding:0px $padding-horizontal-right 0px $padding-horizontal-left;
         margin:0;
         text-decoration:none;
 
