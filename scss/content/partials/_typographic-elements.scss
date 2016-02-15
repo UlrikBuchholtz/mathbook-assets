@@ -36,6 +36,8 @@ h6, .h6, %h6 {
     @include typography-heading-size(h5);
 }
 
+/* deleted by David Farmer on 2/15/16 because it is too non-specific
+ * and difficult to over-ride in MathJax
 a, %a {
     &:link, &:visited {
         @include typography-link-state($state:default)
@@ -49,6 +51,7 @@ a, %a {
         @include typography-link-state($state:active);
     }
 }
+*/
 
 p, %p {
     @include typography-paragraph();

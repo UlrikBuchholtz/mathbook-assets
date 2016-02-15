@@ -5,8 +5,8 @@
 $font-multiplier: .92;
 $font-size:$font-multiplier * $typography-font-size-base;
 
-$codenumber-width:.5*$font-size;
-$codenumber-gutter-right:.5*$font-size;
+$codenumber-width:0.8*$font-size;  // was .5*$font-size;
+$codenumber-gutter-right:0.3*$font-size;  // was .5*$font-size;
 
 $title-offset:$codenumber-width + $codenumber-gutter-right;
 

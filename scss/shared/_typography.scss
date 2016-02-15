@@ -151,25 +151,28 @@ $relative-font-sizing: true; // uses ems instead of pixels
      * Better underlines using background gradients
      * See http://bit.ly/1vTg7hr
      */
-    @if($underline-style == dotted) {
-        $bg1:radial-gradient(center, $color, $color 1px, transparent 1px);
-        @include background-image($bg1...);
-        $underline-offset: $underline-offset - $underline-size/2;
-        $underline-size: 2*$underline-size;
-    } @else {
-        @include background-image(
-                    linear-gradient(top, transparent 50%, $color 50%));
-    }
+ /* the better underlines were removed by David Farmer on 2/9/16
+    because of various headaches  */
+//    @if($underline-style == dotted) {
+//        $bg1:radial-gradient(center, $color, $color 1px, transparent 1px);
+//        @include background-image($bg1...);
+//        $underline-offset: $underline-offset - $underline-size/2;
+//        $underline-size: 2*$underline-size;
+//    } @else {
+//        @include background-image(
+//                    linear-gradient(top, transparent 50%, $color 50%));
+//    }
+//
+//    background-repeat: repeat-x;
+//    background-size: #{$underline-size}em #{$underline-size}em;
+//    background-position: 0 #{$underline-offset}em;
+//    text-decoration: none;
 
-    background-repeat: repeat-x;
-    background-size: #{$underline-size}em #{$underline-size}em;
-    background-position: 0 #{$underline-offset}em;
-    text-decoration: none;
-
-    .lt-ie10 & { // because old IE can't handle it
-        background: none;
-        text-decoration: underline;
-    }
+// removed by David Farmer on 2/9/16
+//    .lt-ie10 & { // because old IE can't handle it
+//        background: none;
+//        text-decoration: underline;
+//    }
 }
 
 // Remove the better underline styling

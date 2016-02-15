@@ -381,7 +381,7 @@
                     });
                 });
 
-                // when Mathjax is finished rendering,
+                // when MathJax is finished rendering,
                 MathJax.Hub.Register.StartupHook("End Typeset", function () {
                     self.postMathJax();
                 });
