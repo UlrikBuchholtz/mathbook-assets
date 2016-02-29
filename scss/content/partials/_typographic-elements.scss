@@ -40,7 +40,7 @@ h6, .h6, %h6 {
  * and difficult to over-ride in MathJax
  * Then put back with the "p > a" restriction.  (2/19/16)
  */
-p > a, p> %a {
+section h2 > a, li > a, li > %a, p > a, p> %a {
     &:link, &:visited {
         @include typography-link-state($state:default)
     }
