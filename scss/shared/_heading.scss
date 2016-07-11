@@ -3,7 +3,7 @@
 $heading-type-before:none !default;
 $heading-type-after:" " !default;
 $heading-codenumber-before:none !default;
-$heading-codenumber-after:"\2002" !default;
+$heading-codenumber-after:"\2002" !default;   // see the not(:empty) in the add-on
 $heading-title-before:none !default;
 $heading-title-after:" " !default;
 $heading-before:none !default;
@@ -93,7 +93,7 @@ $heading-after:" " !default;
     $type-after: $heading-type-after,
 
     $codenumber-before: $heading-codenumber-before,
-    $codenumber-after: $heading-codenumber-after,
+    $codenumber-after: $heading-codenumber-after,   // see line 6 above
 
     $title-before:$heading-title-before,
     $title-after:$heading-title-after,
@@ -111,7 +111,7 @@ $heading-after:" " !default;
         @include heading-set-before-after($type-before, $type-after);
     }
 
-    .codenumber {
+    .codenumber:not(:empty) {      // see line 6 above
         @include heading-set-before-after(
                     $codenumber-before,
                     $codenumber-after);
