@@ -33,7 +33,7 @@ h5, .h5, %h5{
 
 h6, .h6, %h6 {
     @extend %heading-base;
-    @include typography-heading-size(h5);
+    @include typography-heading-size(h6);
 }
 
 /* deleted by David Farmer on 2/15/16 because it is too non-specific

@@ -45,7 +45,7 @@ $heading-after:" " !default;
     }
 }
 
-// TODO move to utilities file?
+// TODO move to utilities file? AND decide why we have display:none instead of just omitting
 // Quickly set the before and after content on ANY element
 @mixin heading-set-before-after($before: none, $after: none) {
     &:before {
@@ -124,10 +124,11 @@ $heading-after:" " !default;
     .type, .codenumber, .title {
         /**
          *  Hide the space after the last element,
-         * defer to .heading:after instead
+         * defer to .heading:after instead  XX obsolete comment
          */
         &:last-child:after {
-            display:none;
+//            display:none;
+//            content: ".\2009 ";
         }
     }
 
