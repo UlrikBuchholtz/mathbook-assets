@@ -250,9 +250,11 @@ $relative-font-sizing: true; // uses ems instead of pixels
 // Blockquote
 @mixin typography-blockquote() {
     & {
-        padding-left:2*$base-rhythm-unit;
-
-        padding-right:$base-rhythm-unit/2;
+//   $base-rhythm-unit equaled 1.25em, but didn't seem to be set anywhere
+//        padding-left:2*$base-rhythm-unit;
+        padding-left:2*rhythm(1);
+//        padding-right:$base-rhythm-unit/2;
+        padding-right:rhythm(1)/2;
     }
 }
 
