@@ -36,7 +36,11 @@ figure {
         margin-right: auto;
     }
 
-    figcaption {
+}
+
+// no reason to insist figcaption occurs inside a figure
+
+figcaption {
         /* We treat figcaptions just like headings */
         @include heading-selector {
             @include heading-base($heading-after:$figure-heading-after);
@@ -58,5 +62,5 @@ figure {
             margin-right: $base-half-leader;
             text-align: center;
         }
-    }
 }
+// }

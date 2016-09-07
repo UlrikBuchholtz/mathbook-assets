@@ -4,7 +4,8 @@
 @import "../../shared/_knowl.scss";
 
 $environment-heading-font-size: $typography-font-size-h5 !default;
-$environment-heading-after: ".\2009 " !default;
+// $environment-heading-after: ".\2009 " !default;
+$environment-heading-after: "" !default;
 
 // Defaults for environments
 @mixin environment-base {
