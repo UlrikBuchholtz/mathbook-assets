@@ -45,8 +45,8 @@
     // use rgba so it looks nice inside knowls too
     $border-color: rgba(black, .1);
     $border-width: .1em;
-    $padding-right: rhythm(1);
-    $tombstone-color: rgba(black, 0.5);
+    $padding-right: rhythm(0.5);
+//    $tombstone-color: rgba(black, 0.5);
 
     // @davidfarmer has asked that we keep proofs separate in CSS output
     // so we use the mixin rather than extending %environment-base
@@ -57,7 +57,7 @@
             font-style: italic;
             font-weight:normal;
             /* It helps to have a little bit of extra space after proof */
-            margin-right:.25em;
+            margin-right: 0.75em;
         }
 
         position:relative;
@@ -69,17 +69,17 @@
         border-right: $border-width solid $border-color;
 
         /* Cut the border up into the top margin */
-        margin-top: -rhythm(.5);
-        padding-top: rhythm(.5);
+//        margin-top: -rhythm(.5);
+//        padding-top: rhythm(.5);
 
         /* Cut the border into the right margin */
         padding-right: $padding-right;
         margin-right:-($padding-right + $border-width);
 
         /* Cut the tombstone into the standard margin-bottom */
-  //      @include padding-trailer(.5);
-  //      @include padding-trailer(0.1);
-        @include margin-trailer(2.0);
+//      @include padding-trailer(.5);
+//      @include padding-trailer(0.1);
+//        @include margin-trailer(2.0);
 
         @media screen and (max-width: $screen-md-max) {
             /* Bring border out of the right margin */
@@ -94,28 +94,37 @@
             padding-top:0;
 
             /* Make more space for tombstone */
-            @include padding-trailer;
-            @include margin-trailer;
+//            @include padding-trailer;
+//            @include margin-trailer;
+
         }
     }
 
     &:after {
-        content:"\220E";
-        position:absolute;
-        width: 1em;
-        right:0;
-        bottom:0;
-        margin:0 0 -0.3em 0; 
+        content:'';
+        border-bottom: $border-width solid $border-color;
+        display: block;
+        margin-left: auto;
+        margin-right: -1 * $padding-right;  /* so the corner of the L meets */
+        width: 1.5em;
+        padding-bottom: 0.25em;
 
-        color: $tombstone-color;
-        text-align:right;
+//        content:"\220E";
+//        position:absolute;
+//        width: 1em;
+//        right:0;
+//        bottom:0;
+//        margin:0 0 -0.3em 0; 
+//
+//        color: $tombstone-color;
+//        text-align:right;
 
-        @media screen and (max-width: $screen-xs-max) {
-            /* Center the tombstone */
-            right:50%;
-            margin-right:-.5em;
-            text-align:center;
-        }
+//        @media screen and (max-width: $screen-xs-max) {
+//            /* Center the tombstone */
+//            right:50%;
+//            margin-right:-.5em;
+//            text-align:center;
+//        }
     }
 }
 
@@ -138,7 +147,7 @@
         position:relative;
 
         /* Cut the border up into the top margin */
-        margin-top: -rhythm(.5);
+        margin-top: -0.5em;
         padding-top: 0;
 
         @include margin-trailer(1.0);
@@ -197,3 +206,11 @@
         border: 1px dotted #aaa;
     }
 }
+
+.knowl .aside-like { 
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    border: none;
+}
+

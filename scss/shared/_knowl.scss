@@ -50,9 +50,9 @@ $knowl-margin-bottom: 12px !default;
     }
 
     $transition-duration: 0ms;
-    $padding-horizontal: 3px;
-    $padding-horizontal-right: 4px;
-    $padding-horizontal-left: 5px;
+    $padding-horizontal: 3px;  /* not used? */
+    $padding-horizontal-right: 2px;
+    $padding-horizontal-left: 2px;
 
     &, &:hover, &.active {
         position:relative;
@@ -91,8 +91,8 @@ $knowl-margin-bottom: 12px !default;
             position:absolute;
             top:0;
             bottom: $border-width-hover - $border-width-base;
-            right:$padding-horizontal;
-            left:$padding-horizontal;
+            right:$padding-horizontal-right * 1.2;
+            left:$padding-horizontal-left * 1.2;
 
             /* Smooth out the transition from underline to border */
             @include transition-property(left,right);
@@ -155,7 +155,8 @@ $knowl-margin-bottom: 12px !default;
 //     $has-ragged-top: $knowl-has-ragged-top,
 //     $ragged-top-height: $knowl-ragged-top-height
     & {
-        border: $border-width solid $border-color;
+//  set in master knowlstyle        border: $border-width solid $border-color;
+        border-color: $border-color;
         background: $bg-color;
         @include border-radius($border-radius);
         margin-bottom:$margin-bottom;
@@ -191,8 +192,9 @@ $knowl-margin-bottom: 12px !default;
         font-size:x-small;
         color: darken($border-color, 60%);
         background: $border-color;
-        bottom: -$border-width;
-        padding:1px 0px 1px $border-width;
+// the master setting from knowlstyle.css seem okay to me
+//        bottom: -$border-width;
+//        padding:1px 0px 1px $border-width;
     }
 
     .knowl-content {

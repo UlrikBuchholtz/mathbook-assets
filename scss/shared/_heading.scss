@@ -159,6 +159,11 @@ $heading-after:" " !default;
                 display:block;
                 @include margin-trailer;
             }
+
+            &:last-child:after {
+                /* Restore the inline paragraph's margin */
+                margin-bottom: 0;
+            }
         }
     }
 }
