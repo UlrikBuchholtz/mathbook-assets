@@ -68,7 +68,7 @@
             * It is defined relative to the top of the screen OR the bottom
             * edge of any fixed UI elements.
             */
-            enterSectionTriggerTop: 50,
+            enterSectionTriggerTop: 20,
             /**
             * When scrolling down...
             * Sections will be entered once their top edge rises above this
@@ -77,7 +77,7 @@
             * This will be automatically rounded to the bottom of the screen
             * if the viewport is smaller than the defined trigger size
             */
-            enterSectionTriggerBottom: 300,
+            enterSectionTriggerBottom: 150,
 
             // The desired top offset of the active link in the ToC
             tocScrollToActiveOffsetTop: 100,
@@ -115,8 +115,8 @@
             sidebarRightOpenClass: "sidebar-right-open",
             sidebarLeftClosedClass: "sidebar-left-closed",
             sidebarRightClosedClass: "sidebar-right-closed",
-            shouldDisableSidebarTogglesAtMedium: true,
-            shouldDisableSidebarTogglesAtLarge: true
+            shouldDisableSidebarTogglesAtMedium: false,
+            shouldDisableSidebarTogglesAtLarge: false
 
         };
 
