@@ -91,7 +91,7 @@
             onActivateSectionLink: null,
             // Whether or not to call onEnterSection and onExitSection for
             // sections without links.
-            shouldTrackOnlyLinkedSections: true,
+            shouldTrackOnlyLinkedSections: false,
 
             /**
             * Interval upon which scrollSpy recomputes section positions
@@ -665,6 +665,7 @@
                 if(typeof settings.onEnterSection === "function"){
                     settings.onEnterSection.apply(element, arguments);
                 }
+                window.thefocus = element.id;
             } else {
                 $section.removeClass(settings.sectionRemoveClass);
                 if(typeof settings.onExitSection === "function"){
