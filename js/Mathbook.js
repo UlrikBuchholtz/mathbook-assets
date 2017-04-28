@@ -11,10 +11,34 @@
  *
  *******************************************************************************
  */
+
+/*  document.write is deprecated for scripts
+if(typeof MathJax == 'undefined' ) {
+    document.write('<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full"></script>')
+}
+*/
+
+/* load MathJax if not already loaded */
+if(typeof MathJax == 'undefined' ) {
+    (function(d, script) {
+       script = d.createElement('script');
+       script.type = 'text/javascript';
+       script.async = true;
+       script.onload = function() {
+        // remote script has loaded
+       };
+       script.onerror = function(){
+        // something went wrong
+       }
+       script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full';
+       d.getElementsByTagName('head')[0].appendChild(script);
+      }(document));
+}
+
 /* global MathJax, jQuery */
 // Leading semicolon safeguards against errors in script concatenation
 // Pass dependencies into this closure from the bottom of the file
-;(function($, w, Espy, MathJax, undefined) {
+;(function($, w, Espy, undefined) {
     'use strict'; // Use EMCAScript 5 strict mode within this closure
 
     // Define our class on the window object under the Mathbook namespace
@@ -1171,4 +1195,37 @@
 
     return Mathbook;
 
-})(jQuery, window, jQuery.Espy, MathJax);
+})(jQuery, window, jQuery.Espy);
+
+
+/*
+window.onload = function()
+{
+    document.onkeyup = function(event)
+    {                   
+        var e = (!event) ? window.event : event;
+        switch(e.keyCode)
+        {                       
+            case 80:  //p 
+                window.location.href = document.getElementById('previousbutton').href;
+                break;                  
+            case 78: //n        
+                window.location.href = document.getElementById('nextbutton').href;
+                break;                  
+            case 85: //u        
+                window.location.href = document.getElementById('upbutton').href;
+            break;                      
+        }                   
+};              
+};      
+*/
+
+// temporary hack for older pages, due to MathJax migration
+window.addEventListener('DOMContentLoaded', function(){
+    badge = document.querySelector('img[src="https://cdn.mathjax.org/mathjax/badge/badge.gif"]');
+    if ( badge ) {
+    // badge.src = "https://www.mathjax.org/badge/badge-square.png";
+    badge.src = "https://www.mathjax.org/badge/badge.gif";
+    };
+});
+
