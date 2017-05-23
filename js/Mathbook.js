@@ -1202,22 +1202,22 @@ if(typeof MathJax == 'undefined' ) {
 window.onload = function()
 {
     document.onkeyup = function(event)
-    {                   
+    {
         var e = (!event) ? window.event : event;
         switch(e.keyCode)
-        {                       
-            case 80:  //p 
+        {
+            case 80:  //p
                 window.location.href = document.getElementById('previousbutton').href;
-                break;                  
-            case 78: //n        
+                break;
+            case 78: //n
                 window.location.href = document.getElementById('nextbutton').href;
-                break;                  
-            case 85: //u        
+                break;
+            case 85: //u
                 window.location.href = document.getElementById('upbutton').href;
-            break;                      
-        }                   
-};              
-};      
+            break;
+        }
+};
+};
 */
 
 // temporary hack for older pages, due to MathJax migration
