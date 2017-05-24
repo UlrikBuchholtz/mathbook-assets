@@ -1,13 +1,5 @@
 @import "../ui_config";
-@import "../mixins/_sliding-sidebars.scss";
-/*
- * Reposition MathJax loading message so it overlays content instead of navbar
- * when there is a toc.
- * To override, we must add body specificity.
- */
-body.has-sidebar-left.sidebar-left-open #MathJax_Message {
-    left: $ui-sidebar-left-width + .5*$typography-font-size-base;
-}
+@import "../mixins/cramped";
 
 /* Restyle MathJax loading message.
  * To override, must add body specificity.
@@ -52,11 +44,9 @@ body #MathJax_Message {
     }
 
     /**
-     * Limit equations in medium layout if sidebar is open
+     * Limit equations in medium layout.
      */
-    @include sliding-sidebars-media-cramped-content(
-        $sidebar-left-width: $ui-sidebar-left-width,
-        $sidebar-right-width: $ui-sidebar-right-width,
+    @include media-cramped-content(
         $content-max-width: $ui-content-max-width,
         $content-margin: $ui-content-margin + $ui-equation-fudge/2
 

@@ -1,14 +1,16 @@
+// -*- mode: scss; css-indent-offset:4 -*-
+
 @import "../ui_config";
 
 @import "compass/css3/transition";
-@import "compass/css3/box-sizing";
 @import "compass/utilities/general/clearfix";
+@import "compass/css3/inline-block";
+@import "compass/css3/box-sizing";
 
 // For icon variables
 @import "lib/ionicons/ionicons-variables";
 
 @import "../mixins/buttons";
-@import "../mixins/flex-container";
 @import "../../shared/_css_message.scss";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -19,13 +21,13 @@
 $navbar-color:change-color($ui-color-base, $lightness: 20%) !default;
 $navbar-bg-color: change-color($ui-color-base, $lightness: 93%) !default;
 
+$item-border-width: 1px !default;
+$item-border-color: darken($navbar-bg-color, 10%);
+$item-border:$item-border-width solid $item-border-color;
+
 $navbar-border-width: 1px !default;
 $navbar-border-color: darken($navbar-bg-color, 20%);
 $navbar-border:$navbar-border-width solid $navbar-border-color;
-
-$toolbar-border-width: $navbar-border-width;
-$toolbar-border-color: $navbar-border-color;
-$toolbar-border:$toolbar-border-width solid $toolbar-border-color;
 
 $navbar-shadow-color:rgba(black,.3) !default;
 $navbar-shadow-spread: 5px !default;
@@ -43,7 +45,6 @@ $navbar-bottom-box-shadow:
 
 & {
     background:$navbar-bg-color;
-    border-bottom:$navbar-border;
     z-index:200;
     height: $ui-navbar-height;
     font-family: $typography-font-family-serif;
@@ -55,7 +56,7 @@ $navbar-bottom-box-shadow:
 
     /*
      * Styles applied to make the navbar persistently visible
-     * when it's sticky-wrapper is stuck
+     * when its sticky-wrapper is stuck
      */
     .stuck & {
         position:fixed;
@@ -89,23 +90,16 @@ $navbar-bottom-box-shadow:
  ******************************************************************************/
 .button {
     @include button-base();
-    @include button-depressable();
     @include transition-property(text-indent,background-color);
     @include transition-duration(200ms);
 
-    float:left;
+    // float:left;
     text-align:left;
     position:relative;
-    display:block;
-
-    /* subtract border and padding from width
-     * so we can set width precisely as percent */
-    @include box-sizing(border-box);
 
     font-size:1em;
     padding:0;
     margin:0;
-    line-height:$ui-icon-box-size;
 
     /* Override link properties */
     &, &:hover, &:focus, &:visited, &:link, &:active {
@@ -132,7 +126,6 @@ $navbar-bottom-box-shadow:
             color: $navbar-color;
             background:$navbar-bg-color;
             cursor:default;
-            @include box-shadow(none);
         }
     }
     //----------------------------------------------------
@@ -140,15 +133,9 @@ $navbar-bottom-box-shadow:
     /* Icon only at small screen sizes */
     @media screen and (max-width:$screen-sm-max) {
         /*@include button-hide-text($navbar-icon-box-size);*/
-        float:left;
+        // float:left;
         text-align:center;
         margin:0;
-        line-height: $ui-icon-box-size-touch;
-
-        &.active, &:active {
-            /* Vertically flip shadow for lower navbar */
-            @include box-shadow(rgba(black,.5) 0 -2px 5px inset);
-        }
     }
 }
 
@@ -165,7 +152,12 @@ $navbar-bottom-box-shadow:
         $pseudo,
         $placement);
 
+    padding-left: $ui-icon-box-size/3;
+    padding-right: $ui-icon-box-size/3;
+
     @media screen and (max-width:$screen-sm-max) {
+        padding-left: 0;
+        padding-right: 0;
         @include button-with-icon(
             $icon,
             $ui-icon-size-touch,
@@ -176,73 +168,34 @@ $navbar-bottom-box-shadow:
     }
 }
 
-.sidebar-left-toggle-button, .sidebar-right-toggle-button {
-    position:relative;
-}
-
-.sidebar-left-toggle-button {
-    /* Do not display if has-sidebar-left is missing */
-    display:none;
-
-    .has-sidebar-left & {
-        display:block;
-        width:$ui-sidebar-left-width;
-    }
-
-    /*On desktop screens, */
-    @media screen and (min-width: $screen-md-min) {
-        &.active {
-            /* Show text if hidden and match sidebar width */
-            text-indent:0;
-            width:$ui-sidebar-left-width;
-        }
-    }
-
+.toggle-button {
     @include navbar-button($ionicon-var-navicon-round);
-    padding:0;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
-.sidebar-right-toggle-button {
-    /* Do not display if has-sidebar-right is missing */
-    display:none;
-
-    .has-sidebar-right & {
-        display:block;
-        width: $ui-sidebar-right-width;
-    }
-
-    @include navbar-button($ionicon-var-chatbox);
-    padding:0;
-
-    /*On desktop screens, */
-    @media screen and (min-width: $screen-md-min) {
-        float:right;
-
-        &.active {
-            /* Show text if hidden and match sidebar width */
-            text-indent:0;
-            width:$ui-sidebar-right-width;
-        }
-    }
+.index-button {
+    padding-left: $ui-icon-box-size/3;
+    padding-right: $ui-icon-box-size/3;
 }
 
 .up-button {
     @include navbar-button($ionicon-var-chevron-up);
     text-align:center;
+    padding-left: 0px;
 }
 
 .previous-button {
     @include navbar-button($ionicon-var-chevron-left);
+    padding-left: 0px;
 }
 
 .next-button {
     @include navbar-button($ionicon-var-chevron-right, after);
     text-align:right;
+    padding-right: 0px;
 }
 
-.settings-button {
-    @include navbar-button($ionicon-var-android-settings);
-}
 
 /*******************************************************************************
  * TOOLBAR
@@ -250,108 +203,50 @@ $navbar-bottom-box-shadow:
 
 
 /**
- * Establish borders on toolbar-items,
+ * This includes buttons and the index nav-jump.
  */
-.toolbar, .toolbar > .toolbar-item, .button {
-    /* Use a left border */
-    border:$toolbar-border;
-    border-top:none;
-    border-bottom:none;
-    border-right:none;
+.toolbar .toolbar-item {
+    /**
+     * Left borders on toolbar-items by default
+     */
+    border:none;
+    border-left:$item-border;
 
-    /* subtract border and padding from width
-     * so we can set width precisely as percent */
-    @include box-sizing(border-box);
+    @include inline-block();
+
+    height:$ui-navbar-height;
+    line-height:$ui-icon-box-size;
+    overflow: hidden;  /* Force baseline = bottom margin */
+
+    @media screen and (max-width:$screen-sm-max) {
+        height: $ui-navbar-height-touch;
+        line-height: $ui-icon-box-size-touch;
+    }
 }
 
-/**
- * Toolbar of buttons and miscellany
- */
-.toolbar {
-    // flex container with support for 1 to 6 children
-    // the sizing of the children is determined by .toolbar-divisor-X
-    $prefix: "toolbar";
-    $child-selector: ".toolbar-item";
-    $level-start: 1;
-    $level-end: 6;
-    @include flex-container($prefix, $child-selector);
-    @include flex-children-widths($prefix, $child-selector, $level-start, $level-end);
+.toolbar .toolbar-buttons-right {
+  float:right;
+}
 
-    /**
-     * Ensure adjacent borders do not double up
-     * BEWARE: THERE BE DRAGONS HERE.
-     */
-    &, &.toolbar-align-left {
-        // Apply some styles to flex-children
-        @include flex-children($prefix, $child-selector, $level-start, $level-end) {
+.toolbar .toolbar-buttons-left {
+  float:left;
+}
 
-            /* First child defers to left border of parent
-             * If toolbar itself is a first-child, we assume it is adjacent with
-             * the screen or the edge of a parent toolbar
-             */
-            &:first-child {
-                border-left:none;
-            }
-
-            /* Last child defers to right border of parent
-             * If toolbar itself is a last-child, we assume it is adjacent with
-             * the screen or the edge of a parent toolbar
-             */
-            &:last-child {
-                border-right:none;
-            }
-
-            &:first-child:last-child  {
-                border-left:none;
-                border-right: $toolbar-border;
-            }
-        }
-    }
-
-    /*
-     * Order is reversed when we float right
-     * So we need to swap first and last on toolbar-item-children
-     * BEWARE: THERE BE DRAGONS HERE.
-     */
-    &.toolbar-align-right {
-        // Apply some styles to flex-children
-        @include flex-children($prefix, $child-selector, $level-start, $level-end) {
-            &:first-child, &:first-child:last-child {
-                border-right:none;
-                border-left:$toolbar-border;
-            }
-
-            &:last-child {
-                border-left:none;
-            }
-        }
-    }
-
+.toolbar .toolbar-buttons-left .toolbar-item {
     &:first-child {
         border-left:none;
     }
+    &:last-child {
+        border-right:$item-border;
+    }
+}
 
+.toolbar .toolbar-buttons-right .toolbar-item {
     &:last-child {
         border-right:none;
     }
-
-    /**
-     * Make this item's bottom edge clear floated toolbar-items
-     * so that our borders display correctly
-     */
-    @include clearfix();
 }
 
-.toolbar.toolbar-borderless {
-    &, &.toolbar-align-right, &.toolbar-align-left {
-        &, & > .toolbar-item {
-            border-left:none;
-            border-right:none;
-            border-top:none;
-            border-bottom:none;
-        }
-    }
-}
 
 /*******************************************************************************
  * TOP VS BOTTOM
@@ -360,6 +255,17 @@ $navbar-bottom-box-shadow:
 .navbar-bottom-buttons {
     display:none;
 
+    .toolbar-item {
+        /* subtract border and padding from width
+         * so we can set width precisely as percent */
+        @include box-sizing(border-box);
+        width: 25%;
+
+        &:last-child {
+            border-right:$item-border;
+        }
+    }
+
     @media screen and (max-width:$screen-sm-max) {
         display:block;
     }
@@ -367,26 +273,9 @@ $navbar-bottom-box-shadow:
 
 .navbar-top-buttons {
     display:block;
+    border-top:$navbar-border;
 
-    .toolbar {
-        .has-sidebar-left & {
-            margin-left:240px;
-            border-right:$toolbar-border;
-
-            .sidebar-left-toggle-button {
-                width: $ui-sidebar-left-width;
-            }
-        }
-
-        .has-sidebar-right & {
-            margin-right:240px;
-            border-right:none;
-
-            .sidebar-right-toggle-button {
-                width: $ui-sidebar-right-width;
-            }
-        }
-    }
+    @include clearfix();
 
     @media screen and (max-width:$screen-sm-max) {
         display:none;

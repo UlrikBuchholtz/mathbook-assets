@@ -29,7 +29,7 @@ $child-indent-touch: $base-indent-touch + $title-offset;
 
 & {
     /* IMPORTANT height must be calculated by javascript. */
-    width:$ui-sidebar-left-width;
+    width:$ui-toolbar-width;
     margin:0;
     font-size:$font-size;
 

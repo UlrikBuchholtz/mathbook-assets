@@ -1,6 +1,6 @@
 @import "../ui_config";
+@import "../mixins/cramped";
 @import "../../shared/typography";
-@import "../mixins/sliding-sidebars";
 @import "compass/css3/transition";
 // This provides an overview of the layout and how the root level
 // elements of the page fit together.
@@ -30,24 +30,12 @@ body {
 
     margin:0;
 
-    @include transition-property(width);
-    @include transition-duration($sliding-sidebars-transition-duration);
-
     &, &.layout-left, .layout-left & {
         max-width: $content-outer-width;
     }
 
-    &.has-sidebar-left, .has-sidebar-left & {
-        max-width: $content-outer-width + $ui-sidebar-left-width;
-    }
-
-    &.has-sidebar-right, .has-sidebar-right & {
-        max-width:none;
-    }
-
     &.layout-centered,
-    .layout-centered &,
-    .has-sidebar-left.has-sidebar-right & {
+    .layout-centered & {
         max-width: none;
     }
 }
@@ -64,14 +52,14 @@ body {
  * Primary Navbar
  * Contains primary actions for navigation or layout control
  */
-#primary-navbar, #primary-navbar-sticky-wrapper {
+#gt-navbar, #gt-navbar-sticky-wrapper {
     @import "./primary-navbar";
 
     // TODO move into partial
     /**
      * Wrapper added by jquery.sticky.js
      */
-    &#primary-navbar-sticky-wrapper {
+    &#gt-navbar-sticky-wrapper {
         /**
          * At small screens, the navbar is fixed to bottom,
          * so the sticky wrapper should collapse.
@@ -96,83 +84,11 @@ body {
  */
 .page {
     position:relative;
-
-    @media screen and (max-width: $screen-sm-max) {
-        /* Clip hidden sidebars */
-        overflow:hidden;
-    }
 }
 
 /* The table-of-contents itself */
 #toc {
     @import "../partials/toc";
-}
-
-/**
- * These styles apply to the sidebar-left root,
- * whether it be the wrapper or the sidebar-left itself.
- * Note: The #sidebar-left-sticky-wrapper is added by javascript on page load
- */
-.page > #sidebar-left, #sidebar-left-sticky-wrapper {
-
-    & {
-        /* Hide sidebar by default */
-        display:none;
-    }
-
-    /* Display it only if it is enabled */
-    .has-sidebar-left & {
-        display:block;
-    }
-
-    @include sliding-sidebars-sidebar(
-        $side:left,
-        $default-open-min: $screen-md-min,
-        $sidebar-width: $ui-sidebar-left-width
-    );
-}
-
-#sidebar-left {
-    // This is for performance.
-    // It has a significant impact on iPads.
-    // Do not apply it to the sticky wrapper, though!
-    // It creates a seperate block formatting context,
-    // which screws up fixed positioned children.
-    @include sliding-sidebars-compositing-layer();
-}
-
-#sidebar-right {
-
-    & {
-        /* Hide sidebar by default */
-        display:none;
-
-        @include sliding-sidebars-sidebar(
-            $side: right,
-            $default-open-min: $screen-lg-min,
-            $sidebar-width: $ui-sidebar-right-width
-        );
-
-        // This is for performance
-        @include sliding-sidebars-compositing-layer();
-
-        top:0;
-        /* The right sidebar is not sticky, so we can use right:0;*/
-        right:0;
-    }
-
-    /* Display it only if it is enabled */
-    .has-sidebar-right & {
-        display:block;
-    }
-
-}
-
-.sidebar-content {
-    /* Extra links -- could go in either sidebar */
-    .extras {
-        @import "sidebar-extras";
-    }
 }
 
 /**
@@ -182,27 +98,6 @@ body {
 
     // Main styling should go here.
     @import "./main";
-
-    // Styles required to make sliding sidebars work.
-    & {
-        @include sliding-sidebars-main();
-        @include sliding-sidebars-main-side(
-            $side: left,
-            $slide-min: $screen-sm-min,
-            $default-open-min: $screen-md-min,
-            $sidebar-width: $ui-sidebar-left-width
-        );
-
-        @include sliding-sidebars-main-side(
-            $side: right,
-            $slide-min: $screen-sm-min,
-            $default-open-min: $screen-lg-min,
-            $sidebar-width: $ui-sidebar-right-width
-        );
-
-        // Force GPU acceleration when animating this element on webkit
-        @include sliding-sidebars-compositing-layer();
-    }
 }
 
 /**
@@ -212,11 +107,11 @@ body {
 #content {
     max-width: $ui-content-max-width;
 
-    &, /* default left */
     .layout-left & {
         margin: $ui-content-margin;
     }
 
+    &, /* default center */
     .layout-centered & {
         margin: $ui-content-margin auto;
     }
@@ -225,13 +120,9 @@ body {
 
         /**
          * When the content is cramped,
-         * either by opened sidebars,
-         * or by a small viewport width,
          * we want small fixed margins
          */
-        @include sliding-sidebars-media-cramped-content(
-            $sidebar-left-width: $ui-sidebar-left-width,
-            $sidebar-right-width: $ui-sidebar-right-width,
+        @include media-cramped-content(
             $content-max-width: $ui-content-max-width,
             $content-margin: $ui-content-margin
         ) {
@@ -240,15 +131,11 @@ body {
         }
 
         /**
-         * But sidebars are closed by default in small layouts,
-         * so we want auto horizontal margins to center content,
-         * regardless of the sidebar state.
+         * We want auto horizontal margins to center content
+         * when the screen is small.
          */
         @media screen and (max-width: $screen-sm-max) {
-            &,
-            .sidebar-left-open &,
-            .sidebar-right-open &,
-            .sidebar-left-open.sidebar-right-open & {
+            & {
                 /* Decrease the margins */
                 margin:$ui-content-margin auto;
             }
@@ -259,10 +146,7 @@ body {
          * reclaim a little bit of horizontal space
          */
         @media screen and (max-width: $screen-xxs-max) {
-            &,
-            .sidebar-left-open &,
-            .sidebar-right-open &,
-            .sidebar-left-open.sidebar-right-open & {
+            & {
                 /* Decrease the horizontal margins */
                 margin:$ui-content-margin-sm $ui-content-margin-xs;
             }

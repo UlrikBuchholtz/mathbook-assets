@@ -79,10 +79,8 @@ $ui-icon-box-size-touch: $ui-touch-scale*$ui-icon-box-size !default;
 $ui-navbar-height:$ui-icon-box-size;
 $ui-navbar-height-touch:$ui-icon-box-size-touch;
 
-// Sidebars
-$ui-sidebar-left-width: 240px !default;
-$ui-sidebar-right-width: $ui-sidebar-left-width !default;
-$sliding-sidebar-transition-duration: 400ms;
+// Toolbar
+$ui-toolbar-width: 240px !default;
 
 $ui-left-margin:($ui-icon-box-size - $ui-icon-size)/2;
 $ui-left-margin-touch:($ui-icon-box-size-touch - $ui-icon-size-touch)/2;

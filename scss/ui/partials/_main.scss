@@ -1,6 +1,6 @@
 @import "../ui_config";
 @import "compass/css3/box-shadow";
-@import "../mixins/sliding-sidebars";
+@import "../mixins/cramped";
 
 & {
     display:block;
@@ -10,12 +10,15 @@
 
     background:white;
 
-    /* side borders */
     border:1px solid #ccc;
     border-top:none;
-    border-bottom:none;
 
-    @include box-shadow(rgba(black,.5) 0 5px 5px);
+    max-width: $ui-content-max-width + 2*$ui-content-margin;
+    margin: $ui-content-margin auto;
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    // @include box-shadow(rgba(black,.5) 0 5px 5px);
 
     /***************************************************************************
      * There are a few ways to fix the #content's top/botom margin collapsing
@@ -47,12 +50,12 @@
 #content {
     max-width: $ui-content-max-width;
 
-    /* Default left */
-    &, .layout-left & {
+    .layout-left & {
         margin: $ui-content-margin;
     }
 
-    .layout-centered & {
+    /* Default center */
+    &, .layout-centered & {
         margin: $ui-content-margin auto;
     }
 
@@ -60,9 +63,7 @@
     &, .layout-left &, .layout-centered & {
 
         /* When the content is cramped */
-        @include sliding-sidebars-media-cramped-content(
-            $sidebar-left-width: $ui-sidebar-left-width,
-            $sidebar-right-width: $ui-sidebar-right-width,
+        @include media-cramped-content(
             $content-max-width: $ui-content-max-width,
             $content-margin: $ui-content-margin
         ) {
@@ -70,14 +71,8 @@
             margin:$ui-content-margin-sm $ui-content-margin-sm;
         }
 
-        /* Since sidebars push open in the small layout,
-         * we want consistent  margins regardless of the sidebar states
-         */
         @media screen and (max-width: $screen-sm-max) {
-            &,
-            .sidebar-left-open &,
-            .sidebar-right-open &,
-            .sidebar-left-open.sidebar-right-open & {
+            & {
                 /* Decrease the margins */
                 margin:$ui-content-margin-sm auto;
             }
@@ -87,10 +82,7 @@
          */
         $breakpoint: $ui-content-max-width + 2*$ui-content-margin;
         @media screen and (max-width: $breakpoint) {
-            &,
-            .sidebar-left-open &,
-            .sidebar-right-open &,
-            .sidebar-left-open.sidebar-right-open & {
+            & {
                 /* Decrease the margins */
                 margin:$ui-content-margin-sm $ui-content-margin-sm;
             }
@@ -98,10 +90,7 @@
 
         /* And even smaller margins at extra small layouts */
         @media screen and (max-width: $screen-xs-max) {
-            &,
-            .sidebar-left-open &,
-            .sidebar-right-open &,
-            .sidebar-left-open.sidebar-right-open & {
+            & {
                 /* Decrease the horizontal margins */
                 margin:$ui-content-margin-sm $ui-content-margin-xs;
             }

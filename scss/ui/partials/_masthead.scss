@@ -23,6 +23,10 @@ $masthead-font-family: $typography-heading-font-family;
     background: $masthead-bg-color;
     min-height:inherit;
     border:none;
+    margin: {
+      left: auto;
+      right: auto;
+    }
     @include box-shadow(none);
 }
 

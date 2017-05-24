@@ -1,0 +1,11 @@
+
+@mixin media-cramped-content(
+    $content-max-width,
+    $content-margin
+) {
+
+    $breakpoint: $content-max-width + 2*$content-margin - 1;
+    @media screen and (max-width: $breakpoint ) {
+        @content;
+    }
+}
