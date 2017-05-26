@@ -10,8 +10,10 @@
 
     background:white;
 
-    border:1px solid #ccc;
-    border-top:none;
+    border:none;
+    /* border:1px solid #ccc; */
+    /* border-top:none; */
+    /* border-bottom:none; */
 
     max-width: $ui-content-max-width + 2*$ui-content-margin;
     margin: $ui-content-margin auto;
@@ -39,7 +41,7 @@
 
     @media screen and (max-width: $screen-sm-max) {
         /* Make space for navbar fixed to bottom of screen */
-        padding-bottom: $ui-navbar-height;
+        padding-bottom: $ui-navbar-height-touch;
     }
 }
 

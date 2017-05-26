@@ -47,12 +47,12 @@ $ui-link-block-bg-hover: $brand-primary-darker !default;
 $ui-link-block-bg-active: $brand-primary !default;
 
 // Applied to navtree headers
-$ui-toc-heading-color: white;
-$ui-toc-heading-color-hover: $ui-link-block-color-hover;
-$ui-toc-heading-color-active: $ui-link-block-color-active;
-$ui-toc-heading-bg: $brand-secondary;
-$ui-toc-heading-bg-hover: $ui-link-block-bg-hover;
-$ui-toc-heading-bg-active: $ui-link-block-bg-active;
+$ui-toc-heading-color: white !default;
+$ui-toc-heading-color-hover: $ui-link-block-color-hover !default;
+$ui-toc-heading-color-active: $ui-link-block-color-active !default;
+$ui-toc-heading-bg: $brand-secondary !default;
+$ui-toc-heading-bg-hover: $ui-link-block-bg-hover !default;
+$ui-toc-heading-bg-active: darken($ui-link-block-bg-active, 10%) !default;
 
 // Space between screen edge and text in UI
 $ui-screen-edge-margin:$typography-font-size-base;

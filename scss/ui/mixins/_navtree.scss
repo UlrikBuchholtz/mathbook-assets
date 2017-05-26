@@ -1,6 +1,6 @@
 /*@import "../ui-config";*/
 @import "../../shared/_typography.scss";
-@import "../mixins/buttons";
+// @import "../mixins/buttons";
 @import "../../shared/_utilities.scss";
 
 $navtree-segment-color: $ui-link-block-color !default;
@@ -138,7 +138,7 @@ $navtree-segment-height: $typography-line-height-computed;
 
     &:active {
         /* Depressed state on click but not when marked active */
-        @include button-depressable();
+        // @include button-depressable();
     }
 }
 

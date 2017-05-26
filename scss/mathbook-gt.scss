@@ -1,9 +1,49 @@
 
-// GT stylesheet overrides
+$lightgray: #888;
+$darkgray: lighten(#000000, 15%);
+$gtyellow: #eeb211;
+$gtyellow-dark: darken($gtyellow, 10%);
 
-$mathbook-primary:#eab72c;
-$mathbook-primary:darken($mathbook-primary, 15%);
-$mathbook-secondary:#888;
+$mathbook-primary: $gtyellow;
+$mathbook-secondary: $darkgray;
+
+$masthead-bg-color: $darkgray;
+$masthead-title-color: white;
+$masthead-byline-color: $gtyellow;
+
+$navbar-bg-color: #eeeeee;
+
+$knowl-color-base: $darkgray;
+$knowl-border-color: $gtyellow;
+
+// inline UI links
+$ui-link-color: $gtyellow-dark;
+$ui-link-color-hover: white;
+$ui-link-color-active: white;
+$ui-color-base: #ddd;
+$ui-color-bg: change-color($ui-color-base, $lightness:87%);
+$ui-link-bg: change-color($ui-color-bg, $lightness:94%) !default;
+$ui-link-bg-hover: $gtyellow-dark;
+$ui-link-bg-active: $gtyellow-dark;
+
+$typography-link-color: black;
+$typography-link-color-hover: lighten($typography-link-color, 10%);
+$typography-link-color-active: lighten($typography-link-color, 10%);
+
+// ToC
+$ui-toc-heading-color: black;
+$ui-toc-heading-color-hover: black;
+$ui-toc-heading-color-active: black;
+$ui-toc-heading-bg: $gtyellow-dark;
+$ui-toc-heading-bg-hover: $gtyellow;
+$ui-toc-heading-bg-active: $gtyellow;
+
+$ui-link-block-color: white;
+$ui-link-block-color-hover: black;
+$ui-link-block-color-active: black;
+$ui-link-block-bg: $darkgray;
+$ui-link-block-bg-hover: $gtyellow;
+$ui-link-block-bg-active: $gtyellow;
 
 @import "mathbook";
 

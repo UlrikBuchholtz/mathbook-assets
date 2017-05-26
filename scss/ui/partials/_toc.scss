@@ -13,12 +13,12 @@ $title-offset:$codenumber-width + $codenumber-gutter-right;
 // Used for headings and, on mobile, for both headings and children
 $segment-height:(1.25/$font-multiplier)*$typography-line-height-computed;
 $segment-line-height:.7*$typography-line-height-computed;
-$segment-border-width: 1px;
+$segment-border-width: 0px;
 
 // Child segments on desktop
 $child-segment-height:(1/$font-multiplier)*$typography-line-height-computed;
 $child-segment-line-height:.7*$typography-line-height-computed;
-$child-segment-border-width: 1px;
+$child-segment-border-width: 0px;
 
 $base-indent:$ui-left-margin;
 $base-indent-touch: $ui-left-margin-touch;
@@ -29,7 +29,6 @@ $child-indent-touch: $base-indent-touch + $title-offset;
 
 & {
     /* IMPORTANT height must be calculated by javascript. */
-    width:$ui-toolbar-width;
     margin:0;
     font-size:$font-size;
 
@@ -38,6 +37,11 @@ $child-indent-touch: $base-indent-touch + $title-offset;
     overflow-x:hidden;
     /* Enable momentum scrolling on iOS */
     -webkit-overflow-scrolling: touch;
+
+    @media screen and (max-width: $screen-sm-max) {
+      // Cancels main.main's padding-top hack
+      margin-top:-1px;
+    }
 }
 
 // TODO we should not be styling the elements directly here.

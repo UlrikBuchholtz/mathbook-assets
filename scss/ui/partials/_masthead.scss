@@ -13,8 +13,8 @@
 
 // Note: These variables should only depend on ui module variables
 $masthead-bg-color: change-color($ui-color-bg, $lightness:98%) !default;
-$masthead-title-color: $brand-primary;
-$masthead-subtitle-color:change-color($ui-color-base, $lightness:35%);
+$masthead-title-color: $brand-primary !default;
+$masthead-subtitle-color:change-color($ui-color-base, $lightness:35%) !default;
 $masthead-byline-color: change-color($masthead-bg-color, $lightness:20%) !default;
 $masthead-font-family: $typography-heading-font-family;
 
@@ -28,10 +28,15 @@ $masthead-font-family: $typography-heading-font-family;
       right: auto;
     }
     @include box-shadow(none);
+
+    /*
+    @media screen and (max-width: $screen-sm-max) {
+        border-bottom:1px solid darken($masthead-bg-color, 15%);
+    }
+    */
 }
 
 .banner {
-    border-bottom:1px solid darken($masthead-bg-color, 15%);
     /* to ensure children's margin-top works */
     border-top:1px solid transparent;
 

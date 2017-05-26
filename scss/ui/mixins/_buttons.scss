@@ -1,6 +1,6 @@
 // TODO make more portable with default module variables pattern
 @import "compass/css3/user-interface";
-@import "compass/css3/box-shadow";
+//@import "compass/css3/box-shadow";
 @import "compass/css3/images";
 @import "compass/css3/border-radius";
 @import "compass/css3/inline-block";
@@ -207,7 +207,7 @@ $button-minimalist-color-active: $ui-link-color-active !default;
 
 // A depressed state for any element
 @mixin button-depressed() {
-    @include box-shadow(rgba(black,.5) 0 2px 5px inset);
+    // @include box-shadow(rgba(black,.5) 0 2px 5px inset);
 }
 
 // Quickly make a button depressable
@@ -460,7 +460,7 @@ $button-minimalist-color-active: $ui-link-color-active !default;
         color:$color-active;
         background: $bg-active;
         text-decoration:none;
-        @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
+        //@include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
 
         &:after {
             @include triangle($direction:$direction,
@@ -541,10 +541,10 @@ $button-minimalist-color-active: $ui-link-color-active !default;
         color: $color-active;
         background: $bg-active;
         text-decoration:none;
-        @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
+        //@include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
 
         &:after {
-            @include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
+            //@include box-shadow( rgba(black,.2) 0 2px 5px 5px inset);
             @include triangle($direction: $direction,
                               $width:$triangle-width,
                               $height:$triangle-height,

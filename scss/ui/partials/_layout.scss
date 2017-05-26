@@ -52,7 +52,7 @@ body {
  * Primary Navbar
  * Contains primary actions for navigation or layout control
  */
-#gt-navbar, #gt-navbar-sticky-wrapper {
+#gt-navbar {
     @import "./primary-navbar";
 
     // TODO move into partial

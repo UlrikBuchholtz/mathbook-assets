@@ -6,6 +6,7 @@
 @import "compass/utilities/general/clearfix";
 @import "compass/css3/inline-block";
 @import "compass/css3/box-sizing";
+@import "compass/css3/box-shadow";
 
 // For icon variables
 @import "lib/ionicons/ionicons-variables";
@@ -48,6 +49,9 @@ $navbar-bottom-box-shadow:
     z-index:200;
     height: $ui-navbar-height;
     font-family: $typography-font-family-serif;
+    border-top:$navbar-border;
+    border-bottom:$navbar-border;
+    width:100%;
 
     /* Smoothly transition box-shadow when navbar sticks/unsticks */
     @include single-transition(box-shadow, 400ms);
@@ -58,12 +62,29 @@ $navbar-bottom-box-shadow:
      * Styles applied to make the navbar persistently visible
      * when its sticky-wrapper is stuck
      */
-    .stuck & {
-        position:fixed;
-        top:0;
-        right:0;
-        left:0;
+    .is-sticky & {
         @include box-shadow( $navbar-top-box-shadow);
+        border-top:none;
+        overflow:visible;
+    }
+
+    .dropdown {
+        position:absolute;
+        width:$ui-toolbar-width;
+        left:0; //-$navbar-border-width;
+        z-index:100;
+        margin-top:$ui-navbar-height;
+
+        .toc-border-container {
+            @include box-sizing(border-box);
+            width:100%;
+            display:none;
+            border-top:$navbar-border;
+
+            .toc-contents {
+                overflow:auto;
+            }
+        }
     }
 
     @media screen and (max-width: $screen-sm-max) {
@@ -71,18 +92,31 @@ $navbar-bottom-box-shadow:
          * At small screen sizes, turn the navbar into a full bar along bottom
          * When stuck and when not stuck. We don't care about stuck at this size
          */
-        &, .stuck & {
+        &, .is-sticky & {
             position:fixed;
             top: auto;
             bottom:0;
-            left:0;
-            right:0;
+            left:auto;
+            right:auto;
             background:$navbar-bg-color;
             @include box-shadow( $navbar-bottom-box-shadow);
             height:$ui-navbar-height-touch;
+            overflow:visible;
+            border-top:none;
+
+            .dropdown {
+                width:100%;
+                height: 0px;
+                overflow: visible;
+                margin-top:0px;
+                left:0;
+
+                .toc-border-container {
+                    border-top:none;
+                }
+            }
         }
     }
-
 }
 
 /*******************************************************************************
@@ -224,6 +258,7 @@ $navbar-bottom-box-shadow:
     }
 }
 
+
 .toolbar .toolbar-buttons-right {
   float:right;
 }
@@ -273,7 +308,6 @@ $navbar-bottom-box-shadow:
 
 .navbar-top-buttons {
     display:block;
-    border-top:$navbar-border;
 
     @include clearfix();
 
