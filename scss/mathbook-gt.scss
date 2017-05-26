@@ -9,12 +9,16 @@ $mathbook-secondary: $darkgray;
 
 $masthead-bg-color: $darkgray;
 $masthead-title-color: white;
+$masthead-title-color-hover: $gtyellow;
+$masthead-title-color-active: white;
 $masthead-byline-color: $gtyellow;
 
 $navbar-bg-color: #eeeeee;
 
+$knowl-border-width:1px;
 $knowl-color-base: $darkgray;
 $knowl-border-color: $gtyellow;
+$knowl-padding: 20px;
 
 // inline UI links
 $ui-link-color: $gtyellow-dark;

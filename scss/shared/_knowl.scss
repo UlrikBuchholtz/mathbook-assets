@@ -39,7 +39,8 @@ $knowl-margin-bottom: 12px !default;
     $color: $knowl-link-color,
     $border-color: $knowl-border-color,
     $border-radius: $knowl-link-border-radius,
-    $font-type: sans-serif
+    $font-type: sans-serif,
+    $bg-color: $knowl-bg-color
 ) {
 
     $border-width-base: 1px;
@@ -109,9 +110,9 @@ $knowl-margin-bottom: 12px !default;
         }
     }
 
-    &:hover, &:active, &.active {
+    &:hover {
         color: darken($border-color, 65%);
-        background: lighten($border-color, 4%);
+        background: darken($bg-color, 5%);
         text-decoration:none;
 
         /* See comment on default style's border/margin */
@@ -120,10 +121,10 @@ $knowl-margin-bottom: 12px !default;
         /*border-bottom: none;*/
 
         &:after {
-            border-bottom:$border-width-hover solid darken($border-color, 15%);
-            left:0;
-            right:0;
-            bottom:0;
+            // border-bottom:$border-width-hover solid darken($border-color, 15%);
+            //left:0;
+            //right:0;
+            //bottom:0;
             /*@include typography-underline(*/
                         /*darken($border-color, 32.5%),*/
                         /*$underline-size: .1,*/
@@ -131,9 +132,10 @@ $knowl-margin-bottom: 12px !default;
         }
     }
 
+    /*
     &:active {
         color: $brand-secondary;
-        background: $brand-secondary-light;
+        background: $bg-color;
 
         &:after {
             border-color: $brand-secondary;
@@ -141,8 +143,9 @@ $knowl-margin-bottom: 12px !default;
     }
 
     &.active {
-        background: $border-color;
+        background: $bg-color;
     }
+   */
 }
 
 @mixin knowl-output(
@@ -156,7 +159,9 @@ $knowl-margin-bottom: 12px !default;
 //     $ragged-top-height: $knowl-ragged-top-height
     & {
 //  set in master knowlstyle        border: $border-width solid $border-color;
-        border-color: $border-color;
+// JDR: but I can't override that here.
+        border: $border-width solid $border-color;
+        // border-color: $border-color;
         background: $bg-color;
         @include border-radius($border-radius);
         margin-bottom:$margin-bottom;
@@ -189,9 +194,21 @@ $knowl-margin-bottom: 12px !default;
 //     }
 
     .knowl-footer {
+      // JDR: disable these -- they just contain a file name
+      display:none;
+      /*
         font-size:x-small;
-        color: darken($border-color, 60%);
-        background: $border-color;
+        //color: darken($border-color, 60%);
+        opacity: 0.75;
+        background: transparent;
+        margin: 0;
+        padding:0;
+        padding-left: $knowl-padding;
+        padding-right: $knowl-padding;
+        border-top: $border-width solid $border-color;
+        position:static;
+        top:0;
+     */
 // the master setting from knowlstyle.css seem okay to me
 //        bottom: -$border-width;
 //        padding:1px 0px 1px $border-width;

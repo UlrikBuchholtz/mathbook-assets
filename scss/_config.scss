@@ -60,10 +60,10 @@ $brand-info:            #2aa198 !default;
 // KNOWL
 ////////////////////////////////////////////////////////////////////////////////
 $knowl-color-base: $brand-primary !default;
-$knowl-margin-bottom: rhythm(1);
-$knowl-padding: rhythm(1);
-$knowl-has-ragged-top: true;
-$knowl-ragged-top-height: rhythm(.5);
+$knowl-margin-bottom: rhythm(1) !default;
+$knowl-padding: rhythm(1) !default;
+$knowl-has-ragged-top: true !default;
+$knowl-ragged-top-height: rhythm(.5) !default;
 
 ////////////////////////////////////////////////////////////////////////////////
 // CONTENT
