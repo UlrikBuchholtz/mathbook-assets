@@ -24,7 +24,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 
 /* line 30, ../scss/_mathbook.scss */
 body {
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
 }
 /* line 106, ../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/typography/_vertical_rhythm.scss */
 body html {
@@ -47,7 +47,7 @@ html, body {
 /* line 13, ../scss/ui/partials/_layout.scss */
 body {
   background: #dedede;
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
 }
 /* line 106, ../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/typography/_vertical_rhythm.scss */
 body html {
@@ -71,7 +71,7 @@ body.centered-container {
 }
 /* line 33, ../scss/ui/partials/_layout.scss */
 .container, .container.layout-left, .layout-left .container {
-  max-width: 664px;
+  max-width: 739px;
 }
 /* line 37, ../scss/ui/partials/_layout.scss */
 .container.layout-centered, .layout-centered .container {
@@ -142,7 +142,7 @@ body.centered-container {
 }
 /* line 104, ../scss/shared/_heading.scss */
 #masthead #title-container > .heading, #masthead #title-container > header > .heading, #masthead .title-container > .heading, #masthead .title-container > header > .heading {
-  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
   color: inherit;
 }
@@ -200,18 +200,18 @@ body.centered-container {
 /* line 75, ../scss/ui/partials/_masthead.scss */
 #masthead #title-container > .heading, #masthead #title-container > header > .heading, #masthead .title-container > .heading, #masthead .title-container > header > .heading {
   margin: 0;
-  font-size: 2em;
-  line-height: 1.25em;
-  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-size: 1.75em;
+  line-height: 1.42857em;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
   color: white;
 }
 @media screen and (max-width: 480px) {
   /* line 18, ../scss/shared/_heading.scss */
   #masthead #title-container > .heading, #masthead #title-container > header > .heading, #masthead .title-container > .heading, #masthead .title-container > header > .heading {
-    font-size: 1.5em;
-    line-height: 1.25em;
+    font-size: 1.3125em;
+    line-height: 1.42857em;
     margin: 0;
-    margin-bottom: 0.41667em;
+    margin-bottom: 0.47619em;
   }
 }
 /* line 96, ../scss/ui/partials/_masthead.scss */
@@ -258,8 +258,8 @@ body.centered-container {
   #masthead #title-container > .heading .subtitle, #masthead #title-container > header > .heading .subtitle, #masthead .title-container > .heading .subtitle, #masthead .title-container > header > .heading .subtitle {
     /* Force the subtitle onto a seperate line */
     display: block;
-    font-size: 1.16667em;
-    line-height: 1.42857em;
+    font-size: 1.14286em;
+    line-height: 1.25em;
     /* De-emphasize relative to main title */
     color: #595959;
     /* Remove colon */
@@ -342,10 +342,10 @@ body.centered-container {
   color: #eeb211;
   font-weight: normal;
   margin: 0;
-  font-size: 1.3125em;
-  line-height: 1.42857em;
+  font-size: 1.1875em;
+  line-height: 1.57895em;
   min-height: inherit;
-  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
 }
 @media screen and (max-width: 480px) {
   /* line 229, ../scss/ui/partials/_masthead.scss */
@@ -417,7 +417,7 @@ body.centered-container {
   background: #eeeeee;
   z-index: 200;
   height: 35.36px;
-  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
   border-top: 1px solid #bbbbbb;
   border-bottom: 1px solid #bbbbbb;
   width: 100%;
@@ -1018,7 +1018,7 @@ body.centered-container {
 /* line 50, ../scss/ui/partials/_toc.scss */
 #toc h2 {
   display: block;
-  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
   font-size: 1em;
   /* Set font size on ToC */
@@ -1245,7 +1245,7 @@ body.centered-container {
   /* border:1px solid #ccc; */
   /* border-top:none; */
   /* border-bottom:none; */
-  max-width: 664px;
+  max-width: 739px;
   margin: 32px auto;
   margin-top: 0px;
   margin-bottom: 0px;
@@ -1273,7 +1273,7 @@ body.centered-container {
 }
 /* line 52, ../scss/ui/partials/_main.scss */
 #main #content, .main #content {
-  max-width: 600px;
+  max-width: 675px;
   /* Default center */
 }
 /* line 55, ../scss/ui/partials/_main.scss */
@@ -1291,7 +1291,7 @@ body.centered-container {
    */
   /* And even smaller margins at extra small layouts */
 }
-@media screen and (max-width: 663px) {
+@media screen and (max-width: 738px) {
   /* line 65, ../scss/ui/partials/_main.scss */
   #main #content, .layout-left #main #content, .layout-centered #main #content, .main #content, .layout-left .main #content, .layout-centered .main #content {
     /* Decrease the margins */
@@ -1305,7 +1305,7 @@ body.centered-container {
     margin: 30px auto;
   }
 }
-@media screen and (max-width: 664px) {
+@media screen and (max-width: 739px) {
   /* line 87, ../scss/ui/partials/_main.scss */
   #main #content, .layout-left #main #content, .layout-centered #main #content, .main #content, .layout-left .main #content, .layout-centered .main #content {
     /* Decrease the margins */
@@ -1326,7 +1326,7 @@ body.centered-container {
  */
 /* line 107, ../scss/ui/partials/_layout.scss */
 #content {
-  max-width: 600px;
+  max-width: 675px;
 }
 /* line 110, ../scss/ui/partials/_layout.scss */
 .layout-left #content {
@@ -1351,7 +1351,7 @@ body.centered-container {
    * reclaim a little bit of horizontal space
    */
 }
-@media screen and (max-width: 663px) {
+@media screen and (max-width: 738px) {
   /* line 119, ../scss/ui/partials/_layout.scss */
   #content, .layout-left #content, .layout-centered #content {
     /* Decrease the margins */
@@ -1384,18 +1384,18 @@ body.centered-container {
 .mathbook-content .summary-links a {
   position: relative;
   display: block;
-  font-size: 1.5em;
-  line-height: 1.25em;
-  padding: 0.41667em 0.83333em;
-  margin-bottom: 0.20833em;
+  font-size: 1.3125em;
+  line-height: 1.42857em;
+  padding: 0.47619em 0.95238em;
+  margin-bottom: 0.2381em;
   border-radius: 3px;
   border-radius: 3px;
   border-radius: 3px;
-  padding-right: 2.06667em;
+  padding-right: 2.30476em;
 }
 /* line 417, ../scss/ui/mixins/_buttons.scss */
 .mathbook-content .summary-links a:after {
-  right: 0.83333em;
+  right: 0.95238em;
 }
 /* line 423, ../scss/ui/mixins/_buttons.scss */
 .mathbook-content .summary-links a:after {
@@ -1462,7 +1462,7 @@ body.centered-container {
 }
 /* line 42, ../scss/ui/partials/_content-ui.scss */
 .mathbook-content .summary-links a {
-  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
 }
 @media screen and (max-width: 480px) {
   /* line 42, ../scss/ui/partials/_content-ui.scss */
@@ -1474,7 +1474,7 @@ body.centered-container {
 /* line 56, ../scss/ui/partials/_content-ui.scss */
 .mathbook-content .summary-links a .codenumber {
   color: #707070;
-  margin-right: 0.41667em;
+  margin-right: 0.47619em;
 }
 /* line 62, ../scss/ui/partials/_content-ui.scss */
 .mathbook-content .summary-links a:hover .codenumber, .mathbook-content .summary-links a:focus .codenumber {
@@ -1497,7 +1497,7 @@ body.centered-container {
 }
 /* line 85, ../scss/ui/partials/_content-ui.scss */
 .mathbook-content .sagecell .ui-button.ui-state-default, .mathbook-content .sagecell .ui-button.ui-state-hover, .mathbook-content .sagecell .ui-button.ui-state-active, .mathbook-content .sagecell .ui-button.ui-state-focus, .mathbook-content .sagecell .ui-button.ui-corner-all {
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
   font-size: 16px;
   padding: 0 0.65em;
 }
@@ -1639,7 +1639,7 @@ body #MathJax_Message {
     overflow-y: hidden;
   }
 }
-@media screen and (max-width: 703px) {
+@media screen and (max-width: 778px) {
   /* line 26, ../scss/ui/partials/_mathjax.scss */
   .MathJax_Display {
     /*Allow users on smaller screens to scroll equations*/
@@ -1717,7 +1717,7 @@ body #MathJax_Message {
  */
 /* line 21, ../scss/mathbook-content-prefixed.scss */
 .mathbook-content {
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
   /*******************************************************************************
    * Content
    ******************************************************************************/
@@ -1738,44 +1738,44 @@ body #MathJax_Message {
 }
 /* line 5, ../scss/content/partials/_typographic-elements.scss */
 .mathbook-content h1, .mathbook-content .h1, .mathbook-content h2, .mathbook-content .h2, .mathbook-content h3, .mathbook-content .h3, .mathbook-content h4, .mathbook-content .h4, .mathbook-content h5, .mathbook-content .h5, .mathbook-content h6, .mathbook-content .h6 {
-  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
   color: inherit;
 }
 /* line 9, ../scss/content/partials/_typographic-elements.scss */
 .mathbook-content h1, .mathbook-content .h1 {
-  font-size: 2em;
-  line-height: 1.25em;
-  margin-top: 0.625em;
-  margin-bottom: 0.3125em;
-}
-/* line 14, ../scss/content/partials/_typographic-elements.scss */
-.mathbook-content h2, .mathbook-content .h2 {
   font-size: 1.75em;
   line-height: 1.42857em;
   margin-top: 0.71429em;
   margin-bottom: 0.35714em;
 }
-/* line 19, ../scss/content/partials/_typographic-elements.scss */
-.mathbook-content h3, .mathbook-content .h3 {
+/* line 14, ../scss/content/partials/_typographic-elements.scss */
+.mathbook-content h2, .mathbook-content .h2 {
   font-size: 1.5em;
   line-height: 1.25em;
   margin-top: 0.83333em;
   margin-bottom: 0.41667em;
 }
-/* line 24, ../scss/content/partials/_typographic-elements.scss */
-.mathbook-content h4, .mathbook-content .h4 {
+/* line 19, ../scss/content/partials/_typographic-elements.scss */
+.mathbook-content h3, .mathbook-content .h3 {
   font-size: 1.3125em;
   line-height: 1.42857em;
   margin-top: 0.95238em;
   margin-bottom: 0.47619em;
 }
+/* line 24, ../scss/content/partials/_typographic-elements.scss */
+.mathbook-content h4, .mathbook-content .h4 {
+  font-size: 1.1875em;
+  line-height: 1.57895em;
+  margin-top: 1.05263em;
+  margin-bottom: 0.52632em;
+}
 /* line 29, ../scss/content/partials/_typographic-elements.scss */
 .mathbook-content h5, .mathbook-content .h5 {
-  font-size: 1.125em;
-  line-height: 1.66667em;
-  margin-top: 1.11111em;
-  margin-bottom: 0.55556em;
+  font-size: 1.0625em;
+  line-height: 1.76471em;
+  margin-top: 1.17647em;
+  margin-bottom: 0.58824em;
 }
 /* line 34, ../scss/content/partials/_typographic-elements.scss */
 .mathbook-content h6, .mathbook-content .h6 {
@@ -1896,7 +1896,7 @@ body #MathJax_Message {
 }
 /* line 104, ../scss/shared/_heading.scss */
 .mathbook-content section > .heading, .mathbook-content section > header > .heading, .mathbook-content .section-like > .heading, .mathbook-content .section-like > header > .heading {
-  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
   color: inherit;
 }
@@ -2087,31 +2087,31 @@ body #MathJax_Message {
 }
 /* line 18, ../scss/shared/_heading.scss */
 .mathbook-content section > .heading, .mathbook-content section > header > .heading, .mathbook-content .section-like > .heading, .mathbook-content .section-like > header > .heading {
-  font-size: 1.75em;
-  line-height: 1.42857em;
-  margin-top: 0.71429em;
-  margin-bottom: 0.35714em;
-}
-/* line 18, ../scss/shared/_heading.scss */
-.mathbook-content section section > .heading, .mathbook-content section section > header > .heading, .mathbook-content section .section-like > .heading, .mathbook-content section .section-like > header > .heading, .mathbook-content .section-like section > .heading, .mathbook-content .section-like section > header > .heading, .mathbook-content .section-like .section-like > .heading, .mathbook-content .section-like .section-like > header > .heading {
   font-size: 1.5em;
   line-height: 1.25em;
   margin-top: 0.83333em;
   margin-bottom: 0.41667em;
 }
 /* line 18, ../scss/shared/_heading.scss */
-.mathbook-content section section section > .heading, .mathbook-content section section section > header > .heading, .mathbook-content section section .section-like > .heading, .mathbook-content section section .section-like > header > .heading, .mathbook-content section .section-like section > .heading, .mathbook-content section .section-like section > header > .heading, .mathbook-content section .section-like .section-like > .heading, .mathbook-content section .section-like .section-like > header > .heading, .mathbook-content .section-like section section > .heading, .mathbook-content .section-like section section > header > .heading, .mathbook-content .section-like section .section-like > .heading, .mathbook-content .section-like section .section-like > header > .heading, .mathbook-content .section-like .section-like section > .heading, .mathbook-content .section-like .section-like section > header > .heading, .mathbook-content .section-like .section-like .section-like > .heading, .mathbook-content .section-like .section-like .section-like > header > .heading {
+.mathbook-content section section > .heading, .mathbook-content section section > header > .heading, .mathbook-content section .section-like > .heading, .mathbook-content section .section-like > header > .heading, .mathbook-content .section-like section > .heading, .mathbook-content .section-like section > header > .heading, .mathbook-content .section-like .section-like > .heading, .mathbook-content .section-like .section-like > header > .heading {
   font-size: 1.3125em;
   line-height: 1.42857em;
   margin-top: 0.95238em;
   margin-bottom: 0.47619em;
 }
 /* line 18, ../scss/shared/_heading.scss */
+.mathbook-content section section section > .heading, .mathbook-content section section section > header > .heading, .mathbook-content section section .section-like > .heading, .mathbook-content section section .section-like > header > .heading, .mathbook-content section .section-like section > .heading, .mathbook-content section .section-like section > header > .heading, .mathbook-content section .section-like .section-like > .heading, .mathbook-content section .section-like .section-like > header > .heading, .mathbook-content .section-like section section > .heading, .mathbook-content .section-like section section > header > .heading, .mathbook-content .section-like section .section-like > .heading, .mathbook-content .section-like section .section-like > header > .heading, .mathbook-content .section-like .section-like section > .heading, .mathbook-content .section-like .section-like section > header > .heading, .mathbook-content .section-like .section-like .section-like > .heading, .mathbook-content .section-like .section-like .section-like > header > .heading {
+  font-size: 1.1875em;
+  line-height: 1.57895em;
+  margin-top: 1.05263em;
+  margin-bottom: 0.52632em;
+}
+/* line 18, ../scss/shared/_heading.scss */
 .mathbook-content section section section section > .heading, .mathbook-content section section section section > header > .heading, .mathbook-content section section section .section-like > .heading, .mathbook-content section section section .section-like > header > .heading, .mathbook-content section section .section-like section > .heading, .mathbook-content section section .section-like section > header > .heading, .mathbook-content section section .section-like .section-like > .heading, .mathbook-content section section .section-like .section-like > header > .heading, .mathbook-content section .section-like section section > .heading, .mathbook-content section .section-like section section > header > .heading, .mathbook-content section .section-like section .section-like > .heading, .mathbook-content section .section-like section .section-like > header > .heading, .mathbook-content section .section-like .section-like section > .heading, .mathbook-content section .section-like .section-like section > header > .heading, .mathbook-content section .section-like .section-like .section-like > .heading, .mathbook-content section .section-like .section-like .section-like > header > .heading, .mathbook-content .section-like section section section > .heading, .mathbook-content .section-like section section section > header > .heading, .mathbook-content .section-like section section .section-like > .heading, .mathbook-content .section-like section section .section-like > header > .heading, .mathbook-content .section-like section .section-like section > .heading, .mathbook-content .section-like section .section-like section > header > .heading, .mathbook-content .section-like section .section-like .section-like > .heading, .mathbook-content .section-like section .section-like .section-like > header > .heading, .mathbook-content .section-like .section-like section section > .heading, .mathbook-content .section-like .section-like section section > header > .heading, .mathbook-content .section-like .section-like section .section-like > .heading, .mathbook-content .section-like .section-like section .section-like > header > .heading, .mathbook-content .section-like .section-like .section-like section > .heading, .mathbook-content .section-like .section-like .section-like section > header > .heading, .mathbook-content .section-like .section-like .section-like .section-like > .heading, .mathbook-content .section-like .section-like .section-like .section-like > header > .heading {
-  font-size: 1.125em;
-  line-height: 1.66667em;
-  margin-top: 1.11111em;
-  margin-bottom: 0.55556em;
+  font-size: 1.0625em;
+  line-height: 1.76471em;
+  margin-top: 1.17647em;
+  margin-bottom: 0.58824em;
 }
 /* line 38, ../scss/content/partials/_sections.scss */
 .mathbook-content .chapter {
@@ -2139,20 +2139,20 @@ body #MathJax_Message {
 /* line 54, ../scss/content/partials/_sections.scss */
 .mathbook-content .chapter > .heading .type, .mathbook-content .chapter > .heading .codenumber, .mathbook-content .chapter > header > .heading .type, .mathbook-content .chapter > header > .heading .codenumber {
   /* Chapter type prefix is smaller (as in LaTeX) */
-  font-size: 1.5em;
-  line-height: 1.25em;
-  margin-top: 0.83333em;
-  margin-bottom: 0.41667em;
+  font-size: 1.3125em;
+  line-height: 1.42857em;
+  margin-top: 0.95238em;
+  margin-bottom: 0.47619em;
 }
 /* line 59, ../scss/content/partials/_sections.scss */
 .mathbook-content .chapter > .heading .title, .mathbook-content .chapter > header > .heading .title {
   display: block;
-  font-size: 1.75em;
-  line-height: 1.42857em;
-  margin-top: 0.71429em;
-  margin-bottom: 0.35714em;
+  font-size: 1.5em;
+  line-height: 1.25em;
+  margin-top: 0.83333em;
+  margin-bottom: 0.41667em;
   /* Force a half-line leader */
-  margin-top: 0.35714em;
+  margin-top: 0.41667em;
 }
 /* line 78, ../scss/content/partials/_sections.scss */
 .mathbook-content .chapter > header {
@@ -2179,11 +2179,11 @@ body #MathJax_Message {
 /* line 18, ../scss/shared/_heading.scss */
 .mathbook-content .frontmatter > .heading, .mathbook-content .frontmatter > header > .heading, .mathbook-content .book > .heading, .mathbook-content .book > header > .heading {
   text-align: center;
-  font-size: 2em;
-  line-height: 1.25em;
-  margin-top: 0.625em;
-  margin-bottom: 0.3125em;
-  margin-bottom: 0.625em;
+  font-size: 1.75em;
+  line-height: 1.42857em;
+  margin-top: 0.71429em;
+  margin-bottom: 0.35714em;
+  margin-bottom: 0.71429em;
 }
 /* line 111, ../scss/content/partials/_sections.scss */
 .mathbook-content .frontmatter > .heading .subtitle, .mathbook-content .frontmatter > header > .heading .subtitle, .mathbook-content .book > .heading .subtitle, .mathbook-content .book > header > .heading .subtitle {
@@ -2191,9 +2191,9 @@ body #MathJax_Message {
   font-weight: normal;
   /* Much classier */
   color: #666666;
-  font-size: 0.875em;
-  line-height: 1.42857em;
-  margin-top: 0.35714em;
+  font-size: 0.85714em;
+  line-height: 1.25em;
+  margin-top: 0.41667em;
 }
 /* line 122, ../scss/content/partials/_sections.scss */
 .mathbook-content .frontmatter .header, .mathbook-content .book .header {
@@ -2211,16 +2211,16 @@ body #MathJax_Message {
 }
 /* line 18, ../scss/shared/_heading.scss */
 .mathbook-content .definition-like > .heading, .mathbook-content .theorem-like > .heading, .mathbook-content .remark-like > .heading, .mathbook-content .example-like > .heading, .mathbook-content .exercise-like > .heading, .mathbook-content .aside-like > .heading, .mathbook-content .definition-like > header > .heading, .mathbook-content .theorem-like > header > .heading, .mathbook-content .remark-like > header > .heading, .mathbook-content .example-like > header > .heading, .mathbook-content .exercise-like > header > .heading, .mathbook-content .aside-like > header > .heading {
-  font-size: 1.125em;
-  line-height: 1.66667em;
-  margin-top: 1.11111em;
-  margin-bottom: 0.55556em;
+  font-size: 1.0625em;
+  line-height: 1.76471em;
+  margin-top: 1.17647em;
+  margin-bottom: 0.58824em;
   /* Support links in headings */
   /* Support knowl links in headings */
 }
 /* line 104, ../scss/shared/_heading.scss */
 .mathbook-content .definition-like > .heading, .mathbook-content .theorem-like > .heading, .mathbook-content .remark-like > .heading, .mathbook-content .example-like > .heading, .mathbook-content .exercise-like > .heading, .mathbook-content .aside-like > .heading, .mathbook-content .definition-like > header > .heading, .mathbook-content .theorem-like > header > .heading, .mathbook-content .remark-like > header > .heading, .mathbook-content .example-like > header > .heading, .mathbook-content .exercise-like > header > .heading, .mathbook-content .aside-like > header > .heading {
-  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
   color: inherit;
 }
@@ -2451,16 +2451,16 @@ body #MathJax_Message {
 }
 /* line 18, ../scss/shared/_heading.scss */
 .mathbook-content .proof > .heading, .mathbook-content .proof > header > .heading {
-  font-size: 1.125em;
-  line-height: 1.66667em;
-  margin-top: 1.11111em;
-  margin-bottom: 0.55556em;
+  font-size: 1.0625em;
+  line-height: 1.76471em;
+  margin-top: 1.17647em;
+  margin-bottom: 0.58824em;
   /* Support links in headings */
   /* Support knowl links in headings */
 }
 /* line 104, ../scss/shared/_heading.scss */
 .mathbook-content .proof > .heading, .mathbook-content .proof > header > .heading {
-  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
   color: inherit;
 }
@@ -2724,16 +2724,16 @@ body #MathJax_Message {
 }
 /* line 18, ../scss/shared/_heading.scss */
 .mathbook-content .hiddenproof > .heading, .mathbook-content .hiddenproof > header > .heading {
-  font-size: 1.125em;
-  line-height: 1.66667em;
-  margin-top: 1.11111em;
-  margin-bottom: 0.55556em;
+  font-size: 1.0625em;
+  line-height: 1.76471em;
+  margin-top: 1.17647em;
+  margin-bottom: 0.58824em;
   /* Support links in headings */
   /* Support knowl links in headings */
 }
 /* line 104, ../scss/shared/_heading.scss */
 .mathbook-content .hiddenproof > .heading, .mathbook-content .hiddenproof > header > .heading {
-  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
   color: inherit;
 }
@@ -3459,7 +3459,7 @@ body #MathJax_Message {
 }
 /* line 104, ../scss/shared/_heading.scss */
 .mathbook-content figcaption > .heading, .mathbook-content figcaption > header > .heading {
-  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-family: "CharterBT", "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
   color: inherit;
 }

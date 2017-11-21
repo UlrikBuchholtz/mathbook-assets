@@ -48,5 +48,21 @@ $ui-link-block-bg: $darkgray;
 $ui-link-block-bg-hover: $gtyellow;
 $ui-link-block-bg-active: $gtyellow;
 
+// Typography
+$typography-font-family-serif:
+    "CharterBT", "PT Serif", "Times New Roman", Times, serif;
+$typography-font-family-base: $typography-font-family-serif;
+$typography-font-size-base: 16px;
+//$typography-line-height-base: 1.25;
+
+$typography-font-size-h1: floor(1.8 * 16px);
+$typography-font-size-h2: floor(1.55 * 16px);
+$typography-font-size-h3: floor(1.35 * 16px);
+$typography-font-size-h4: floor(1.2 * 16px);
+$typography-font-size-h5: floor(1.1 * 16px);
+$typography-font-size-h6: 16px;
+
+$ui-content-max-width: floor(600px * 18 / 16);
+
 @import "mathbook";
 
