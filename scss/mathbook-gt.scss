@@ -32,6 +32,7 @@ $ui-link-bg-active: $gtyellow-dark;
 $typography-link-color: black;
 $typography-link-color-hover: lighten($typography-link-color, 10%);
 $typography-link-color-active: lighten($typography-link-color, 10%);
+$typography-should-import-google-fonts: false;
 
 // ToC
 $ui-toc-heading-color: black;

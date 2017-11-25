@@ -6,21 +6,23 @@
 * everyone someday, then we could use the htaccess fix instead.
 * See http://geoff.evason.name/2010/05/03/cross-domain-workaround-for-font-face-and-firefox/
 */
-@import "compass/css3/font-face";
-@include font-face(
-    $ionicons-font-family, 
-    font-files("#{$ionicons-font-path}/ionicons.svg#Ionicons", svg), "#{$ionicons-font-path}/ionicons.eot#iefix", 
-    normal, 
-    normal);
-@include font-face(
-    $ionicons-font-family, 
-    inline-font-files(
-        "#{$ionicons-font-path}/ionicons.woff", 
-        woff, 
-        "#{$ionicons-font-path}/ionicons.eot",
-        truetype), 
-    $weight: normal, 
-    $style: normal);
+
+/* JDR: don't include the whole font in the css file */
+/*@import "compass/css3/font-face";*/
+/* @include font-face( */
+/*     $ionicons-font-family,  */
+/*     font-files("#{$ionicons-font-path}/ionicons.svg#Ionicons", svg), "#{$ionicons-font-path}/ionicons.eot#iefix",  */
+/*     normal,  */
+/*     normal); */
+/* @include font-face( */
+/*     $ionicons-font-family,  */
+/*     inline-font-files( */
+/*         "#{$ionicons-font-path}/ionicons.woff",  */
+/*         woff,  */
+/*         "#{$ionicons-font-path}/ionicons.eot", */
+/*         truetype),  */
+/*     $weight: normal,  */
+/*     $style: normal); */
 
 .ion {
   display: inline-block;
