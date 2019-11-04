@@ -1,9 +1,4 @@
-# Generated files
-gen
-
-# Repos we don't want to include
-fcla
-fclaxml
-
 # SASS / Compass metadata
 .sass-cache
+build
+.sconsign.dblite
