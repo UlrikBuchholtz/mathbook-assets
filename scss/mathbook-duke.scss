@@ -1,0 +1,69 @@
+
+$lightgray: #bbb;
+$darkgray: lighten(#000000, 15%);
+$dukeblue: #012169;
+$dukeblue-royal: #00539b;
+
+$mathbook-primary: $dukeblue;
+$mathbook-secondary: $darkgray;
+
+$masthead-bg-color: $dukeblue;
+$masthead-title-color: white;
+$masthead-title-color-hover: white;
+$masthead-title-color-active: white;
+$masthead-byline-color: $lightgray;
+
+$navbar-bg-color: #eeeeee;
+
+$knowl-border-width:1px;
+$knowl-color-base: $darkgray;
+$knowl-border-color: $dukeblue-royal;
+
+// inline UI links
+$ui-link-color: $dukeblue;
+$ui-link-color-hover: white;
+$ui-link-color-active: white;
+$ui-color-base: #ddd;
+$ui-color-bg: change-color($ui-color-base, $lightness:87%);
+$ui-link-bg: change-color($ui-color-bg, $lightness:94%) !default;
+$ui-link-bg-hover: $dukeblue;
+$ui-link-bg-active: $dukeblue;
+
+$typography-link-color: black;
+$typography-link-color-hover: lighten($typography-link-color, 10%);
+$typography-link-color-active: lighten($typography-link-color, 10%);
+$typography-should-import-google-fonts: false;
+
+// ToC
+$ui-toc-heading-color: $lightgray;
+$ui-toc-heading-color-hover: white;
+$ui-toc-heading-color-active: white;
+$ui-toc-heading-bg: $dukeblue-royal;
+$ui-toc-heading-bg-hover: $dukeblue-royal;
+$ui-toc-heading-bg-active: $dukeblue-royal;
+
+$ui-link-block-color: $lightgray;
+$ui-link-block-color-hover: white;
+$ui-link-block-color-active: white;
+$ui-link-block-bg: $darkgray;
+$ui-link-block-bg-hover: $dukeblue-royal;
+$ui-link-block-bg-active: $dukeblue-royal;
+
+// Typography
+$typography-font-family-serif:
+    "CharterBT", "PT Serif", "Times New Roman", Times, serif;
+$typography-font-family-base: $typography-font-family-serif;
+$typography-font-size-base: 16px;
+//$typography-line-height-base: 1.25;
+
+$typography-font-size-h1: floor(1.8 * 16px);
+$typography-font-size-h2: floor(1.55 * 16px);
+$typography-font-size-h3: floor(1.35 * 16px);
+$typography-font-size-h4: floor(1.2 * 16px);
+$typography-font-size-h5: floor(1.1 * 16px);
+$typography-font-size-h6: 16px;
+
+$ui-content-max-width: floor(600px * 18 / 16);
+
+@import "mathbook";
+
