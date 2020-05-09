@@ -29,7 +29,7 @@ $child-indent-touch: $base-indent-touch + $title-offset;
 
 & {
     /* IMPORTANT height must be calculated by javascript. */
-    margin:0;
+
     font-size:$font-size;
 
     // Not sure about this one...we'll see
@@ -37,6 +37,11 @@ $child-indent-touch: $base-indent-touch + $title-offset;
     overflow-x:hidden;
     /* Enable momentum scrolling on iOS */
     -webkit-overflow-scrolling: touch;
+
+    /* allow the theme to place a box shadow around the TOC*/
+    @if variable-exists(ui-toc-box-shadow) {
+    box-shadow: $ui-toc-box-shadow;
+    }
 
     @media screen and (max-width: $screen-sm-max) {
       // Cancels main.main's padding-top hack

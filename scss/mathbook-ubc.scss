@@ -6,15 +6,15 @@ $ubcblue-royal: #0055B7;
 $ubcblue-sky: #97D4E9;
 
 $mathbook-primary: $ubcblue;
-$mathbook-secondary: $darkgray;
+$mathbook-secondary: $ubcblue-royal;
 
 $masthead-bg-color: $ubcblue;
 $masthead-title-color: white;
 $masthead-title-color-hover: white;
 $masthead-title-color-active: white;
-$masthead-byline-color: $lightgray;
+$masthead-byline-color: white;
 
-$navbar-bg-color: #eeeeee;
+$navbar-bg-color: #eee;
 
 $knowl-border-width:1px;
 $knowl-color-base: $darkgray;
@@ -36,24 +36,29 @@ $typography-link-color-active: lighten($typography-link-color, 10%);
 $typography-should-import-google-fonts: false;
 
 // ToC
-$ui-toc-heading-color: $ubcblue-sky;
-$ui-toc-heading-color-hover: $ubcblue-sky;
-$ui-toc-heading-color-active: $ubcblue-sky;
-$ui-toc-heading-bg: $ubcblue-royal;
-$ui-toc-heading-bg-hover: $ubcblue-royal;
-$ui-toc-heading-bg-active: $ubcblue-royal;
+$ui-toc-box-shadow: 1px 1px  1px #aaa;
 
-$ui-link-block-color: $ubcblue-sky;
-$ui-link-block-color-hover: $ubcblue-sky;
-$ui-link-block-color-active: $ubcblue-sky   ;
-$ui-link-block-bg: $darkgray;
-$ui-link-block-bg-hover: $ubcblue-royal;
-$ui-link-block-bg-active: $ubcblue-royal;
+$ui-toc-heading-color: $ubcblue;
+$ui-toc-heading-color-hover: $ubcblue;
+$ui-toc-heading-color-active: $ubcblue;
+$ui-toc-heading-bg: white;
+$ui-toc-heading-bg-hover: $ubcblue-sky;
+$ui-toc-heading-bg-active: $ubcblue-sky;
+
+$ui-link-block-color: $ubcblue;
+$ui-link-block-color-hover: $ubcblue;
+$ui-link-block-color-active: $ubcblue;
+$ui-link-block-bg: white;
+$ui-link-block-bg-hover: $ubcblue-sky;
+$ui-link-block-bg-active: $ubcblue-sky;
 
 // Typography
 $typography-font-family-serif:
     "CharterBT", "PT Serif", "Times New Roman", Times, serif;
+$typography-font-family-sans-serif:
+    "Whitney", "Open Sans", "Arial", "Helvetica", sans-serif;
 $typography-font-family-base: $typography-font-family-serif;
+$typography-heading-font-family: $typography-font-family-serif;
 $typography-font-size-base: 16px;
 //$typography-line-height-base: 1.25;
 
