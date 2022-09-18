@@ -1,0 +1,77 @@
+
+$lightgray: #97918e;
+$darkgray: #434341;
+$uonblue1: #009bbd;
+$uonblue2: #007ca7;
+$uonblue3: #005597;
+$uonblue4: #1a296b;
+$uonblue5: #18194f;
+
+$mathbook-primary: $uonblue4;
+$mathbook-secondary: $uonblue3;
+
+$masthead-bg-color: $uonblue4;
+$masthead-title-color: white;
+$masthead-title-color-hover: white;
+$masthead-title-color-active: white;
+$masthead-byline-color: white;
+
+$navbar-bg-color: #eee;
+
+$knowl-border-width:1px;
+$knowl-color-base: $darkgray;
+$knowl-border-color: $uonblue3;
+
+// inline UI links
+$ui-link-color: $uonblue2;
+$ui-link-color-hover: white;
+$ui-link-color-active: white;
+$ui-color-base: #ddd;
+$ui-color-bg: change-color($ui-color-base, $lightness:87%);
+$ui-link-bg: change-color($ui-color-bg, $lightness:94%) !default;
+$ui-link-bg-hover: $uonblue4;
+$ui-link-bg-active: $uonblue4;
+
+$typography-link-color: black;
+$typography-link-color-hover: lighten($typography-link-color, 10%);
+$typography-link-color-active: lighten($typography-link-color, 10%);
+$typography-should-import-google-fonts: false;
+
+// ToC
+$ui-toc-box-shadow: 1px 1px  1px #aaa;
+
+$ui-toc-heading-color: $uonblue4;
+$ui-toc-heading-color-hover: $uonblue4;
+$ui-toc-heading-color-active: $uonblue4;
+$ui-toc-heading-bg: white;
+$ui-toc-heading-bg-hover: $uonblue2;
+$ui-toc-heading-bg-active: $uonblue2;
+
+$ui-link-block-color: $uonblue4;
+$ui-link-block-color-hover: $uonblue4;
+$ui-link-block-color-active: $uonblue4;
+$ui-link-block-bg: white;
+$ui-link-block-bg-hover: $uonblue2;
+$ui-link-block-bg-active: $uonblue2;
+
+// Typography
+$typography-font-family-serif:
+    "CharterBT", "PT Serif", "Times New Roman", Times, serif;
+$typography-font-family-sans-serif:
+    "Whitney", "Open Sans", "Arial", "Helvetica", sans-serif;
+$typography-font-family-base: $typography-font-family-serif;
+$typography-heading-font-family: $typography-font-family-serif;
+$typography-font-size-base: 16px;
+//$typography-line-height-base: 1.25;
+
+$typography-font-size-h1: floor(1.8 * 16px);
+$typography-font-size-h2: floor(1.55 * 16px);
+$typography-font-size-h3: floor(1.35 * 16px);
+$typography-font-size-h4: floor(1.2 * 16px);
+$typography-font-size-h5: floor(1.1 * 16px);
+$typography-font-size-h6: 16px;
+
+$ui-content-max-width: floor(600px * 18 / 16);
+
+@import "mathbook";
+

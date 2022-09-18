@@ -10,6 +10,6 @@ for root, dirnames, filenames in os.walk('scss'):
     for filename in fnmatch.filter(filenames, '*.scss'):
         matches.append(os.path.join(root, filename))
 
-env.Command(['build/mathbook-gt.css', 'build/lib/ionicons/ionicons.css'],
+env.Command(['build/mathbook-uon.css', 'build/lib/ionicons/ionicons.css'],
             matches,
             'compass compile --time --css-dir=build --force')
